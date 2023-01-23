@@ -18,22 +18,28 @@ public class BoardManager : MonoBehaviour
     [SerializeField]
     public Transform itemRoot;
 
+    [SerializeField][Tooltip("显示/隐藏白模节点")]
+    public bool tirggerVisibleNode = true;
+
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    void Start() { }
 
     // Update is called once per frame
-    void Update()
+    void Update() { }
+
+    private void OnValidate()
     {
-        
+        if(visualRoot==null)
+        {
+            return;
+        }
+        visualRoot.gameObject.SetActive(tirggerVisibleNode);
     }
 
     [ContextMenu("处理关卡")]
     void Process()
     {
-        this.FindNodes();
+        FindNodes();
         ProcessSquareNodes();
         ProcessVisialNodes();
         ProcessLinkedNodes();
@@ -68,6 +74,9 @@ public class BoardManager : MonoBehaviour
 
     void ProcessSquareNodes()
     {
+        var minX = int.MaxValue;
+        var minZ = int.MaxValue;
+
         for(var index = 0; index < squareRoot.childCount; index++)
         {
             var nodeTransform = squareRoot.GetChild(index);
@@ -76,7 +85,7 @@ public class BoardManager : MonoBehaviour
             while(childCount>0)
             {
                 var childGameObject = nodeTransform.GetChild(0).gameObject;
-                GameObject.DestroyImmediate(childGameObject);
+                DestroyImmediate(childGameObject);
                 childCount = nodeTransform.childCount;
             }
 
@@ -87,14 +96,44 @@ public class BoardManager : MonoBehaviour
             base_SquareInstance.transform.localPosition = new Vector3(0, 0, 0);
 
             var coord = nodeTransform.name.Split('_');
-            nodeTransform.transform.localPosition = new Vector3(int.Parse(coord[0]),0, int.Parse(coord[1]));
+
+            var coordX = int.Parse(coord[0]);
+
+            var coordZ = int.Parse(coord[1]);
+
+
+            if(coordX < minX)
+            {
+                minX = coordX;
+            }
+
+            if(coordZ < minZ)
+            {
+                minZ = coordZ;
+            }
+
+            nodeTransform.transform.localPosition = new Vector3(coordX, 0, coordZ);
 
             var script = nodeTransform.GetComponent<BoardNode>();
-            if(script==null)
+
+            if(script == null)
             {
                 script = nodeTransform.gameObject.AddComponent<BoardNode>();
             }
+
             script.initWithTransform(nodeTransform);
+        }
+
+        Debug.Log(string.Format("X坐标最小值{0},Z坐标最小值{1}",minX,minZ));
+        for (var index = 0; index < squareRoot.childCount; index++)
+        {
+            var nodeTransform = squareRoot.GetChild(index);
+            var nodeCoordArr = nodeTransform.name.Split('_');
+            var coordX = int.Parse(nodeCoordArr[0]);
+            var coordZ = int.Parse(nodeCoordArr[1]);
+            coordX -= minX;
+            coordZ -= minZ;
+            nodeTransform.name = string.Format("{0}_{1}", coordX, coordZ);
         }
     }
 

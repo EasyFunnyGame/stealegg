@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="Assets\Script\BoardManager.cs" />
     <Compile Include="Assets\Script\BoardNode.cs" />
+    <Compile Include="Assets\Script\PathFind.cs" />
+    <Compile Include="Assets\Script\PathFinder.cs" />
     <Compile Include="Assets\_Packages\FreeDraw\Scripts\Drawable.cs" />
     <Compile Include="Assets\_Packages\FreeDraw\Scripts\DrawingSettings.cs" />
     <Compile Include="Assets\_Packages\MeshCombiner\Scripts\MeshCombiner.cs" />
@@ -640,14 +642,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Ionlara.Dtilemap.Editor.csproj">
-      <Project>{ADF0BF8D-91D1-A220-41D9-DE7C0342FFC1}</Project>
-      <Name>Ionlara.Dtilemap.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Ionlara.Dtilemap.csproj">
-      <Project>{6B790F77-D3D1-8F72-261D-33623047CEA1}</Project>
-      <Name>Ionlara.Dtilemap</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
