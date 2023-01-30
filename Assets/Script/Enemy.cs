@@ -15,7 +15,7 @@ public static class EnemyName
     public const string Enemy_Distracted = "Enemy_Distracted";
     public const string Enemy_Patrol = "Enemy_Patrol";
     public const string Enemy_Sentinel = "Enemy_Sentinel";
-    public const string Enemy_Static = "Enemy_Static";
+    public const string Enemy_Static = "Enemy_Static"; 
 }
 
 

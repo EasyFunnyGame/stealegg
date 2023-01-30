@@ -281,33 +281,16 @@ public class BoardManager : MonoBehaviour
 
 
     #region RunTime
-
-    public Item start;
-
-    public Item star;
-
-    public Item graff;
-
-    public Item end;
-
-    public List<Item> lureBottles = new List<Item>();
-
-    public List<Item> pincerses = new List<Item>();
-
-    public List<Item> grouthes = new List<Item>();
-
-    public List<Item> manholeCovers = new List<Item>();
-
-    public List<Enemy> enemies = new List<Enemy>();
-
-    public void init()
+    public void init(Level level)
     {
-        resetItems();
-        resetEnemies();
-        spawnPlayer();
+        level.name = gameObject.name;
+        gameObject.name = "BoardManager";
+        resetItems(level);
+        resetEnemies(level);
+        //spawnPlayer(level);
     }
 
-    void resetItems()
+    void resetItems(Level level)
     {
         for (var index = 0; index < itemRoot.childCount; index++)
         {
@@ -321,28 +304,28 @@ public class BoardManager : MonoBehaviour
             switch (itemTr.name)
             {
                 case ItemName.Item_Start:
-                    start = item;
+                    level.start = item;
                     break;
                 case ItemName.Item_Star:
-                    star = item;
+                    level.star = item;
                     break;
                 case ItemName.Item_Pincers:
-                    pincerses.Add(itemTr.GetComponent<Item>());
+                    level.pincerses.Add(itemTr.GetComponent<Item>());
                     break;
                 case ItemName.Item_ManholeCover:
-                    manholeCovers.Add(item);
+                    level.manholeCovers.Add(item);
                     break;
                 case ItemName.Item_LureBottle:
-                    lureBottles.Add(item);
+                    level.lureBottles.Add(item);
                     break;
                 case ItemName.item_Growth:
-                    grouthes.Add(item);
+                    level.grouthes.Add(item);
                     break;
                 case ItemName.Item_Graff:
-                    graff = item;
+                    level.graff = item;
                     break;
                 case ItemName.Item_End:
-                    end = item;
+                    level.end = item;
                     break;
                 default:
                     Debug.LogError(string.Format("未处理未定义Item{0}", itemTr.name));
@@ -351,7 +334,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void resetEnemies()
+    void resetEnemies(Level level)
     {
         for (var index = 0; index < enemyRoot.childCount; index++)
         {
@@ -362,31 +345,31 @@ public class BoardManager : MonoBehaviour
                 Debug.Log(string.Format("未挂载脚本Enemy{0}", enemyTr.name));
                 continue;
             }
-            enemies.Add(enemy);
+
+            level.enemies.Add(enemy);
+
             switch (enemyTr.name)
             {
                 case EnemyName.Enemy_Static:
-                    break;
                 case EnemyName.Enemy_Sentinel:
-                    break;
                 case EnemyName.Enemy_Patrol:
-                    break;
                 case EnemyName.Enemy_Distracted:
                     break;
                 default:
-                    Debug.LogError(string.Format("未处理未定义Item{0}", enemyTr.name));
+                    Debug.LogError(string.Format("未定义敌人{0}", enemyTr.name));
                     break;
             }
         }
     }
 
-    void spawnPlayer()
+    void spawnPlayer(Level level)
     {
         var playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefab/Character/Player.prefab");
         var playerInstance = Instantiate(playerPrefab,transform);
-        playerInstance.transform.position = start.transform.position;
-        playerInstance.transform.rotation = start.transform.rotation;
-        start.gameObject.SetActive(false);
+        playerInstance.transform.position = level.start.transform.position;
+        playerInstance.transform.rotation = level.start.transform.rotation;
+        level.start.gameObject.SetActive(false);
+        level.player = playerInstance.GetComponent<Player>() ?? playerInstance.AddComponent<Player>();
     }
 
     #endregion
