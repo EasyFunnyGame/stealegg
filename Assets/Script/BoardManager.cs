@@ -287,7 +287,6 @@ public class BoardManager : MonoBehaviour
         gameObject.name = "BoardManager";
         resetItems(level);
         resetEnemies(level);
-        //spawnPlayer(level);
     }
 
     void resetItems(Level level)
@@ -303,9 +302,9 @@ public class BoardManager : MonoBehaviour
             }
             switch (itemTr.name)
             {
-                case ItemName.Item_Start:
-                    level.start = item;
-                    break;
+                //case ItemName.Item_Start:
+                //    level.start = item;
+                //    break;
                 case ItemName.Item_Star:
                     level.star = item;
                     break;
@@ -362,15 +361,6 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void spawnPlayer(Level level)
-    {
-        var playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefab/Character/Player.prefab");
-        var playerInstance = Instantiate(playerPrefab,transform);
-        playerInstance.transform.position = level.start.transform.position;
-        playerInstance.transform.rotation = level.start.transform.rotation;
-        level.start.gameObject.SetActive(false);
-        level.player = playerInstance.GetComponent<Player>() ?? playerInstance.AddComponent<Player>();
-    }
 
     #endregion
 }

@@ -15,8 +15,6 @@ public class Level : MonoBehaviour
 
     public Player player;
 
-    public Item start;
-
     public Item star;
 
     public Item graff;
@@ -56,7 +54,6 @@ public class Level : MonoBehaviour
     void Clear()
     {
         player = null;
-        start = null;
         end = null;
         star = null;
         graff = null;
@@ -71,7 +68,7 @@ public class Level : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        gridManager.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -109,12 +106,8 @@ public class Level : MonoBehaviour
                 if ( player.moving ||  player.tile_s != tile)
                 {
                     player.selected_tile_s = tile;
-                    //player.tar_tile_s = tile;
                     player.gm_s.find_paths_realtime(player, tile);
                 }
-                
-                //find_paths_realtime(char_s, char_s.selected_tile_s);
-                //player.move_tile(tile);
             }
         }
     }
