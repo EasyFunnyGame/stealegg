@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor;
 
 
@@ -27,8 +26,6 @@ public class grid_manager : MonoBehaviour
 {
     public efind_path find_path;
     public Vector2 v2_grid;
-    //public RectTransform rt;
-    //public GridLayoutGroup glg;
     public GridLayout gridLayout;
     public GameObject go_pref_tile;
     public character char_s;
@@ -38,18 +35,7 @@ public class grid_manager : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetMouseButtonDown(1) && !char_s.moving && char_s.tile_s != char_s.selected_tile_s && char_s.selected_tile_s != null)
-        //{
-        //    if (find_path == efind_path.on_click)
-        //        find_paths_realtime(char_s, char_s.selected_tile_s);
-        //if (char_s!=null && char_s.selected_tile_s != null && !char_s.moving && char_s.tile_s != char_s.selected_tile_s && char_s.selected_tile_s != null)
-        //{
-        //    if (char_s.selected_tile_s.db_path_lowest.Count > 0)
-        //        char_s.move_tile(char_s.selected_tile_s);
-        //    else
-        //        print("no valid tile selected");
-        //}
-        //}
+        
     }
 
 
@@ -177,43 +163,14 @@ public class grid_manager : MonoBehaviour
 
     public void hover_tile(tile ttile)
     {
-        //for (int x = 0; x < db_tiles.Count; x++)
-        //{
-        //    if (find_path == efind_path.max_tiles && db_tiles[x].db_path_lowest.Count > 0)
-        //        db_tiles[x].im.color = Color.blue;
-        //    else
-        //        db_tiles[x].im.color = new Color(1, 1, 1, 0);
-        //}
-
         if (!char_s.big)
         {
             char_s.selected_tile_s = ttile;
-            //ttile.im.color = char_s.col;
         }
         else
         if (char_s.big)
         {
             char_s.selected_tile_s = ttile;
-            //if (ttile.db_neighbors[2].tile_s != null && ttile.db_neighbors[1].tile_s != null && ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null && !ttile.db_neighbors[2].blocked && !ttile.db_neighbors[1].blocked && !ttile.db_neighbors[1].tile_s.db_neighbors[2].blocked && !ttile.db_neighbors[2].tile_s.db_neighbors[1].blocked)
-            //{
-            //    ttile.im.color = char_s.col;
-            //    ttile.db_neighbors[1].tile_s.im.color = char_s.col;
-            //    ttile.db_neighbors[2].tile_s.im.color = char_s.col;
-            //    ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s.im.color = char_s.col;
-            //}
-            //else
-            ////Make the 4 tiles (if they exit) red to show not useable//
-            //{
-            //    ttile.im.color = Color.red;
-            //    if (ttile.db_neighbors[1].tile_s != null)
-            //    {
-            //        ttile.db_neighbors[1].tile_s.im.color = Color.red;
-            //        if (ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null)
-            //            ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s.im.color = Color.red;
-            //    }
-            //    if (ttile.db_neighbors[2].tile_s != null)
-            //        ttile.db_neighbors[2].tile_s.im.color = Color.red;
-            //}
         }
 
         if (!char_s.moving)
@@ -221,85 +178,16 @@ public class grid_manager : MonoBehaviour
             //**For pathfinding in real time, this becomes slower exponentially as the grid gets bigger, not recommended for anything above 100 tiles**//
             if (find_path == efind_path.on_hover)
                 find_paths_realtime(char_s, ttile);
-
-            if (!char_s.big)
-            {
-                //char_s.tile_s.im.color = char_s.col;
-
-                //if (find_path != efind_path.on_click)
-                //{
-                //    for (int x = 0; x < char_s.selected_tile_s.db_path_lowest.Count; x++)
-                //        char_s.selected_tile_s.db_path_lowest[x].im.color = char_s.col;
-                //}
-
-                //if (ttile.db_path_lowest.Count == 0 && find_path != efind_path.on_click)
-                //    ttile.im.color = Color.red;
-            }
-            else
-            if (char_s.big)
-            {
-                //Char's tile(s) turn to team color as part of path//
-                if (char_s.selected_tile_s.db_path_lowest.Count > 0)
-                {
-                    //char_s.tile_s.im.color = char_s.col;
-                    //if (char_s.tile_s.db_neighbors[1].tile_s != null)
-                    //{
-                    //    char_s.tile_s.db_neighbors[1].tile_s.im.color = char_s.col;
-                    //    if (char_s.tile_s.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null)
-                    //        char_s.tile_s.db_neighbors[1].tile_s.db_neighbors[2].tile_s.im.color = char_s.col;
-                    //}
-                    //if (char_s.tile_s.db_neighbors[2].tile_s != null)
-                    //    char_s.tile_s.db_neighbors[2].tile_s.im.color = char_s.col;
-
-                    //Path tiles turn to team color//
-                    if (find_path != efind_path.on_click)
-                    {
-                        for (int x = 0; x < char_s.selected_tile_s.db_path_lowest.Count; x++)
-                        {
-                            //char_s.selected_tile_s.db_path_lowest[x].im.color = char_s.col;
-                            //if (char_s.selected_tile_s.db_path_lowest[x].db_neighbors[1].tile_s != null)
-                            //{
-                            //    char_s.selected_tile_s.db_path_lowest[x].db_neighbors[1].tile_s.im.color = char_s.col;
-                            //    if (char_s.selected_tile_s.db_path_lowest[x].db_neighbors[1].tile_s.db_neighbors[2].tile_s != null)
-                            //        char_s.selected_tile_s.db_path_lowest[x].db_neighbors[1].tile_s.db_neighbors[2].tile_s.im.color = char_s.col;
-                            //}
-                            //if (char_s.selected_tile_s.db_path_lowest[x].db_neighbors[2].tile_s != null)
-                            //    char_s.selected_tile_s.db_path_lowest[x].db_neighbors[2].tile_s.im.color = char_s.col;
-                        }
-                    }
-                }
-                else
-                //No path, make tar tile(s) red//
-                if (find_path != efind_path.on_click)
-                {
-                    //ttile.im.color = Color.red;
-                    //if (ttile.db_neighbors[1].tile_s != null)
-                    //{
-                    //    ttile.db_neighbors[1].tile_s.im.color = Color.red;
-                    //    if (ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null)
-                    //        ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s.im.color = Color.red;
-                    //}
-                    //if (ttile.db_neighbors[2].tile_s != null)
-                    //    ttile.db_neighbors[2].tile_s.im.color = Color.red;
-                }
-            }
         }
     }
 
 
     public void make_grid()
     {
-        //glg.enabled = true;
-
         //Clear Old Tiles//
         for (int i = 0; i < db_tiles.Count; i++)
             DestroyImmediate(db_tiles[i].gameObject);
         db_tiles.Clear();
-
-        //float twidth = (glg.cellSize.y + glg.spacing.y) * v2_grid.y;
-        //rt.sizeDelta = new Vector2(twidth, glg.cellSize.x);
-
-        
 
         for (int x = 0; x < v2_grid.x; x++)
         {

@@ -102,7 +102,7 @@ public class Level : MonoBehaviour
 
                 var tileIndex = coord.x * Mathf.RoundToInt(gridManager.v2_grid.y) + coord.z;
                 var tile = gridManager.db_tiles[tileIndex];
-                Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
+                //Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
                 if ( player.moving ||  player.tile_s != tile)
                 {
                     player.selected_tile_s = tile;
