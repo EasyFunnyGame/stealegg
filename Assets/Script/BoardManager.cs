@@ -68,7 +68,7 @@ public class BoardManager : MonoBehaviour
             visualRoot = boardNode.GetChild(1);
             enemyRoot = boardNode.GetChild(2);
             linkRoot = boardNode.GetChild(3);
-            linkRoot.gameObject.SetActive(true);
+            linkRoot.gameObject.SetActive(false);
 
             itemRoot = boardNode.Find("ItemRoot");
             if(itemRoot==null)

@@ -1,6 +1,4 @@
-﻿using RTS_Cam;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Level : MonoBehaviour
@@ -33,37 +31,11 @@ public class Level : MonoBehaviour
 
     private void Awake()
     {
-        //this.Clear();
-
         boardMgr = GetComponent<BoardManager>();
         if(boardMgr == null)
             throw new System.Exception("No BoardManager Attached To This GameObject");
         boardMgr.init(this);
-
-        if(gameCamera== null)
-        {
-            var camera = Camera.main;
-            gameCamera = camera.GetComponent<GameCamera>();
-            if (gameCamera == null)
-                gameCamera = camera.gameObject.AddComponent<GameCamera>();
-            gameCamera.SetFollowTarget(player.transform);
-        }
-        
     }
-
-    void Clear()
-    {
-        player = null;
-        end = null;
-        star = null;
-        graff = null;
-        lureBottles.Clear();
-        pincerses.Clear();
-        grouthes.Clear();
-        manholeCovers.Clear();
-        enemies.Clear();
-    }
-
 
     // Start is called before the first frame update
     void Start()

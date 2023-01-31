@@ -4,36 +4,14 @@ using UnityEngine;
 
 public class GameCamera : MonoBehaviour
 {
-
     public Camera camera;
-
-    public Vector3 offset;
 
     public float ditanceFromTarget;
 
     public Transform followTarget;
 
-    public bool tagetSwitching;
-
-    public void SetFollowTarget(Transform targetTr)
-    {
-        offset = transform.position - targetTr.position;
-        ditanceFromTarget = Vector3.Distance(transform.position, targetTr.position);
-
-        if (followTarget != null && followTarget != targetTr)
-        {
-            tagetSwitching = true;
-        }
-        followTarget = targetTr;
-    }
-
     private void Awake()
     {
-        camera = GetComponent<Camera>();
-        if(followTarget)
-        {
-            offset = transform.position - followTarget.transform.position;
-        }
     }
 
     // Start is called before the first frame update
@@ -49,11 +27,7 @@ public class GameCamera : MonoBehaviour
         {
             return;
         }
-        var distance = Vector3.Distance(transform.position, followTarget.position);
-        if( Mathf.Abs(ditanceFromTarget - distance) < 0.01)
-        {
-            tagetSwitching = false;
-        }
-        transform.position = followTarget.position + offset;
+        
+        transform.position = followTarget.position;
     }
 }
