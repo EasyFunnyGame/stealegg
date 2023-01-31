@@ -30,6 +30,10 @@ public class GameCamera : MonoBehaviour
     private void Awake()
     {
         camera = GetComponent<Camera>();
+        if(followTarget)
+        {
+            offset = transform.position - followTarget.transform.position;
+        }
     }
 
     // Start is called before the first frame update
@@ -50,5 +54,6 @@ public class GameCamera : MonoBehaviour
         {
             tagetSwitching = false;
         }
+        transform.position = followTarget.position + offset;
     }
 }
