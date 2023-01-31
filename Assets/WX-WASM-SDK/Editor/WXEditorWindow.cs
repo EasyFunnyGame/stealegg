@@ -596,8 +596,8 @@ namespace WeChatWASM
                 var brcodeSize = brcodeInfo.Length;
                 if (brcodeSize + int.Parse(dataFileSize) > 20971520)
                 {
-                    ShowNotification(new GUIContent("资源文件过大，不适宜用放小游戏包内加载"));
-                    throw new Exception("资源文件过大，不适宜用小游戏包内加载");
+                    ShowNotification(new GUIContent(string.Format("资源文件过大，不适宜用放小游戏包内加载。size:{0}m", (brcodeSize + int.Parse(dataFileSize))/1024)));
+                    throw new Exception(string.Format("资源文件过大，不适宜用放小游戏包内加载。size:{0}m", (brcodeSize + int.Parse(dataFileSize)) / 1024));
                 }
                 else
                 {

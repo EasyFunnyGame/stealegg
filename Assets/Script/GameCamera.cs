@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GameCamera : MonoBehaviour
 {
-    public Camera camera;
+    public static GameCamera instance;
+
+    public new Camera camera;
 
     public float ditanceFromTarget;
 
@@ -12,6 +14,7 @@ public class GameCamera : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
     }
 
     // Start is called before the first frame update

@@ -195,7 +195,7 @@ public class grid_manager : MonoBehaviour
             {
                 var tgo = (GameObject) Instantiate(go_pref_tile, go_pref_tile.transform.position, go_pref_tile.transform.rotation, gridLayout.transform);
                 tgo.SetActive(true);
-                tgo.name = "tile_" + x + "_" + y;
+                tgo.name = x + "_" + y;
                 var ttile = tgo.GetComponent<tile>();
                 ttile.v2xy = new Vector2(x, y);
                 db_tiles.Add(ttile);

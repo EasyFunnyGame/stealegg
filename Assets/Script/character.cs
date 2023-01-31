@@ -77,9 +77,14 @@ public class character : MonoBehaviour
                         gm_s.find_paths_static(this);
                     gm_s.hover_tile(selected_tile_s);
                 }
-                Debug.Log(string.Format("到达{0}", tile_s.gameObject.name));
+                Reached();
             }
         }
+    }
+
+    protected virtual void Reached()
+    {
+        Debug.Log(string.Format("{0}到达{1}",gameObject.name, tile_s.gameObject.name));
     }
 
 

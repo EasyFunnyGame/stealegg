@@ -13,6 +13,15 @@ public struct Coord
 
     public string name;
 
+    public Coord(string tileName, float tileHeight)
+    {
+        name = tileName;
+        height = tileHeight;
+        var coordArr = tileName.Split('_');
+        this.x = int.Parse(coordArr[0]);
+        this.z = int.Parse(coordArr[1]);
+    }
+
     public Coord(Vector3 position)
     {
         this.x = Mathf.FloorToInt(position.x);

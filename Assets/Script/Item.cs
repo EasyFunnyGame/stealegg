@@ -66,4 +66,21 @@ public class Item : MonoBehaviour
     {
         
     }
+
+    public void Picked(Player player)
+    {
+        Debug.Log(string.Format("拾取道具:{0}",gameObject.name));
+
+        switch(itemType)
+        {
+            case ItemType.Star:
+                gameObject.SetActive(false);
+                break;
+
+            case ItemType.LureBottle:
+                gameObject.SetActive(false);
+                break;
+        }
+       
+    }
 }

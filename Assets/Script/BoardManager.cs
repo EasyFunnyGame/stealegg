@@ -22,6 +22,12 @@ public class BoardManager : MonoBehaviour
     [SerializeField][Tooltip("显示/隐藏白模节点")]
     public bool tirggerVisibleNode = true;
 
+    public static BoardManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start() { }
@@ -41,6 +47,8 @@ public class BoardManager : MonoBehaviour
         visualRoot.gameObject.SetActive(tirggerVisibleNode);
     }
 
+#if UNITY_EDITOR
+
     [ContextMenu("处理关卡(不要点)")]
     void Process()
     {
@@ -52,6 +60,7 @@ public class BoardManager : MonoBehaviour
         ProcessEnemy();
         SaveAsPrefab(Selection.activeGameObject);
     }
+
 
     void FindNodes()
     {
@@ -276,11 +285,13 @@ public class BoardManager : MonoBehaviour
         PrefabUtility.SaveAsPrefabAssetAndConnect(go, url,InteractionMode.UserAction);
         Debug.Log(string.Format("保存关卡预设{0}", url));
     }
-
+#endif
     #endregion
 
 
     #region RunTime
+
+    public Dictionary<string, Item> allItems = new Dictionary<string, Item>(); 
     public void init(Level level)
     {
         level.name = gameObject.name;
@@ -300,6 +311,7 @@ public class BoardManager : MonoBehaviour
                 Debug.Log(string.Format("未挂载脚本Item{0}", itemTr.name));
                 continue;
             }
+            allItems.Add(item.coord.name, item);
             switch (itemTr.name)
             {
                 //case ItemName.Item_Start:
@@ -361,6 +373,16 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+
+    public void PickItem(string name, Player player)
+    {
+        var item = allItems.ContainsKey(name) ? allItems[name] : null;
+        if(item)
+        {
+            allItems.Remove(name);
+            item.Picked(player);
+        }
+    }
 
     #endregion
 }

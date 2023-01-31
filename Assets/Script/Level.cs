@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
+
+    public static Level instance;
+
     public grid_manager gridManager;
 
     public BoardManager boardMgr;
@@ -31,6 +34,7 @@ public class Level : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         boardMgr = GetComponent<BoardManager>();
         if(boardMgr == null)
             throw new System.Exception("No BoardManager Attached To This GameObject");
