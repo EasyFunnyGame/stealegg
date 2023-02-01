@@ -274,5 +274,16 @@ public class grid_manager : MonoBehaviour
     {
         char_s.tile_s = db_tiles[0]; //Slight delay in start game, this gives the char a tile so we don't get an onhover error during that milisecond//
         StartCoroutine(start_game());
+        Debug.Log("GridManager Start!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
+
+    public void HideLayout()
+    {
+        gridLayout.gameObject.SetActive(false);
+    }
+
+    public void ShowLayout()
+    {
+        gridLayout.gameObject.SetActive(true);
     }
 }

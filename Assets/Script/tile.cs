@@ -34,9 +34,8 @@ public class tile : MonoBehaviour
     public grid_manager gm_s;
     public Vector2 v2xy;
     public walls walls_s;
-    //public Image im;
     public MeshRenderer mr;
-    public Button btn;
+    //public Button btn;
     public List<character> db_chars;
     public List<sub_tile> db_neighbors;
     public List<tile> db_path_lowest;

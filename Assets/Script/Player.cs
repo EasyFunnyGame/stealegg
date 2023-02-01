@@ -1,20 +1,14 @@
 ﻿
-using UnityEngine;
 
 public class Player : character
 {
-    public Level level;
-    //public PathFinder finder;
+    public BoardManager boardManager;
 
     public static Player instance;
 
     void Awake()
     {
-        Player.instance = this;
-        //if(finder == null)
-        //{
-        //    finder = gameObject.GetComponent<PathFinder>() ?? gameObject.AddComponent<PathFinder>();
-        //}
+        instance = this;
     }
 
     // Start is called before the first frame update
@@ -32,6 +26,6 @@ public class Player : character
     override protected void Reached()
     {
         base.Reached();
-        level.boardMgr.PickItem(tile_s.name,this);
+        boardManager.PickItem(tile_s.name,this);
     }
 }

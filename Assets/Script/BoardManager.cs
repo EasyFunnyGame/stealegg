@@ -24,20 +24,182 @@ public class BoardManager : MonoBehaviour
 
     public static BoardManager instance;
 
+    public grid_manager gridManager;
+
+    public GameCamera gameCamera;
+
+    public new string name;
+
+    public Player player;
+
+    public Item star;
+
+    public Item graff;
+
+    public Item end;
+
+    public List<Item> lureBottles = new List<Item>();
+
+    public List<Item> pincerses = new List<Item>();
+
+    public List<Item> grouthes = new List<Item>();
+
+    public List<Item> manholeCovers = new List<Item>();
+
+    public List<Enemy> enemies = new List<Enemy>();
+
     private void Awake()
     {
         instance = this;
     }
 
     // Start is called before the first frame update
-    void Start() { }
+    void Start() {
+        gridManager.HideLayout();
+        Init();
+    }
 
     // Update is called once per frame
-    void Update() { }
+    void Update() {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                Debug.Log("鼠标按下");
+            }
+            Ray ray = gameCamera.camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+            if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
+            {
+                var node = hitInfo.transform.parent.parent;
+                if (node == null)
+                {
+                    Debug.Log("鼠标按下Error 1");
+                    return;
+                }
+                var nodeScript = node.GetComponent<BoardNode>();
+                if (nodeScript == null)
+                {
+                    Debug.Log("鼠标按下Error 2");
+                    return;
+                }
+                var coord = nodeScript.coord;
 
 
-    #region Editor Process
+                var tileIndex = coord.x * Mathf.RoundToInt(gridManager.v2_grid.y) + coord.z;
+                var tile = gridManager.db_tiles[tileIndex];
+                //Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
+                if (player.moving || player.tile_s != tile)
+                {
+                    player.selected_tile_s = tile;
+                    player.gm_s.find_paths_realtime(player, tile);
+                }
+            }
+        }
+    }
 
+    #region RunTime
+
+    public Dictionary<string, Item> allItems = new Dictionary<string, Item>();
+    public void Init()
+    {
+        name = gameObject.name;
+        gameObject.name = "BoardManager";
+        resetItems();
+        resetEnemies();
+    }
+
+    void resetItems()
+    {
+        for (var index = 0; index < itemRoot.childCount; index++)
+        {
+            var itemTr = itemRoot.GetChild(index);
+            var item = itemTr.GetComponent<Item>();
+            if (item == null)
+            {
+                Debug.Log(string.Format("未挂载脚本Item{0}", itemTr.name));
+                continue;
+            }
+            allItems.Add(item.coord.name, item);
+            switch (itemTr.name)
+            {
+                //case ItemName.Item_Start:
+                //    level.start = item;
+                //    break;
+                case ItemName.Item_Star:
+                    star = item;
+                    break;
+                case ItemName.Item_Pincers:
+                    pincerses.Add(itemTr.GetComponent<Item>());
+                    break;
+                case ItemName.Item_ManholeCover:
+                    manholeCovers.Add(item);
+                    break;
+                case ItemName.Item_LureBottle:
+                    lureBottles.Add(item);
+                    break;
+                case ItemName.item_Growth:
+                    grouthes.Add(item);
+                    break;
+                case ItemName.Item_Graff:
+                    graff = item;
+                    break;
+                case ItemName.Item_End:
+                    end = item;
+                    break;
+                default:
+                    Debug.LogError(string.Format("未处理未定义Item{0}", itemTr.name));
+                    break;
+            }
+        }
+    }
+
+    void resetEnemies()
+    {
+        for (var index = 0; index < enemyRoot.childCount; index++)
+        {
+            var enemyTr = enemyRoot.GetChild(index);
+            var enemy = enemyTr.GetComponent<Enemy>();
+            if (enemy == null)
+            {
+                Debug.Log(string.Format("未挂载脚本Enemy{0}", enemyTr.name));
+                continue;
+            }
+
+            enemies.Add(enemy);
+
+            switch (enemyTr.name)
+            {
+                case EnemyName.Enemy_Static:
+                case EnemyName.Enemy_Sentinel:
+                case EnemyName.Enemy_Patrol:
+                case EnemyName.Enemy_Distracted:
+                    break;
+                default:
+                    Debug.LogError(string.Format("未定义敌人{0}", enemyTr.name));
+                    break;
+            }
+        }
+    }
+
+
+    public void PickItem(string name, Player player)
+    {
+        var item = allItems.ContainsKey(name) ? allItems[name] : null;
+        if (item)
+        {
+            allItems.Remove(name);
+            item.Picked(player);
+        }
+    }
+
+    #endregion
+
+
+
+    #region Editor Process 编辑器代码
+
+#if UNITY_EDITOR
     private void OnValidate()
     {
         if(visualRoot==null)
@@ -47,7 +209,7 @@ public class BoardManager : MonoBehaviour
         visualRoot.gameObject.SetActive(tirggerVisibleNode);
     }
 
-#if UNITY_EDITOR
+
 
     [ContextMenu("处理关卡(不要点)")]
     void Process()
@@ -286,103 +448,6 @@ public class BoardManager : MonoBehaviour
         Debug.Log(string.Format("保存关卡预设{0}", url));
     }
 #endif
-    #endregion
-
-
-    #region RunTime
-
-    public Dictionary<string, Item> allItems = new Dictionary<string, Item>(); 
-    public void init(Level level)
-    {
-        level.name = gameObject.name;
-        gameObject.name = "BoardManager";
-        resetItems(level);
-        resetEnemies(level);
-    }
-
-    void resetItems(Level level)
-    {
-        for (var index = 0; index < itemRoot.childCount; index++)
-        {
-            var itemTr = itemRoot.GetChild(index);
-            var item = itemTr.GetComponent<Item>();
-            if (item == null)
-            {
-                Debug.Log(string.Format("未挂载脚本Item{0}", itemTr.name));
-                continue;
-            }
-            allItems.Add(item.coord.name, item);
-            switch (itemTr.name)
-            {
-                //case ItemName.Item_Start:
-                //    level.start = item;
-                //    break;
-                case ItemName.Item_Star:
-                    level.star = item;
-                    break;
-                case ItemName.Item_Pincers:
-                    level.pincerses.Add(itemTr.GetComponent<Item>());
-                    break;
-                case ItemName.Item_ManholeCover:
-                    level.manholeCovers.Add(item);
-                    break;
-                case ItemName.Item_LureBottle:
-                    level.lureBottles.Add(item);
-                    break;
-                case ItemName.item_Growth:
-                    level.grouthes.Add(item);
-                    break;
-                case ItemName.Item_Graff:
-                    level.graff = item;
-                    break;
-                case ItemName.Item_End:
-                    level.end = item;
-                    break;
-                default:
-                    Debug.LogError(string.Format("未处理未定义Item{0}", itemTr.name));
-                    break;
-            }
-        }
-    }
-
-    void resetEnemies(Level level)
-    {
-        for (var index = 0; index < enemyRoot.childCount; index++)
-        {
-            var enemyTr = enemyRoot.GetChild(index);
-            var enemy = enemyTr.GetComponent<Enemy>();
-            if (enemy == null)
-            {
-                Debug.Log(string.Format("未挂载脚本Enemy{0}", enemyTr.name));
-                continue;
-            }
-
-            level.enemies.Add(enemy);
-
-            switch (enemyTr.name)
-            {
-                case EnemyName.Enemy_Static:
-                case EnemyName.Enemy_Sentinel:
-                case EnemyName.Enemy_Patrol:
-                case EnemyName.Enemy_Distracted:
-                    break;
-                default:
-                    Debug.LogError(string.Format("未定义敌人{0}", enemyTr.name));
-                    break;
-            }
-        }
-    }
-
-
-    public void PickItem(string name, Player player)
-    {
-        var item = allItems.ContainsKey(name) ? allItems[name] : null;
-        if(item)
-        {
-            allItems.Remove(name);
-            item.Picked(player);
-        }
-    }
 
     #endregion
 }
