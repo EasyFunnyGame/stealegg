@@ -20,7 +20,7 @@ public static class EnemyName
 
 
 
-public class Enemy : MonoBehaviour
+public class Enemy : character
 {
     [SerializeField]
     public EnemyType enemyType;
@@ -29,14 +29,20 @@ public class Enemy : MonoBehaviour
     public Coord coord;
 
     // Start is called before the first frame update
+
+    void Awake()
+    {
+        base.Awake (); 
+    }
+
     void Start()
     {
-        
+        base.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        base.Update();
     }
 }

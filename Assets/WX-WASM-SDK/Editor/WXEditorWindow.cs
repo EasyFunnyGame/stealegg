@@ -1381,7 +1381,7 @@ namespace WeChatWASM
                 if (res == 0)
                 {
                     checkNeedCopyDataPackage(false);
-                    UnityEngine.Debug.LogFormat("[Converter] All done!");
+                    UnityEngine.Debug.LogFormat("[Converter] All done!"+ DateTime.Now.ToUniversalTime());
                     ShowNotification(new GUIContent("转换完成"));
                 }
                 else

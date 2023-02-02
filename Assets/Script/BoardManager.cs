@@ -51,22 +51,19 @@ public class BoardManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        gridManager.HideLayout();
+        Init();
     }
 
     // Start is called before the first frame update
     void Start() {
-        gridManager.HideLayout();
-        Init();
+        
     }
 
     // Update is called once per frame
     void Update() {
         if (Input.GetMouseButtonDown(0))
         {
-            if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                Debug.Log("鼠标按下");
-            }
             Ray ray = gameCamera.camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
@@ -85,9 +82,30 @@ public class BoardManager : MonoBehaviour
                 }
                 var coord = nodeScript.coord;
 
-
                 var tileIndex = coord.x * Mathf.RoundToInt(gridManager.v2_grid.y) + coord.z;
                 var tile = gridManager.db_tiles[tileIndex];
+
+                var targetArray = tile.name.Split('_');
+                var t_x = int.Parse(targetArray[0]);
+                var t_z = int.Parse(targetArray[1]);
+
+                var currentArray = player.tile_s.name.Split('_');
+                var c_x = int.Parse(currentArray[0]);
+                var c_z = int.Parse(currentArray[1]);
+
+                //if(enemies.Count>0)
+                //{
+                //    enemies[0].selected_tile_s = tile;
+                //    enemies[0].gm_s.find_paths_realtime(enemies[0], tile);
+                //}
+
+
+                //if (t_x + t_z - c_x- c_z > 1)
+                //{
+                //    Debug.Log("Tile Too Far!");
+                //    return;
+                //}
+
                 //Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
                 if (player.moving || player.tile_s != tile)
                 {
@@ -101,15 +119,19 @@ public class BoardManager : MonoBehaviour
     #region RunTime
 
     public Dictionary<string, Item> allItems = new Dictionary<string, Item>();
+
+    public Dictionary<string, BoardNode> nodes = new Dictionary<string, BoardNode>();
+
     public void Init()
     {
         name = gameObject.name;
         gameObject.name = "BoardManager";
-        resetItems();
-        resetEnemies();
+        ResetItems();
+        ResetEnemies();
+        ResetSquareNodes();
     }
 
-    void resetItems()
+    void ResetItems()
     {
         for (var index = 0; index < itemRoot.childCount; index++)
         {
@@ -154,7 +176,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void resetEnemies()
+    void ResetEnemies()
     {
         for (var index = 0; index < enemyRoot.childCount; index++)
         {
@@ -168,6 +190,8 @@ public class BoardManager : MonoBehaviour
 
             enemies.Add(enemy);
 
+            enemy.Reached();
+
             switch (enemyTr.name)
             {
                 case EnemyName.Enemy_Static:
@@ -178,6 +202,20 @@ public class BoardManager : MonoBehaviour
                 default:
                     Debug.LogError(string.Format("未定义敌人{0}", enemyTr.name));
                     break;
+            }
+        }
+    }
+
+    void ResetSquareNodes()
+    {
+        for(var index = 0; index < squareRoot.childCount; index++)
+        {
+            var boardNodeGameObject = squareRoot.GetChild(index);
+            var boardNode = boardNodeGameObject.GetComponent<BoardNode>();
+            if(boardNode)
+            {
+                nodes.Add(boardNode.coord.name, boardNode);
+                boardNode.contour.gameObject.SetActive(false);
             }
         }
     }
@@ -239,7 +277,7 @@ public class BoardManager : MonoBehaviour
             visualRoot = boardNode.GetChild(1);
             enemyRoot = boardNode.GetChild(2);
             linkRoot = boardNode.GetChild(3);
-            linkRoot.gameObject.SetActive(false);
+            linkRoot.gameObject.SetActive(true);
 
             itemRoot = boardNode.Find("ItemRoot");
             if(itemRoot==null)
@@ -268,7 +306,7 @@ public class BoardManager : MonoBehaviour
                 childCount = nodeTransform.childCount;
             }
 
-            var base_Square = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Prefab/Item/Base_Square.prefab");
+            var base_Square = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/__Resources/Prefab/Item/Base_Square.prefab");
             var base_SquareInstance = Instantiate(base_Square);
             base_SquareInstance.transform.parent = nodeTransform;
             base_SquareInstance.name = "Base_Square";
@@ -345,7 +383,7 @@ public class BoardManager : MonoBehaviour
     [ContextMenu("替换物品预设")]
     void ProcessItem()
     {
-        var prefabRoot = "Assets/Resources/Prefab/Item/{0}.prefab";
+        var prefabRoot = "Assets/__Resources/Prefab/Item/{0}.prefab";
         var childCount = itemRoot.childCount;
         for ( var index = 0; index < childCount; index++ )
         {
@@ -398,7 +436,7 @@ public class BoardManager : MonoBehaviour
     [ContextMenu("替换敌人预设")]
     void ProcessEnemy()
     {
-        var prefabRoot = "Assets/Resources/Prefab/Character/{0}.prefab";
+        var prefabRoot = "Assets/__Resources/Prefab/Character/{0}.prefab";
         var childCount = enemyRoot.childCount;
         for (var index = 0; index < childCount; index++)
         {
@@ -412,25 +450,38 @@ public class BoardManager : MonoBehaviour
             enemyInstance.transform.localPosition = new Vector3(Mathf.RoundToInt(enemyTransform.localPosition.x), enemyTransform.localPosition.y, Mathf.RoundToInt(enemyTransform.localPosition.z));
             enemyInstance.transform.localRotation = enemyTransform.localRotation;
             enemyInstance.transform.SetSiblingIndex(enemyTransform.GetSiblingIndex());
-            var enemyScript = enemyInstance.AddComponent<Enemy>();
-            enemyScript.coord = new Coord(enemyTransform.position);
+            Enemy enemyScript = null;
+            
             switch (enemyTransform.name)
             {
                 case EnemyName.Enemy_Static:
+                    enemyScript = enemyInstance.AddComponent<EnemyStatic>();
                     enemyScript.enemyType = EnemyType.Static;
                     break;
                 case EnemyName.Enemy_Distracted:
+                    enemyScript = enemyInstance.AddComponent<EnemyDistracted>();
                     enemyScript.enemyType = EnemyType.Distracted;
                     break;
                 case EnemyName.Enemy_Sentinel:
+                    enemyScript = enemyInstance.AddComponent<EnemySentinel>();
                     enemyScript.enemyType = EnemyType.Sentinel;
                     break;
                 case EnemyName.Enemy_Patrol:
+                    enemyScript = enemyInstance.AddComponent<EnemyPatrol>();
                     enemyScript.enemyType = EnemyType.Patrol;
                     break;
                 default:
                     Debug.LogError(string.Format("没有定义敌人{0}", enemyInstance.name));
                     break;
+            }
+
+            if(enemyScript!=null)
+            {
+                enemyScript.coord = new Coord(enemyTransform.position);
+            }
+            else
+            {
+                Debug.LogError(string.Format("没有绑定敌人脚本{0}", enemyInstance.name));
             }
             DestroyImmediate(enemyTransform.gameObject);
         }
@@ -443,7 +494,7 @@ public class BoardManager : MonoBehaviour
         var chapterAndLevel = go.name.Split('-');
         var chapter = int.Parse(chapterAndLevel[0]);
         var level = int.Parse(chapterAndLevel[1]);
-        var url = string.Format("Assets/Resources/Prefab/Level/{0}/{1}.prefab", chapter, name);
+        var url = string.Format("Assets/__Resources/Prefab/Level/{0}/{1}.prefab", chapter, gameObject.name);
         PrefabUtility.SaveAsPrefabAssetAndConnect(go, url,InteractionMode.UserAction);
         Debug.Log(string.Format("保存关卡预设{0}", url));
     }

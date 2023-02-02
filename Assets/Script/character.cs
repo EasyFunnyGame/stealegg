@@ -23,6 +23,21 @@ public class character : MonoBehaviour
 
     public bool myTurn = true;
 
+    protected BoardManager boardManager;
+
+    public Direction direction = Direction.Up;
+
+    public void Awake()
+    {
+        this.ResetDirection();
+    }
+
+    public void Start()
+    {
+        var boardManagerGo = GameObject.Find("BoardManager");
+        boardManager = boardManagerGo.GetComponent<BoardManager>();
+    }
+
     public void Update()
     {
         if (!myTurn)
@@ -82,10 +97,16 @@ public class character : MonoBehaviour
         }
     }
 
-    protected virtual void Reached()
+    
+
+    protected virtual void ResetDirection()
     {
-        Debug.Log(string.Format("{0}到达{1}",gameObject.name, tile_s.gameObject.name));
+        var rotateY = transform.localRotation.eulerAngles.y;
+        direction = (Direction)System.Enum.Parse(typeof(Direction), ((rotateY -= (rotateY %= 90)) / 90).ToString(), true);
+        //Debug.Log(gameObject.name + "方向:" + direction);
     }
+
+   
 
 
     public void move_tile(tile ttile)
@@ -134,5 +155,42 @@ public class character : MonoBehaviour
         moving = true;
         moving_tiles = true;
         body_looking = true;
+        
+        StartMove();
     }
+
+    public void Reached()
+    {
+        ResetDirection();
+        OnReached();
+    }
+
+    virtual protected void OnReached()
+    {
+        
+    }
+
+    public void StartMove()
+    {
+        OnStartMove();
+    }
+
+    virtual protected void OnStartMove()
+    {
+        
+    }
+
+
+    #region 动画事件回调
+    public virtual void FootL()
+    {
+
+    }
+
+    public virtual void FootR()
+    {
+
+    }
+
+    #endregion
 }

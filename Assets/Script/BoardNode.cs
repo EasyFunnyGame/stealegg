@@ -5,13 +5,13 @@ using UnityEngine;
 public class BoardNode : MonoBehaviour
 {
     [SerializeField]
-    private Transform targetIcon;
+    public Transform targetIcon;
 
     [SerializeField]
-    private Transform contour;
+    public Transform contour;
 
     [SerializeField]
-    private float height;
+    public float height;
 
     [SerializeField]
     public Coord coord;

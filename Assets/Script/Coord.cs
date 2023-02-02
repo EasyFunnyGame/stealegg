@@ -2,6 +2,14 @@
 
 using UnityEngine;
 
+public enum Direction
+{
+    Up,// 0
+    Right,// 90
+    Down,// 180
+    Left,// 270
+}
+
 [Serializable]
 public struct Coord
 {
@@ -18,8 +26,8 @@ public struct Coord
         name = tileName;
         height = tileHeight;
         var coordArr = tileName.Split('_');
-        this.x = int.Parse(coordArr[0]);
-        this.z = int.Parse(coordArr[1]);
+        x = int.Parse(coordArr[0]);
+        z = int.Parse(coordArr[1]);
     }
 
     public Coord(Vector3 position)

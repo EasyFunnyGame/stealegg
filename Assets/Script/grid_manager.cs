@@ -32,6 +32,7 @@ public class grid_manager : MonoBehaviour
     public List<tile> db_tiles;
     public List<int> db_direction_order;
 
+    public tile startTile;
 
     void Update()
     {
@@ -272,9 +273,8 @@ public class grid_manager : MonoBehaviour
 
     void Start()
     {
-        char_s.tile_s = db_tiles[0]; //Slight delay in start game, this gives the char a tile so we don't get an onhover error during that milisecond//
+        char_s.tile_s = startTile; //Slight delay in start game, this gives the char a tile so we don't get an onhover error during that milisecond//
         StartCoroutine(start_game());
-        Debug.Log("GridManager Start!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     public void HideLayout()
