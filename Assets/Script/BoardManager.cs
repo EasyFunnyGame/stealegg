@@ -24,7 +24,7 @@ public class BoardManager : MonoBehaviour
 
     public static BoardManager instance;
 
-    public grid_manager gridManager;
+    public GridManager gridManager;
 
     public GameCamera gameCamera;
 
@@ -85,32 +85,18 @@ public class BoardManager : MonoBehaviour
                 var tileIndex = coord.x * Mathf.RoundToInt(gridManager.v2_grid.y) + coord.z;
                 var tile = gridManager.db_tiles[tileIndex];
 
-                var targetArray = tile.name.Split('_');
-                var t_x = int.Parse(targetArray[0]);
-                var t_z = int.Parse(targetArray[1]);
+                if (enemies.Count > 0)
+                {
+                    enemies[0].selected_tile_s = tile;
+                    enemies[0].findPathRealTime(tile);
+                }
 
-                var currentArray = player.tile_s.name.Split('_');
-                var c_x = int.Parse(currentArray[0]);
-                var c_z = int.Parse(currentArray[1]);
+                // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
 
-                //if(enemies.Count>0)
-                //{
-                //    enemies[0].selected_tile_s = tile;
-                //    enemies[0].gm_s.find_paths_realtime(enemies[0], tile);
-                //}
-
-
-                //if (t_x + t_z - c_x- c_z > 1)
-                //{
-                //    Debug.Log("Tile Too Far!");
-                //    return;
-                //}
-
-                //Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
                 if (player.moving || player.tile_s != tile)
                 {
                     player.selected_tile_s = tile;
-                    player.gm_s.find_paths_realtime(player, tile);
+                    player.findPathRealTime(tile);
                 }
             }
         }
@@ -450,24 +436,24 @@ public class BoardManager : MonoBehaviour
             enemyInstance.transform.localPosition = new Vector3(Mathf.RoundToInt(enemyTransform.localPosition.x), enemyTransform.localPosition.y, Mathf.RoundToInt(enemyTransform.localPosition.z));
             enemyInstance.transform.localRotation = enemyTransform.localRotation;
             enemyInstance.transform.SetSiblingIndex(enemyTransform.GetSiblingIndex());
-            Enemy enemyScript = null;
+            Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
             
             switch (enemyTransform.name)
             {
                 case EnemyName.Enemy_Static:
-                    enemyScript = enemyInstance.AddComponent<EnemyStatic>();
+                    // enemyScript = enemyInstance.AddComponent<EnemyStatic>();
                     enemyScript.enemyType = EnemyType.Static;
                     break;
                 case EnemyName.Enemy_Distracted:
-                    enemyScript = enemyInstance.AddComponent<EnemyDistracted>();
+                    // enemyScript = enemyInstance.AddComponent<EnemyDistracted>();
                     enemyScript.enemyType = EnemyType.Distracted;
                     break;
                 case EnemyName.Enemy_Sentinel:
-                    enemyScript = enemyInstance.AddComponent<EnemySentinel>();
+                    // enemyScript = enemyInstance.AddComponent<EnemySentinel>();
                     enemyScript.enemyType = EnemyType.Sentinel;
                     break;
                 case EnemyName.Enemy_Patrol:
-                    enemyScript = enemyInstance.AddComponent<EnemyPatrol>();
+                    // enemyScript = enemyInstance.AddComponent<EnemyPatrol>();
                     enemyScript.enemyType = EnemyType.Patrol;
                     break;
                 default:

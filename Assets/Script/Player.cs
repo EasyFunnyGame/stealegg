@@ -1,7 +1,4 @@
-﻿
-
-using UnityEngine;
-
+﻿using UnityEngine;
 public class Player : character
 {
     public Animator animator;

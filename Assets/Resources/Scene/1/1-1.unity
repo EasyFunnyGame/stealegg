@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 4, y: 3}
   walls_s: {fileID: 1595427694}
   mr: {fileID: 844042377}
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 3, y: 1}
   walls_s: {fileID: 1785434161}
   mr: {fileID: 48947351}
@@ -732,7 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 3, y: 0}
   walls_s: {fileID: 192571777}
   mr: {fileID: 1241308159}
@@ -968,7 +968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 1, y: 0}
   walls_s: {fileID: 1972140088}
   mr: {fileID: 700772844}
@@ -1032,7 +1032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 4, y: 1}
   walls_s: {fileID: 2056426998}
   mr: {fileID: 722608766}
@@ -1282,7 +1282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 4, y: 2}
   walls_s: {fileID: 1217846432}
   mr: {fileID: 942776902}
@@ -1346,7 +1346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 5, y: 2}
   walls_s: {fileID: 942206268}
   mr: {fileID: 1286724608}
@@ -1752,7 +1752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 1, y: 1}
   walls_s: {fileID: 741811932}
   mr: {fileID: 80926793}
@@ -2638,7 +2638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 1, y: 3}
   walls_s: {fileID: 1536167667}
   mr: {fileID: 1809811898}
@@ -2702,7 +2702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 2, y: 3}
   walls_s: {fileID: 847865369}
   mr: {fileID: 409417107}
@@ -2959,18 +2959,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373331981}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &376008930 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8061044542378103681, guid: c63187447762c4af1824402b8adef160,
-    type: 3}
-  m_PrefabInstance: {fileID: 2451556632111088841}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9db5e5d22ee9240c88942128adad7f4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &388051718
 GameObject:
   m_ObjectHideFlags: 0
@@ -3691,7 +3679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 0, y: 1}
   walls_s: {fileID: 539157004}
   mr: {fileID: 513850660}
@@ -5369,7 +5357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 5, y: 3}
   walls_s: {fileID: 2105509908}
   mr: {fileID: 909980272}
@@ -5528,7 +5516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 2, y: 2}
   walls_s: {fileID: 191919035}
   mr: {fileID: 1092030818}
@@ -6546,7 +6534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 4, y: 0}
   walls_s: {fileID: 405667444}
   mr: {fileID: 1304092374}
@@ -8609,7 +8597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 0, y: 0}
   walls_s: {fileID: 352886425}
   mr: {fileID: 234921041}
@@ -10257,7 +10245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 5, y: 0}
   walls_s: {fileID: 1325669999}
   mr: {fileID: 10309636}
@@ -10466,7 +10454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 3, y: 3}
   walls_s: {fileID: 1738529090}
   mr: {fileID: 1823851986}
@@ -11889,7 +11877,7 @@ PrefabInstance:
         type: 3}
       propertyPath: boardManager
       value: 
-      objectReference: {fileID: 376008930}
+      objectReference: {fileID: 563310252856326216}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22322aaf2a8a010409808036f8cf4510, type: 3}
 --- !u!114 &1825745704 stripped
@@ -12147,7 +12135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 2, y: 1}
   walls_s: {fileID: 1260535941}
   mr: {fileID: 1203248664}
@@ -12211,7 +12199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 2, y: 0}
   walls_s: {fileID: 619755772}
   mr: {fileID: 974244720}
@@ -12275,7 +12263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 5, y: 1}
   walls_s: {fileID: 619978605}
   mr: {fileID: 389236072}
@@ -12749,7 +12737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 0, y: 2}
   walls_s: {fileID: 157623043}
   mr: {fileID: 1311757527}
@@ -12813,7 +12801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 0, y: 3}
   walls_s: {fileID: 2116308235}
   mr: {fileID: 1793949067}
@@ -12970,7 +12958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 1, y: 2}
   walls_s: {fileID: 1224550693}
   mr: {fileID: 821541582}
@@ -14060,7 +14048,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac14b87e5d5131498de1adbe93bf52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 2127982140248681249}
+  gridManager: {fileID: 0}
   v2xy: {x: 3, y: 2}
   walls_s: {fileID: 1321032223}
   mr: {fileID: 1964949329}
@@ -14094,82 +14082,25 @@ MonoBehaviour:
   row: 6
   col: 4
   size: 1
---- !u!114 &2127982140248681249
+--- !u!114 &563310252856326216 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8061044542378103681, guid: c63187447762c4af1824402b8adef160,
+    type: 3}
+  m_PrefabInstance: {fileID: 1419355056609033613}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3832694869735152642}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 702ba4edecd47e24bb8d22627fec8ffb, type: 3}
+  m_Script: {fileID: 11500000, guid: 9db5e5d22ee9240c88942128adad7f4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  find_path: 2
-  v2_grid: {x: 6, y: 4}
-  gridLayout: {fileID: 162857310354012977}
-  go_pref_tile: {fileID: 7491000205150086847}
-  char_s: {fileID: 1825745704}
-  db_tiles:
-  - {fileID: 1172485258}
-  - {fileID: 421871297}
-  - {fileID: 2005485304}
-  - {fileID: 2009347696}
-  - {fileID: 108589507}
-  - {fileID: 203534366}
-  - {fileID: 2053736175}
-  - {fileID: 307225779}
-  - {fileID: 1865348308}
-  - {fileID: 1862159298}
-  - {fileID: 704010007}
-  - {fileID: 336949300}
-  - {fileID: 72884685}
-  - {fileID: 59143408}
-  - {fileID: 2138845742}
-  - {fileID: 1546335684}
-  - {fileID: 831593792}
-  - {fileID: 126036071}
-  - {fileID: 139049018}
-  - {fileID: 20055492}
-  - {fileID: 1523496045}
-  - {fileID: 1868126031}
-  - {fileID: 140818911}
-  - {fileID: 683604756}
-  db_direction_order: 
-  startTile: {fileID: 0}
---- !u!1001 &2451556632111088841
+--- !u!1001 &1419355056609033613
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5167451447378901976, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5167451447378901976, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5167451447378901976, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5167451447378901976, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5167451447378901976, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
     - target: {fileID: 7260481233403740958, guid: c63187447762c4af1824402b8adef160,
         type: 3}
       propertyPath: m_RootOrder
@@ -14225,31 +14156,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7808727916188000631, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 1825745704}
-    - target: {fileID: 7808727916188000631, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: gameCamera
-      value: 
-      objectReference: {fileID: 852304627}
-    - target: {fileID: 7808727916188000631, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: gridManager
-      value: 
-      objectReference: {fileID: 2127982140248681249}
     - target: {fileID: 8037159082535934372, guid: c63187447762c4af1824402b8adef160,
         type: 3}
       propertyPath: m_Name
       value: 1-1
       objectReference: {fileID: 0}
-    - target: {fileID: 8037159082535934372, guid: c63187447762c4af1824402b8adef160,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8061044542378103681, guid: c63187447762c4af1824402b8adef160,
         type: 3}
       propertyPath: player
@@ -14265,9 +14176,50 @@ PrefabInstance:
       propertyPath: gridManager
       value: 
       objectReference: {fileID: 2127982140248681249}
-    m_RemovedComponents:
-    - {fileID: 7808727916188000631, guid: c63187447762c4af1824402b8adef160, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c63187447762c4af1824402b8adef160, type: 3}
+--- !u!114 &2127982140248681249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3832694869735152642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 702ba4edecd47e24bb8d22627fec8ffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  find_path: 2
+  v2_grid: {x: 6, y: 4}
+  gridLayout: {fileID: 162857310354012977}
+  go_pref_tile: {fileID: 7491000205150086847}
+  db_tiles:
+  - {fileID: 1172485258}
+  - {fileID: 421871297}
+  - {fileID: 2005485304}
+  - {fileID: 2009347696}
+  - {fileID: 108589507}
+  - {fileID: 203534366}
+  - {fileID: 2053736175}
+  - {fileID: 307225779}
+  - {fileID: 1865348308}
+  - {fileID: 1862159298}
+  - {fileID: 704010007}
+  - {fileID: 336949300}
+  - {fileID: 72884685}
+  - {fileID: 59143408}
+  - {fileID: 2138845742}
+  - {fileID: 1546335684}
+  - {fileID: 831593792}
+  - {fileID: 126036071}
+  - {fileID: 139049018}
+  - {fileID: 20055492}
+  - {fileID: 1523496045}
+  - {fileID: 1868126031}
+  - {fileID: 140818911}
+  - {fileID: 683604756}
+  db_direction_order: 
 --- !u!1 &2563232634399915726
 GameObject:
   m_ObjectHideFlags: 0

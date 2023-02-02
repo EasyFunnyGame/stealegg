@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class character : MonoBehaviour
 {
-    public grid_manager gm_s;
+    public GridManager gridManager;
     public bool big;
     public bool body_looking;
     public bool moving;
@@ -30,12 +30,21 @@ public class character : MonoBehaviour
     public void Awake()
     {
         this.ResetDirection();
+        
     }
 
     public void Start()
     {
         var boardManagerGo = GameObject.Find("BoardManager");
         boardManager = boardManagerGo.GetComponent<BoardManager>();
+
+        var gridManagerGo = GameObject.Find("GridManager");
+        gridManager = gridManagerGo.GetComponent<GridManager>();
+
+        var x = int.Parse(transform.position.x.ToString());
+        var z = int.Parse(transform.position.x.ToString());
+        var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
+        tile_s = tile;
     }
 
     public void Update()
@@ -88,25 +97,16 @@ public class character : MonoBehaviour
                     db_moves[4].gameObject.SetActive(false);
                     moving = false;
                     moving_tiles = false;
-                    if (gm_s.find_path == efind_path.once_per_turn || gm_s.find_path == efind_path.max_tiles)
-                        gm_s.find_paths_static(this);
-                    gm_s.hover_tile(selected_tile_s);
+                    if (gridManager.find_path == efind_path.once_per_turn || gridManager.find_path == efind_path.max_tiles)
+                        gridManager.find_paths_static(this);
+                    //gm_s.hover_tile(selected_tile_s);
                 }
                 Reached();
             }
         }
     }
 
-    
 
-    protected virtual void ResetDirection()
-    {
-        var rotateY = transform.localRotation.eulerAngles.y;
-        direction = (Direction)System.Enum.Parse(typeof(Direction), ((rotateY -= (rotateY %= 90)) / 90).ToString(), true);
-        //Debug.Log(gameObject.name + "方向:" + direction);
-    }
-
-   
 
 
     public void move_tile(tile ttile)
@@ -159,6 +159,18 @@ public class character : MonoBehaviour
         StartMove();
     }
 
+
+    public void findPathRealTime(tile t)
+    {
+        this.gridManager.find_paths_realtime(this, t);
+    }
+
+    protected virtual void ResetDirection()
+    {
+        var rotateY = transform.localRotation.eulerAngles.y;
+        direction = (Direction)System.Enum.Parse(typeof(Direction), ((rotateY -= (rotateY %= 90)) / 90).ToString(), true);
+        //Debug.Log(gameObject.name + "方向:" + direction);
+    }
     public void Reached()
     {
         ResetDirection();
