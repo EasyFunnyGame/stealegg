@@ -1,19 +1,18 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainCanvas : MonoBehaviour
+public class MainCanvas : BaseCanvas
 {
     public Button btn_start;
     public Button btn_setting;
-    public Image img_bg;
+    public Image bg;
 
-    private void Awake()
+    void Awake()
     {
         btn_start.onClick.AddListener(StartGame);
         btn_setting.onClick.AddListener(ShowSettingCanvas);
-        UiUtils.Adaptive(img_bg, GetComponent<RectTransform>());
+        //UiUtils.Adaptive(bg, GetComponent<RectTransform>());
     }
 
     // Start is called before the first frame update
@@ -30,16 +29,20 @@ public class MainCanvas : MonoBehaviour
 
     void StartGame()
     {
-        var level = PlayerPrefs.GetInt("Level");
-        var chapter = (level - level % 12) / 12;
-        level = level % 12;
-        var sceneName = string.Format("{0}-{1}", chapter + 1, level + 1);
-        SceneManager.LoadScene(sceneName);
-        Game.Instance.mainCanvas.gameObject.SetActive(false);
+        Game.Instance.mainCanvas.Hide();
+        Game.Instance.chapterCanvas.Show();
     }
 
     void ShowSettingCanvas()
     {
         Game.Instance.settingCanvas.gameObject.SetActive(true);
+    }
+
+    protected override void OnShow()
+    {
+    }
+
+    protected override void OnHide()
+    {
     }
 }

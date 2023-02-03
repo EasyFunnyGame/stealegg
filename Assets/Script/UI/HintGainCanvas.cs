@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HintGainCanvas : MonoBehaviour
+public class HintGainCanvas : BaseCanvas
 {
     // Start is called before the first frame update
     void Start()
@@ -14,5 +14,12 @@ public class HintGainCanvas : MonoBehaviour
     void Update()
     {
         
+    }
+    protected override void OnShow()
+    {
+    }
+
+    protected override void OnHide()
+    {
     }
 }

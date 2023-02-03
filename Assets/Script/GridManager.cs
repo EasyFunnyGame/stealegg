@@ -28,23 +28,22 @@ public class GridManager : MonoBehaviour
     public Vector2 v2_grid;
     public GridLayout gridLayout;
     public GameObject go_pref_tile;
-    //public character char_s;
-    public List<tile> db_tiles;
+    public List<Tile> db_tiles;
     public List<int> db_direction_order;
 
     //**Once Per Turn/Max Tile Pathfinding**//
-    public void find_paths_static(character tchar)
+    public void find_paths_static(Character tchar)
     {
         var ttile = tchar.tile_s;
         for (int x = 0; x < db_tiles.Count; x++)
             db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
 
-        List<tile> db_tpath = new List<tile>();
+        List<Tile> db_tpath = new List<Tile>();
         find_next_path_static(tchar, ttile, db_tpath);
     }
 
 
-    void find_next_path_static(character tchar, tile ttile, List<tile> db_tpath)
+    void find_next_path_static(Character tchar, Tile ttile, List<Tile> db_tpath)
     {
         for (int x = 0; x < ttile.db_neighbors.Count; x++)
         {
@@ -59,8 +58,12 @@ public class GridManager : MonoBehaviour
                         {
                             ntile.db_path_lowest.Clear();
                             for (int i = 0; i < db_tpath.Count; i++)
+                            {
                                 ntile.db_path_lowest.Add(db_tpath[i]);
 
+                            }
+                                
+                                
                             if (find_path == efind_path.max_tiles)
                                 //ntile.im.color = Color.blue;
 
@@ -73,9 +76,16 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void ClearPath(Character character)
+    {
+        character.tar_tile_s = null;
+        character.selected_tile_s = null;
+        for (int x = 0; x < db_tiles.Count; x++)
+            db_tiles[x].db_path_lowest.Clear();
+    }
 
     //**On_hover/On_Click Pathfinding**//
-    public void find_paths_realtime(character tchar, tile tar_tile_s)
+    public void find_paths_realtime(Character tchar, Tile tar_tile_s)
     {
         var ttile = tchar.tile_s;
         for (int x = 0; x < db_tiles.Count; x++)
@@ -118,12 +128,11 @@ public class GridManager : MonoBehaviour
             db_direction_order.Add(1);
             db_direction_order.Add(2);
         }
-
-        List<tile> db_tpath = new List<tile>();
+        List<Tile> db_tpath = new List<Tile>();
         find_next_path_realtime(tchar, ttile, db_tpath, tar_tile_s);
     }
 
-    void find_next_path_realtime(character tchar, tile ttile, List<tile> db_tpath, tile tar_tile_s)
+    void find_next_path_realtime(Character tchar, Tile ttile, List<Tile> db_tpath, Tile tar_tile_s)
     {
         for (int x = 0; x < ttile.db_neighbors.Count; x++)
         {
@@ -139,7 +148,9 @@ public class GridManager : MonoBehaviour
                         {
                             ntile.db_path_lowest.Clear();
                             for (int i = 0; i < db_tpath.Count; i++)
+                            {
                                 ntile.db_path_lowest.Add(db_tpath[i]);
+                            }
 
                             ntile.db_path_lowest.Add(ntile);
 
@@ -152,7 +163,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public tile GetTileByName(string name)
+    public Tile GetTileByName(string name)
     {
         for(var index = 0; index < db_tiles.Count; index++)
         {
@@ -161,27 +172,6 @@ public class GridManager : MonoBehaviour
         }
         return null;
     }
-
-
-    //public void hover_tile(tile ttile)
-    //{
-    //    if (!char_s.big)
-    //    {
-    //        char_s.selected_tile_s = ttile;
-    //    }
-    //    else
-    //    if (char_s.big)
-    //    {
-    //        char_s.selected_tile_s = ttile;
-    //    }
-
-    //    if (!char_s.moving)
-    //    {
-    //        //**For pathfinding in real time, this becomes slower exponentially as the grid gets bigger, not recommended for anything above 100 tiles**//
-    //        if (find_path == efind_path.on_hover)
-    //            find_paths_realtime(char_s, ttile);
-    //    }
-    //}
 
 
     public void make_grid()
@@ -198,7 +188,7 @@ public class GridManager : MonoBehaviour
                 var tgo = (GameObject) Instantiate(go_pref_tile, go_pref_tile.transform.position, go_pref_tile.transform.rotation, gridLayout.transform);
                 tgo.SetActive(true);
                 tgo.name = x + "_" + y;
-                var ttile = tgo.GetComponent<tile>();
+                var ttile = tgo.GetComponent<Tile>();
                 ttile.v2xy = new Vector2(x, y);
                 db_tiles.Add(ttile);
             }
@@ -249,42 +239,15 @@ public class GridManager : MonoBehaviour
         }
     }
 
-
-    IEnumerator start_game()
+    private void Awake()
     {
-        yield return new WaitForSeconds(0.01f);
-
-        //var ttile = db_tiles[0];
-        //char_s.tile_s = ttile;
-        //ttile.db_chars.Add(char_s);
-        //var tpos = ttile.transform.position;
-
-        //if (char_s.big)
-        //{
-        //    tpos = new Vector3(0, 0, 0);
-        //    tpos += ttile.transform.position + ttile.db_neighbors[1].tile_s.transform.position + ttile.db_neighbors[2].tile_s.transform.position + ttile.db_neighbors[1].tile_s.db_neighbors[2].tile_s.transform.position;
-        //    tpos /= 4;
-        //}
-        //char_s.transform.position = tpos;
-
-        //if (find_path == efind_path.once_per_turn || find_path == efind_path.max_tiles)
-        //    find_paths_static(char_s);
+        gridLayout.gameObject.SetActive(false);
     }
 
 
     void Start()
     {
-        //char_s.tile_s = startTile; //Slight delay in start game, this gives the char a tile so we don't get an onhover error during that milisecond//
-        //StartCoroutine(start_game());
+
     }
 
-    public void HideLayout()
-    {
-        gridLayout.gameObject.SetActive(false);
-    }
-
-    public void ShowLayout()
-    {
-        gridLayout.gameObject.SetActive(true);
-    }
 }

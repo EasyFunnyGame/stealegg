@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class character : MonoBehaviour
+public class Character : MonoBehaviour
 {
     public GridManager gridManager;
     public bool big;
@@ -14,22 +14,23 @@ public class character : MonoBehaviour
     public float rotate_speed = 1f;
     public Color col;
     public Transform tr_body;
-    public tile tile_s;
-    public tile tar_tile_s;
-    public tile selected_tile_s;
+    public Tile tile_s;
+    public Tile tar_tile_s;
+    public Tile selected_tile_s;
+    public Tile nextTile;
     public List<Transform> db_moves;
     public int max_tiles = 7;
     public int num_tile;
-
-    public bool myTurn = true;
-
+    public List<Tile> path;
     protected BoardManager boardManager;
 
     public Direction direction = Direction.Up;
 
+    public bool hasAction = false;
+
     public void Awake()
     {
-        this.ResetDirection();
+        ResetDirection();
         
     }
 
@@ -39,19 +40,28 @@ public class character : MonoBehaviour
         boardManager = boardManagerGo.GetComponent<BoardManager>();
 
         var gridManagerGo = GameObject.Find("GridManager");
-        gridManager = gridManagerGo.GetComponent<GridManager>();
+
+        if(gameObject.name != "Player")
+        {
+            var gridManagerCopy = Instantiate(gridManagerGo);
+            gridManagerCopy.name = "GridManager_" + gameObject.name;
+            gridManager = gridManagerCopy.GetComponent<GridManager>();
+        }
+        else
+        {
+            gridManager = gridManagerGo.GetComponent<GridManager>();
+        }
 
         var x = int.Parse(transform.position.x.ToString());
-        var z = int.Parse(transform.position.x.ToString());
+        var z = int.Parse(transform.position.z.ToString());
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
         tile_s = tile;
+
+        Reached();
     }
 
     public void Update()
     {
-        if (!myTurn)
-            return;
-
         if ( selected_tile_s != null && !moving && tile_s != selected_tile_s && selected_tile_s != null)
         {
             if (selected_tile_s.db_path_lowest.Count > 0)
@@ -90,6 +100,7 @@ public class character : MonoBehaviour
                     }
                     tpos.y = transform.position.y;
                     db_moves[0].position = tpos;
+                    nextTile = tar_tile_s.db_path_lowest[num_tile];
                     db_moves[1].position = tpos;
                 }
                 else
@@ -106,10 +117,7 @@ public class character : MonoBehaviour
         }
     }
 
-
-
-
-    public void move_tile(tile ttile)
+    public void move_tile(Tile ttile)
     {
         num_tile = 0;
         tar_tile_s = ttile;
@@ -125,6 +133,7 @@ public class character : MonoBehaviour
         if (!big)
         {
             tpos = tar_tile_s.transform.position;
+            
         }
         else
         if (big)
@@ -140,16 +149,19 @@ public class character : MonoBehaviour
         if (!big)
         {
             tpos += tar_tile_s.db_path_lowest[num_tile].transform.position;
+            nextTile = tar_tile_s.db_path_lowest[num_tile];
         }
         else
         if (big)
         {
             tpos += tar_tile_s.db_path_lowest[num_tile].transform.position + tar_tile_s.db_path_lowest[num_tile].db_neighbors[1].tile_s.transform.position + tar_tile_s.db_path_lowest[num_tile].db_neighbors[2].tile_s.transform.position + tar_tile_s.db_path_lowest[num_tile].db_neighbors[1].tile_s.db_neighbors[2].tile_s.transform.position;
             tpos /= 4;
+            nextTile = tar_tile_s.db_path_lowest[num_tile];
         }
 
         tpos.y = transform.position.y;
         db_moves[0].position = tpos;
+        
         db_moves[1].position = tpos;
 
         moving = true;
@@ -159,10 +171,14 @@ public class character : MonoBehaviour
         StartMove();
     }
 
-
-    public void findPathRealTime(tile t)
+    public void ClearPath()
     {
-        this.gridManager.find_paths_realtime(this, t);
+        gridManager.ClearPath(this);
+    }
+
+    public void FindPathRealTime(Tile t)
+    {
+        gridManager.find_paths_realtime(this, t);
     }
 
     protected virtual void ResetDirection()

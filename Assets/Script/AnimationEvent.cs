@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class AnimationEvent : MonoBehaviour
 {
-    public character owner;
+    public Character owner;
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void FootL()
@@ -22,9 +22,8 @@ public class AnimationEvent : MonoBehaviour
         owner.FootL();
     }
 
-    public void FootR()
+    public virtual void FootR()
     {
-        owner.FootL();
+        owner.FootR();
     }
-
 }

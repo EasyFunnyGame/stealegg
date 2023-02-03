@@ -7,6 +7,10 @@ Fixed - 修复问题
 Others - 其他 
 -->
 ## 2023-01-17
+### Fixed
+* iOS高性能模式下，touch identifier始终返回正整数
+
+## 2023-01-17
 ### Feature
 * 适配Unity 2020版本导出的_JS_Sound_IsStopped
 * 适配插件版本升级到1.1.12

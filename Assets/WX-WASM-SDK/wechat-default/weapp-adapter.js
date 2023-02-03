@@ -1312,13 +1312,45 @@ const isWK = false;
       this.type = type;
     };
 
+    GameGlobal.identifierCache = [];
+
+    function formatIdentifier(identifier) {
+      if (identifier > 0 && Math.abs(identifier) < 2147483648) {
+        return Math.round(identifier);
+      }
+      // eslint-disable-next-line no-restricted-syntax
+      let identifierCache = GameGlobal.identifierCache
+      for (const key in identifierCache) {
+        if (identifierCache[key] && identifierCache[key].key === identifier) {
+          return identifierCache[key].value;
+        }
+      }
+      let value = parseInt(Math.random() * 2147483648, 10);
+      // eslint-disable-next-line no-loop-func
+      while (identifierCache.some(v => v.value === value)) {
+        value += 1;
+      }
+      identifierCache.push({
+        key: identifier,
+        value,
+      });
+      if (identifierCache.length > 30) {
+        identifierCache.shift();
+      }
+      // console.error('formatIdentifier', identifier, value);
+      return value;
+    }
+    function formatTouchEvent(v) {
+      v.identifier = formatIdentifier(v.identifier)
+      return v
+    }
     function touchEventHandlerFactory(type) {
       return function (event) {
         const touchEvent = new TouchEvent(type);
 
-        touchEvent.touches = event.touches;
-        touchEvent.targetTouches = Array.prototype.slice.call(event.touches);
-        touchEvent.changedTouches = event.changedTouches;
+        touchEvent.touches = event.touches.map(v => formatTouchEvent(v));
+        touchEvent.targetTouches = Array.prototype.slice.call(event.touches).map(v => formatTouchEvent(v));
+        touchEvent.changedTouches = event.changedTouches.map(v => formatTouchEvent(v));
         touchEvent.timeStamp = event.timeStamp;
         _document2.default.dispatchEvent(touchEvent);
       };

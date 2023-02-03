@@ -18,15 +18,15 @@ public static class EnemyName
     public const string Enemy_Static = "Enemy_Static"; 
 }
 
-
-
-public class Enemy : character
+public class Enemy : Character
 {
     [SerializeField]
     public EnemyType enemyType;
 
     [SerializeField]
     public Coord coord;
+
+    public bool tracing = false;
 
     // Start is called before the first frame update
 
@@ -43,6 +43,12 @@ public class Enemy : character
     // Update is called once per frame
     void Update()
     {
+        if (Game.Instance.turn != Turn.PLAYER) return;
         base.Update();
+    }
+
+    public void FoundTarget()
+    {
+
     }
 }

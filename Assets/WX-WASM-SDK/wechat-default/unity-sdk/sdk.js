@@ -2,13 +2,13 @@
 import ResType from './resType';
 import moduleHelper from './module-helper';
 
-const identifierCache = [];
 
 function formatIdentifier(identifier) {
-  if (Math.abs(identifier) < 2147483648) {
+  if (identifier > 0 && Math.abs(identifier) < 2147483648) {
     return Math.round(identifier);
   }
   // eslint-disable-next-line no-restricted-syntax
+  let identifierCache = GameGlobal.identifierCache
   for (const key in identifierCache) {
     if (identifierCache[key] && identifierCache[key].key === identifier) {
       return identifierCache[key].value;
@@ -26,6 +26,7 @@ function formatIdentifier(identifier) {
   if (identifierCache.length > 30) {
     identifierCache.shift();
   }
+  // console.error('formatIdentifier', identifier, value);
   return value;
 }
 

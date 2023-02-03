@@ -201,8 +201,10 @@ public class WXTouchInputOverride : BaseInput
 		data.touch.deltaPosition = pos - data.touch.position;
 		data.touch.position = pos;
 		data.touch.deltaTime = (timeStamp - data.timeStamp) / 1000000.0f;
+		
 	}
 
+#if !UNITY_EDITOR
 	public override bool touchSupported
 	{
 		get
@@ -210,7 +212,13 @@ public class WXTouchInputOverride : BaseInput
 			return true;
 		}
 	}
-
+	public override bool mousePresent
+	{
+		get
+		{
+			return false;
+		}
+	}
 	public override int touchCount
 	{
 		get { return _touches.Count; }
@@ -218,6 +226,9 @@ public class WXTouchInputOverride : BaseInput
 
 	public override Touch GetTouch(int index)
 	{
+	    // Debug.LogError($"GetTouch touchCount:{touchCount}, index:{index}, touch:{_touches[index].touch.fingerId}, {_touches[index].touch.phase}");
 		return _touches[index].touch;
 	}
+	
+#endif
 }

@@ -278,10 +278,10 @@ namespace WeChatWASM
            newStr="_emscripten_set_main_loop_timing(1, 1);if (!GameGlobal.unityNamespace.isLoopRunnerEnable) return;"
        },new Rule(){
            old="\"parent\": *Module\\b",
-           newStr="\"parent\": Module,wx:{ignore_opt_glue_apis:[\"_glGenTextures\",\"_glBindTexture\",\"_glDeleteTextures\",\"_glFramebufferTexture2D\",\"_glIsTexture\",\"_glCompressedTexImage2D\",\"_glGetString\"],wx_disable_wasm_opt:GameGlobal.managerConfig.contextConfig.contextType==2?1:0}"
+           newStr="\"parent\": Module,wx:{ignore_opt_glue_apis:[\"_glGenTextures\",\"_glBindTexture\",\"_glDeleteTextures\",\"_glFramebufferTexture2D\",\"_glIsTexture\",\"_glCompressedTexImage2D\",\"_glGetString\"],wx_disable_wasm_opt:wx.getSystemInfoSync().platform=='ios'?(GameGlobal.managerConfig.contextConfig.contextType==2?1:0):1}"
        },new Rule(){
            old="info={\"a\":asmLibraryArg}",
-           newStr="info={\"a\":asmLibraryArg,\"wx\":{ignore_opt_glue_apis:[\"glGenTextures\",\"glBindTexture\",\"glDeleteTextures\",\"glFramebufferTexture2D\",\"glIsTexture\",\"glCompressedTexImage2D\",\"glGetString\"],wx_disable_wasm_opt:GameGlobal.managerConfig.contextConfig.contextType==2?1:0}}"
+           newStr="info={\"a\":asmLibraryArg,\"wx\":{ignore_opt_glue_apis:[\"glGenTextures\",\"glBindTexture\",\"glDeleteTextures\",\"glFramebufferTexture2D\",\"glIsTexture\",\"glCompressedTexImage2D\",\"glGetString\"],wx_disable_wasm_opt:wx.getSystemInfoSync().platform=='ios'?(GameGlobal.managerConfig.contextConfig.contextType==2?1:0):1}}"
        },new Rule(){
           old = "GL.createContext\\(([^)]+)\\);",
           newStr="GL.createContext($1);WXWASMSDK.canvasContext && WXWASMSDK.canvasContext._triggerCallback();"

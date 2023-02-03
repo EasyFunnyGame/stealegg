@@ -79,6 +79,14 @@ public class Item : MonoBehaviour
 
             case ItemType.LureBottle:
                 gameObject.SetActive(false);
+                player.bottleCount++;
+                break;
+
+            case ItemType.Pincers:
+                break;
+
+            case ItemType.End:
+                Game.Instance.status = GameStatus.WIN;
                 break;
         }
        

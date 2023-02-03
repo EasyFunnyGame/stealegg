@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingCanvas : MonoBehaviour
+public class SettingCanvas : BaseCanvas
 {
     public Button btn_clz;
 
@@ -24,8 +24,11 @@ public class SettingCanvas : MonoBehaviour
     }
 
 
-    void Hide()
+    protected override void OnShow()
     {
-        Game.Instance.settingCanvas.gameObject.SetActive(false);
+    }
+
+    protected override void OnHide()
+    {
     }
 }

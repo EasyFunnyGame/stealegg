@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
-public class Player : character
+public class Player : Character
 {
     public Animator animator;
 
-    public static Player instance;
+    public static Player Instance;
+
+    public int bottleCount;
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
+        //big = true;
         base.Awake();
     }
 
@@ -18,8 +21,16 @@ public class Player : character
     }
 
     // Update is called once per frame
-    new void Update()
+    void Update()
     {
+        if (Game.Instance.turn != Turn.PLAYER) return;
+        if (selected_tile_s != null && !moving && tile_s != selected_tile_s && selected_tile_s != null)
+        {
+            if (selected_tile_s.db_path_lowest.Count > 1)
+            {
+                ClearPath();
+            }
+        }
         base.Update();
     }
 
@@ -28,14 +39,60 @@ public class Player : character
         base.OnReached();
         boardManager.PickItem(tile_s.name,this);
         animator.CrossFade("Player_Idle",0.1f);
-        Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
+        //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
+
+        CheckWhistle();
+        CheckBottle();
+
+        hasAction = false;
+        Game.Instance.CheckPlayerTurnEnd();
     }
 
     override protected void OnStartMove()
     {
         base.OnStartMove();
         animator.CrossFade("Player_Run",0.1f);
-        Debug.Log(string.Format("{0}开始行走{1}", gameObject.name, tar_tile_s.name));
+        hasAction = true;
+
+        Game.Instance.gameCanvas.DisableWhistle();
+        Game.Instance.gameCanvas.DisableBottle();
+        //Debug.Log(string.Format("{0}开始行走{1}", gameObject.name, tar_tile_s.name));
+    }
+
+    public void CheckWhistle()
+    {
+        Game.Instance.gameCanvas.DisableWhistle();
+        var nodes = boardManager.FindNodesAround(tile_s.name, 2);
+        var stop = false;
+        foreach( var kvp in nodes)
+        {
+            for(var index = 0; index < boardManager.enemies.Count; index++)
+            {
+                var enemy = boardManager.enemies[index];
+                if(enemy.coord.Equals(kvp.Value.coord))
+                {
+                    Game.Instance.gameCanvas.EnableWhistle();
+                    stop = true;
+                    break;
+                }
+            }
+            if(stop)
+            {
+                break;
+            }
+        }
+    }
+
+    public void CheckBottle()
+    {
+        if( bottleCount > 0 )
+        {
+            Game.Instance.gameCanvas.EnableBottle();
+        }
+        else
+        {
+            Game.Instance.gameCanvas.DisableBottle();
+        }
     }
 
     public override void FootL()
@@ -46,6 +103,5 @@ public class Player : character
     public override void FootR()
     {
         base.FootR();
-
     }
 }

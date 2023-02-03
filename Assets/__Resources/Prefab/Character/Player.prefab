@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a60635f2d3ac741814c9408bfe6b50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gm_s: {fileID: 0}
+  gridManager: {fileID: 0}
   big: 0
   body_looking: 0
   moving: 0
@@ -220,6 +220,7 @@ MonoBehaviour:
   tile_s: {fileID: 0}
   tar_tile_s: {fileID: 0}
   selected_tile_s: {fileID: 0}
+  nextTile: {fileID: 0}
   db_moves:
   - {fileID: 8366258183440692586}
   - {fileID: 3777704065912201615}
@@ -228,10 +229,11 @@ MonoBehaviour:
   - {fileID: 4117958468138487770}
   max_tiles: 7
   num_tile: 0
-  myTurn: 1
-  boardManager: {fileID: 0}
+  path: []
+  direction: 0
+  hasAction: 0
   animator: {fileID: 74550571717878178}
-  animationEvent: {fileID: 0}
+  bottleCount: 0
 --- !u!1 &5048376697293508416
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +313,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1152362667887314914
+--- !u!114 &8749309579669887784
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -320,7 +322,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6675222097641759074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f9352c405420ca4d8e84719cb91864a, type: 3}
+  m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 5601727608320456375}
@@ -630,9 +632,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efc909fbb69f0064984e07825c48ab7b, type: 3}
---- !u!1 &6675222097641759074 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5643075552542595173, guid: efc909fbb69f0064984e07825c48ab7b,
+--- !u!95 &74550571717878178 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1439963484953745573, guid: efc909fbb69f0064984e07825c48ab7b,
     type: 3}
   m_PrefabInstance: {fileID: 1365466381855258887}
   m_PrefabAsset: {fileID: 0}
@@ -642,9 +644,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1365466381855258887}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &74550571717878178 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 1439963484953745573, guid: efc909fbb69f0064984e07825c48ab7b,
+--- !u!1 &6675222097641759074 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5643075552542595173, guid: efc909fbb69f0064984e07825c48ab7b,
     type: 3}
   m_PrefabInstance: {fileID: 1365466381855258887}
   m_PrefabAsset: {fileID: 0}

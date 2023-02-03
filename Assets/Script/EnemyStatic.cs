@@ -21,12 +21,12 @@ public class EnemyStatic : Enemy
         base.Update();
     }
 
-    new protected void OnReached()
+    protected override void OnReached()
     {
         base.OnReached();
-        var direction = this.direction;
 
         var xOffset = 0;
+
         var zOffset = 0;
 
         if (direction == Direction.Up)
@@ -37,26 +37,54 @@ public class EnemyStatic : Enemy
         {
             zOffset = -1;
         }
-        else if (Direction.Left == Direction.Right)
+        else if (direction == Direction.Right)
         {
             xOffset = 1;
         }
-        else if(Direction.Right == Direction.Left)
+        else if(direction == Direction.Left)
         {
             xOffset = -1;
         }
 
-        var coordX = this.coord.x;
-        var coordZ = this.coord.z;
+        var curNodeName = tile_s.gameObject.name;
 
-        var nextCoordX = this.coord.x + xOffset;
-        var nextCoordZ = this.coord.z + zOffset;
-        var nextNodeName = string.Format("{0}_{1}", nextCoordX, nextCoordZ);
+        var next1CoordX = coord.x + xOffset;
+        var next1CoordZ = coord.z + zOffset;
+        var next1NodeName = string.Format("{0}_{1}", next1CoordX, next1CoordZ);
 
+        var next2CoordX = next1CoordX + xOffset;
+        var next2CoordZ = next1CoordZ + zOffset;
+        var next2NodeName = string.Format("{0}_{1}", next2CoordX, next2CoordZ);
+
+        var linkLine1 = boardManager.FindLine(curNodeName, next1NodeName);
+
+        boardManager.RedLine(linkLine1);
+
+        var linkLine2 = boardManager.FindLine(next1NodeName, next2NodeName);
+
+        boardManager.RedLine(linkLine2);
+
+        var node1 = boardManager.FindNode(next1NodeName);
+
+        boardManager.RedNode(node1);
+
+        var node2 = boardManager.FindNode(next2NodeName);
+
+        boardManager.RedNode(node2);
+
+        UpdateGuardNode();
+
+        //Debug.Log("Eeney Static Guard Nodes " + linkLine1.name + "   " + linkLine2.name);
+        //Debug.Log("Eeney Static Guard Nodes " + node1.name + "   " + node2.name);
     }
 
-    new protected void OnStartMove()
+    protected override void OnStartMove()
     {
         base.OnStartMove();
+    }
+
+    private void UpdateGuardNode()
+    {
+
     }
 }

@@ -6,12 +6,12 @@ using UnityEditor;
 
 
 #if UNITY_EDITOR
-[CustomEditor(typeof(tile)), CanEditMultipleObjects]
+[CustomEditor(typeof(Tile)), CanEditMultipleObjects]
 class tile_editor : Editor
 {
     public override void OnInspectorGUI()
     {
-        tile tile_s = (tile)target;
+        Tile tile_s = (Tile)target;
         if (GUILayout.Button("Disable Walls"))
             tile_s.disable_walls();
         if (GUILayout.Button("Top"))
@@ -29,16 +29,16 @@ class tile_editor : Editor
 #endif
 
 
-public class tile : MonoBehaviour
+public class Tile : MonoBehaviour
 {
     public GridManager gridManager;
     public Vector2 v2xy;
     public walls walls_s;
     public MeshRenderer mr;
     //public Button btn;
-    public List<character> db_chars;
-    public List<sub_tile> db_neighbors;
-    public List<tile> db_path_lowest;
+    public List<Character> db_chars;
+    public List<SubTile> db_neighbors;
+    public List<Tile> db_path_lowest;
 
 
     public void add_wall(int tnum)

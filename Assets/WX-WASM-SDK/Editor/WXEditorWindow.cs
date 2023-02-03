@@ -596,8 +596,8 @@ namespace WeChatWASM
                 var brcodeSize = brcodeInfo.Length;
                 if (brcodeSize + int.Parse(dataFileSize) > 20971520)
                 {
-                    ShowNotification(new GUIContent(string.Format("资源文件过大，不适宜用放小游戏包内加载。size:{0}m", (brcodeSize + int.Parse(dataFileSize))/1024)));
-                    throw new Exception(string.Format("资源文件过大，不适宜用放小游戏包内加载。size:{0}m", (brcodeSize + int.Parse(dataFileSize)) / 1024));
+                    ShowNotification(new GUIContent("资源文件过大，不适宜用放小游戏包内加载"));
+                    throw new Exception("资源文件过大，不适宜用小游戏包内加载");
                 }
                 else
                 {
@@ -689,7 +689,7 @@ namespace WeChatWASM
             //修改纹理dxt
             content = File.ReadAllText(Path.Combine(Application.dataPath, "WX-WASM-SDK", "wechat-default", "unity-sdk", "texture.js"), Encoding.UTF8);
 
-            content = content.Replace("\"$UseDXT5$\"", config.CompressTexture.useDXT5 ? "true" : "false");
+            content = content.Replace("'$UseDXT5$'", config.CompressTexture.useDXT5 ? "true" : "false");
 
             File.WriteAllText(Path.Combine(dst, miniGameDir, "unity-sdk", "texture.js"), content, Encoding.UTF8);
 
@@ -1381,7 +1381,7 @@ namespace WeChatWASM
                 if (res == 0)
                 {
                     checkNeedCopyDataPackage(false);
-                    UnityEngine.Debug.LogFormat("[Converter] All done!"+ DateTime.Now.ToUniversalTime());
+                    UnityEngine.Debug.LogFormat("[Converter] All done!");
                     ShowNotification(new GUIContent("转换完成"));
                 }
                 else

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameCamera : MonoBehaviour
 {
-    public static GameCamera instance;
+    public static GameCamera Instance;
 
     public new Camera camera;
 
@@ -14,7 +14,7 @@ public class GameCamera : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     // Start is called before the first frame update

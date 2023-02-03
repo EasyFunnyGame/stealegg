@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
+    [SerializeField]
+    public int width;
+
+    [SerializeField]
+    public int height;
+
     [SerializeField]
     public Transform squareRoot;
 
@@ -22,9 +29,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField][Tooltip("显示/隐藏白模节点")]
     public bool tirggerVisibleNode = true;
 
-    public static BoardManager instance;
-
-    public GridManager gridManager;
+    public static BoardManager Instance;
 
     public GameCamera gameCamera;
 
@@ -32,74 +37,34 @@ public class BoardManager : MonoBehaviour
 
     public Player player;
 
-    public Item star;
-
-    public Item graff;
-
-    public Item end;
-
-    public List<Item> lureBottles = new List<Item>();
-
-    public List<Item> pincerses = new List<Item>();
-
-    public List<Item> grouthes = new List<Item>();
-
-    public List<Item> manholeCovers = new List<Item>();
-
     public List<Enemy> enemies = new List<Enemy>();
+
+    public List<BoardNode> redNodes = new List<BoardNode>();
+
+    public List<LinkLine> redLines = new List<LinkLine>();
+
+    public List<string> dangerNodeNames = new List<string>();
 
     private void Awake()
     {
-        instance = this;
-        gridManager.HideLayout();
+        Instance = this;
         Init();
     }
 
     // Start is called before the first frame update
     void Start() {
-        
+        StartCoroutine("SceneLoaded");
+    }
+
+    IEnumerator SceneLoaded()
+    {
+        yield return null;
+        Game.Instance.SceneLoaded(this);
     }
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = gameCamera.camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
-            {
-                var node = hitInfo.transform.parent.parent;
-                if (node == null)
-                {
-                    Debug.Log("鼠标按下Error 1");
-                    return;
-                }
-                var nodeScript = node.GetComponent<BoardNode>();
-                if (nodeScript == null)
-                {
-                    Debug.Log("鼠标按下Error 2");
-                    return;
-                }
-                var coord = nodeScript.coord;
-
-                var tileIndex = coord.x * Mathf.RoundToInt(gridManager.v2_grid.y) + coord.z;
-                var tile = gridManager.db_tiles[tileIndex];
-
-                if (enemies.Count > 0)
-                {
-                    enemies[0].selected_tile_s = tile;
-                    enemies[0].findPathRealTime(tile);
-                }
-
-                // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
-
-                if (player.moving || player.tile_s != tile)
-                {
-                    player.selected_tile_s = tile;
-                    player.findPathRealTime(tile);
-                }
-            }
-        }
+        
     }
 
     #region RunTime
@@ -115,6 +80,8 @@ public class BoardManager : MonoBehaviour
         ResetItems();
         ResetEnemies();
         ResetSquareNodes();
+
+        
     }
 
     void ResetItems()
@@ -131,29 +98,29 @@ public class BoardManager : MonoBehaviour
             allItems.Add(item.coord.name, item);
             switch (itemTr.name)
             {
-                //case ItemName.Item_Start:
-                //    level.start = item;
-                //    break;
+                case ItemName.Item_Start:
+                    //start = item;
+                    break;
                 case ItemName.Item_Star:
-                    star = item;
+                    //star = item;
                     break;
                 case ItemName.Item_Pincers:
-                    pincerses.Add(itemTr.GetComponent<Item>());
+                    //pincerses.Add(itemTr.GetComponent<Item>());
                     break;
                 case ItemName.Item_ManholeCover:
-                    manholeCovers.Add(item);
+                    //manholeCovers.Add(item);
                     break;
                 case ItemName.Item_LureBottle:
-                    lureBottles.Add(item);
+                    //bottles.Add(item);
                     break;
                 case ItemName.item_Growth:
-                    grouthes.Add(item);
+                    //grouthes.Add(item);
                     break;
                 case ItemName.Item_Graff:
-                    graff = item;
+                    //graff = item;
                     break;
                 case ItemName.Item_End:
-                    end = item;
+                    //end = item;
                     break;
                 default:
                     Debug.LogError(string.Format("未处理未定义Item{0}", itemTr.name));
@@ -175,8 +142,6 @@ public class BoardManager : MonoBehaviour
             }
 
             enemies.Add(enemy);
-
-            enemy.Reached();
 
             switch (enemyTr.name)
             {
@@ -206,7 +171,6 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-
     public void PickItem(string name, Player player)
     {
         var item = allItems.ContainsKey(name) ? allItems[name] : null;
@@ -217,6 +181,101 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public LinkLine FindLine(string node1, string node2)
+    {
+        for(var index = 0; index < linkRoot.childCount; index++)
+        {
+            var linkLineGo = linkRoot.GetChild(index);
+            var linkLine = linkLineGo.GetComponent<LinkLine>();
+            var linkingNodes = linkLine.LinkingNode(node1, node2);
+            if(linkingNodes)
+            {
+                return linkLine;
+            }
+        }
+        return null;
+    }
+
+    public BoardNode FindNode(string name)
+    {
+        for (var index = 0; index < squareRoot.childCount; index++)
+        {
+            var child = squareRoot.GetChild(index);
+            var boardNode = child.GetComponent<BoardNode>();
+            if(child.gameObject.name == name && child.gameObject.activeSelf)
+            {
+                return boardNode;
+            }
+        }
+        return null;
+    }
+
+    public void ClearReds()
+    {
+        redNodes.ForEach((BoardNode node) =>
+        {
+            node.targetIcon.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Light_Blue_Mat.mat");
+        });
+
+        redLines.ForEach((LinkLine line) =>
+        {
+            line.transform.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Light_Blue_Mat.mat");
+        });
+    }
+
+    public void RedNode(BoardNode boardNode)
+    {
+        if (boardNode == null) return;
+        boardNode.targetIcon.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Red_Mat.mat");
+    }
+
+    public void RedLine(LinkLine linkLine)
+    {
+        if (linkLine == null) return;
+        linkLine.transform.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Red_Mat.mat");
+    }
+
+    public Dictionary<string,BoardNode> FindNodesAround(string curNodeName, int range)
+    {
+        var nodes = new Dictionary<string,BoardNode>();
+
+        var coordArr = curNodeName.Split('_');
+        var x = int.Parse(coordArr[0]);
+        var z = int.Parse(coordArr[1]);
+
+        for(var i = 0; i < range; i++)
+        {
+            for(var j = 0; j < range; j++)
+            {
+                var name = (x + i).ToString() + "_" + (z + j).ToString();
+                var node = FindNode(name);
+                if (node != null && !nodes.ContainsKey(name))
+                {
+                    nodes.Add(name,node);
+                }
+                name = (x + i).ToString() + "_" + (z - j).ToString();
+                node = FindNode(name);
+                if (node != null && !nodes.ContainsKey(name))
+                {
+                    nodes.Add(name,node);
+                }
+                name = (x - i).ToString() + "_" + (z + j).ToString();
+                node = FindNode(name);
+                if (node != null && !nodes.ContainsKey(name))
+                {
+                    nodes.Add(name,node);
+                }
+                name = (x - i).ToString() + "_" + (z - j).ToString();
+                node = FindNode(name);
+                if (node != null && !nodes.ContainsKey(name))
+                {
+                    nodes.Add(name,node);
+                }
+            }
+        }
+        //Debug.Log("范围节点名字");
+        return nodes;
+    }
     #endregion
 
 
@@ -338,6 +397,11 @@ public class BoardManager : MonoBehaviour
             coordZ -= minZ;
             nodeTransform.name = string.Format("{0}_{1}", coordX, coordZ);
         }
+
+        var lastSquare = squareRoot.GetChild(squareRoot.childCount - 1);
+        var widthAndHeight = lastSquare.name.Split('_');
+        width = int.Parse(widthAndHeight[0]);
+        height = int.Parse(widthAndHeight[1]);
     }
 
     void ProcessVisialNodes()
@@ -363,10 +427,15 @@ public class BoardManager : MonoBehaviour
                 var childNameArr = childGameObject.name.Split(' ');
                 childGameObject.name = childNameArr[0];
             }
+
+            var linkLine = linkNodeGameObject.GetComponent<LinkLine>() ?? linkNodeGameObject.gameObject.AddComponent<LinkLine>();
+            var names = linkNodeGameObject.gameObject.name.Split('=');
+            linkLine.node1 = names[0];
+            linkLine.node2 = names[1];
         }
     }
 
-    [ContextMenu("替换物品预设")]
+    //[ContextMenu("替换物品预设")]
     void ProcessItem()
     {
         var prefabRoot = "Assets/__Resources/Prefab/Item/{0}.prefab";
@@ -419,7 +488,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("替换敌人预设")]
+    //[ContextMenu("替换敌人预设")]
     void ProcessEnemy()
     {
         var prefabRoot = "Assets/__Resources/Prefab/Character/{0}.prefab";
@@ -471,7 +540,6 @@ public class BoardManager : MonoBehaviour
             }
             DestroyImmediate(enemyTransform.gameObject);
         }
-
     }
 
     [ContextMenu("保存预设")]
