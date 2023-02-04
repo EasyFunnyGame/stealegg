@@ -22,7 +22,7 @@ public class ChapterCanvas : BaseCanvas
 
     private void Awake()
     {
-        //UiUtils.Adaptive(bg, GetComponent<RectTransform>());
+        UiUtils.Adaptive(bg, GetComponent<RectTransform>());
 
         btn_left.onClick.AddListener(onClickPreChapterHandler);
         btn_right.onClick.AddListener(onClickNxtChapterHandler);

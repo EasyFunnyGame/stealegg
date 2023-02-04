@@ -32,8 +32,8 @@ public struct Coord
 
     public Coord(Vector3 position)
     {
-        this.x = Mathf.FloorToInt(position.x);
-        this.z = Mathf.FloorToInt(position.z);
+        this.x = Mathf.RoundToInt(position.x);
+        this.z = Mathf.RoundToInt(position.z);
         this.height = position.y;
         this.name = string.Format("{0}_{1}",x,z);
     }

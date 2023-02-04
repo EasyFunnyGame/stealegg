@@ -227,6 +227,8 @@ public class Game : MonoBehaviour
             for (var index = 0; index < enemiesCount; index++)
             {
                 var enemy = boardManager.enemies[index];
+                enemy.TryCatch();
+                enemy.TryTrace();
                 enemy.CheckAction();
             }
         }

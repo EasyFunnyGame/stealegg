@@ -27,13 +27,16 @@ public class Character : MonoBehaviour
     public bool rotation = false;
     public bool reachedTile = false;
 
+    public Direction originalDirection = Direction.Up;
+
+    public Direction targetDirection = Direction.Up;
 
     protected Coord originalCoord;
 
     public Coord coord;
     public void Awake()
     {
-        ResetDirection();
+       
     }
 
     public void Start()
@@ -70,11 +73,9 @@ public class Character : MonoBehaviour
 
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
         tile_s = tile;
-
         Reached();
+        originalDirection = direction;
         originalCoord = coord.Clone();
-
-        
     }
 
     public virtual void Update()
@@ -102,7 +103,6 @@ public class Character : MonoBehaviour
             {
                 ResetDirection();
                 body_looking = false;
-                OnDirectionRested();
                 StartMove();
             }
 
@@ -117,9 +117,9 @@ public class Character : MonoBehaviour
             var tdist = Vector3.Distance(tr_body.position, db_moves[0].position);
             if (tdist < 0.001f)
             {
-                tile_s.db_chars.Remove(this);
+                //tile_s.db_chars.Remove(this);
                 tile_s = tar_tile_s.db_path_lowest[num_tile];
-                tile_s.db_chars.Add(this);
+                //tile_s.db_chars.Add(this);
                 if (moving_tiles && num_tile < tar_tile_s.db_path_lowest.Count - 1)
                 {
                     num_tile++;
@@ -197,7 +197,7 @@ public class Character : MonoBehaviour
         moving_tiles = true;
         reachedTile = false;
 
-        UpdateTargetDirection();
+        UpdateTargetDirection(nextTile);
 
         if(!body_looking)
         {
@@ -205,21 +205,70 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void UpdateTargetDirection()
+    public void UpdateMoves(Tile ttile)
     {
-        if (nextTile == null)
+        num_tile = 0;
+
+        tar_tile_s = ttile;
+
+        //0 - body_move, 1 - body_look, 2 - head_look, 3 - eyes_look, target tile marker
+        db_moves[0].parent = null;
+        db_moves[1].parent = null;
+        db_moves[4].parent = null;
+
+        //move_speed = 1;
+
+        var tpos = new Vector3(0, 0, 0);
+        if (!big)
+        {
+            tpos = tar_tile_s.transform.position;
+        }
+        else
+        if (big)
+        {
+            tpos += tar_tile_s.transform.position + tar_tile_s.db_neighbors[1].tile_s.transform.position + tar_tile_s.db_neighbors[2].tile_s.transform.position + tar_tile_s.db_neighbors[1].tile_s.db_neighbors[2].tile_s.transform.position;
+            tpos /= 4;
+        }
+
+        db_moves[4].position = tpos; //Tar Tile Marker//
+        db_moves[4].gameObject.SetActive(true); //Tar Tile Marker//
+
+        tpos = new Vector3(0, 0, 0);
+        if (!big)
+        {
+            tpos += tar_tile_s.db_path_lowest[num_tile].transform.position;
+            nextTile = tar_tile_s.db_path_lowest[num_tile];
+        }
+        else
+        if (big)
+        {
+            tpos += tar_tile_s.db_path_lowest[num_tile].transform.position + tar_tile_s.db_path_lowest[num_tile].db_neighbors[1].tile_s.transform.position + tar_tile_s.db_path_lowest[num_tile].db_neighbors[2].tile_s.transform.position + tar_tile_s.db_path_lowest[num_tile].db_neighbors[1].tile_s.db_neighbors[2].tile_s.transform.position;
+            tpos /= 4;
+            nextTile = tar_tile_s.db_path_lowest[num_tile];
+        }
+
+        tpos.y = transform.position.y;
+        db_moves[0].position = tpos;
+        db_moves[1].position = tpos;
+
+        UpdateTargetDirection(nextTile);
+    }
+
+    protected void UpdateTargetDirection(Tile targetTile)
+    {
+        if (targetTile == null)
         {
             return;
         }
 
-        var tileNameArr = nextTile.name.Split('_');
+        var tileNameArr = targetTile.name.Split('_');
         var nxtTileX = int.Parse(tileNameArr[0]);
         var nxtTileZ = int.Parse(tileNameArr[1]);
 
         tileNameArr = tile_s.name.Split('_');
         var tileX = int.Parse(tileNameArr[0]);
         var tileZ = int.Parse(tileNameArr[1]);
-        var targetDirection = direction;
+        targetDirection = direction;
         if (nxtTileX - tileX == 1 && nxtTileZ == tileZ)
         {
             targetDirection = Direction.Right;
@@ -258,10 +307,22 @@ public class Character : MonoBehaviour
 
     protected virtual void ResetDirection()
     {
-
         var rotateY = transform.localRotation.eulerAngles.y;
-        direction = (Direction)System.Enum.Parse(typeof(Direction), ((rotateY -= (rotateY %= 90)) / 90).ToString(), true);
+
+        while(rotateY > 360)
+        {
+            rotateY -= 360;
+        }
+        while (rotateY < -360)
+        {
+            rotateY += 360;
+        }
+        rotateY = rotateY / 90;
+        rotateY = Mathf.RoundToInt(rotateY);
+        direction = (Direction)System.Enum.Parse(typeof(Direction), rotateY.ToString(), true);
+        targetDirection = direction;
         //Debug.Log(gameObject.name + "方向:" + direction);
+        OnDirectionRested();
     }
 
     public virtual void OnDirectionRested()
@@ -275,13 +336,14 @@ public class Character : MonoBehaviour
         coord = new Coord(transform.position);
         reachedTile = true;
         ResetDirection();
-        UpdateTargetDirection();
+        UpdateTargetDirection(nextTile);
         OnReached();
+        
     }
 
     virtual protected void OnReached()
     {
-        
+
     }
 
     public void StartMove()
@@ -298,6 +360,8 @@ public class Character : MonoBehaviour
     {
         return boardManager.FindNodesAround(tile_s.name, range);
     }
+
+
 
     #region 动画事件回调
     public virtual void FootL()

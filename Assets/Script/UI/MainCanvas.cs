@@ -12,7 +12,7 @@ public class MainCanvas : BaseCanvas
     {
         btn_start.onClick.AddListener(StartGame);
         btn_setting.onClick.AddListener(ShowSettingCanvas);
-        //UiUtils.Adaptive(bg, GetComponent<RectTransform>());
+        UiUtils.Adaptive(bg, GetComponent<RectTransform>());
     }
 
     // Start is called before the first frame update

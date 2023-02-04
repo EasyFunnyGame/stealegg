@@ -23,8 +23,6 @@ public class Enemy : Character
     [SerializeField]
     public EnemyType enemyType;
 
-    
-
     public Tile tracingTile = null;
 
     public static int count;
@@ -46,8 +44,43 @@ public class Enemy : Character
     // Update is called once per frame
     public override void Update()
     {
-        if (Game.Instance.turn != Turn.ENEMY) return;
         if (Game.Instance.status != GameStatus.PLAYING) return;
+
+        if(targetDirection != direction && tracingTile != null)
+        {
+            //Debug.Log("转向目标方向" + targetDirection + " -- -- " + direction);
+            Vector3 tar_dir = tracingTile.transform.position - tr_body.position;
+
+            if (targetDirection == Direction.Up)
+            {
+                tar_dir = new Vector3(0,0,1);
+            }
+            else if (targetDirection == Direction.Down)
+            {
+                tar_dir = new Vector3(0, 0, -1);
+            }
+            else if (targetDirection == Direction.Left)
+            {
+                tar_dir = new Vector3(-1, 0, 0);
+            }
+            else if (targetDirection == Direction.Right)
+            {
+                tar_dir = new Vector3(1, 0, 0);
+            }
+
+            Vector3 new_dir = Vector3.RotateTowards(tr_body.forward, tar_dir, rotate_speed * Time.deltaTime / 2, 0f);
+            new_dir.y = 0;
+            tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
+
+            var angle = Vector3.Angle(tar_dir, tr_body.forward);
+            if (angle <= 1)
+            {
+                ResetDirection();
+                body_looking = false;
+            }
+            return;
+        }
+        if (Game.Instance.turn != Turn.ENEMY) return;
 
 
         if (selected_tile_s != null && !moving && tile_s != selected_tile_s && selected_tile_s != null)
@@ -85,9 +118,9 @@ public class Enemy : Character
             var tdist = Vector3.Distance(tr_body.position, db_moves[0].position);
             if (tdist < 0.001f)
             {
-                tile_s.db_chars.Remove(this);
+                //tile_s.db_chars.Remove(this);
                 tile_s = tar_tile_s.db_path_lowest[num_tile];
-                tile_s.db_chars.Add(this);
+                //tile_s.db_chars.Add(this);
                 if (moving_tiles && num_tile < tar_tile_s.db_path_lowest.Count - 1)
                 {
                     num_tile++;
@@ -114,15 +147,10 @@ public class Enemy : Character
         }
     }
 
-    public void UpdateMove0()
-    {
-        
-    }
 
     public override void OnDirectionRested()
     {
         base.OnDirectionRested();
-        Debug.Log("todo 检查敌人");
     }
 
     public void Alert(string tileName)
@@ -136,6 +164,8 @@ public class Enemy : Character
             selected_tile_s = tracingTile;
             gridManager.find_paths_realtime(this, tracingTile);
             hasAction = true;
+            UpdateMoves(targetTile);
+            //UpdateTargetDirection(targetTile);
         }
     }
 
@@ -150,41 +180,42 @@ public class Enemy : Character
             }
             else
             {
-                //if(tracingTile.name != originalCoord.name)
-                //{
-                //    //ClearPath();
-                //    tracingTile = gridManager.GetTileByName(originalCoord.name);
-                //    selected_tile_s = tracingTile;
-                //    gridManager.find_paths_realtime(this, tracingTile);
-                //    hasAction = true;
-                //}
+                if (tracingTile.name != originalCoord.name)
+                {
+                    tracingTile = gridManager.GetTileByName(originalCoord.name);
+                    if(tracingTile!=null)
+                    {
+                        selected_tile_s = tracingTile;
+                        gridManager.find_paths_realtime(this, tracingTile);
+                        UpdateMoves(tracingTile);
+                        hasAction = true;
+                    }
+                }
                 //else
                 //{
-                //    tracingTile = null;
-                //    //ClearPath();
+                //    targetDirection = originalDirection;
                 //}
             }
-            
         }
-        
     }
 
-    public List<MeshRenderer> redLines = new List<MeshRenderer>();
+    public List<Transform> redLines = new List<Transform>();
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
+
     public void RedLineByName(string nodeName1, string nodeName2)
     {
         var line = boardManager.FindLine(nodeName1, nodeName2);
 
         if (line != null)
         {
-            var lineTr = line.transform.GetChild(0);
-            var copyLine = Instantiate(lineTr.GetComponent<MeshRenderer>());
+            var lineTr = line.transform;
+            var copyLine = Instantiate(lineTr);
             copyLine.transform.position = lineTr.position;
-            copyLine.transform.Translate(new Vector3(0, 0, -0.001f));
+            copyLine.transform.Translate(new Vector3(0, 0.001f, 0));
             copyLine.transform.rotation = lineTr.rotation;
             redLines.Add(copyLine);
-            copyLine.material = Resources.Load<Material>("Material/RouteRed");
+            copyLine.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/RouteRed");
         }
     }
 
@@ -207,6 +238,19 @@ public class Enemy : Character
     protected override void OnReached()
     {
         base.OnReached();
+
+        if(Player.Instance.tile_s)
+        {
+            Player.Instance.CheckBottle();
+            Player.Instance.CheckWhistle();
+        }
+        
+
+        // 回到起点
+        if (originalCoord.name == coord.name && tracingTile.name == coord.name)
+        {
+            targetDirection = originalDirection;
+        }
     }
 
     public virtual void UpdateRouteMark()
