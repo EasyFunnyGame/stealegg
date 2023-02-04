@@ -7,9 +7,6 @@ public class EnemyStatic : Enemy
     public Animator animator;
 
 
-    public List<MeshRenderer> redLines = new List<MeshRenderer>();
-
-    public List<MeshRenderer> redNodes = new List<MeshRenderer>();
 
     void Awake()
     {
@@ -32,6 +29,8 @@ public class EnemyStatic : Enemy
         base.OnReached();
         UpdateRouteMark();
         hasAction = false;
+        animator.Play("Player_Run");
+
         //Debug.Log("Eeney Static Guard Nodes " + linkLine1.name + "   " + linkLine2.name);
         //Debug.Log("Eeney Static Guard Nodes " + node1.name + "   " + node2.name);
     }
@@ -40,6 +39,7 @@ public class EnemyStatic : Enemy
     protected override void OnStartMove()
     {
         base.OnStartMove();
+        animator.Play("Player_Idle");
     }
 
     public override void OnDirectionRested()
@@ -133,65 +133,12 @@ public class EnemyStatic : Enemy
         var next2CoordX = next1CoordX + xOffset;
         var next2CoordZ = next1CoordZ + zOffset;
         var next2NodeName = string.Format("{0}_{1}", next2CoordX, next2CoordZ);
-
-        var linkLine1 = boardManager.FindLine(curNodeName, next1NodeName);
-
-        if (linkLine1 != null)
-        {
-            var lineTr = linkLine1.transform.GetChild(0);
-            var copyLine = Instantiate(lineTr.GetComponent<MeshRenderer>());
-            copyLine.transform.position = lineTr.position;
-            copyLine.transform.rotation = lineTr.rotation;
-            redLines.Add(copyLine);
-            copyLine.material = Resources.Load<Material>("Material/UI_Red_Mat");
-        }
-
-        var linkLine2 = boardManager.FindLine(next1NodeName, next2NodeName);
-
-        if (linkLine2 != null)
-        {
-            var lineTr = linkLine2.transform.GetChild(0);
-            var copyLine = Instantiate(lineTr.GetComponent<MeshRenderer>());
-            copyLine.transform.position = lineTr.position;
-            copyLine.transform.rotation = lineTr.rotation;
-            redLines.Add(copyLine);
-            copyLine.material = Resources.Load<Material>("Material/UI_Red_Mat");
-        }
-
-        var node0 = boardManager.FindNode(curNodeName);
-
-        if (node0 != null)
-        {
-            var nodeTr = node0.targetIcon;
-            var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
-            copyNode.transform.position = nodeTr.transform.position;
-            copyNode.transform.rotation = nodeTr.transform.rotation;
-            redNodes.Add(copyNode);
-            copyNode.material = Resources.Load<Material>("Material/UI_Red_Mat");
-        }
-
-        var node1 = boardManager.FindNode(next1NodeName);
-
-        if (node1 != null)
-        {
-            var nodeTr = node1.targetIcon;
-            var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
-            copyNode.transform.position = nodeTr.transform.position;
-            copyNode.transform.rotation = nodeTr.transform.rotation;
-            redNodes.Add(copyNode);
-            copyNode.material = Resources.Load<Material>("Material/UI_Red_Mat");
-        }
-
-        var node2 = boardManager.FindNode(next2NodeName);
-
-        if (node2 != null)
-        {
-            var nodeTr = node2.targetIcon;
-            var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
-            redNodes.Add(copyNode);
-            copyNode.transform.position = nodeTr.transform.position;
-            copyNode.transform.rotation = nodeTr.transform.rotation;
-            copyNode.material = Resources.Load<Material>("Material/UI_Red_Mat");
-        }
+        RedLineByName(curNodeName, next1NodeName);
+        RedLineByName(next1NodeName, next2NodeName);
+        RedNodeByName(curNodeName);
+        RedNodeByName(next1NodeName);
+        RedNodeByName(next2NodeName);
     }
+
+    
 }

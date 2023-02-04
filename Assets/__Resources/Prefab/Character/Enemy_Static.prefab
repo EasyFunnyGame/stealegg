@@ -229,7 +229,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ad17cc72ffc9a8546aaf77c90428a803, type: 2}
+  - {fileID: 2100000, guid: e1700e9aabd176440938efc80beac480, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -387,7 +387,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ad17cc72ffc9a8546aaf77c90428a803, type: 2}
+  - {fileID: 2100000, guid: e1d60f330a818ce43ba952dbfd7281e3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -466,7 +466,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ad17cc72ffc9a8546aaf77c90428a803, type: 2}
+  - {fileID: 2100000, guid: 8f179715f7ee08d4e944f249e925dc8f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -559,18 +559,19 @@ MonoBehaviour:
   - {fileID: 1807326452827089798}
   max_tiles: 7
   num_tile: 0
-  path: []
-  autoRotate: 0
   direction: 0
   hasAction: 0
   rotation: 0
-  enemyType: 0
+  reachedTile: 0
   coord:
     x: 0
     z: 0
     height: 0
     name: 
+  enemyType: 0
   tracingTile: {fileID: 0}
+  redLines: []
+  redNodes: []
   animator: {fileID: 2039961456329746607}
 --- !u!1001 &6507841173033157873
 PrefabInstance:
@@ -588,6 +589,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 68
+      objectReference: {fileID: 0}
+    - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 68
+      objectReference: {fileID: 0}
+    - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 68
       objectReference: {fileID: 0}
     - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
         type: 3}
@@ -641,9 +657,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c268534ef6300b24abd3cf9e23081169, type: 3}
---- !u!95 &2039961456329746607 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5052785017882176606, guid: c268534ef6300b24abd3cf9e23081169,
+--- !u!1 &983110286790869376 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6337913268706624881, guid: c268534ef6300b24abd3cf9e23081169,
     type: 3}
   m_PrefabInstance: {fileID: 6507841173033157873}
   m_PrefabAsset: {fileID: 0}
@@ -653,9 +669,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6507841173033157873}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &983110286790869376 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6337913268706624881, guid: c268534ef6300b24abd3cf9e23081169,
+--- !u!95 &2039961456329746607 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5052785017882176606, guid: c268534ef6300b24abd3cf9e23081169,
     type: 3}
   m_PrefabInstance: {fileID: 6507841173033157873}
   m_PrefabAsset: {fileID: 0}

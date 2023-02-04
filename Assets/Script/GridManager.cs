@@ -32,49 +32,49 @@ public class GridManager : MonoBehaviour
     public List<int> db_direction_order;
 
     //**Once Per Turn/Max Tile Pathfinding**//
-    public void find_paths_static(Character tchar)
-    {
-        var ttile = tchar.tile_s;
-        for (int x = 0; x < db_tiles.Count; x++)
-            db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
+    //public void find_paths_static(Character tchar)
+    //{
+    //    var ttile = tchar.tile_s;
+    //    for (int x = 0; x < db_tiles.Count; x++)
+    //        db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
 
-        List<Tile> db_tpath = new List<Tile>();
-        find_next_path_static(tchar, ttile, db_tpath);
-    }
+    //    List<Tile> db_tpath = new List<Tile>();
+    //    find_next_path_static(tchar, ttile, db_tpath);
+    //}
 
 
-    void find_next_path_static(Character tchar, Tile ttile, List<Tile> db_tpath)
-    {
-        for (int x = 0; x < ttile.db_neighbors.Count; x++)
-        {
-            var ntile = ttile.db_neighbors[x].tile_s;
-            if (ttile.db_neighbors[x].tile_s != null && !db_tpath.Contains(ntile) && !ttile.db_neighbors[x].blocked) //Check if tile, if not already used, if not blocked//
-            {
-                if (find_path == efind_path.once_per_turn || (db_tpath.Count < tchar.max_tiles))
-                {
-                    if (ntile.db_path_lowest.Count == 0 || db_tpath.Count + 1 < ntile.db_path_lowest.Count)
-                    {
-                        if ((!tchar.big) || (tchar.big && ntile.db_neighbors[1].tile_s != null && !ntile.db_neighbors[1].blocked && ntile.db_neighbors[2].tile_s != null && !ntile.db_neighbors[2].blocked && ntile.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null && !ntile.db_neighbors[1].tile_s.db_neighbors[2].blocked && !ntile.db_neighbors[2].tile_s.db_neighbors[1].blocked))
-                        {
-                            ntile.db_path_lowest.Clear();
-                            for (int i = 0; i < db_tpath.Count; i++)
-                            {
-                                ntile.db_path_lowest.Add(db_tpath[i]);
+    //void find_next_path_static(Character tchar, Tile ttile, List<Tile> db_tpath)
+    //{
+    //    for (int x = 0; x < ttile.db_neighbors.Count; x++)
+    //    {
+    //        var ntile = ttile.db_neighbors[x].tile_s;
+    //        if (ttile.db_neighbors[x].tile_s != null && !db_tpath.Contains(ntile) && !ttile.db_neighbors[x].blocked) //Check if tile, if not already used, if not blocked//
+    //        {
+    //            if (find_path == efind_path.once_per_turn || (db_tpath.Count < tchar.max_tiles))
+    //            {
+    //                if (ntile.db_path_lowest.Count == 0 || db_tpath.Count + 1 < ntile.db_path_lowest.Count)
+    //                {
+    //                    if ((!tchar.big) || (tchar.big && ntile.db_neighbors[1].tile_s != null && !ntile.db_neighbors[1].blocked && ntile.db_neighbors[2].tile_s != null && !ntile.db_neighbors[2].blocked && ntile.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null && !ntile.db_neighbors[1].tile_s.db_neighbors[2].blocked && !ntile.db_neighbors[2].tile_s.db_neighbors[1].blocked))
+    //                    {
+    //                        ntile.db_path_lowest.Clear();
+    //                        for (int i = 0; i < db_tpath.Count; i++)
+    //                        {
+    //                            ntile.db_path_lowest.Add(db_tpath[i]);
 
-                            }
+    //                        }
                                 
                                 
-                            if (find_path == efind_path.max_tiles)
-                                //ntile.im.color = Color.blue;
+    //                        if (find_path == efind_path.max_tiles)
+    //                            //ntile.im.color = Color.blue;
 
-                            ntile.db_path_lowest.Add(ntile);
-                            find_next_path_static(tchar, ntile, ntile.db_path_lowest);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //                        ntile.db_path_lowest.Add(ntile);
+    //                        find_next_path_static(tchar, ntile, ntile.db_path_lowest);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
     //public void ClearPath(Character character)
     //{

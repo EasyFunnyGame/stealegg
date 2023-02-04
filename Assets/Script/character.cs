@@ -45,9 +45,20 @@ public class Character : MonoBehaviour
 
         if(gameObject.name != "Player")
         {
-            var gridManagerCopy = Instantiate(gridManagerGo);
-            gridManagerCopy.name = "GridManager_" + gameObject.name;
-            gridManager = gridManagerCopy.GetComponent<GridManager>();
+            gridManagerGo = GameObject.Find("GridManager_Enemy");
+            if (Enemy.count == 0)
+            {
+                gridManager = gridManagerGo.GetComponent<GridManager>();
+            }
+            else
+            {
+                var gridManagerCopy = Instantiate(gridManagerGo);
+                gridManagerCopy.name += gameObject.name;
+                gridManagerCopy.name += Enemy.count;
+                gridManager = gridManagerCopy.GetComponent<GridManager>();
+            }
+            Enemy.count++;
+           
         }
         else
         {
@@ -62,6 +73,8 @@ public class Character : MonoBehaviour
 
         Reached();
         originalCoord = coord.Clone();
+
+        
     }
 
     public virtual void Update()
@@ -127,9 +140,6 @@ public class Character : MonoBehaviour
                     db_moves[4].gameObject.SetActive(false);
                     moving = false;
                     moving_tiles = false;
-                    if (gridManager.find_path == efind_path.once_per_turn || gridManager.find_path == efind_path.max_tiles)
-                        gridManager.find_paths_static(this);
-                    //gm_s.hover_tile(selected_tile_s);
                 }
                 Reached();
             }
@@ -139,6 +149,7 @@ public class Character : MonoBehaviour
     public void move_tile(Tile ttile)
     {
         num_tile = 0;
+
         tar_tile_s = ttile;
 
         //0 - body_move, 1 - body_look, 2 - head_look, 3 - eyes_look, target tile marker
