@@ -192,7 +192,20 @@ public class Game : MonoBehaviour
 
     public void UseWhistle()
     {
-
+        var nodes = boardManager.FindNodesAround(Player.Instance.tile_s.name ,2);
+        foreach(var kvp in nodes)
+        {
+            var name = kvp.Key;
+            var node = kvp.Value;
+            for(var index = 0; index < boardManager.enemies.Count; index++)
+            {
+                var enemy = boardManager.enemies[index];
+                if (enemy.coord.name == name)
+                {
+                    enemy.Alert(Player.Instance.tile_s.name);
+                }
+            }
+        }
     }
 
     public void UseBottle()
@@ -210,6 +223,12 @@ public class Game : MonoBehaviour
         if(status == GameStatus.PLAYING)
         {
             turn = Turn.ENEMY;
+            var enemiesCount = boardManager.enemies.Count;
+            for (var index = 0; index < enemiesCount; index++)
+            {
+                var enemy = boardManager.enemies[index];
+                enemy.CheckAction();
+            }
         }
     }
 

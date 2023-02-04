@@ -21,17 +21,19 @@ public class Character : MonoBehaviour
     public List<Transform> db_moves;
     public int max_tiles = 7;
     public int num_tile;
-    public List<Tile> path;
     protected BoardManager boardManager;
-
     public Direction direction = Direction.Up;
-
     public bool hasAction = false;
+    public bool rotation = false;
+    public bool reachedTile = false;
 
+
+    protected Coord originalCoord;
+
+    public Coord coord;
     public void Awake()
     {
         ResetDirection();
-        
     }
 
     public void Start()
@@ -54,14 +56,19 @@ public class Character : MonoBehaviour
 
         var x = int.Parse(transform.position.x.ToString());
         var z = int.Parse(transform.position.z.ToString());
+
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
         tile_s = tile;
 
         Reached();
+        originalCoord = coord.Clone();
     }
 
-    public void Update()
+    public virtual void Update()
     {
+        if (Game.Instance.status != GameStatus.PLAYING) return;
+
+
         if ( selected_tile_s != null && !moving && tile_s != selected_tile_s && selected_tile_s != null)
         {
             if (selected_tile_s.db_path_lowest.Count > 0)
@@ -70,13 +77,25 @@ public class Character : MonoBehaviour
                 print("no valid tile selected");
         }
 
-        if (body_looking)
+        if (body_looking )
         {
             Vector3 tar_dir = db_moves[1].position - tr_body.position;
             Vector3 new_dir = Vector3.RotateTowards(tr_body.forward, tar_dir, rotate_speed * Time.deltaTime / 2, 0f);
             new_dir.y = 0;
             tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
+
+            var angle = Vector3.Angle(tar_dir, tr_body.forward);
+            if(angle<=1)
+            {
+                ResetDirection();
+                body_looking = false;
+                OnDirectionRested();
+                StartMove();
+            }
+
+            return;
         }
+
 
         if (moving)
         {
@@ -133,7 +152,6 @@ public class Character : MonoBehaviour
         if (!big)
         {
             tpos = tar_tile_s.transform.position;
-            
         }
         else
         if (big)
@@ -166,15 +184,61 @@ public class Character : MonoBehaviour
 
         moving = true;
         moving_tiles = true;
-        body_looking = true;
-        
-        StartMove();
+        reachedTile = false;
+
+        UpdateTargetDirection();
+
+        if(!body_looking)
+        {
+            StartMove();
+        }
     }
 
-    public void ClearPath()
+    protected void UpdateTargetDirection()
     {
-        gridManager.ClearPath(this);
+        if (nextTile == null)
+        {
+            return;
+        }
+
+        var tileNameArr = nextTile.name.Split('_');
+        var nxtTileX = int.Parse(tileNameArr[0]);
+        var nxtTileZ = int.Parse(tileNameArr[1]);
+
+        tileNameArr = tile_s.name.Split('_');
+        var tileX = int.Parse(tileNameArr[0]);
+        var tileZ = int.Parse(tileNameArr[1]);
+        var targetDirection = direction;
+        if (nxtTileX - tileX == 1 && nxtTileZ == tileZ)
+        {
+            targetDirection = Direction.Right;
+        }
+        else if (nxtTileX - tileX == -1 && nxtTileZ == tileZ)
+        {
+            targetDirection = Direction.Left;
+        }
+        else if (nxtTileX == tileX && nxtTileZ - tileZ == 1)
+        {
+            targetDirection = Direction.Up;
+        }
+        else if (nxtTileX == tileX && nxtTileZ - tileZ == -1)
+        {
+            targetDirection = Direction.Down;
+        }
+        if(targetDirection == direction)
+        {
+            body_looking = false;
+        }
+        else
+        {
+            body_looking = true;
+        }
     }
+
+    //public void ClearPath()
+    //{
+    //    gridManager.ClearPath(this);
+    //}
 
     public void FindPathRealTime(Tile t)
     {
@@ -183,13 +247,24 @@ public class Character : MonoBehaviour
 
     protected virtual void ResetDirection()
     {
+
         var rotateY = transform.localRotation.eulerAngles.y;
         direction = (Direction)System.Enum.Parse(typeof(Direction), ((rotateY -= (rotateY %= 90)) / 90).ToString(), true);
         //Debug.Log(gameObject.name + "方向:" + direction);
     }
+
+    public virtual void OnDirectionRested()
+    {
+
+    }
+
+
     public void Reached()
     {
+        coord = new Coord(transform.position);
+        reachedTile = true;
         ResetDirection();
+        UpdateTargetDirection();
         OnReached();
     }
 
@@ -208,6 +283,10 @@ public class Character : MonoBehaviour
         
     }
 
+    public Dictionary<string,BoardNode> FindNodesAround(int range)
+    {
+        return boardManager.FindNodesAround(tile_s.name, range);
+    }
 
     #region 动画事件回调
     public virtual void FootL()

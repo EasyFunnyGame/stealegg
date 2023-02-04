@@ -50,12 +50,12 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseWhistleHandler()
     {
-
+        Game.Instance.UseWhistle();
     }
 
     private void onClickPauseGameHandler()
     {
-
+        Game.Instance.UseBottle();
     }
 
     // Start is called before the first frame update

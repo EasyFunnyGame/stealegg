@@ -10,7 +10,6 @@ public class Player : Character
     void Awake()
     {
         Instance = this;
-        //big = true;
         base.Awake();
     }
 
@@ -21,14 +20,14 @@ public class Player : Character
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (Game.Instance.turn != Turn.PLAYER) return;
         if (selected_tile_s != null && !moving && tile_s != selected_tile_s && selected_tile_s != null)
         {
             if (selected_tile_s.db_path_lowest.Count > 1)
             {
-                ClearPath();
+                //ClearPath();
             }
         }
         base.Update();
@@ -104,4 +103,5 @@ public class Player : Character
     {
         base.FootR();
     }
+
 }

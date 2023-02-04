@@ -76,17 +76,18 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void ClearPath(Character character)
-    {
-        character.tar_tile_s = null;
-        character.selected_tile_s = null;
-        for (int x = 0; x < db_tiles.Count; x++)
-            db_tiles[x].db_path_lowest.Clear();
-    }
+    //public void ClearPath(Character character)
+    //{
+    //    character.selected_tile_s = null;
+    //    character.nextTile = null;
+    //    for (int x = 0; x < db_tiles.Count; x++)
+    //        db_tiles[x].db_path_lowest.Clear();
+    //}
 
     //**On_hover/On_Click Pathfinding**//
     public void find_paths_realtime(Character tchar, Tile tar_tile_s)
     {
+        tchar.num_tile = 0;
         var ttile = tchar.tile_s;
         for (int x = 0; x < db_tiles.Count; x++)
             db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
