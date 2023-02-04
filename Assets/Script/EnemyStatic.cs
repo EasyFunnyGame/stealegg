@@ -27,10 +27,12 @@ public class EnemyStatic : Enemy
     protected override void OnReached()
     {
         base.OnReached();
+
+        Debug.Log("敌人到达路径点");
+
         UpdateRouteMark();
         hasAction = false;
-        animator.Play("Player_Run");
-
+        animator.CrossFade("Player_Idle", 0.1f);
         //Debug.Log("Eeney Static Guard Nodes " + linkLine1.name + "   " + linkLine2.name);
         //Debug.Log("Eeney Static Guard Nodes " + node1.name + "   " + node2.name);
     }
@@ -39,7 +41,7 @@ public class EnemyStatic : Enemy
     protected override void OnStartMove()
     {
         base.OnStartMove();
-        animator.Play("Player_Idle");
+        animator.CrossFade("Player_Run", 0.1f);
     }
 
     public override void OnDirectionRested()

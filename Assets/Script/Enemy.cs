@@ -114,6 +114,11 @@ public class Enemy : Character
         }
     }
 
+    public void UpdateMove0()
+    {
+        
+    }
+
     public override void OnDirectionRested()
     {
         base.OnDirectionRested();
