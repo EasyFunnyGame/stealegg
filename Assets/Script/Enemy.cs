@@ -25,6 +25,9 @@ public class Enemy : Character
 
     public Tile tracingTile = null;
 
+    public Animator animator;
+
+
     public static int count;
     
 
@@ -156,7 +159,7 @@ public class Enemy : Character
     public void Alert(string tileName)
     {
         Debug.Log("警觉" + tileName);
-        var targetTile = gridManager.GetTileByName(tileName);
+        var targetTile = gridManager.GetTileByName(tileName); 
         if(targetTile!=null)
         {
             //ClearPath();
@@ -166,6 +169,7 @@ public class Enemy : Character
             hasAction = true;
             UpdateMoves(targetTile);
             //UpdateTargetDirection(targetTile);
+            animator.Play("Enemy_Alert");
         }
     }
 

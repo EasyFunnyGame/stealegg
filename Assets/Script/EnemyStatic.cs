@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class EnemyStatic : Enemy
 {
-    public Animator animator;
-
-
-
+    
     void Awake()
     {
         base.Awake();

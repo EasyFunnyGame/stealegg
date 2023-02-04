@@ -28,7 +28,13 @@ public class GameCanvas : BaseCanvas
 
     public Button btn_pause;
 
+    public CanvasGroup canvasGroup;
+
     public int index;
+
+    private float fadeOutTime = 3;
+
+    const int fadeOutDuration = 3;
 
     private void Awake()
     {
@@ -36,6 +42,8 @@ public class GameCanvas : BaseCanvas
         btn_bottle.onClick.AddListener(onClickUseBottleHandler);
         btn_whistle.onClick.AddListener(onClickUseWhistleHandler);
         btn_pause.onClick.AddListener(onClickPauseGameHandler);
+
+        canvasGroup.alpha = 1;
     }
 
     private void onClickShowEnergyGainCanvasHandler()
@@ -67,7 +75,11 @@ public class GameCanvas : BaseCanvas
     // Update is called once per frame
     void Update()
     {
-        
+        if(fadeOutTime>0)
+        {
+            fadeOutTime -= Time.deltaTime;
+            canvasGroup.alpha = fadeOutTime / fadeOutDuration;
+        }
     }
     protected override void OnShow()
     {
