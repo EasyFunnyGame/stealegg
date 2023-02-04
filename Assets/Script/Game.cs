@@ -42,9 +42,11 @@ public class Game : MonoBehaviour
 
     public int level;
 
-    public Turn turn = Turn.NONE;
-
     public BoardManager boardManager;
+
+    public ActionBase playerAction;
+
+    //public List<ActionBase> enemyActions = new List<ActionBase>();
 
     private void Awake()
     {
@@ -52,8 +54,6 @@ public class Game : MonoBehaviour
         DontDestroyOnLoad(this);
 
         status = GameStatus.PREPARED;
-
-        turn = Turn.NONE;
 
         level = PlayerPrefs.GetInt("Level");
         if (level > 36) level = 36;
@@ -95,7 +95,6 @@ public class Game : MonoBehaviour
     {
         boardManager = boardMgr;
         status = GameStatus.PLAYING;
-        turn = Turn.PLAYER;
         gameCanvas.Show();
     }
 
@@ -127,17 +126,54 @@ public class Game : MonoBehaviour
 
     void GamePlayingUpdate()
     {
-        if (turn == Turn.PLAYER)
+        var enemyActionRunning = false;
+        if(playerAction != null)
         {
-            PlayerTurnUpdate();
+            if (playerAction.CheckComplete())
+            {
+                // 主角动作完成回调
+                playerAction = null;
+
+                // 更新敌人行为
+                for (var i = 0; i < boardManager.enemies.Count; i++)
+                {
+                    var enemy = boardManager.enemies[i];
+                    enemy.CheckAction();
+                }
+            }
+            else
+            {
+                playerAction.Run();
+            }
         }
-        else if (turn == Turn.ENEMY)
+        else
         {
-            EnemyTurnUpdate();
+            for(var i = 0; i < boardManager.enemies.Count; i++)
+            {
+                var enemy = boardManager.enemies[i];
+                if(enemy.currentAction!=null)
+                {
+                    var complete = enemy.currentAction.CheckComplete();
+                    if(complete)
+                    {
+                        enemy.currentAction = null;
+                    }
+                    else
+                    {
+                        enemy.currentAction.Run();
+                        enemyActionRunning = true;
+                    }
+                }
+            }
+        }
+
+        if(playerAction==null && !enemyActionRunning)
+        {
+            ListenClick();
         }
     }
 
-    void PlayerTurnUpdate()
+    void ListenClick()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -165,28 +201,9 @@ public class Game : MonoBehaviour
                 Tile tile = Player.Instance.gridManager.db_tiles[tileIndex];
                 if (Player.Instance.moving || Player.Instance.tile_s != tile)
                 {
-                    Player.Instance.selected_tile_s = tile;
-                    Player.Instance.FindPathRealTime(tile);
+                    playerAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);
                 }
             }
-        }
-    }
-
-    void EnemyTurnUpdate()
-    {
-        var allEnd = true;
-        var enemiesCount = boardManager.enemies.Count;
-        for (var index = 0; index < enemiesCount; index++)
-        {
-            var enemy = boardManager.enemies[index];
-            if (enemy.hasAction)
-            {
-                allEnd = false;
-            }
-        }
-        if (allEnd)
-        {
-            turn = Turn.PLAYER;
         }
     }
 
@@ -196,7 +213,6 @@ public class Game : MonoBehaviour
         foreach(var kvp in nodes)
         {
             var name = kvp.Key;
-            var node = kvp.Value;
             for(var index = 0; index < boardManager.enemies.Count; index++)
             {
                 var enemy = boardManager.enemies[index];
@@ -216,27 +232,6 @@ public class Game : MonoBehaviour
     public void ThrowBottle()
     {
 
-    }
-
-    public void CheckPlayerTurnEnd()
-    {
-        if(status == GameStatus.PLAYING)
-        {
-            turn = Turn.ENEMY;
-            var enemiesCount = boardManager.enemies.Count;
-            for (var index = 0; index < enemiesCount; index++)
-            {
-                var enemy = boardManager.enemies[index];
-                enemy.TryCatch();
-                enemy.TryTrace();
-                enemy.CheckAction();
-            }
-        }
-    }
-
-    public void CheckEnemiesTurnEnd()
-    {
-        
     }
 
     public void Save()

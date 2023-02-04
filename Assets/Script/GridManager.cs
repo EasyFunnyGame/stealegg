@@ -100,19 +100,16 @@ public class GridManager : MonoBehaviour
                 {
                     if (ntile.db_path_lowest.Count == 0 || db_tpath.Count + 1 < ntile.db_path_lowest.Count)
                     {
-                        if ((!tchar.big) || (tchar.big && ntile.db_neighbors[1].tile_s != null && !ntile.db_neighbors[1].blocked && ntile.db_neighbors[2].tile_s != null && !ntile.db_neighbors[2].blocked && ntile.db_neighbors[1].tile_s.db_neighbors[2].tile_s != null && !ntile.db_neighbors[1].tile_s.db_neighbors[2].blocked && !ntile.db_neighbors[2].tile_s.db_neighbors[1].blocked))
+                        ntile.db_path_lowest.Clear();
+                        for (int i = 0; i < db_tpath.Count; i++)
                         {
-                            ntile.db_path_lowest.Clear();
-                            for (int i = 0; i < db_tpath.Count; i++)
-                            {
-                                ntile.db_path_lowest.Add(db_tpath[i]);
-                            }
-
-                            ntile.db_path_lowest.Add(ntile);
-
-                            if (ttile != tar_tile_s)
-                                find_next_path_realtime(tchar, ntile, ntile.db_path_lowest, tar_tile_s);
+                            ntile.db_path_lowest.Add(db_tpath[i]);
                         }
+
+                        ntile.db_path_lowest.Add(ntile);
+
+                        if (ttile != tar_tile_s)
+                            find_next_path_realtime(tchar, ntile, ntile.db_path_lowest, tar_tile_s);
                     }
                 }
             }

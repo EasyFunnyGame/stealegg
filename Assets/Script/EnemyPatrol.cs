@@ -20,14 +20,4 @@ public class EnemyPatrol : Enemy
     {
         base.Update();
     }
-
-    override protected void OnReached()
-    {
-        base.OnReached();
-    }
-
-    override protected void OnStartMove()
-    {
-        base.OnStartMove();
-    }
 }

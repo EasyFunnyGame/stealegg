@@ -22,20 +22,12 @@ public class Player : Character
     // Update is called once per frame
     public void Update()
     {
-        if (Game.Instance.turn != Turn.PLAYER) return;
-        if (selected_tile_s != null && !moving && tile_s != selected_tile_s && selected_tile_s != null)
-        {
-            if (selected_tile_s.db_path_lowest.Count > 1)
-            {
-                //ClearPath();
-            }
-        }
-        base.Update();
+        //base.Update();
     }
 
-    override protected void OnReached()
+    override public void Reached()
     {
-        base.OnReached();
+        base.Reached();
 
         CheckWhistle();
         CheckBottle();
@@ -43,16 +35,13 @@ public class Player : Character
         boardManager.PickItem(tile_s.name,this);
         animator.CrossFade("Player_Idle",0.1f);
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
-
-        hasAction = false;
-        Game.Instance.CheckPlayerTurnEnd();
+        // Game.Instance.EnemiesTryCatchAndTracePlayer();
     }
 
-    override protected void OnStartMove()
+    override public void StartMove()
     {
-        base.OnStartMove();
+        base.StartMove();
         animator.CrossFade("Player_Sprint", 0.1f);
-        hasAction = true;
 
         Game.Instance.gameCanvas.DisableWhistle();
         Game.Instance.gameCanvas.DisableBottle();
@@ -96,7 +85,7 @@ public class Player : Character
 
     public void CheckBottle()
     {
-        if (Player.Instance.bottleCount > 0)
+        if (bottleCount > 0)
         {
             Game.Instance.gameCanvas.EnableBottle();
         }
