@@ -55,7 +55,7 @@ public class BoardManager : MonoBehaviour
     IEnumerator SceneLoaded()
     {
         yield return null;
-        Game.Instance.SceneLoaded(this);
+        Game.Instance.SceneLoaded(this, name);
     }
 
     // Update is called once per frame

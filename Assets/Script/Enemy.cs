@@ -31,11 +31,11 @@ public class Enemy : Character
 
     public ActionBase currentAction = null;
 
-    public Tile foundPlayerTile = null;
+    public GridTile foundPlayerTile = null;
 
-    public Tile hearSoundTile = null;
+    public GridTile hearSoundTile = null;
 
-    public Tile originalTile = null;
+    public GridTile originalTile = null;
     
 
     public override void ResetDirection()
@@ -70,19 +70,18 @@ public class Enemy : Character
             currentAction = new ActionCatchPlayer(this,ActionType.CatchPlayer);
             return;
         }
-        
-
-        if (hearSoundTile != null)
-        {
-            originalTile = null;
-            currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, hearSoundTile);
-            return;
-        }
 
         if (foundPlayerTile != null)
         {
             originalTile = null;
             currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, foundPlayerTile);
+            return;
+        }
+
+        if (hearSoundTile != null)
+        {
+            originalTile = null;
+            currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, hearSoundTile);
             return;
         }
 
@@ -105,9 +104,9 @@ public class Enemy : Character
                 else
                 {
                     currentAction = new ActionTurnDirection(this, ActionType.EnemyMove, targetDirection);
+                    for (int x = 0; x < gridManager.db_tiles.Count; x++)
+                        gridManager.db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
                 }
-                for (int x = 0; x < gridManager.db_tiles.Count; x++)
-                    gridManager.db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
             }
             return;
         }
@@ -228,7 +227,7 @@ public class Enemy : Character
         //Debug.Log("抓捕:"+ catchTileName + " 主角位置:" + Player.Instance.coord.name);
         if (catchTile != null && Player.Instance.coord.name == catchTileName)
         {
-            Game.Instance.status = GameStatus.FAIL;
+            //Game.Instance.status = GameStatus.FAIL;
             return true;
         }
         return false;

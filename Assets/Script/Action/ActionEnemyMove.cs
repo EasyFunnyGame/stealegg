@@ -6,7 +6,7 @@ public class ActionEnemyMove : ActionBase
 {
     private Vector3 nextStepTilePosition;
 
-    public ActionEnemyMove(Enemy character, ActionType actionType, Tile tile) : base(character, actionType)
+    public ActionEnemyMove(Enemy character, ActionType actionType, GridTile tile) : base(character, actionType)
     {
         character.FindPathRealTime(tile);
         nextStepTilePosition = character.db_moves[0].position;
@@ -27,13 +27,26 @@ public class ActionEnemyMove : ActionBase
         {
             if(enemy.foundPlayerTile)
             {
-                // 到达地点后更新玩家的追踪位置
-                var playerTile = enemy.gridManager.GetTileByName(Player.Instance.tile_s.name);
-                if (playerTile != null)
+                if(enemy.tile_s.name == enemy.foundPlayerTile.name)
                 {
-                    enemy.foundPlayerTile = playerTile;
+                    // 到达地点后更新玩家的追踪位置
+                    var playerTile = enemy.gridManager.GetTileByName(Player.Instance.tile_s.name);
+                    if(playerTile != null)
+                    {
+                        enemy.foundPlayerTile = playerTile;
+                        character.FindPathRealTime(playerTile);
+                        enemy.UpdateTargetDirection(enemy.nextTile);
+                        if (enemy.direction == enemy.targetDirection)
+                        {
+                            character.Reached();
+                            return true;
+                        }
+                        for (int x = 0; x < enemy.gridManager.db_tiles.Count; x++)
+                            enemy.gridManager.db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
+
+                    }
                 }
-                enemy.UpdateTargetDirection(enemy.nextTile);
+
                 if(enemy.direction == enemy.targetDirection)
                 {
                     character.Reached();

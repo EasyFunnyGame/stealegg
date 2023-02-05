@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameCanvas : BaseCanvas
@@ -43,7 +44,22 @@ public class GameCanvas : BaseCanvas
         btn_whistle.onClick.AddListener(onClickUseWhistleHandler);
         btn_pause.onClick.AddListener(onClickPauseGameHandler);
 
-        canvasGroup.alpha = 1;
+        btn_home.onClick.AddListener(onClickBackToHomeHandler);
+        btn_reStart.onClick.AddListener(onClickReStartLevelHandler);
+    }
+
+    void onClickReStartLevelHandler()
+    {
+        Game.Instance.gameCanvas.Hide();
+        SceneManager.LoadScene(Game.Instance.currentLevelName);
+        Game.Instance.status = GameStatus.PREPARED;
+    }
+
+    void onClickBackToHomeHandler()
+    {
+        Game.Instance.gameCanvas.Hide();
+        SceneManager.LoadScene("Main");
+        Game.Instance.status = GameStatus.PREPARED;
     }
 
     private void onClickShowEnergyGainCanvasHandler()
@@ -79,10 +95,16 @@ public class GameCanvas : BaseCanvas
         {
             fadeOutTime -= Time.deltaTime;
             canvasGroup.alpha = fadeOutTime / fadeOutDuration;
+            if(canvasGroup.alpha<=0)
+            {
+                Game.Instance.status = GameStatus.PLAYING;
+            }
         }
     }
     protected override void OnShow()
     {
+        fadeOutTime = 3;
+        canvasGroup.alpha = 1;
         RefreshEnergy();
         img_level.texture = Resources.Load<Texture>("UI/Sprite/Num/" + (index+1).ToString());
     }

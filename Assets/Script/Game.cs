@@ -42,11 +42,19 @@ public class Game : MonoBehaviour
 
     public int level;
 
+    public string currentLevelName;
+
     public BoardManager boardManager;
 
     public ActionBase playerAction;
 
-    //public List<ActionBase> enemyActions = new List<ActionBase>();
+    public bool graffable = false;
+
+    public bool graffing = false;
+
+    public bool graffed = false;
+
+    public GameCamera gCamera;
 
     private void Awake()
     {
@@ -91,11 +99,22 @@ public class Game : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    public void SceneLoaded(BoardManager boardMgr)
+    public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
         boardManager = boardMgr;
-        status = GameStatus.PLAYING;
+        
+        currentLevelName = sceneName;
+
+        gCamera = GameObject.Find("Main Camera").GetComponent<GameCamera>();
+
+        graffed = false;
+
+        graffable = false;
+
+        graffing = false;
+
         gameCanvas.Show();
+        Debug.Log("当前场景名称" + sceneName);
     }
 
     public void EndGame()
@@ -114,6 +133,10 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gameCanvas.canvasGroup.alpha>0)
+        {
+            return;
+        }
         if (status == GameStatus.PLAYING)
         {
             GamePlayingUpdate();
@@ -167,7 +190,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        if(playerAction==null && !enemyActionRunning)
+        if(playerAction == null && !enemyActionRunning && !graffing)
         {
             ListenClick();
         }
@@ -179,7 +202,18 @@ public class Game : MonoBehaviour
         {
             Ray ray = GameCamera.Instance.camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
+
+            if(graffable && Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Item")))
+            {
+                Debug.Log("开始画画");
+                //graffing = true;
+                //var graffCameraTransform = GameObject.Find("GraffCamera");
+                //if(graffCameraTransform != null)
+                //{
+                //    gCamera.SetGraffTarget(graffCameraTransform.transform);
+                //}
+            }
+            else if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
             {
                 var node = hitInfo.transform.parent.parent;
                 if (node == null)
@@ -198,7 +232,7 @@ public class Game : MonoBehaviour
                 var tileIndex = coord.x * BoardManager.Instance.height + coord.z;
 
                 // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
-                Tile tile = Player.Instance.gridManager.db_tiles[tileIndex];
+                GridTile tile = Player.Instance.gridManager.db_tiles[tileIndex];
                 if (Player.Instance.moving || Player.Instance.tile_s != tile)
                 {
                     playerAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);
@@ -223,6 +257,8 @@ public class Game : MonoBehaviour
             }
         }
     }
+
+    
 
     public void UseBottle()
     {

@@ -28,7 +28,7 @@ public class GridManager : MonoBehaviour
     public Vector2 v2_grid;
     public GridLayout gridLayout;
     public GameObject go_pref_tile;
-    public List<Tile> db_tiles;
+    public List<GridTile> db_tiles;
     public List<int> db_direction_order;
 
     //public void ClearPath(Character character)
@@ -40,7 +40,7 @@ public class GridManager : MonoBehaviour
     //}
 
     //**On_hover/On_Click Pathfinding**//
-    public void find_paths_realtime(Character tchar, Tile tar_tile_s)
+    public void find_paths_realtime(Character tchar, GridTile tar_tile_s)
     {
         tchar.num_tile = 0;
         var ttile = tchar.tile_s;
@@ -84,11 +84,11 @@ public class GridManager : MonoBehaviour
             db_direction_order.Add(1);
             db_direction_order.Add(2);
         }
-        List<Tile> db_tpath = new List<Tile>();
+        List<GridTile> db_tpath = new List<GridTile>();
         find_next_path_realtime(tchar, ttile, db_tpath, tar_tile_s);
     }
 
-    void find_next_path_realtime(Character tchar, Tile ttile, List<Tile> db_tpath, Tile tar_tile_s)
+    void find_next_path_realtime(Character tchar, GridTile ttile, List<GridTile> db_tpath, GridTile tar_tile_s)
     {
         for (int x = 0; x < ttile.db_neighbors.Count; x++)
         {
@@ -116,7 +116,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public Tile GetTileByName(string name)
+    public GridTile GetTileByName(string name)
     {
         for(var index = 0; index < db_tiles.Count; index++)
         {
@@ -141,7 +141,7 @@ public class GridManager : MonoBehaviour
                 var tgo = (GameObject) Instantiate(go_pref_tile, go_pref_tile.transform.position, go_pref_tile.transform.rotation, gridLayout.transform);
                 tgo.SetActive(true);
                 tgo.name = x + "_" + y;
-                var ttile = tgo.GetComponent<Tile>();
+                var ttile = tgo.GetComponent<GridTile>();
                 ttile.v2xy = new Vector2(x, y);
                 db_tiles.Add(ttile);
             }

@@ -5,7 +5,7 @@ using System;
 public class SubTile
 {
     public bool blocked;
-    public Tile tile_s;
+    public GridTile tile_s;
     public int num;
 }
 

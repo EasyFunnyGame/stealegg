@@ -88,6 +88,10 @@ public class Item : MonoBehaviour
             case ItemType.End:
                 Game.Instance.status = GameStatus.WIN;
                 break;
+
+            case ItemType.Graff:
+                Game.Instance.graffable = true;
+                break;
         }
        
     }

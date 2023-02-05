@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameEndCanvas : BaseCanvas
@@ -24,17 +25,21 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickReturnToHomeHandler()
     {
-        throw new NotImplementedException();
+        SceneManager.LoadScene("Main");
+        Game.Instance.endCanvas.Hide();
+        //throw new NotImplementedException();
     }
 
     private void onClickPlayNextLevelHandler()
     {
-        throw new NotImplementedException();
+        Game.Instance.endCanvas.Hide();
+        SceneManager.LoadScene("1-1");
     }
 
     private void onClickReplayThisLevelHandler()
     {
-        throw new NotImplementedException();
+        Game.Instance.endCanvas.Hide();
+        SceneManager.LoadScene("1-1");
     }
 
     private void onClickShareHandler()

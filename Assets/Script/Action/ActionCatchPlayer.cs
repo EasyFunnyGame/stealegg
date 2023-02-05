@@ -14,6 +14,7 @@ public class ActionCatchPlayer : ActionBase
     {
         if (actionDuration < 0)
         {
+            Game.Instance.status = GameStatus.FAIL;
             return true;
         }
         return false;

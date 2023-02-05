@@ -19,19 +19,12 @@ public class Player : Character
         base.Start();
     }
 
-    // Update is called once per frame
-    public void Update()
-    {
-        //base.Update();
-    }
-
     override public void Reached()
     {
         base.Reached();
 
         CheckWhistle();
         CheckBottle();
-
         boardManager.PickItem(tile_s.name,this);
         animator.CrossFade("Player_Idle",0.1f);
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));

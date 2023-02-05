@@ -12,6 +12,8 @@ public class GameCamera : MonoBehaviour
 
     public Transform followTarget;
 
+    public Animator camAnimator;
+
     private void Awake()
     {
         Instance = this;
@@ -32,5 +34,29 @@ public class GameCamera : MonoBehaviour
         }
         
         transform.position = followTarget.position;
+
+
+
+        if (graffPos)
+        {
+            
+        }
+
+    }
+
+
+    private Transform graffPos;
+
+    private float delta = 2;
+
+    public void SetGraffTarget(Transform pos)
+    {
+        graffPos = pos;
+    }
+
+    public void RecoverFromGraffing()
+    {
+        graffPos = null;
+
     }
 }
