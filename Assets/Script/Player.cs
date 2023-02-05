@@ -10,7 +10,6 @@ public class Player : Character
     void Awake()
     {
         Instance = this;
-        base.Awake();
     }
 
     // Start is called before the first frame update
@@ -86,5 +85,20 @@ public class Player : Character
         {
             Game.Instance.gameCanvas.DisableBottle();
         }
+    }
+
+    public bool CanBeSee(string tileName)
+    {
+        var tile = gridManager.GetTileByName(tileName);
+        if (tile != null)
+        {
+            var pathLength = 0;
+            selected_tile_s = tile;
+            gridManager.find_paths_realtime(this, tile);
+            pathLength = tile.db_path_lowest.Count;
+            Clear();
+            return pathLength == 1;
+        }
+        return false;
     }
 }

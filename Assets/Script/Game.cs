@@ -113,6 +113,8 @@ public class Game : MonoBehaviour
 
         graffing = false;
 
+        delayShowEndTimer = 0;
+
         gameCanvas.Show();
         Debug.Log("当前场景名称" + sceneName);
     }
@@ -130,6 +132,8 @@ public class Game : MonoBehaviour
 
     }
 
+    public float delayShowEndTimer = 0;
+
     // Update is called once per frame
     void Update()
     {
@@ -141,10 +145,21 @@ public class Game : MonoBehaviour
         {
             GamePlayingUpdate();
         }
-        if (status == GameStatus.FAIL || status == GameStatus.WIN)
+
+        if(delayShowEndTimer > 0)
         {
-            EndGame();
+            delayShowEndTimer -= Time.deltaTime;
+            if(delayShowEndTimer<0)
+            {
+                EndGame();
+            }
         }
+    }
+
+    public void FailGame()
+    {
+        status = GameStatus.FAIL;
+        delayShowEndTimer = 2;
     }
 
     void GamePlayingUpdate()
@@ -156,7 +171,6 @@ public class Game : MonoBehaviour
             {
                 // 主角动作完成回调
                 playerAction = null;
-
                 // 更新敌人行为
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
@@ -193,6 +207,11 @@ public class Game : MonoBehaviour
         if(playerAction == null && !enemyActionRunning && !graffing)
         {
             ListenClick();
+        }
+        if(enemyActionRunning)
+        {
+            gameCanvas.DisableBottle();
+            gameCanvas.DisableWhistle();
         }
     }
 

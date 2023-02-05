@@ -20,6 +20,7 @@ public class ActionPlayerMove : ActionBase
             return false;
             
         }
+        character.Reached();
         return true;
     }
 

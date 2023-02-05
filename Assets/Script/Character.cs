@@ -33,13 +33,7 @@ public class Character : MonoBehaviour
 
     public Coord coord;
 
-
     public List<GridTile> path = new List<GridTile>();
-
-    public void Awake()
-    {
-       
-    }
 
     public void Start()
     {
@@ -194,11 +188,6 @@ public class Character : MonoBehaviour
         }
     }
 
-    //public void ClearPath()
-    //{
-    //    gridManager.ClearPath(this);
-    //}
-
     public void FindPathRealTime(GridTile t)
     {
         selected_tile_s = t;
@@ -206,8 +195,6 @@ public class Character : MonoBehaviour
         UpdateMoves(t);
         path = t.db_path_lowest;
         UpdateTargetDirection(nextTile);
-        //for (int x = 0; x < gridManager.db_tiles.Count; x++)
-        //    gridManager.db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
     }
 
     public virtual void ResetDirection()
@@ -240,7 +227,6 @@ public class Character : MonoBehaviour
     {
         coord = new Coord(transform.position);
         ResetDirection();
-        
     }
 
     public virtual void StartMove()
@@ -254,6 +240,16 @@ public class Character : MonoBehaviour
         return boardManager.FindNodesAround(tile_s.name, range);
     }
 
+
+    public void Clear()
+    {
+        for (int x = 0; x < gridManager.db_tiles.Count; x++)
+            gridManager.db_tiles[x].db_path_lowest.Clear();
+        selected_tile_s = null;
+        nextTile = null;
+        tar_tile_s = null;
+        db_moves.ForEach((Transform cube) => { cube.parent = transform; });
+    }
 
 
     #region 动画事件回调

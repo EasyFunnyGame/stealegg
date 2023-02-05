@@ -36,7 +36,11 @@ public class Enemy : Character
     public GridTile hearSoundTile = null;
 
     public GridTile originalTile = null;
-    
+
+    public GameObject question;
+    public GameObject back;
+    public GameObject exclamation;
+    public GameObject sleep;
 
     public override void ResetDirection()
     {
@@ -44,19 +48,40 @@ public class Enemy : Character
         UpdateRouteMark();
     }
 
+
     public void Alert(string tileName)
     {
-        Debug.Log("警觉" + tileName);
+        //Debug.Log("警觉" + tileName);
         var targetTile = gridManager.GetTileByName(tileName); 
         if(targetTile!=null)
         {
-            hearSoundTile = targetTile;
-            // tracingTile = targetTile;
-            // selected_tile_s = tracingTile;
-            // gridManager.find_paths_realtime(this, tracingTile);
-            // UpdateMoves(targetTile);
-            // UpdateTargetDirection(targetTile);
             animator.Play("Enemy_Alert");
+            ShowAlert();
+            if (hearSoundTile && hearSoundTile.name == targetTile.name)
+            {
+                currentAction = new ActionEnemyMove(this, hearSoundTile);
+                return;
+            }
+            hearSoundTile = targetTile;
+            var canSeePlayer = Player.Instance.CanBeSee(tile_s.name);
+            if (canSeePlayer)
+            {
+                currentAction = new ActionTurnDirection(this, Utils.DirectionTo(tile_s, Player.Instance.tile_s, direction));
+                return;
+            }
+            // 如果追踪方向和当前方向相同  直接行进
+            if(foundPlayerTile)
+            {
+                currentAction = new ActionEnemyMove(this, foundPlayerTile);
+                return;
+            }
+            // 判断寻路的方向  
+            FindPathRealTime(targetTile);
+            UpdateTargetDirection(nextTile);
+            if (targetDirection != direction)
+            {
+                currentAction = new ActionTurnDirection(this, targetDirection);
+            }
         }
     }
 
@@ -67,47 +92,34 @@ public class Enemy : Character
         var caught = TryCatchPlayer();
         if (caught)
         {
-            currentAction = new ActionCatchPlayer(this,ActionType.CatchPlayer);
+            Game.Instance.FailGame();
+            animator.Play("Enemy_Caugth");
             return;
         }
 
         if (foundPlayerTile != null)
         {
             originalTile = null;
-            currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, foundPlayerTile);
+            currentAction = new ActionEnemyMove(this,  foundPlayerTile);
             return;
         }
 
         if (hearSoundTile != null)
         {
             originalTile = null;
-            currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, hearSoundTile);
+            currentAction = new ActionEnemyMove(this, hearSoundTile);
             return;
-        }
+        } 
 
         if (originalTile != null)
         {
-            currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, originalTile);
+            currentAction = new ActionEnemyMove(this, originalTile);
             return;
         }
 
-        if ( tile_s.name != originalCoord.name )
+        if (ReturnOriginal(true))
         {
-            originalTile = gridManager.GetTileByName(originalCoord.name);
-            if(originalTile!=null)
-            {
-                FindPathRealTime(originalTile);
-                if(direction == targetDirection)
-                {
-                    currentAction = new ActionEnemyMove(this, ActionType.EnemyMove, originalTile);
-                }
-                else
-                {
-                    currentAction = new ActionTurnDirection(this, ActionType.EnemyMove, targetDirection);
-                    for (int x = 0; x < gridManager.db_tiles.Count; x++)
-                        gridManager.db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
-                }
-            }
+            ShowReturnOriginal();
             return;
         }
 
@@ -122,6 +134,32 @@ public class Enemy : Character
     public List<Transform> redLines = new List<Transform>();
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
+
+    public bool ReturnOriginal(bool needAction)
+    {
+        if (tile_s.name != originalCoord.name)
+        {
+            originalTile = gridManager.GetTileByName(originalCoord.name);
+            if (originalTile != null)
+            {
+                FindPathRealTime(originalTile);
+                if (needAction)
+                {
+                    if (direction == targetDirection)
+                    {
+                        currentAction = new ActionEnemyMove(this, originalTile);
+                    }
+                    else
+                    {
+                        currentAction = new ActionTurnDirection(this, targetDirection);
+                    }
+                }
+            }
+            
+            return true;
+        }
+        return false;
+    }
 
     public void RedLineByName(string nodeName1, string nodeName2)
     {
@@ -161,27 +199,12 @@ public class Enemy : Character
 
         UpdateRouteMark();
 
-        if (foundPlayerTile != null || hearSoundTile != null)
-        {
-            animator.CrossFade("Enemy_Alert", 0.1f);
-        }
-        else
-        {
-            animator.CrossFade("Player_Idle", 0.1f);
-        }
-        
-
-        if (Player.Instance.tile_s)
-        {
-            Player.Instance.CheckBottle();
-            Player.Instance.CheckWhistle();
-        }
-
         // 
         var catchPlayer = TryCatchPlayer();
-        if(catchPlayer)
+        if (catchPlayer)
         {
-            currentAction = new ActionCatchPlayer(this, ActionType.CatchPlayer);
+            Game.Instance.FailGame();
+            animator.CrossFade("Enemy_Caught", 0.1f);
             return;
         }
         var foundPlayer = TryFoundPlayer();
@@ -191,7 +214,24 @@ public class Enemy : Character
             return;
         }
 
+        if (Game.Instance.status == GameStatus.FAIL)
+        {
+            animator.CrossFade("Enemy_Caught", 0.1f);
+        }
+        else if (foundPlayerTile != null || hearSoundTile != null)
+        {
+            animator.CrossFade("Enemy_Alert", 0.1f);
+        }
+        else
+        {
+            animator.CrossFade("Player_Idle", 0.1f);
+        }
 
+        if (Player.Instance.tile_s)
+        {
+            Player.Instance.CheckBottle();
+            Player.Instance.CheckWhistle();
+        }
         Debug.Log("敌人到达路径点:"+tile_s.name);
     }
 
@@ -227,7 +267,6 @@ public class Enemy : Character
         //Debug.Log("抓捕:"+ catchTileName + " 主角位置:" + Player.Instance.coord.name);
         if (catchTile != null && Player.Instance.coord.name == catchTileName)
         {
-            //Game.Instance.status = GameStatus.FAIL;
             return true;
         }
         return false;
@@ -264,6 +303,7 @@ public class Enemy : Character
                 foundPlayerTile = targetTile;
                 hearSoundTile = null;
                 originalTile = null;
+                Debug.Log("开始追踪:" + targetTile.name);
                 return true;
             }
         }
@@ -275,5 +315,56 @@ public class Enemy : Character
         animator.CrossFade("Player_Sprint", 0.1f);
     }
 
+    public void ShowQuestion()
+    {
+        question.gameObject.SetActive(true);
+        exclamation.gameObject.SetActive(false);
+        sleep.gameObject.SetActive(false);
+        back.gameObject.SetActive(false);
+        questionShowTimer = 2;
+    }
+
+    public void ShowAlert()
+    {
+        question.gameObject.SetActive(false);
+        exclamation.gameObject.SetActive(true);
+        sleep.gameObject.SetActive(false);
+        back.gameObject.SetActive(false);
+    }
+
+    public void ShowReturnOriginal()
+    {
+        question.gameObject.SetActive(false);
+        exclamation.gameObject.SetActive(false);
+        sleep.gameObject.SetActive(false);
+        back.gameObject.SetActive(true);
+    }
+
+    public void ShowSleep()
+    {
+        question.gameObject.SetActive(false);
+        exclamation.gameObject.SetActive(false);
+        sleep.gameObject.SetActive(true);
+        back.gameObject.SetActive(false);
+    }
+
+    private float questionShowTimer = 0;
+
+    private void Update()
+    {
+        if(questionShowTimer>0)
+        {
+            questionShowTimer -= Time.deltaTime;
+            if(questionShowTimer<=0)
+            {
+                question.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public virtual void OnReachedOriginal()
+    {
+
+    }
 
 }

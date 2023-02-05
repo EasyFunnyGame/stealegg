@@ -338,6 +338,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6369200127929686214}
+  - component: {fileID: 6811610140019303508}
   m_Layer: 0
   m_Name: tag
   m_TagString: Untagged
@@ -352,7 +353,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3310977625046819332}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0.04048822, y: 0.95403373, z: -0.15110414, w: -0.2556325}
   m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -362,7 +363,19 @@ Transform:
   - {fileID: 2648680922415302000}
   m_Father: {fileID: 1437979140120115682}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 18, y: 210, z: 0}
+--- !u!114 &6811610140019303508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3310977625046819332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa9a1c66c721b24dac7c72f9d7c49e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3403506729377830061
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,12 +947,12 @@ MonoBehaviour:
   foundPlayerTile: {fileID: 0}
   hearSoundTile: {fileID: 0}
   originalTile: {fileID: 0}
-  redLines: []
-  redNodes: []
   question: {fileID: 2602030203839722569}
   back: {fileID: 3577163755114026476}
   exclamation: {fileID: 4397294727111515821}
   sleep: {fileID: 3191764806636634985}
+  redLines: []
+  redNodes: []
 --- !u!1001 &6507841173033157873
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -965,17 +978,17 @@ PrefabInstance:
     - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 68
+      value: 84
       objectReference: {fileID: 0}
     - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 68
+      value: 84
       objectReference: {fileID: 0}
     - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 68
+      value: 84
       objectReference: {fileID: 0}
     - target: {fileID: 6683089119814229963, guid: c268534ef6300b24abd3cf9e23081169,
         type: 3}

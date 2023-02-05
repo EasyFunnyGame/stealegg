@@ -31,14 +31,6 @@ public class GridManager : MonoBehaviour
     public List<GridTile> db_tiles;
     public List<int> db_direction_order;
 
-    //public void ClearPath(Character character)
-    //{
-    //    character.selected_tile_s = null;
-    //    character.nextTile = null;
-    //    for (int x = 0; x < db_tiles.Count; x++)
-    //        db_tiles[x].db_path_lowest.Clear();
-    //}
-
     //**On_hover/On_Click Pathfinding**//
     public void find_paths_realtime(Character tchar, GridTile tar_tile_s)
     {
@@ -196,11 +188,4 @@ public class GridManager : MonoBehaviour
     {
         gridLayout.gameObject.SetActive(false);
     }
-
-
-    void Start()
-    {
-
-    }
-
 }

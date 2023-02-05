@@ -5,9 +5,10 @@ using UnityEngine;
 public class ActionTurnDirection : ActionBase
 {
     private Direction targetDirection;
-    public ActionTurnDirection(Character character, ActionType actionType, Direction direction) : base(character, actionType)
+    public ActionTurnDirection(Character character,  Direction direction) : base(character, ActionType.TurnDirection)
     {
         targetDirection = direction;
+        Utils.SetDirection(character, targetDirection);
     }
 
     public override bool CheckComplete()
