@@ -26,6 +26,12 @@ public class BoardManager : MonoBehaviour
     [SerializeField]
     public Transform itemRoot;
 
+    [SerializeField]
+    public GridManager playerGridManager;
+
+    [SerializeField]
+    public GridManager enemyGridManager;
+
     [SerializeField][Tooltip("显示/隐藏白模节点")]
     public bool tirggerVisibleNode = true;
 
@@ -44,7 +50,13 @@ public class BoardManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        Init();
+        playerGridManager.gameObject.SetActive(true);
+        enemyGridManager.gameObject.SetActive(true);
+        name = gameObject.name;
+        gameObject.name = "BoardManager";
+        ResetItems();
+        ResetEnemies();
+        ResetSquareNodes();
     }
 
     // Start is called before the first frame update
@@ -68,17 +80,6 @@ public class BoardManager : MonoBehaviour
     public Dictionary<string, Item> allItems = new Dictionary<string, Item>();
 
     public Dictionary<string, BoardNode> nodes = new Dictionary<string, BoardNode>();
-
-    public void Init()
-    {
-        name = gameObject.name;
-        gameObject.name = "BoardManager";
-        ResetItems();
-        ResetEnemies();
-        ResetSquareNodes();
-
-        
-    }
 
     void ResetItems()
     {

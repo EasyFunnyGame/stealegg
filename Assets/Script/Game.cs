@@ -159,6 +159,7 @@ public class Game : MonoBehaviour
     public void FailGame()
     {
         status = GameStatus.FAIL;
+        Player.Instance.animator.CrossFade("Player_GiveUp",0.1f);
         delayShowEndTimer = 2;
     }
 
