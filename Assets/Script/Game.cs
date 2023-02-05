@@ -233,6 +233,15 @@ public class Game : MonoBehaviour
 
                 // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
                 GridTile tile = Player.Instance.gridManager.db_tiles[tileIndex];
+
+                for ( var i = 0; i < boardManager.enemies.Count;  i++ )
+                {
+                    var enemy = boardManager.enemies[i];
+                    if(enemy.coord.name == tile.name)
+                    {
+                        return;
+                    }
+                }
                 if (Player.Instance.moving || Player.Instance.tile_s != tile)
                 {
                     playerAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);

@@ -1,5 +1,22 @@
-﻿public class EnemyStatic : Enemy
+﻿using UnityEngine;
+
+public class EnemyStatic : Enemy
 {
+    public GameObject question;
+    public GameObject back;
+    public GameObject exclamation;
+    public GameObject sleep;
+
+    private void Awake()
+    {
+        base.Awake();
+        question.gameObject.SetActive(false);
+        back.gameObject.SetActive(false);
+        exclamation.gameObject.SetActive(false);
+        sleep.gameObject.SetActive(false);
+    }
+
+
     public override void UpdateRouteMark()
     {
         base.UpdateRouteMark();
