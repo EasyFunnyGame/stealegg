@@ -93,9 +93,6 @@ public class BoardManager : MonoBehaviour
             allItems.Add(item.coord.name, item);
             switch (itemTr.name)
             {
-                case ItemName.Item_Start:
-                    //start = item;
-                    break;
                 case ItemName.Item_Star:
                     //star = item;
                     break;
@@ -447,13 +444,14 @@ public class BoardManager : MonoBehaviour
             itemInstance.transform.localPosition = new Vector3(itemTransform.localPosition.x, itemTransform.localPosition.y, itemTransform.localPosition.z);
             itemInstance.transform.localRotation = itemTransform.localRotation;
             itemInstance.transform.SetSiblingIndex(itemTransform.GetSiblingIndex());
-            var itemScript = itemInstance.AddComponent<Item>();
+            var itemScript = itemInstance.GetComponent<Item>();
+            if(itemScript == null)
+            {
+                itemScript = itemInstance.AddComponent<Item>();
+            }
             itemScript.coord = new Coord(itemTransform.position);
             switch (itemTransform.name)
             {
-                case ItemName.Item_Start:
-                    itemScript.itemType = ItemType.Start;
-                    break;
                 case ItemName.Item_Star:
                     itemScript.itemType = ItemType.Star;
                     break;

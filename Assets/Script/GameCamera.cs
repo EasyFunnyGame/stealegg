@@ -17,7 +17,8 @@ public class GameCamera : MonoBehaviour
 	public float PaddingDown;
 	public float MoveSmoothTime = 0.19f;
 
-	private Camera _camera;
+	public Camera m_camera;
+
 	public GameObject[] _targets = new GameObject[0];
 	private DebugProjection _debugProjection;
 
@@ -32,7 +33,7 @@ public class GameCamera : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		_camera = gameObject.GetComponent<Camera>();
+		//_camera = gameObject.GetComponent<Camera>();
 		_debugProjection = DebugProjection.ROTATED;
 	}
 
@@ -40,27 +41,13 @@ public class GameCamera : MonoBehaviour
     {
 		if (Player.Instance == null) return;
 		var player = Player.Instance;
-		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.tile_s.name, 2);
+		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.currentTile.name, 2);
 		var targets = new List<GameObject>(nearPlaneNodesAround.Count);
 		foreach (var kvp in nearPlaneNodesAround)
 		{
 			targets.Add(kvp.Value.gameObject);
 		}
 		_targets = targets.ToArray();
-
-		var playerPosOnScreen = _camera.WorldToScreenPoint(player.transform.position);
-		var canvasRt = Game.Instance.gameCanvas.GetComponent<RectTransform>();
-		float resolutionRotioWidth = canvasRt.sizeDelta.x;
-		float resolutionRotioHeight = canvasRt.sizeDelta.y;
-		float widthRatio = resolutionRotioWidth / Screen.width;
-		float heightRatio = resolutionRotioHeight / Screen.height;
-		playerPosOnScreen.x *= widthRatio;
-		playerPosOnScreen.y *= heightRatio;
-
-		playerPosOnScreen.x -= resolutionRotioWidth / 2;
-		playerPosOnScreen.y -= resolutionRotioHeight / 2;
-
-		//Debug.Log("玩家位置在屏幕上的位置[" + playerPosOnScreen.x + "]  " + "[" + playerPosOnScreen.y + "]");
 	}
 
     private void Update()
@@ -84,8 +71,8 @@ public class GameCamera : MonoBehaviour
 
 	PositionAndRotation TargetPositionAndRotation(GameObject[] targets)
 	{
-		float halfVerticalFovRad = (_camera.fieldOfView * Mathf.Deg2Rad) / 2f;
-		float halfHorizontalFovRad = Mathf.Atan(Mathf.Tan(halfVerticalFovRad) * _camera.aspect);
+		float halfVerticalFovRad = (m_camera.fieldOfView * Mathf.Deg2Rad) / 2f;
+		float halfHorizontalFovRad = Mathf.Atan(Mathf.Tan(halfVerticalFovRad) * m_camera.aspect);
 
 		var rotation = Quaternion.Euler(Pitch, Yaw, Roll);
 		var inverseRotation = Quaternion.Inverse(rotation);

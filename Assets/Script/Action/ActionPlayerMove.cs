@@ -26,7 +26,7 @@ public class ActionPlayerMove : ActionBase
 
     public override void Run()
     {
-        if (character.selected_tile_s != null && !character.moving && character.tile_s != character.selected_tile_s && character.selected_tile_s != null)
+        if (character.selected_tile_s != null && !character.moving && character.currentTile != character.selected_tile_s && character.selected_tile_s != null)
         {
             if (character.selected_tile_s.db_path_lowest.Count > 0)
                 character.move_tile(character.selected_tile_s);
@@ -60,7 +60,7 @@ public class ActionPlayerMove : ActionBase
             var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
             if (tdist < 0.001f)
             {
-                character.tile_s = character.tar_tile_s.db_path_lowest[character.num_tile];
+                character.currentTile = character.tar_tile_s.db_path_lowest[character.num_tile];
                 if (character.moving_tiles && character.num_tile < character.tar_tile_s.db_path_lowest.Count - 1)
                 {
                     character.num_tile++;

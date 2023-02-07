@@ -28,28 +28,32 @@ public class ActionEnemyMove : ActionBase
         {
             if(enemy.foundPlayerTile)
             {
-                if(character.tile_s.name == enemy.foundPlayerTile.name)
+                if(character.currentTile.name == enemy.foundPlayerTile.name)
                 {
                     // 到达地点后更新玩家的追踪位置
-                    var canSeePlayer = Player.Instance.CanReach(character.tile_s.name);
+                    var canSeePlayer = Player.Instance.CanReach(character.currentTile.name);
                     if(canSeePlayer)
                     {
                         Debug.LogWarning("todo 能够看见主角,直接抓捕");
-                        var targetDirection = Utils.DirectionTo(character.tile_s, Player.Instance.tile_s, character.direction);
-                        if (character.direction == targetDirection)
+                        var playerLastTile = Player.Instance.gridManager.GetTileByName(Player.Instance.lastTileName);
+                        if(playerLastTile)
                         {
-                            Game.Instance.FailGame();
-                            character.Reached();
-                            return true;
-                        }
-                        else
-                        {
-                            Utils.SetDirection(character, targetDirection);
-                            return false;
+                            var targetDirection = Utils.DirectionTo(character.currentTile, playerLastTile, character.direction);
+                            if (character.direction == targetDirection)
+                            {
+                                Game.Instance.FailGame();
+                                character.Reached();
+                                return true;
+                            }
+                            else
+                            {
+                                Utils.SetDirection(character, targetDirection);
+                                return false;
+                            }
                         }
                     }
 
-                    var playerTile = character.gridManager.GetTileByName(Player.Instance.tile_s.name);
+                    var playerTile = character.gridManager.GetTileByName(Player.Instance.currentTile.name);
                     if(playerTile != null)
                     {
                         enemy.foundPlayerTile = playerTile;
@@ -75,7 +79,7 @@ public class ActionEnemyMove : ActionBase
                 character.UpdateTargetDirection(character.nextTile);
                 if (character.direction == character.targetDirection)
                 {
-                    if (character.tile_s.name == enemy.hearSoundTile.name)
+                    if (character.currentTile.name == enemy.hearSoundTile.name)
                     {
                         enemy.ShowQuestion();
                         enemy.hearSoundTile = null;
@@ -89,7 +93,7 @@ public class ActionEnemyMove : ActionBase
                     }
                 }
             }
-            else if(character.tile_s.name == character.originalCoord.name)
+            else if(character.currentTile.name == character.originalCoord.name)
             {
                 // 回到原点要转向
                 if (character.direction != character.originalDirection)
@@ -126,7 +130,7 @@ public class ActionEnemyMove : ActionBase
 
     public override void Run()
     {
-        if (character.selected_tile_s != null && !character.moving && character.tile_s != character.selected_tile_s && character.selected_tile_s != null)
+        if (character.selected_tile_s != null && !character.moving && character.currentTile != character.selected_tile_s && character.selected_tile_s != null)
         {
             if (character.selected_tile_s.db_path_lowest.Count > 0)
                 character.move_tile(character.selected_tile_s);
@@ -177,7 +181,7 @@ public class ActionEnemyMove : ActionBase
             var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
             if (tdist < 0.001f)
             {
-                character.tile_s = character.tar_tile_s.db_path_lowest[character.num_tile];
+                character.currentTile = character.tar_tile_s.db_path_lowest[character.num_tile];
                 if (character.moving_tiles && character.num_tile < character.tar_tile_s.db_path_lowest.Count - 1)
                 {
                     character.num_tile++;

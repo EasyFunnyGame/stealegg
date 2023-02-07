@@ -13,7 +13,22 @@ public class Character : MonoBehaviour
     public float rotate_speed = 1f;
     public Color col;
     public Transform tr_body;
-    public GridTile tile_s;
+    private GridTile _currentTile;
+    public GridTile currentTile
+    {
+        set
+        {
+            if(_currentTile)
+            {
+                lastTileName = _currentTile.name;
+            }
+            _currentTile = value;
+        }
+        get
+        {
+            return _currentTile;
+        }
+    }
     public GridTile tar_tile_s;
     public GridTile selected_tile_s;
     public GridTile nextTile;
@@ -37,6 +52,8 @@ public class Character : MonoBehaviour
 
     public ActionBase currentAction = null;
 
+    public string lastTileName;
+
     public virtual void Start()
     {
         var boardManagerGo = GameObject.Find("BoardManager");
@@ -59,7 +76,6 @@ public class Character : MonoBehaviour
                 gridManager = gridManagerCopy.GetComponent<GridManager>();
             }
             Enemy.count++;
-           
         }
         else
         {
@@ -70,7 +86,9 @@ public class Character : MonoBehaviour
         var z = int.Parse(transform.position.z.ToString());
 
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
-        tile_s = tile;
+
+        currentTile = tile;
+
         Reached();
         originalDirection = direction;
         originalCoord = coord.Clone();
@@ -160,7 +178,7 @@ public class Character : MonoBehaviour
         var nxtTileX = int.Parse(tileNameArr[0]);
         var nxtTileZ = int.Parse(tileNameArr[1]);
 
-        tileNameArr = tile_s.name.Split('_');
+        tileNameArr = currentTile.name.Split('_');
         var tileX = int.Parse(tileNameArr[0]);
         var tileZ = int.Parse(tileNameArr[1]);
         targetDirection = direction;
@@ -239,7 +257,7 @@ public class Character : MonoBehaviour
 
     public Dictionary<string,BoardNode> FindNodesAround(int range)
     {
-        return boardManager.FindNodesAround(tile_s.name, range);
+        return boardManager.FindNodesAround(currentTile.name, range);
     }
 
 

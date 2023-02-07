@@ -35,7 +35,7 @@ public class GridManager : MonoBehaviour
     public void find_paths_realtime(Character tchar, GridTile tar_tile_s)
     {
         tchar.num_tile = 0;
-        var ttile = tchar.tile_s;
+        var ttile = tchar.currentTile;
         for (int x = 0; x < db_tiles.Count; x++)
             db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
 

@@ -61,10 +61,10 @@ public class Enemy : Character
                 return;
             }
             hearSoundTile = targetTile;
-            var canSeePlayer = Player.Instance.CanReach(tile_s.name);
+            var canSeePlayer = Player.Instance.CanReach(currentTile.name);
             if (canSeePlayer)
             {
-                currentAction = new ActionTurnDirection(this, Utils.DirectionTo(tile_s, Player.Instance.tile_s, direction));
+                currentAction = new ActionTurnDirection(this, Utils.DirectionTo(currentTile, Player.Instance.currentTile, direction));
                 return;
             }
             // 如果追踪方向和当前方向相同  直接行进
@@ -133,7 +133,7 @@ public class Enemy : Character
 
     public bool ReturnOriginal(bool needAction)
     {
-        if (tile_s.name != originalCoord.name)
+        if (currentTile.name != originalCoord.name)
         {
             originalTile = gridManager.GetTileByName(originalCoord.name);
             if (originalTile != null)
@@ -208,7 +208,7 @@ public class Enemy : Character
             return;
         }
 
-        if (Game.Instance.status == GameStatus.FAIL)
+        if (Game.Instance.result == GameResult.FAIL)
         {
             animator.CrossFade("Enemy_Caught", 0.1f);
         }
@@ -221,12 +221,12 @@ public class Enemy : Character
             animator.CrossFade("Player_Idle", 0.1f);
         }
 
-        if (Player.Instance.tile_s)
+        if (Player.Instance.currentTile)
         {
             Player.Instance.CheckBottle();
             Player.Instance.CheckWhistle();
         }
-        Debug.Log("敌人到达路径点:"+tile_s.name);
+        Debug.Log("敌人到达路径点:"+ currentTile.name);
     }
 
     public virtual void UpdateRouteMark()
@@ -236,9 +236,9 @@ public class Enemy : Character
 
     public virtual bool TryCatchPlayer()
     {
-        if (Player.Instance == null || Player.Instance.tile_s == null) return false;
-        var canSeePlayer = Player.Instance.CanReach(tile_s.name);
-        var targetDirection = Utils.DirectionTo(tile_s, Player.Instance.tile_s, direction);
+        if (Player.Instance == null || Player.Instance.currentTile == null) return false;
+        var canSeePlayer = Player.Instance.CanReach(currentTile.name);
+        var targetDirection = Utils.DirectionTo(currentTile, Player.Instance.currentTile, direction);
         if(targetDirection == direction)
         {
             if (foundPlayerTile != null && canSeePlayer)
@@ -247,7 +247,7 @@ public class Enemy : Character
                 animator.CrossFade("Enemy_Caught", 0.1f);
                 return true;
             }
-            var canReach = CanReach(Player.Instance.tile_s.name);
+            var canReach = CanReach(Player.Instance.currentTile.name);
             if (canReach)
             {
                 Game.Instance.FailGame();
@@ -281,7 +281,7 @@ public class Enemy : Character
         var catchNodeX = coord.x + xOffset * 2;
         var catchNodeZ = coord.z + zOffset * 2;
         var next1NodeName = string.Format("{0}_{1}", catchNodeX, catchNodeZ);
-        if (Player.Instance.tile_s && Player.Instance.tile_s.name == next1NodeName)
+        if (Player.Instance.currentTile && Player.Instance.currentTile.name == next1NodeName)
         {
             var targetTile = gridManager.GetTileByName(next1NodeName);
             if (targetTile != null)

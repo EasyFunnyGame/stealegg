@@ -2,22 +2,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum GameStatus
+public enum GameResult
 {
-    PREPARED,
-
-    PLAYING,
-
     WIN,
 
-    FAIL
-}
-
-public enum Turn
-{
-    NONE,
-    PLAYER,
-    ENEMY,
+    FAIL,
 }
 
 public class Game : MonoBehaviour
@@ -36,8 +25,6 @@ public class Game : MonoBehaviour
 
     public Dictionary<string, int> scores = new Dictionary<string, int>();
 
-    public GameStatus status;
-
     public int energy;
 
     public int level;
@@ -54,12 +41,17 @@ public class Game : MonoBehaviour
 
     public GameCamera gCamera;
 
+    public bool pausing = false;
+
+    public bool playing = false;
+
+    public GameResult result;
+
+
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(this);
-
-        status = GameStatus.PREPARED;
 
         level = PlayerPrefs.GetInt("Level");
         if (level > 36) level = 36;
@@ -114,6 +106,9 @@ public class Game : MonoBehaviour
         delayShowEndTimer = 0;
 
         gameCanvas.Show();
+
+        gameCanvas.InitWithBoardManager(boardMgr);
+
         Debug.Log("当前场景名称" + sceneName);
     }
 
@@ -121,7 +116,6 @@ public class Game : MonoBehaviour
     {
         gameCanvas.Hide();
         endCanvas.Show();
-        status = GameStatus.PREPARED;
     }
 
     // Start is called before the first frame update
@@ -135,11 +129,7 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameCanvas.canvasGroup.alpha>0)
-        {
-            return;
-        }
-        if (status == GameStatus.PLAYING)
+        if (playing)
         {
             GamePlayingUpdate();
         }
@@ -156,7 +146,7 @@ public class Game : MonoBehaviour
 
     public void FailGame()
     {
-        status = GameStatus.FAIL;
+        result = GameResult.FAIL;
         Player.Instance.animator.CrossFade("Player_GiveUp",0.1f);
         delayShowEndTimer = 2;
     }
@@ -217,9 +207,10 @@ public class Game : MonoBehaviour
 
     void ListenClick()
     {
+        if (pausing) return;
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = GameCamera.Instance.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            Ray ray = gCamera.m_camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
             if(graffable && Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Item")))
@@ -262,7 +253,7 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                if (Player.Instance.moving || Player.Instance.tile_s != tile)
+                if (Player.Instance.moving || Player.Instance.currentTile != tile)
                 {
                     Player.Instance.currentAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);
                     Debug.Log("主角行为====移动");
@@ -273,7 +264,7 @@ public class Game : MonoBehaviour
 
     public void UseWhistle()
     {
-        var nodes = boardManager.FindNodesAround(Player.Instance.tile_s.name ,2);
+        var nodes = boardManager.FindNodesAround(Player.Instance.currentTile.name ,2);
         foreach(var kvp in nodes)
         {
             var name = kvp.Key;
@@ -282,15 +273,13 @@ public class Game : MonoBehaviour
                 var enemy = boardManager.enemies[index];
                 if (enemy.coord.name == name)
                 {
-                    enemy.Alert(Player.Instance.tile_s.name);
+                    enemy.Alert(Player.Instance.currentTile.name);
                     Debug.Log("主角行为====吹哨");
                 }
             }
         }
         Player.Instance.currentAction = null;
     }
-
-    
 
     public void UseBottle()
     {

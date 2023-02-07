@@ -25,7 +25,7 @@ public class Player : Character
 
         CheckWhistle();
         CheckBottle();
-        boardManager.PickItem(tile_s.name,this);
+        boardManager.PickItem(currentTile.name,this);
         animator.CrossFade("Player_Idle",0.1f);
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
@@ -54,7 +54,7 @@ public class Player : Character
     public void CheckWhistle()
     {
         Game.Instance.gameCanvas.DisableWhistle();
-        var nodes = boardManager.FindNodesAround(tile_s.name, 2);
+        var nodes = boardManager.FindNodesAround(currentTile.name, 2);
         var stop = false;
         foreach (var kvp in nodes)
         {

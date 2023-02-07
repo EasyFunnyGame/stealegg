@@ -60,13 +60,13 @@ public class GameEndCanvas : BaseCanvas
     }
     protected override void OnShow()
     {
-        if(Game.Instance.status == GameStatus.WIN)
+        if(Game.Instance.result == GameResult.WIN)
         {
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0049");
             btn_nxtLevel.gameObject.SetActive(true);
             btn_replay.gameObject.SetActive(false);
         }
-        else if(Game.Instance.status == GameStatus.FAIL)
+        else if(Game.Instance.result == GameResult.FAIL)
         {
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0048");
             btn_nxtLevel.gameObject.SetActive(false);

@@ -71,12 +71,6 @@ public class LevelItem : MonoBehaviour
     {
         var sceneName = string.Format("{0}-{1}", chapter + 1, index + 1);
 
-        if(Game.Instance.energy <= 0)
-        {
-            Game.Instance.energyGainCanvas.Show();
-            return;
-        }
-
         if(level == Game.Instance.level+1)
         {
             Game.Instance.msgCanvas.PopMessage("观看视频可直接试玩此关!");

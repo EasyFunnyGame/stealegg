@@ -49,7 +49,7 @@ public class EnemyStatic : Enemy
             xOffset = -1;
         }
 
-        var curNodeName = tile_s.gameObject.name;
+        var curNodeName = currentTile.gameObject.name;
 
         var next1CoordX = coord.x + xOffset;
         var next1CoordZ = coord.z + zOffset;

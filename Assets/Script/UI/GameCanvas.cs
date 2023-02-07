@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class GameCanvas : BaseCanvas
 {
+
+    public int index;
+
     public RawImage img_level;
 
     public RawImage img_energy;
@@ -31,35 +34,70 @@ public class GameCanvas : BaseCanvas
 
     public CanvasGroup canvasGroup;
 
-    public int index;
+    public GameObject home;
 
-    private float fadeOutTime = 3;
+    public GameObject playing;
 
-    const int fadeOutDuration = 3;
+    public Button btn_start;
+
+    public ItemIconOnUI icon_graff;
+
+    public ItemIconOnUI icon_star;
+
+    public ItemIconOnUI icon_template_bottle;
+
+    public ItemIconOnUI icon_template_pricers;
+
+    public ItemIconOnUI icon_template_manholecover;
+
+    public ItemIconOnUI icon_template_growth;
+
+    public List<ItemIconOnUI> icon_bottles;
+
+    public List<ItemIconOnUI> icon_pincers;
+
+    public List<ItemIconOnUI> icon_manholecover;
+
+    public List<ItemIconOnUI> icon_growth;
+
+    public List<IconsAboveEnemy> icon_enemies;
 
     private void Awake()
     {
         btn_add.onClick.AddListener(onClickShowEnergyGainCanvasHandler);
         btn_bottle.onClick.AddListener(onClickUseBottleHandler);
         btn_whistle.onClick.AddListener(onClickUseWhistleHandler);
-        btn_pause.onClick.AddListener(onClickPauseGameHandler);
 
         btn_home.onClick.AddListener(onClickBackToHomeHandler);
         btn_reStart.onClick.AddListener(onClickReStartLevelHandler);
+        btn_pause.onClick.AddListener(onClickPasueGameHandler);
+
+        btn_start.onClick.AddListener(onClickStartPlayingGameHandler);
+    }
+
+    void onClickStartPlayingGameHandler()
+    {
+        home.gameObject.SetActive(false);
+        playing.gameObject.SetActive(true);
+        Game.Instance.playing = true;
+    }
+
+    private void onClickPasueGameHandler()
+    {
     }
 
     void onClickReStartLevelHandler()
     {
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
-        Game.Instance.status = GameStatus.PREPARED;
+        Game.Instance.playing = false;
     }
 
     void onClickBackToHomeHandler()
     {
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene("Main");
-        Game.Instance.status = GameStatus.PREPARED;
+        Game.Instance.playing = false;
     }
 
     private void onClickShowEnergyGainCanvasHandler()
@@ -88,25 +126,38 @@ public class GameCanvas : BaseCanvas
         
     }
 
+
+    Vector3 screenPoint = new Vector3();
+
     // Update is called once per frame
     void Update()
     {
-        if(fadeOutTime>0)
+        if(Player.Instance == null || Player.Instance.currentTile == null)
         {
-            fadeOutTime -= Time.deltaTime;
-            canvasGroup.alpha = fadeOutTime / fadeOutDuration;
-            if(canvasGroup.alpha<=0)
-            {
-                Game.Instance.status = GameStatus.PLAYING;
-            }
+            return;
+        }
+        if (icon_star.gameObject.activeSelf)
+        {
+            UiUtils.WorldToScreenPoint(Game.Instance.gCamera.m_camera, this, icon_star.item.GetIconPosition(),  out screenPoint);
+            icon_star.rectTransform.anchoredPosition = screenPoint;
+        }
+
+        if (icon_graff.gameObject.activeSelf)
+        {
+            UiUtils.WorldToScreenPoint(Game.Instance.gCamera.m_camera, this, icon_graff.item.GetIconPosition(), out screenPoint);
+            icon_graff.rectTransform.anchoredPosition = screenPoint;
         }
     }
+
+
     protected override void OnShow()
     {
-        fadeOutTime = 3;
         canvasGroup.alpha = 1;
         RefreshEnergy();
         img_level.texture = Resources.Load<Texture>("UI/Sprite/Num/" + (index+1).ToString());
+
+        playing.gameObject.SetActive(false);
+        home.gameObject.SetActive(true);
     }
 
     protected override void OnHide()
@@ -141,5 +192,48 @@ public class GameCanvas : BaseCanvas
     {
         btn_bottle.gameObject.SetActive(true);
         btn_bottle_disable.gameObject.SetActive(false);
+    }
+
+    public void InitWithBoardManager(BoardManager boardManager)
+    {
+        for (var index = 0; index < boardManager.itemRoot.childCount; index++)
+        {
+            var itemTr = boardManager.itemRoot.GetChild(index);
+            var item = itemTr.GetComponent<Item>();
+            if (item == null)
+            {
+                Debug.Log(string.Format("未挂载脚本Item{0}", itemTr.name));
+                continue;
+            }
+            switch (itemTr.name)
+            {
+                case ItemName.Item_Star:
+                    icon_star.item = item;
+                    icon_star.gameObject.SetActive(true);
+                    break;
+                case ItemName.Item_Pincers:
+                    //pincerses.Add(itemTr.GetComponent<Item>());
+                    break;
+                case ItemName.Item_ManholeCover:
+                    //manholeCovers.Add(item);
+                    break;
+                case ItemName.Item_LureBottle:
+                    //bottles.Add(item);
+                    break;
+                case ItemName.item_Growth:
+                    //grouthes.Add(item);
+                    break;
+                case ItemName.Item_Graff:
+                    icon_graff.item = item;
+                    icon_graff.gameObject.SetActive(true);
+                    break;
+                case ItemName.Item_End:
+                    //end = item;
+                    break;
+                default:
+                    Debug.LogError(string.Format("未处理未定义Item{0}", itemTr.name));
+                    break;
+            }
+        }
     }
 }

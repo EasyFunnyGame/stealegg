@@ -2,9 +2,6 @@
 
 public enum ItemType
 {
-    /** 玩家出生点 **/
-    Start,
-
     /** 星星 **/
     Star,
 
@@ -29,9 +26,6 @@ public enum ItemType
 
 public static class ItemName
 {
-    /** 玩家出生点 **/
-    public const string Item_Start = "Item_Start";
-
     public const string Item_Star = "Item_Star";
 
     public const string Item_Pincers = "Item_Pincers";
@@ -55,17 +49,25 @@ public class Item : MonoBehaviour
     [SerializeField]
     public Coord coord;
 
+    public Transform iconLower;
+
+    public Transform iconUpper;
+
+    public Transform iconPosition;
+
+    public GameObject debug_sphere;
+
+    private void Awake()
+    {
+        HideDebugSphere();
+        targetIconPosition = iconLower;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void Picked(Player player)
     {
@@ -86,7 +88,6 @@ public class Item : MonoBehaviour
                 break;
 
             case ItemType.End:
-                Game.Instance.status = GameStatus.WIN;
                 break;
 
             case ItemType.Graff:
@@ -94,5 +95,62 @@ public class Item : MonoBehaviour
                 break;
         }
        
+    }
+
+    public void HideDebugSphere()
+    {
+     
+        if(debug_sphere)
+        {
+            debug_sphere.SetActive(false);
+        }
+    }
+
+    public float MoveSmoothTime = 0.1f;
+    // Update is called once per frame
+    void Update()
+    {
+        if(!iconUpper || !iconLower || !iconPosition )
+        {
+            return;
+        }
+        Vector3 velocity = Vector3.zero;
+        if (targetIconPosition == iconUpper)
+        {
+            targetIconPosition.position = Vector3.SmoothDamp(iconUpper.position, iconLower.position, ref velocity, MoveSmoothTime);
+        }
+        else
+        {
+            targetIconPosition.position = Vector3.SmoothDamp(iconLower.position, iconUpper.position, ref velocity, MoveSmoothTime);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!iconUpper || !iconLower || !iconPosition)
+        {
+            return;
+        }
+        targetIconPosition = iconUpper;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!iconUpper || !iconLower || !iconPosition)
+        {
+            return;
+        }
+        targetIconPosition = iconLower;
+    }
+
+    private Transform targetIconPosition;
+    
+    public Vector3 GetIconPosition()
+    {
+        if (!iconUpper || !iconLower || !iconPosition)
+        {
+            return transform.position;
+        }
+        return iconPosition.position;
     }
 }
