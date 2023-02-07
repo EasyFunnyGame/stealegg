@@ -37,8 +37,6 @@ public class BoardManager : MonoBehaviour
 
     public static BoardManager Instance;
 
-    public GameCamera gameCamera;
-
     public new string name;
 
     public Player player;

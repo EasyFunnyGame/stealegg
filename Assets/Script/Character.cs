@@ -20,7 +20,7 @@ public class Character : MonoBehaviour
     public List<Transform> db_moves;
     public int max_tiles = 7;
     public int num_tile;
-    protected BoardManager boardManager;
+    public BoardManager boardManager;
     public Direction direction = Direction.Up;
     public bool rotation = false;
     public bool reachedTile = false;
@@ -35,7 +35,9 @@ public class Character : MonoBehaviour
 
     public List<GridTile> path = new List<GridTile>();
 
-    public void Start()
+    public ActionBase currentAction = null;
+
+    public virtual void Start()
     {
         var boardManagerGo = GameObject.Find("BoardManager");
         boardManager = boardManagerGo.GetComponent<BoardManager>();
@@ -249,6 +251,22 @@ public class Character : MonoBehaviour
         nextTile = null;
         tar_tile_s = null;
         db_moves.ForEach((Transform cube) => { cube.parent = transform; });
+    }
+
+    public bool CanReach(string tileName)
+    {
+        if (gridManager == null) return false;
+        var tile = gridManager.GetTileByName(tileName);
+        if (tile != null)
+        {
+            var pathLength = 0;
+            selected_tile_s = tile;
+            gridManager.find_paths_realtime(this, tile);
+            pathLength = tile.db_path_lowest.Count;
+            Clear();
+            return pathLength == 1;
+        }
+        return false;
     }
 
 

@@ -56,6 +56,8 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CameraMultiTarget\Example\ExampleGameController.cs" />
+    <Compile Include="Assets\CameraMultiTarget\Example\ExampleTargetBehaviour.cs" />
     <Compile Include="Assets\Script\Action\ActionAlert.cs" />
     <Compile Include="Assets\Script\Action\ActionBase.cs" />
     <Compile Include="Assets\Script\Action\ActionEnemyMove.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Assets\Script\BoardManager.cs" />
     <Compile Include="Assets\Script\BoardNode.cs" />
     <Compile Include="Assets\Script\CameraAnimationEvent.cs" />
+    <Compile Include="Assets\Script\CameraMultiTarget.cs" />
     <Compile Include="Assets\Script\Character.cs" />
     <Compile Include="Assets\Script\Coord.cs" />
     <Compile Include="Assets\Script\Enemy.cs" />
@@ -87,6 +90,8 @@
     <Compile Include="Assets\Script\Level.cs" />
     <Compile Include="Assets\Script\LinkLine.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\PositionAndRotation.cs" />
+    <Compile Include="Assets\Script\ProjectionHits.cs" />
     <Compile Include="Assets\Script\RTS_Camera.cs" />
     <Compile Include="Assets\Script\SubTile.cs" />
     <Compile Include="Assets\Script\UI\BaseCanvas.cs" />
@@ -157,6 +162,7 @@
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\CameraMultiTarget\Example\ProjectorMultiply.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
@@ -715,6 +721,9 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -738,6 +747,9 @@
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>

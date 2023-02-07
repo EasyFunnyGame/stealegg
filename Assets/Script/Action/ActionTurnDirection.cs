@@ -5,8 +5,10 @@ using UnityEngine;
 public class ActionTurnDirection : ActionBase
 {
     private Direction targetDirection;
-    public ActionTurnDirection(Character character,  Direction direction) : base(character, ActionType.TurnDirection)
+    private Enemy _enemy;
+    public ActionTurnDirection(Enemy enemy,  Direction direction) : base(enemy, ActionType.TurnDirection)
     {
+        _enemy = enemy;
         targetDirection = direction;
         Utils.SetDirection(character, targetDirection);
     }
@@ -15,6 +17,15 @@ public class ActionTurnDirection : ActionBase
     {
         if(character.direction == targetDirection)
         {
+            var catchPlayer = _enemy.TryCatchPlayer();
+            if(!catchPlayer)
+            {
+                var foundPlayer = _enemy.TryFoundPlayer();
+                if (foundPlayer)
+                {
+                    _enemy.currentAction = new ActionFoundPlayer(_enemy, ActionType.FoundPlayer);
+                }
+            }
             return true;
         }
         return false;

@@ -29,8 +29,6 @@ public class Enemy : Character
 
     public bool tracingPlayer = false;
 
-    public ActionBase currentAction = null;
-
     public GridTile foundPlayerTile = null;
 
     public GridTile hearSoundTile = null;
@@ -63,7 +61,7 @@ public class Enemy : Character
                 return;
             }
             hearSoundTile = targetTile;
-            var canSeePlayer = Player.Instance.CanBeSee(tile_s.name);
+            var canSeePlayer = Player.Instance.CanReach(tile_s.name);
             if (canSeePlayer)
             {
                 currentAction = new ActionTurnDirection(this, Utils.DirectionTo(tile_s, Player.Instance.tile_s, direction));
@@ -92,8 +90,6 @@ public class Enemy : Character
         var caught = TryCatchPlayer();
         if (caught)
         {
-            Game.Instance.FailGame();
-            animator.Play("Enemy_Caugth");
             return;
         }
 
@@ -203,8 +199,6 @@ public class Enemy : Character
         var catchPlayer = TryCatchPlayer();
         if (catchPlayer)
         {
-            Game.Instance.FailGame();
-            animator.CrossFade("Enemy_Caught", 0.1f);
             return;
         }
         var foundPlayer = TryFoundPlayer();
@@ -242,34 +236,26 @@ public class Enemy : Character
 
     public virtual bool TryCatchPlayer()
     {
-        var xOffset = 0;
-        var zOffset = 0;
-        if (direction == Direction.Up)
+        if (Player.Instance == null || Player.Instance.tile_s == null) return false;
+        var canSeePlayer = Player.Instance.CanReach(tile_s.name);
+        var targetDirection = Utils.DirectionTo(tile_s, Player.Instance.tile_s, direction);
+        if(targetDirection == direction)
         {
-            zOffset = 1;
+            if (foundPlayerTile != null && canSeePlayer)
+            {
+                Game.Instance.FailGame();
+                animator.CrossFade("Enemy_Caught", 0.1f);
+                return true;
+            }
+            var canReach = CanReach(Player.Instance.tile_s.name);
+            if (canReach)
+            {
+                Game.Instance.FailGame();
+                animator.CrossFade("Enemy_Caught", 0.1f);
+                return true;
+            }
         }
-        else if (direction == Direction.Down)
-        {
-            zOffset = -1;
-        }
-        else if (direction == Direction.Right)
-        {
-            xOffset = 1;
-        }
-        else if (direction == Direction.Left)
-        {
-            xOffset = -1;
-        }
-        var catchNodeX = coord.x + xOffset;
-        var catchNodeZ = coord.z + zOffset;
-        var catchTileName = string.Format("{0}_{1}", catchNodeX, catchNodeZ);
-        var catchTile = gridManager.GetTileByName(catchTileName);
-        //Debug.Log("抓捕:"+ catchTileName + " 主角位置:" + Player.Instance.coord.name);
-        if (catchTile != null && Player.Instance.coord.name == catchTileName)
-        {
-            return true;
-        }
-        return false;
+        return false;;
     }
 
     public virtual bool TryFoundPlayer()

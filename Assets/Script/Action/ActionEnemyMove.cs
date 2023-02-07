@@ -31,7 +31,7 @@ public class ActionEnemyMove : ActionBase
                 if(character.tile_s.name == enemy.foundPlayerTile.name)
                 {
                     // 到达地点后更新玩家的追踪位置
-                    var canSeePlayer = Player.Instance.CanBeSee(character.tile_s.name);
+                    var canSeePlayer = Player.Instance.CanReach(character.tile_s.name);
                     if(canSeePlayer)
                     {
                         Debug.LogWarning("todo 能够看见主角,直接抓捕");
@@ -150,15 +150,18 @@ public class ActionEnemyMove : ActionBase
 
                 if(enemy.foundPlayerTile != null)
                 {
-                    var foundPlayer = enemy.TryFoundPlayer();
-                    if (!foundPlayer)
+                    var catchPlayer = enemy.TryCatchPlayer();
+                    if(!catchPlayer)
                     {
-                        enemy.foundPlayerTile = null;
-                        enemy.animator.Play("Player_Idle");
-                        enemy.ShowQuestion();
+                        var foundPlayer = enemy.TryFoundPlayer();
+                        if (!foundPlayer)
+                        {
+                            enemy.foundPlayerTile = null;
+                            enemy.animator.Play("Player_Idle");
+                            enemy.ShowQuestion();
+                        }
                     }
                 }
-
                 if (enemy.hearSoundTile != null)
                 {
                     Debug.Log("巡声转向完毕");

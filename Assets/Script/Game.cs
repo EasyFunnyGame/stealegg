@@ -46,8 +46,6 @@ public class Game : MonoBehaviour
 
     public BoardManager boardManager;
 
-    public ActionBase playerAction;
-
     public bool graffable = false;
 
     public bool graffing = false;
@@ -105,7 +103,7 @@ public class Game : MonoBehaviour
         
         currentLevelName = sceneName;
 
-        gCamera = GameObject.Find("Main Camera").GetComponent<GameCamera>();
+        gCamera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
 
         graffed = false;
 
@@ -166,12 +164,13 @@ public class Game : MonoBehaviour
     void GamePlayingUpdate()
     {
         var enemyActionRunning = false;
-        if(playerAction != null)
+        if (Player.Instance == null) return;
+        if(Player.Instance.currentAction != null)
         {
-            if (playerAction.CheckComplete())
+            if (Player.Instance.currentAction.CheckComplete())
             {
                 // 主角动作完成回调
-                playerAction = null;
+                Player.Instance.currentAction = null;
                 // 更新敌人行为
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
@@ -181,7 +180,7 @@ public class Game : MonoBehaviour
             }
             else
             {
-                playerAction.Run();
+                Player.Instance.currentAction.Run();
             }
         }
         else
@@ -205,7 +204,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        if(playerAction == null && !enemyActionRunning && !graffing)
+        if(Player.Instance.currentAction == null && !enemyActionRunning && !graffing)
         {
             ListenClick();
         }
@@ -220,7 +219,7 @@ public class Game : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = GameCamera.Instance.camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = GameCamera.Instance.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
             if(graffable && Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Item")))
@@ -262,9 +261,11 @@ public class Game : MonoBehaviour
                         return;
                     }
                 }
+
                 if (Player.Instance.moving || Player.Instance.tile_s != tile)
                 {
-                    playerAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);
+                    Player.Instance.currentAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);
+                    Debug.Log("主角行为====移动");
                 }
             }
         }
@@ -282,21 +283,23 @@ public class Game : MonoBehaviour
                 if (enemy.coord.name == name)
                 {
                     enemy.Alert(Player.Instance.tile_s.name);
+                    Debug.Log("主角行为====吹哨");
                 }
             }
         }
+        Player.Instance.currentAction = null;
     }
 
     
 
     public void UseBottle()
     {
-
+        Player.Instance.currentAction = null;
     }
 
     public void ThrowBottle()
     {
-
+        Player.Instance.currentAction = null;
     }
 
     public void Save()
