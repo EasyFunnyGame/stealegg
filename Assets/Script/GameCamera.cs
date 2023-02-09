@@ -8,6 +8,8 @@ public class GameCamera : MonoBehaviour
 
     public Animator camAnimator;
 
+	public bool upper;
+
 	public float Pitch;
 	public float Yaw;
 	public float Roll;
@@ -16,6 +18,14 @@ public class GameCamera : MonoBehaviour
 	public float PaddingUp;
 	public float PaddingDown;
 	public float MoveSmoothTime = 0.19f;
+
+	public float ChangeSmoothTime = 0.01f;
+
+	public float near = 4;
+
+	public float far = 5;
+
+	public float height;
 
 	public Camera m_camera;
 
@@ -33,26 +43,59 @@ public class GameCamera : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		//_camera = gameObject.GetComponent<Camera>();
 		_debugProjection = DebugProjection.ROTATED;
 	}
 
-	public void Near()
+    public void Near()
     {
-		if (Player.Instance == null) return;
-		var player = Player.Instance;
-		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.currentTile.name, 2);
+		if (Game.Instance?.player == null) return;
+		var player = Game.Instance.player;
+		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.currentTile.name, 3,true);
 		var targets = new List<GameObject>(nearPlaneNodesAround.Count);
 		foreach (var kvp in nearPlaneNodesAround)
 		{
 			targets.Add(kvp.Value.gameObject);
 		}
-		_targets = targets.ToArray();
+		SetTargets(targets.ToArray());
+		upper = false;
+		height = near;
 	}
 
-    private void Update()
+	public void Far()
+	{
+		if (Game.Instance?.player == null) return;
+
+		var player = Game.Instance.player;
+		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.currentTile.name, 3, true);
+		var targets = new List<GameObject>(nearPlaneNodesAround.Count);
+		foreach (var kvp in nearPlaneNodesAround)
+		{
+			targets.Add(kvp.Value.gameObject);
+		}
+		SetTargets(targets.ToArray());
+		height = far;
+		upper = true;
+	}
+	bool init = false;
+	private void Update()
     {
-		Near();
+		if(!init)
+        {
+			if (Game.Instance.player)
+            {
+				init = true;
+				//near = Game.Instance.player.near_front.transform.localPosition.z;
+				//far = Game.Instance.player.far_front.transform.localPosition.z;
+				if (upper)
+                {
+					Far();
+                }
+				else
+                {
+					Near();
+                }
+            }
+        }
 	}
 
     private void LateUpdate()
@@ -107,7 +150,7 @@ public class GameCamera : MonoBehaviour
 			halfHorizontalFovRad,
 			halfVerticalFovRad);
 
-		return new PositionAndRotation(rotation * cameraPositionIdentity, rotation, 4);
+		return new PositionAndRotation(rotation * cameraPositionIdentity, rotation, height);
 	}
 
 	private static float RequiredCameraPerpedicularDistanceFromProjectionPlane(ProjectionHits viewProjectionEdgeHits, float halfFovRad)

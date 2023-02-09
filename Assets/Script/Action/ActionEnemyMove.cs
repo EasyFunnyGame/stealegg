@@ -31,11 +31,11 @@ public class ActionEnemyMove : ActionBase
                 if(character.currentTile.name == enemy.foundPlayerTile.name)
                 {
                     // 到达地点后更新玩家的追踪位置
-                    var canSeePlayer = Player.Instance.CanReach(character.currentTile.name);
+                    var canSeePlayer = Game.Instance.player.CanReach(character.currentTile.name);
                     if(canSeePlayer)
                     {
                         Debug.LogWarning("todo 能够看见主角,直接抓捕");
-                        var playerLastTile = Player.Instance.gridManager.GetTileByName(Player.Instance.lastTileName);
+                        var playerLastTile = Game.Instance.player.gridManager.GetTileByName(Game.Instance.player.lastTileName);
                         if(playerLastTile)
                         {
                             var targetDirection = Utils.DirectionTo(character.currentTile, playerLastTile, character.direction);
@@ -53,7 +53,7 @@ public class ActionEnemyMove : ActionBase
                         }
                     }
 
-                    var playerTile = character.gridManager.GetTileByName(Player.Instance.currentTile.name);
+                    var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
                     if(playerTile != null)
                     {
                         enemy.foundPlayerTile = playerTile;
@@ -81,7 +81,6 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.hearSoundTile.name)
                     {
-                        enemy.ShowQuestion();
                         enemy.hearSoundTile = null;
                         character.Reached();
                         return true;
@@ -161,8 +160,7 @@ public class ActionEnemyMove : ActionBase
                         if (!foundPlayer)
                         {
                             enemy.foundPlayerTile = null;
-                            enemy.animator.Play("Player_Idle");
-                            enemy.ShowQuestion();
+                            enemy.m_animator.Play("Player_Idle");
                         }
                     }
                 }

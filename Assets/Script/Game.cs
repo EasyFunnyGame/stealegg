@@ -22,6 +22,7 @@ public class Game : MonoBehaviour
     public SettingCanvas settingCanvas;
     public ChapterCanvas chapterCanvas;
     public GraffCanvas graffCanvas;
+    public CameraSettingCanvas cameraSettingCanvas;
 
     public Dictionary<string, int> scores = new Dictionary<string, int>();
 
@@ -39,14 +40,15 @@ public class Game : MonoBehaviour
 
     public bool graffed = false;
 
-    public GameCamera gCamera;
+    public new GameCamera camera;
+
+    public Player player;
 
     public bool pausing = false;
 
     public bool playing = false;
 
     public GameResult result;
-
 
     private void Awake()
     {
@@ -69,6 +71,7 @@ public class Game : MonoBehaviour
         settingCanvas.Hide();
         chapterCanvas.Hide();
         graffCanvas.Hide();
+        cameraSettingCanvas.Show();
     }
 
     public void StartGame(string sceneName, int index)
@@ -95,7 +98,9 @@ public class Game : MonoBehaviour
         
         currentLevelName = sceneName;
 
-        gCamera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
+        camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
+
+        player = GameObject.Find("Player").GetComponent<Player>();
 
         graffed = false;
 
@@ -108,6 +113,8 @@ public class Game : MonoBehaviour
         gameCanvas.Show();
 
         gameCanvas.InitWithBoardManager(boardMgr);
+
+        cameraSettingCanvas.InitWithGameCamera(camera, player);
 
         Debug.Log("当前场景名称" + sceneName);
     }
@@ -129,7 +136,7 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playing)
+        if (playing )
         {
             GamePlayingUpdate();
         }
@@ -147,20 +154,28 @@ public class Game : MonoBehaviour
     public void FailGame()
     {
         result = GameResult.FAIL;
-        Player.Instance.animator.CrossFade("Player_GiveUp",0.1f);
+        player.m_animator.CrossFade("Player_GiveUp",0.1f);
         delayShowEndTimer = 2;
+        playing = false;
+    }
+
+    public void WinGame()
+    {
+        result = GameResult.WIN;
+        delayShowEndTimer = 2;
+        playing = false;
     }
 
     void GamePlayingUpdate()
     {
         var enemyActionRunning = false;
-        if (Player.Instance == null) return;
-        if(Player.Instance.currentAction != null)
+        if (player == null) return;
+        if(player.currentAction != null)
         {
-            if (Player.Instance.currentAction.CheckComplete())
+            if (player.currentAction.CheckComplete())
             {
                 // 主角动作完成回调
-                Player.Instance.currentAction = null;
+                player.currentAction = null;
                 // 更新敌人行为
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
@@ -170,7 +185,7 @@ public class Game : MonoBehaviour
             }
             else
             {
-                Player.Instance.currentAction.Run();
+                player.currentAction.Run();
             }
         }
         else
@@ -194,7 +209,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        if(Player.Instance.currentAction == null && !enemyActionRunning && !graffing)
+        if(player.currentAction == null && !enemyActionRunning && !graffing)
         {
             ListenClick();
         }
@@ -210,7 +225,7 @@ public class Game : MonoBehaviour
         if (pausing) return;
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = gCamera.m_camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
             if(graffable && Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Item")))
@@ -239,10 +254,10 @@ public class Game : MonoBehaviour
                 }
                 var coord = nodeScript.coord;
 
-                var tileIndex = coord.x * BoardManager.Instance.height + coord.z;
+                var tileIndex = coord.x * boardManager.height + coord.z;
 
                 // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
-                GridTile tile = Player.Instance.gridManager.db_tiles[tileIndex];
+                GridTile tile = player.gridManager.db_tiles[tileIndex];
 
                 for ( var i = 0; i < boardManager.enemies.Count;  i++ )
                 {
@@ -253,9 +268,9 @@ public class Game : MonoBehaviour
                     }
                 }
 
-                if (Player.Instance.moving || Player.Instance.currentTile != tile)
+                if (player.moving || player.currentTile != tile)
                 {
-                    Player.Instance.currentAction = new ActionPlayerMove(Player.Instance,ActionType.PlayerMove, tile);
+                    player.currentAction = new ActionPlayerMove(player, ActionType.PlayerMove, tile);
                     Debug.Log("主角行为====移动");
                 }
             }
@@ -264,7 +279,7 @@ public class Game : MonoBehaviour
 
     public void UseWhistle()
     {
-        var nodes = boardManager.FindNodesAround(Player.Instance.currentTile.name ,2);
+        var nodes = boardManager.FindNodesAround(player.currentTile.name ,2);
         foreach(var kvp in nodes)
         {
             var name = kvp.Key;
@@ -273,22 +288,22 @@ public class Game : MonoBehaviour
                 var enemy = boardManager.enemies[index];
                 if (enemy.coord.name == name)
                 {
-                    enemy.Alert(Player.Instance.currentTile.name);
+                    enemy.Alert(player.currentTile.name);
                     Debug.Log("主角行为====吹哨");
                 }
             }
         }
-        Player.Instance.currentAction = null;
+        player.currentAction = null;
     }
 
     public void UseBottle()
     {
-        Player.Instance.currentAction = null;
+        player.currentAction = null;
     }
 
     public void ThrowBottle()
     {
-        Player.Instance.currentAction = null;
+        player.currentAction = null;
     }
 
     public void Save()

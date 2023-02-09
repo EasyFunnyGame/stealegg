@@ -6,6 +6,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public GridManager gridManager;
+    public Animator m_animator;
     public bool body_looking;
     public bool moving;
     public bool moving_tiles;

@@ -35,8 +35,6 @@ public class BoardManager : MonoBehaviour
     [SerializeField][Tooltip("显示/隐藏白模节点")]
     public bool tirggerVisibleNode = true;
 
-    public static BoardManager Instance;
-
     public new string name;
 
     public Player player;
@@ -47,7 +45,6 @@ public class BoardManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
         playerGridManager.gameObject.SetActive(true);
         enemyGridManager.gameObject.SetActive(true);
         name = gameObject.name;
@@ -55,16 +52,6 @@ public class BoardManager : MonoBehaviour
         ResetItems();
         ResetEnemies();
         ResetSquareNodes();
-    }
-
-    // Start is called before the first frame update
-    void Start() {
-        StartCoroutine("SceneLoaded");
-    }
-
-    IEnumerator SceneLoaded()
-    {
-        yield return null;
         Game.Instance.SceneLoaded(this, name);
     }
 
@@ -188,19 +175,30 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-    public BoardNode FindNode(string name)
+    public BoardNode FindNode(string name, bool inCludeDisable=false)
     {
         for (var index = 0; index < squareRoot.childCount; index++)
         {
             var child = squareRoot.GetChild(index);
             var boardNode = child.GetComponent<BoardNode>();
-            if(child.gameObject.name == name && child.gameObject.activeSelf)
+            if(child.gameObject.name == name )
             {
-                return boardNode;
+                if(inCludeDisable)
+                {
+                    return boardNode;
+                }
+                else
+                {
+                    if(child.gameObject.activeSelf)
+                    {
+                        return boardNode;
+                    }
+                }
             }
         }
         return null;
     }
+
 
     //public void ClearReds()
     //{
@@ -227,7 +225,7 @@ public class BoardManager : MonoBehaviour
     //    linkLine.transform.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Red_Mat.mat");
     //}
 
-    public Dictionary<string,BoardNode> FindNodesAround(string curNodeName, int range)
+    public Dictionary<string,BoardNode> FindNodesAround(string curNodeName, int range, bool inCludeDisable = false)
     {
         var nodes = new Dictionary<string,BoardNode>();
 
@@ -240,25 +238,25 @@ public class BoardManager : MonoBehaviour
             for(var j = 0; j < range; j++)
             {
                 var name = (x + i).ToString() + "_" + (z + j).ToString();
-                var node = FindNode(name);
+                var node = FindNode(name, inCludeDisable);
                 if (node != null && !nodes.ContainsKey(name))
                 {
                     nodes.Add(name,node);
                 }
                 name = (x + i).ToString() + "_" + (z - j).ToString();
-                node = FindNode(name);
+                node = FindNode(name, inCludeDisable);
                 if (node != null && !nodes.ContainsKey(name))
                 {
                     nodes.Add(name,node);
                 }
                 name = (x - i).ToString() + "_" + (z + j).ToString();
-                node = FindNode(name);
+                node = FindNode(name, inCludeDisable);
                 if (node != null && !nodes.ContainsKey(name))
                 {
                     nodes.Add(name,node);
                 }
                 name = (x - i).ToString() + "_" + (z - j).ToString();
-                node = FindNode(name);
+                node = FindNode(name, inCludeDisable);
                 if (node != null && !nodes.ContainsKey(name))
                 {
                     nodes.Add(name,node);

@@ -23,8 +23,6 @@ public class Enemy : Character
     [SerializeField]
     public EnemyType enemyType;
 
-    public Animator animator;
-
     public static int count;
 
     public bool tracingPlayer = false;
@@ -34,11 +32,6 @@ public class Enemy : Character
     public GridTile hearSoundTile = null;
 
     public GridTile originalTile = null;
-
-    public GameObject question;
-    public GameObject back;
-    public GameObject exclamation;
-    public GameObject sleep;
 
     public override void ResetDirection()
     {
@@ -53,18 +46,17 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName); 
         if(targetTile!=null)
         {
-            animator.Play("Enemy_Alert");
-            ShowAlert();
+            m_animator.Play("Enemy_Alert");
             if (hearSoundTile && hearSoundTile.name == targetTile.name)
             {
                 currentAction = new ActionEnemyMove(this, hearSoundTile);
                 return;
             }
             hearSoundTile = targetTile;
-            var canSeePlayer = Player.Instance.CanReach(currentTile.name);
+            var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
             if (canSeePlayer)
             {
-                currentAction = new ActionTurnDirection(this, Utils.DirectionTo(currentTile, Player.Instance.currentTile, direction));
+                currentAction = new ActionTurnDirection(this, Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction));
                 return;
             }
             // 如果追踪方向和当前方向相同  直接行进
@@ -115,7 +107,6 @@ public class Enemy : Character
 
         if (ReturnOriginal(true))
         {
-            ShowReturnOriginal();
             return;
         }
 
@@ -210,21 +201,21 @@ public class Enemy : Character
 
         if (Game.Instance.result == GameResult.FAIL)
         {
-            animator.CrossFade("Enemy_Caught", 0.1f);
+            m_animator.CrossFade("Enemy_Caught", 0.1f);
         }
         else if (foundPlayerTile != null || hearSoundTile != null)
         {
-            animator.CrossFade("Enemy_Alert", 0.1f);
+            m_animator.CrossFade("Enemy_Alert", 0.1f);
         }
         else
         {
-            animator.CrossFade("Player_Idle", 0.1f);
+            m_animator.CrossFade("Player_Idle", 0.1f);
         }
 
-        if (Player.Instance.currentTile)
+        if (Game.Instance.player.currentTile)
         {
-            Player.Instance.CheckBottle();
-            Player.Instance.CheckWhistle();
+            Game.Instance.player.CheckBottle();
+            Game.Instance.player.CheckWhistle();
         }
         Debug.Log("敌人到达路径点:"+ currentTile.name);
     }
@@ -236,22 +227,22 @@ public class Enemy : Character
 
     public virtual bool TryCatchPlayer()
     {
-        if (Player.Instance == null || Player.Instance.currentTile == null) return false;
-        var canSeePlayer = Player.Instance.CanReach(currentTile.name);
-        var targetDirection = Utils.DirectionTo(currentTile, Player.Instance.currentTile, direction);
+        if (Game.Instance.player == null || Game.Instance.player.currentTile == null) return false;
+        var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
+        var targetDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
         if(targetDirection == direction)
         {
             if (foundPlayerTile != null && canSeePlayer)
             {
                 Game.Instance.FailGame();
-                animator.CrossFade("Enemy_Caught", 0.1f);
+                m_animator.CrossFade("Enemy_Caught", 0.1f);
                 return true;
             }
-            var canReach = CanReach(Player.Instance.currentTile.name);
+            var canReach = CanReach(Game.Instance.player.currentTile.name);
             if (canReach)
             {
                 Game.Instance.FailGame();
-                animator.CrossFade("Enemy_Caught", 0.1f);
+                m_animator.CrossFade("Enemy_Caught", 0.1f);
                 return true;
             }
         }
@@ -281,7 +272,7 @@ public class Enemy : Character
         var catchNodeX = coord.x + xOffset * 2;
         var catchNodeZ = coord.z + zOffset * 2;
         var next1NodeName = string.Format("{0}_{1}", catchNodeX, catchNodeZ);
-        if (Player.Instance.currentTile && Player.Instance.currentTile.name == next1NodeName)
+        if (Game.Instance.player.currentTile && Game.Instance.player.currentTile.name == next1NodeName)
         {
             var targetTile = gridManager.GetTileByName(next1NodeName);
             if (targetTile != null)
@@ -298,54 +289,13 @@ public class Enemy : Character
 
     public override void StartMove()
     {
-        animator.CrossFade("Player_Sprint", 0.1f);
+        m_animator.CrossFade("Player_Sprint", 0.1f);
     }
 
-    public void ShowQuestion()
-    {
-        question.gameObject.SetActive(true);
-        exclamation.gameObject.SetActive(false);
-        sleep.gameObject.SetActive(false);
-        back.gameObject.SetActive(false);
-        questionShowTimer = 2;
-    }
-
-    public void ShowAlert()
-    {
-        question.gameObject.SetActive(false);
-        exclamation.gameObject.SetActive(true);
-        sleep.gameObject.SetActive(false);
-        back.gameObject.SetActive(false);
-    }
-
-    public void ShowReturnOriginal()
-    {
-        question.gameObject.SetActive(false);
-        exclamation.gameObject.SetActive(false);
-        sleep.gameObject.SetActive(false);
-        back.gameObject.SetActive(true);
-    }
-
-    public void ShowSleep()
-    {
-        question.gameObject.SetActive(false);
-        exclamation.gameObject.SetActive(false);
-        sleep.gameObject.SetActive(true);
-        back.gameObject.SetActive(false);
-    }
-
-    private float questionShowTimer = 0;
 
     private void Update()
     {
-        if(questionShowTimer>0)
-        {
-            questionShowTimer -= Time.deltaTime;
-            if(questionShowTimer<=0)
-            {
-                question.gameObject.SetActive(false);
-            }
-        }
+        
     }
 
     public virtual void OnReachedOriginal()

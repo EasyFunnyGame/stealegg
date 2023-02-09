@@ -49,18 +49,24 @@ public class Item : MonoBehaviour
     [SerializeField]
     public Coord coord;
 
-    public Transform iconLower;
+    public bool upper = false;
 
-    public Transform iconUpper;
+    public Vector3 upperPosition = new Vector3(-0.06f,0.6f,0);
+
+    public Vector3 lowerPosition = new Vector3();
 
     public Transform iconPosition;
 
     public GameObject debug_sphere;
 
+    public bool picked = false;
+
+    public ItemIconOnUI icon;
+
     private void Awake()
     {
         HideDebugSphere();
-        targetIconPosition = iconLower;
+        upper = false ;
     }
 
     // Start is called before the first frame update
@@ -76,10 +82,14 @@ public class Item : MonoBehaviour
         switch(itemType)
         {
             case ItemType.Star:
+
+                picked = true;
                 gameObject.SetActive(false);
+                icon.gameObject.SetActive(false);
                 break;
 
             case ItemType.LureBottle:
+                picked = true;
                 gameObject.SetActive(false);
                 player.bottleCount++;
                 break;
@@ -106,51 +116,44 @@ public class Item : MonoBehaviour
         }
     }
 
-    public float MoveSmoothTime = 0.1f;
+    public float MoveSmoothTime = 0.05f;
     // Update is called once per frame
     void Update()
     {
-        if(!iconUpper || !iconLower || !iconPosition )
+        if(!iconPosition )
         {
             return;
         }
         Vector3 velocity = Vector3.zero;
-        if (targetIconPosition == iconUpper)
+        if (upper)
         {
-            targetIconPosition.position = Vector3.SmoothDamp(iconUpper.position, iconLower.position, ref velocity, MoveSmoothTime);
+            iconPosition.position = Vector3.SmoothDamp(iconPosition.position, transform.position + upperPosition, ref velocity, MoveSmoothTime);
         }
         else
         {
-            targetIconPosition.position = Vector3.SmoothDamp(iconLower.position, iconUpper.position, ref velocity, MoveSmoothTime);
+            iconPosition.position = Vector3.SmoothDamp(iconPosition.position, transform.position + lowerPosition, ref velocity, MoveSmoothTime);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!iconUpper || !iconLower || !iconPosition)
-        {
-            return;
-        }
-        targetIconPosition = iconUpper;
+        //if (other.gameObject.GetComponent<Character>())
+            upper = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!iconUpper || !iconLower || !iconPosition)
-        {
-            return;
-        }
-        targetIconPosition = iconLower;
+        //if (other.gameObject.GetComponent<Character>())
+            upper = false;        
     }
-
-    private Transform targetIconPosition;
     
     public Vector3 GetIconPosition()
     {
-        if (!iconUpper || !iconLower || !iconPosition)
+        if (!iconPosition)
         {
             return transform.position;
         }
         return iconPosition.position;
     }
+
 }

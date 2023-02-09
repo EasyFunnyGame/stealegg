@@ -2,17 +2,6 @@
 
 public class EnemyStatic : Enemy
 {
-
-
-    private void Awake()
-    {
-        question.gameObject.SetActive(false);
-        back.gameObject.SetActive(false);
-        exclamation.gameObject.SetActive(false);
-        sleep.gameObject.SetActive(false);
-    }
-
-
     public override void UpdateRouteMark()
     {
         base.UpdateRouteMark();
@@ -69,10 +58,5 @@ public class EnemyStatic : Enemy
 
     public override void OnReachedOriginal()
     {
-        base.OnReachedOriginal();
-        question.gameObject.SetActive(false);
-        exclamation.gameObject.SetActive(false);
-        sleep.gameObject.SetActive(false);
-        back.gameObject.SetActive(false);
     }
 }

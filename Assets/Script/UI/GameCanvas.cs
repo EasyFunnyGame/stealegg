@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class GameCanvas : BaseCanvas
 {
-
     public int index;
 
     public RawImage img_level;
@@ -132,19 +131,19 @@ public class GameCanvas : BaseCanvas
     // Update is called once per frame
     void Update()
     {
-        if(Player.Instance == null || Player.Instance.currentTile == null)
+        if(Game.Instance.player == null || Game.Instance.player.currentTile == null)
         {
             return;
         }
         if (icon_star.gameObject.activeSelf)
         {
-            UiUtils.WorldToScreenPoint(Game.Instance.gCamera.m_camera, this, icon_star.item.GetIconPosition(),  out screenPoint);
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon_star.item.GetIconPosition(),  out screenPoint);
             icon_star.rectTransform.anchoredPosition = screenPoint;
         }
 
         if (icon_graff.gameObject.activeSelf)
         {
-            UiUtils.WorldToScreenPoint(Game.Instance.gCamera.m_camera, this, icon_graff.item.GetIconPosition(), out screenPoint);
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon_graff.item.GetIconPosition(), out screenPoint);
             icon_graff.rectTransform.anchoredPosition = screenPoint;
         }
     }
@@ -209,6 +208,7 @@ public class GameCanvas : BaseCanvas
             {
                 case ItemName.Item_Star:
                     icon_star.item = item;
+                    item.icon = icon_star;
                     icon_star.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_Pincers:
@@ -225,6 +225,7 @@ public class GameCanvas : BaseCanvas
                     break;
                 case ItemName.Item_Graff:
                     icon_graff.item = item;
+                    item.icon = icon_star;
                     icon_graff.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_End:

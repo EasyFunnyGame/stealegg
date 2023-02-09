@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 public class Player : Character
 {
-    public Animator animator;
-
-    public static Player Instance;
-
     public int bottleCount;
 
-    void Awake()
-    {
-        Instance = this;
-    }
+    public GameObject near_front;
+
+    public GameObject near_back;
+
+    public GameObject near_left;
+
+    public GameObject near_right;
+
+    public GameObject far_front;
+
+    public GameObject far_back;
+
+    public GameObject far_left;
+
+    public GameObject far_right;
 
     // Start is called before the first frame update
     public override void Start()
@@ -22,18 +28,17 @@ public class Player : Character
     override public void Reached()
     {
         base.Reached();
-
         CheckWhistle();
         CheckBottle();
         boardManager.PickItem(currentTile.name,this);
-        animator.CrossFade("Player_Idle",0.1f);
+        m_animator.CrossFade("Player_Idle",0.1f);
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
 
     override public void StartMove()
     {
         base.StartMove();
-        animator.CrossFade("Player_Sprint", 0.1f);
+        m_animator.CrossFade("Player_Sprint", 0.1f);
 
         Game.Instance.gameCanvas.DisableWhistle();
         Game.Instance.gameCanvas.DisableBottle();
