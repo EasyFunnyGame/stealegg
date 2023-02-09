@@ -3,22 +3,6 @@ public class Player : Character
 {
     public int bottleCount;
 
-    public GameObject near_front;
-
-    public GameObject near_back;
-
-    public GameObject near_left;
-
-    public GameObject near_right;
-
-    public GameObject far_front;
-
-    public GameObject far_back;
-
-    public GameObject far_left;
-
-    public GameObject far_right;
-
     // Start is called before the first frame update
     public override void Start()
     {

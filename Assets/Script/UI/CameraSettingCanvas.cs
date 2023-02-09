@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,13 +6,7 @@ public class CameraSettingCanvas : BaseCanvas
 {
     public Button btn_show_and_hide;
 
-    public Button btn_near;
-
-    public Button btn_far;
-
     public RectTransform content;
-
-    public bool upper;
 
     public Text eulerX;
 
@@ -21,73 +14,138 @@ public class CameraSettingCanvas : BaseCanvas
 
     public Text eulerZ;
 
-    public Text nearHeight;
+    public Text up;
 
-    public Text farHeight;
+    public Text down;
+
+    public Text left;
+
+    public Text right;
 
     public Text smoothTime;
 
+    public Text height;
+
     public Button btn_euler_x_min;
-    public Slider sld_euler_x;
     public Button btn_euler_x_add;
 
     public Button btn_euler_y_min;
-    public Slider sld_euler_y;
     public Button btn_euler_y_add;
 
     public Button btn_euler_z_min;
-    public Slider sld_euler_z;
     public Button btn_euler_z_add;
 
-    public Button btn_height_near_min;
-    public Slider sld_height_near;
-    public Button btn_height_near_add;
-
-    public Button btn_height_far_min;
-    public Slider sld_height_far;
-    public Button btn_height_far_add;
-
     public Button btn_smooth_min;
-    public Slider sld_smooth;
     public Button btn_smooth_add;
+
+    public Button btn_up_min;
+    public Button btn_up_add;
+
+    public Button btn_down_min;
+    public Button btn_down_add;
+
+    public Button btn_left_min;
+    public Button btn_left_add;
+
+    public Button btn_right_min;
+    public Button btn_right_add;
+
+    public Button btn_height_min;
+    public Button btn_height_add;
 
     public GameCamera m_gamecamera;
 
     public Player m_player;
-
 
     // Start is called before the first frame update
     void Start()
     {
         btn_show_and_hide.onClick.AddListener(ExpandOrHide);
 
-        btn_near.onClick.AddListener(CameraNear);
-
-        btn_far.onClick.AddListener(CameraFar);
-
         btn_euler_x_add.onClick.AddListener(AddEulerX); 
-        sld_euler_x.onValueChanged.AddListener(OnEulerXChanged);
         btn_euler_x_min.onClick.AddListener(MinEulerX);
 
         btn_euler_y_add.onClick.AddListener(AddEuluerY);
-        sld_euler_y.onValueChanged.AddListener(EulerYChange);
         btn_euler_y_min.onClick.AddListener(MinEulerY); 
 
         btn_euler_z_add.onClick.AddListener(AddEulerZ); 
-        sld_euler_z.onValueChanged.AddListener(OnEulerZChanged);
         btn_euler_z_min.onClick.AddListener(MinEulerZ);
 
-        btn_height_near_min.onClick.AddListener(MinHeightNear);
-        sld_height_near.onValueChanged.AddListener(OnEHeightNearChanged);
-        btn_height_near_add.onClick.AddListener(AddHeightNear);
-
-        btn_height_far_min.onClick.AddListener(MinHeightFar);
-        sld_height_far.onValueChanged.AddListener(OnEHeightFarChanged);
-        btn_height_far_add.onClick.AddListener(AddHeightFar);
 
         btn_smooth_min.onClick.AddListener(MinSmoothTime);
-        sld_smooth.onValueChanged.AddListener(onSmoothTimeChanged);
         btn_smooth_add.onClick.AddListener(AddSmoothTime);
+
+        btn_up_min.onClick.AddListener(MinUp);
+        btn_up_add.onClick.AddListener(AddUp);
+
+        btn_down_min.onClick.AddListener(MinDown);
+        btn_down_add.onClick.AddListener(AddDown);
+
+        btn_left_min.onClick.AddListener(MinLeft);
+        btn_left_add.onClick.AddListener(AddLeft);
+
+        btn_right_min.onClick.AddListener(MinRight);
+        btn_right_add.onClick.AddListener(AddRight);
+
+        btn_height_min.onClick.AddListener(MinHeight);
+        btn_height_add.onClick.AddListener(AddHeight);
+
+    }
+
+
+    private void MinHeight()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.height -= 0.1f;
+    }
+
+    private void AddHeight()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.height += 0.1f;
+    }
+
+
+    private void MinUp()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingUp -= 10;
+    }
+    private void AddUp()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingUp += 10;
+    }
+    private void MinDown()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingDown -= 10;
+    }
+    private void AddDown()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingDown += 10;
+    }
+    private void MinLeft()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingLeft -= 10;
+    }
+    private void AddLeft()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingLeft += 10;
+    }
+    private void MinRight()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingRight -= 10;
+    }
+
+    private void AddRight()
+    {
+        if (!m_gamecamera) return;
+        m_gamecamera.PaddingRight += 10;
     }
 
     // Update is called once per frame
@@ -97,13 +155,18 @@ public class CameraSettingCanvas : BaseCanvas
         if (!m_gamecamera) return;
         if (!m_player) return;
 
-        eulerX.text = m_gamecamera.transform.eulerAngles.x.ToString();
-        eulerY.text = m_gamecamera.transform.eulerAngles.y.ToString();
-        eulerZ.text = m_gamecamera.transform.eulerAngles.z.ToString();
+        eulerX.text = m_gamecamera.transform.eulerAngles.x.ToString("#0");
+        eulerY.text = m_gamecamera.transform.eulerAngles.y.ToString("#0");
+        eulerZ.text = m_gamecamera.transform.eulerAngles.z.ToString("#0");
 
-        nearHeight.text = m_gamecamera.near.ToString();
-        farHeight.text = m_gamecamera.far.ToString();
-        smoothTime.text = m_gamecamera.MoveSmoothTime.ToString();
+        smoothTime.text = m_gamecamera.MoveSmoothTime.ToString("#0.000");
+
+        up.text = m_gamecamera.PaddingUp.ToString("#0");
+        down.text = m_gamecamera.PaddingDown.ToString("#0");
+        left.text = m_gamecamera.PaddingLeft.ToString("#0");
+        right.text = m_gamecamera.PaddingRight.ToString("#0");
+
+        height.text = m_gamecamera.height.ToString("#0.0");
     }
 
     void MinEulerX()
@@ -113,21 +176,6 @@ public class CameraSettingCanvas : BaseCanvas
         if(m_gamecamera.Pitch < -180)
         {
             m_gamecamera.Pitch = -180;
-        }
-    }
-
-    void OnEulerXChanged(float value)
-    {
-        if (!m_gamecamera) return;
-
-        m_gamecamera.Pitch = value;
-        if (m_gamecamera.Pitch < -180)
-        {
-            m_gamecamera.Pitch = -180;
-        }
-        if (m_gamecamera.Pitch > 180)
-        {
-            m_gamecamera.Pitch = 180;
         }
     }
 
@@ -151,19 +199,6 @@ public class CameraSettingCanvas : BaseCanvas
         }
     }
 
-    void EulerYChange(float value)
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.Yaw = value;
-        if (m_gamecamera.Yaw < -180)
-        {
-            m_gamecamera.Yaw = -180;
-        }
-        if (m_gamecamera.Yaw > 180)
-        {
-            m_gamecamera.Yaw = 180;
-        }
-    }
 
     void AddEuluerY()
     {
@@ -185,20 +220,6 @@ public class CameraSettingCanvas : BaseCanvas
         }
     }
 
-    void OnEulerZChanged(float value)
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.Roll = value;
-        if (m_gamecamera.Roll < -180)
-        {
-            m_gamecamera.Roll = -180;
-        }
-        if (m_gamecamera.Roll > 180)
-        {
-            m_gamecamera.Roll = 180;
-        }
-    }
-
     void AddEulerZ()
     {
         if (!m_gamecamera) return;
@@ -210,124 +231,23 @@ public class CameraSettingCanvas : BaseCanvas
         
     }
 
-
-    void MinHeightNear()
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.near -= 0.01f;
-        if (m_gamecamera.near < 0)
-        {
-            m_gamecamera.near = 0;
-        }
-
-        //m_player.near_front.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-        //m_player.near_back.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-        //m_player.near_left.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-        //m_player.near_right.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-    }
-
-    void OnEHeightNearChanged(float value)
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.near = value;
-        if (m_gamecamera.near < 0)
-        {
-            m_gamecamera.near = 0;
-        }
-        if (m_gamecamera.near > 10)
-        {
-            m_gamecamera.near = 10;
-        }
-    }
-
-    void AddHeightNear()
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.near += 0.01f;
-        if (m_gamecamera.near > 10)
-        {
-            m_gamecamera.near = 10;
-        }
-        //m_player.near_front.transform.localPosition = new Vector3(0,0, m_gamecamera.near);
-        //m_player.near_back.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-        //m_player.near_left.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-        //m_player.near_right.transform.localPosition = new Vector3(0, 0, m_gamecamera.near);
-    }
-
-    void MinHeightFar()
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.far -= 0.02f;
-        if (m_gamecamera.far < 0)
-        {
-            m_gamecamera.far = 0;
-        }
-        //m_player.far_front.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-        //m_player.far_back.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-        //m_player.far_left.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-        //m_player.far_right.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-       
-    }
-
-    void OnEHeightFarChanged(float value)
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.far = value;
-        if (m_gamecamera.far < 0)
-        {
-            m_gamecamera.far = 0;
-        }
-        if (m_gamecamera.far > 10)
-        {
-            m_gamecamera.far = 10;
-        }
-    }
-
-    void AddHeightFar()
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.far += 0.02f;
-        if (m_gamecamera.far > 10)
-        {
-            m_gamecamera.far = 10;
-        }
-        m_player.far_front.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-        m_player.far_back.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-        m_player.far_left.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-        m_player.far_right.transform.localPosition = new Vector3(0, 0, m_gamecamera.far);
-    }
-
     void MinSmoothTime()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.ChangeSmoothTime -= 0.02f;
-        if (m_gamecamera.ChangeSmoothTime < 0)
-        {
-            m_gamecamera.ChangeSmoothTime = 0;
-        }
-    }
-
-    void onSmoothTimeChanged(float value)
-    {
-        if (!m_gamecamera) return;
-        m_gamecamera.MoveSmoothTime = value;
+        m_gamecamera.MoveSmoothTime -= 0.001f;
         if (m_gamecamera.MoveSmoothTime < 0)
         {
             m_gamecamera.MoveSmoothTime = 0;
-        }
-        if (m_gamecamera.MoveSmoothTime > 10)
-        {
-            m_gamecamera.MoveSmoothTime = 10;
         }
     }
 
     void AddSmoothTime()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.ChangeSmoothTime += 0.02f;
-        if (m_gamecamera.ChangeSmoothTime > 1)
+        m_gamecamera.MoveSmoothTime += 0.001f;
+        if (m_gamecamera.MoveSmoothTime > 1)
         {
-            m_gamecamera.ChangeSmoothTime = 1;
+            m_gamecamera.MoveSmoothTime = 1;
         }
     }
 
@@ -347,13 +267,11 @@ public class CameraSettingCanvas : BaseCanvas
     void CameraNear()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Near();
     }
 
     void CameraFar()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Far();
     }
 
     void ExpandOrHide()
@@ -366,11 +284,11 @@ public class CameraSettingCanvas : BaseCanvas
         expand = value;
         if(expand)
         {
-            content.anchoredPosition = new Vector2(-268, 520);
+            content.anchoredPosition = new Vector2(-180, -300);
         }
         else
         {
-            content.anchoredPosition = new Vector2(268, 520);
+            content.anchoredPosition = new Vector2(180, -300);
         }
     }
 

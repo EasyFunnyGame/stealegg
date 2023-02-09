@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+
 public class GameCamera : MonoBehaviour
 {
     public static GameCamera Instance;
@@ -18,12 +20,6 @@ public class GameCamera : MonoBehaviour
 	public float PaddingUp;
 	public float PaddingDown;
 	public float MoveSmoothTime = 0.19f;
-
-	public float ChangeSmoothTime = 0.01f;
-
-	public float near = 4;
-
-	public float far = 5;
 
 	public float height;
 
@@ -46,71 +42,6 @@ public class GameCamera : MonoBehaviour
 		_debugProjection = DebugProjection.ROTATED;
 	}
 
-    public void Near()
-    {
-		if (Game.Instance?.player == null) return;
-		var player = Game.Instance.player;
-		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.currentTile.name, 3,true);
-		var targets = new List<GameObject>(nearPlaneNodesAround.Count);
-		foreach (var kvp in nearPlaneNodesAround)
-		{
-			targets.Add(kvp.Value.gameObject);
-		}
-		SetTargets(targets.ToArray());
-		upper = false;
-		height = near;
-	}
-
-	public void Far()
-	{
-		if (Game.Instance?.player == null) return;
-
-		var player = Game.Instance.player;
-		var nearPlaneNodesAround = player.boardManager.FindNodesAround(player.currentTile.name, 3, true);
-		var targets = new List<GameObject>(nearPlaneNodesAround.Count);
-		foreach (var kvp in nearPlaneNodesAround)
-		{
-			targets.Add(kvp.Value.gameObject);
-		}
-		SetTargets(targets.ToArray());
-		height = far;
-		upper = true;
-	}
-	bool init = false;
-	private void Update()
-    {
-		if(!init)
-        {
-			if (Game.Instance.player)
-            {
-				init = true;
-				//near = Game.Instance.player.near_front.transform.localPosition.z;
-				//far = Game.Instance.player.far_front.transform.localPosition.z;
-				if (upper)
-                {
-					Far();
-                }
-				else
-                {
-					Near();
-                }
-            }
-        }
-	}
-
-    private void LateUpdate()
-	{
-		if (_targets.Length == 0)
-			return;
-
-		var targetPositionAndRotation = TargetPositionAndRotation(_targets);
-
-		Vector3 velocity = Vector3.zero;
-
-
-		transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, MoveSmoothTime);
-		transform.rotation = targetPositionAndRotation.Rotation;
-	}
 
 	PositionAndRotation TargetPositionAndRotation(GameObject[] targets)
 	{
@@ -242,5 +173,82 @@ public class GameCamera : MonoBehaviour
 		Debug.DrawRay(rotation * start, rotation * direction, color);
 	}
 
-	
+	public float playerPaddingUp;
+	public float playerPaddingDown;
+	public float playerPaddingLeft;
+	public float playerPaddingRight;
+	public Vector3 targetPosition = new Vector3();
+
+	private void LateUpdate()
+	{
+		if(playerPaddingDown < PaddingDown)
+        {
+			transform.Translate(new Vector3(0,0,-MoveSmoothTime), Space.World);
+		}
+		if (playerPaddingUp < PaddingUp)
+        {
+			transform.Translate(new Vector3(0, 0, MoveSmoothTime), Space.World);
+		}
+		if (playerPaddingLeft < PaddingLeft)
+		{
+			transform.Translate(new Vector3(-MoveSmoothTime, 0, 0), Space.World);
+		}
+		if (playerPaddingRight < PaddingRight)
+		{
+			transform.Translate(new Vector3(MoveSmoothTime, 0, 0), Space.World);
+		}
+
+		if (transform.position.y < height)
+        {
+			transform.Translate(new Vector3(0, MoveSmoothTime, 0), Space.World);
+		}
+
+		if (transform.position.y > height)
+		{
+			transform.Translate(new Vector3(0, -MoveSmoothTime, 0), Space.World);
+		}
+		var rotation = Quaternion.Euler(Pitch, Yaw, Roll);
+		transform.rotation = rotation;
+
+		//Vector3 v = Vector3.zero;
+		//transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref v, MoveSmoothTime);
+
+
+		if (_targets.Length > 0)
+		{
+			var targetPositionAndRotation = TargetPositionAndRotation(_targets);
+
+			Vector3 velocity = Vector3.zero;
+
+			transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, MoveSmoothTime);
+			transform.rotation = targetPositionAndRotation.Rotation;
+		}
+	}
+
+	public void UpdatePlayerPositionOnScreen(RectTransform canvasRect, Vector3 position, Image playerImage)
+    {
+		float resolutionRotioWidth = canvasRect.sizeDelta.x;
+		float resolutionRotioHeight = canvasRect.sizeDelta.y;
+		float widthRatio = resolutionRotioWidth / Screen.width;
+		float heightRatio = resolutionRotioHeight / Screen.height;
+
+		float posX = position.x *= widthRatio;
+
+		float posY = position.y *= heightRatio;
+
+		float halfCanvasHeight = resolutionRotioHeight / 2;
+		float halfCanvasWidth = resolutionRotioWidth / 2;
+
+		playerPaddingUp = halfCanvasHeight - posY;
+		playerPaddingDown = halfCanvasHeight + posY;
+		playerPaddingLeft = halfCanvasWidth + posX;
+		playerPaddingRight = halfCanvasWidth - posX;
+
+		playerImage.rectTransform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, playerPaddingUp);
+		playerImage.rectTransform.GetChild(1).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -playerPaddingDown);
+		playerImage.rectTransform.GetChild(2).GetComponent<RectTransform>().anchoredPosition = new Vector2(-playerPaddingLeft, 0);
+		playerImage.rectTransform.GetChild(3).GetComponent<RectTransform>().anchoredPosition = new Vector2(playerPaddingRight, 0);
+	}
+
+
 }

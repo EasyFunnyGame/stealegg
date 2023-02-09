@@ -61,6 +61,9 @@ public class GameCanvas : BaseCanvas
 
     public List<IconsAboveEnemy> icon_enemies;
 
+    public Image playerPosition;
+
+
     private void Awake()
     {
         btn_add.onClick.AddListener(onClickShowEnergyGainCanvasHandler);
@@ -83,6 +86,7 @@ public class GameCanvas : BaseCanvas
 
     private void onClickPasueGameHandler()
     {
+
     }
 
     void onClickReStartLevelHandler()
@@ -131,10 +135,13 @@ public class GameCanvas : BaseCanvas
     // Update is called once per frame
     void Update()
     {
-        if(Game.Instance.player == null || Game.Instance.player.currentTile == null)
+        if (Game.Instance.player != null)
         {
-            return;
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
+            playerPosition.rectTransform.anchoredPosition = screenPoint;
+            Game.Instance.camera.UpdatePlayerPositionOnScreen(GetComponent<RectTransform>(), screenPoint, playerPosition);
         }
+
         if (icon_star.gameObject.activeSelf)
         {
             UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon_star.item.GetIconPosition(),  out screenPoint);
