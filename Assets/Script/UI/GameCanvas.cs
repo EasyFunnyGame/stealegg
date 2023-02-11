@@ -31,8 +31,6 @@ public class GameCanvas : BaseCanvas
 
     public Button btn_pause;
 
-    public CanvasGroup canvasGroup;
-
     public GameObject home;
 
     public GameObject playing;
@@ -61,6 +59,17 @@ public class GameCanvas : BaseCanvas
 
     public List<IconsAboveEnemy> icon_enemies;
 
+
+    public Image distance_up;
+    public Text txt_up;
+    public Image distance_down;
+    public Text txt_down;
+    public Image distance_left;
+    public Text txt_left;
+    public Image distance_right;
+    public Text txt_right;
+
+
     public Image playerPosition;
 
 
@@ -75,6 +84,18 @@ public class GameCanvas : BaseCanvas
         btn_pause.onClick.AddListener(onClickPasueGameHandler);
 
         btn_start.onClick.AddListener(onClickStartPlayingGameHandler);
+
+        icon_graff.gameObject.SetActive(false);
+
+        icon_star.gameObject.SetActive(false);
+
+        icon_template_bottle.gameObject.SetActive(false);
+
+        icon_template_pricers.gameObject.SetActive(false);
+
+        icon_template_manholecover.gameObject.SetActive(false);
+
+        icon_template_growth.gameObject.SetActive(false);
     }
 
     void onClickStartPlayingGameHandler()
@@ -86,7 +107,8 @@ public class GameCanvas : BaseCanvas
 
     private void onClickPasueGameHandler()
     {
-
+        playing.gameObject.SetActive(false);
+        home.gameObject.SetActive(true);
     }
 
     void onClickReStartLevelHandler()
@@ -155,10 +177,25 @@ public class GameCanvas : BaseCanvas
         }
     }
 
+    void LateUpdate()
+    {
+        if (!Game.Instance.camera) return;
+        distance_up.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingUp));
+        txt_up.text = Math.Abs(Game.Instance.camera.playerPaddingUp).ToString();
+
+        distance_down.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingDown));
+        txt_down.text = Math.Abs(Game.Instance.camera.playerPaddingDown).ToString();
+
+        distance_left.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingLeft), 2);
+        txt_left.text = Math.Abs(Game.Instance.camera.playerPaddingLeft).ToString();
+
+        distance_right.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingRight), 2);
+        txt_right.text = Math.Abs(Game.Instance.camera.playerPaddingRight).ToString();
+    }
+
 
     protected override void OnShow()
     {
-        canvasGroup.alpha = 1;
         RefreshEnergy();
         img_level.texture = Resources.Load<Texture>("UI/Sprite/Num/" + (index+1).ToString());
 

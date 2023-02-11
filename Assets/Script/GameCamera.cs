@@ -225,12 +225,16 @@ public class GameCamera : MonoBehaviour
 		}
 	}
 
+	private float ration;
+
 	public void UpdatePlayerPositionOnScreen(RectTransform canvasRect, Vector3 position, Image playerImage)
     {
 		float resolutionRotioWidth = canvasRect.sizeDelta.x;
 		float resolutionRotioHeight = canvasRect.sizeDelta.y;
 		float widthRatio = resolutionRotioWidth / Screen.width;
 		float heightRatio = resolutionRotioHeight / Screen.height;
+
+		ration = widthRatio;
 
 		float posX = position.x *= widthRatio;
 
@@ -239,10 +243,11 @@ public class GameCamera : MonoBehaviour
 		float halfCanvasHeight = resolutionRotioHeight / 2;
 		float halfCanvasWidth = resolutionRotioWidth / 2;
 
-		playerPaddingUp = halfCanvasHeight - posY;
-		playerPaddingDown = halfCanvasHeight + posY;
-		playerPaddingLeft = halfCanvasWidth + posX;
-		playerPaddingRight = halfCanvasWidth - posX;
+
+		playerPaddingUp = halfCanvasHeight - playerImage.GetComponent<RectTransform>().anchoredPosition.y;
+		playerPaddingDown = halfCanvasHeight + playerImage.GetComponent<RectTransform>().anchoredPosition.y;
+		playerPaddingLeft = halfCanvasWidth + playerImage.GetComponent<RectTransform>().anchoredPosition.x;
+		playerPaddingRight = halfCanvasWidth - playerImage.GetComponent<RectTransform>().anchoredPosition.x;
 
 		playerImage.rectTransform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, playerPaddingUp);
 		playerImage.rectTransform.GetChild(1).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -playerPaddingDown);

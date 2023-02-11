@@ -284,11 +284,11 @@ public class CameraSettingCanvas : BaseCanvas
         expand = value;
         if(expand)
         {
-            content.anchoredPosition = new Vector2(-180, -300);
+            content.anchoredPosition = new Vector2(-180, -350);
         }
         else
         {
-            content.anchoredPosition = new Vector2(180, -300);
+            content.anchoredPosition = new Vector2(180, -350);
         }
     }
 

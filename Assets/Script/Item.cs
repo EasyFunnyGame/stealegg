@@ -86,6 +86,7 @@ public class Item : MonoBehaviour
                 picked = true;
                 gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
+                Game.Instance.energy += 5;
                 break;
 
             case ItemType.LureBottle:

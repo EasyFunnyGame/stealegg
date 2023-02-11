@@ -60,7 +60,7 @@ public class Game : MonoBehaviour
 
         energy = PlayerPrefs.GetInt("Energy", -1);
         if (energy == -1)
-            energy = 5;
+            energy = 10;
 
         mainCanvas.Show();
         msgCanvas.Show();
