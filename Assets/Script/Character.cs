@@ -21,7 +21,7 @@ public class Character : MonoBehaviour
         {
             if(_currentTile)
             {
-                lastTileName = _currentTile.name;
+                //lastTileName = _currentTile.name;
             }
             _currentTile = value;
         }
@@ -53,7 +53,7 @@ public class Character : MonoBehaviour
 
     public ActionBase currentAction = null;
 
-    public string lastTileName;
+    //public string lastTileName;
 
     public virtual void Start()
     {
@@ -90,7 +90,6 @@ public class Character : MonoBehaviour
 
         currentTile = tile;
 
-        Reached();
         originalDirection = direction;
         originalCoord = coord.Clone();
     }
@@ -269,7 +268,18 @@ public class Character : MonoBehaviour
         selected_tile_s = null;
         nextTile = null;
         tar_tile_s = null;
-        db_moves.ForEach((Transform cube) => { cube.parent = transform; });
+        db_moves.ForEach((Transform cube) => {
+            cube.parent = transform;
+            cube.transform.localPosition = new Vector3(0, 0, 0);
+        });
+    }
+
+    public void ResetMoves()
+    {
+        db_moves.ForEach((Transform cube) => {
+            cube.parent = transform;
+            cube.transform.localPosition = new Vector3(0, 0, 0);
+        });
     }
 
     public bool CanReach(string tileName)
@@ -296,6 +306,11 @@ public class Character : MonoBehaviour
     }
 
     public virtual void FootR()
+    {
+
+    }
+
+    public virtual void PlayerReached()
     {
 
     }

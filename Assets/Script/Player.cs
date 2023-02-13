@@ -3,10 +3,13 @@ public class Player : Character
 {
     public int bottleCount;
 
+    public Animator playerMove;
+
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
+        Reached();
     }
 
     override public void Reached()
@@ -16,6 +19,7 @@ public class Player : Character
         CheckBottle();
         boardManager.PickItem(currentTile.name,this);
         m_animator.CrossFade("Player_Idle",0.1f);
+        ShowReached(); 
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
 
@@ -75,4 +79,17 @@ public class Player : Character
             Game.Instance.gameCanvas.DisableBottle();
         }
     }
+
+    public void ShowReached()
+    {
+        playerMove.gameObject.SetActive(true);
+        playerMove.Play("Movement_Animation_01");
+    }
+
+    public override void PlayerReached()
+    {
+        base.PlayerReached();
+        playerMove.gameObject.SetActive(false);
+    }
+
 }

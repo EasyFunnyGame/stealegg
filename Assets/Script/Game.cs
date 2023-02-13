@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public enum GameResult
 {
+    NONE,
+
     WIN,
 
     FAIL,
@@ -61,7 +63,6 @@ public class Game : MonoBehaviour
         energy = PlayerPrefs.GetInt("Energy", -1);
         if (energy == -1)
             energy = 10;
-
         mainCanvas.Show();
         msgCanvas.Show();
         gameCanvas.Hide();
@@ -83,6 +84,8 @@ public class Game : MonoBehaviour
         chapterCanvas.Hide();
 
         gameCanvas.index = index;
+
+        result = GameResult.NONE;
 
         Save();
     }
@@ -116,7 +119,11 @@ public class Game : MonoBehaviour
 
         cameraSettingCanvas.InitWithGameCamera(camera, player);
 
-        Debug.Log("当前场景名称" + sceneName);
+        Debug.Log("当前场景名称:" + sceneName);
+
+        cameraSettingCanvas.SetExpand(false);
+
+        result = GameResult.NONE;
     }
 
     public void EndGame()

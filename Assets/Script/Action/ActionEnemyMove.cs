@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ActionEnemyMove : ActionBase
 {
@@ -28,42 +26,50 @@ public class ActionEnemyMove : ActionBase
         {
             if(enemy.foundPlayerTile)
             {
-                if(character.currentTile.name == enemy.foundPlayerTile.name)
+                character.UpdateTargetDirection(character.nextTile);
+                if (character.direction == character.targetDirection)
                 {
-                    // 到达地点后更新玩家的追踪位置
-                    var canSeePlayer = Game.Instance.player.CanReach(character.currentTile.name);
-                    if(canSeePlayer)
+                    if (character.currentTile.name == enemy.foundPlayerTile.name)
                     {
-                        Debug.LogWarning("todo 能够看见主角,直接抓捕");
-                        var playerLastTile = Game.Instance.player.gridManager.GetTileByName(Game.Instance.player.lastTileName);
-                        if(playerLastTile)
+                        // 到达地点后更新玩家的追踪位置  todo 这里差一个转向
+                        var canSeePlayer = Game.Instance.player.CanReach(character.currentTile.name);
+                        if (canSeePlayer)
                         {
-                            var targetDirection = Utils.DirectionTo(character.currentTile, playerLastTile, character.direction);
-                            if (character.direction == targetDirection)
+                            Debug.LogWarning("todo 能够看见主角,直接抓捕");
+                            var playerLastTile = Game.Instance.player.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+                            if (playerLastTile)
                             {
-                                Game.Instance.FailGame();
-                                character.Reached();
-                                return true;
-                            }
-                            else
-                            {
-                                Utils.SetDirection(character, targetDirection);
-                                return false;
+                                var targetDirection = Utils.DirectionTo(character.currentTile, playerLastTile, character.direction);
+                                if (character.direction == targetDirection)
+                                {
+                                    Game.Instance.FailGame();
+                                    character.Reached();
+                                    return true;
+                                }
+                                else
+                                {
+                                    Utils.SetDirection(character, targetDirection);
+                                    return false;
+                                }
                             }
                         }
-                    }
 
-                    var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-                    if(playerTile != null)
-                    {
-                        enemy.foundPlayerTile = playerTile;
-                        Debug.Log("更新追踪:"+playerTile.name);
-                        character.FindPathRealTime(playerTile);
-                        character.UpdateTargetDirection(character.nextTile);
-                        if (character.direction == character.targetDirection)
+                        var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+                        if (playerTile != null)
                         {
-                            character.Reached();
-                            return true;
+                            Debug.Log("更新追踪:" + playerTile.name);
+                            //enemy.foundPlayerTile = playerTile;
+                            character.FindPathRealTime(playerTile);
+                            character.UpdateTargetDirection(character.nextTile);
+                            //character.ResetMoves();
+                            if (character.direction == character.targetDirection)
+                            {
+                                character.Reached();
+                                enemy.foundPlayerTile = null;
+                                enemy.ShowNotFound();
+                                // todo 显示问号，取消敌人  准备返回  取消追踪目标显示
+                                return true;
+                            }
                         }
                     }
                 }
@@ -71,6 +77,11 @@ public class ActionEnemyMove : ActionBase
                 if(character.direction == character.targetDirection)
                 {
                     character.Reached();
+                    var foundPlayer = enemy.TryFoundPlayer();
+                    if (foundPlayer)
+                    {
+                        enemy.currentAction = new ActionFoundPlayer(enemy, ActionType.FoundPlayer);
+                    }
                     return true;
                 }
             }
@@ -81,6 +92,7 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.hearSoundTile.name)
                     {
+                        enemy.ShowNotFound();
                         enemy.hearSoundTile = null;
                         character.Reached();
                         return true;
@@ -146,28 +158,46 @@ public class ActionEnemyMove : ActionBase
             character.tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
 
             var angle = Vector3.Angle(tar_dir, character.tr_body.forward);
-            if (angle <= 1)
+
+            
+            if (angle <= 1 )
             {
+                character.transform.forward = tar_dir;
                 character.ResetDirection();
                 character.body_looking = false;
 
-                if(enemy.foundPlayerTile != null)
+                var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
+                if (tdist < 0.01)
                 {
-                    var catchPlayer = enemy.TryCatchPlayer();
-                    if(!catchPlayer)
+                    if (enemy.foundPlayerTile != null)
                     {
-                        var foundPlayer = enemy.TryFoundPlayer();
-                        if (!foundPlayer)
+                        enemy.ShowTraceTarget(enemy.foundPlayerTile);
+                        var catchPlayer = enemy.TryCatchPlayer();
+                        if (!catchPlayer)
                         {
-                            enemy.foundPlayerTile = null;
-                            enemy.m_animator.Play("Player_Idle");
+                            var foundPlayer = enemy.TryFoundPlayer();
+                            if (!foundPlayer)
+                            {
+                                enemy.ShowNotFound();
+                                enemy.foundPlayerTile = null;
+                                enemy.m_animator.Play("Player_Idle");
+                            }
                         }
+                        Debug.Log("追踪转向完毕");
+                    }
+                    if (enemy.hearSoundTile != null)
+                    {
+                        Debug.Log("巡声转向完毕");
                     }
                 }
-                if (enemy.hearSoundTile != null)
-                {
-                    Debug.Log("巡声转向完毕");
-                }
+                //else
+                //{
+                //    var foundPlayer = enemy.TryFoundPlayer();
+                //    if(foundPlayer)
+                //    {
+                //        enemy.currentAction = new ActionFoundPlayer(enemy, ActionType.FoundPlayer);
+                //    }
+                //}
             }
             return;
         }

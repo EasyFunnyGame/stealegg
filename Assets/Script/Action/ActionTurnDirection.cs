@@ -25,6 +25,16 @@ public class ActionTurnDirection : ActionBase
                 {
                     _enemy.currentAction = new ActionFoundPlayer(_enemy, ActionType.FoundPlayer);
                 }
+                var canSeePlayer = Game.Instance.player.CanReach(_enemy.currentTile.name);
+                if (canSeePlayer)
+                {
+                    var targetTile = _enemy.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+                    if (targetTile != null)
+                    {
+                        _enemy.foundPlayerTile = targetTile;
+                        _enemy.hearSoundTile = null;
+                    }
+                }
             }
             return true;
         }

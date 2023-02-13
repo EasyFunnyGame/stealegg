@@ -119,7 +119,7 @@ public class BoardManager : MonoBehaviour
                 Debug.Log(string.Format("未挂载脚本Enemy{0}", enemyTr.name));
                 continue;
             }
-
+            
             enemies.Add(enemy);
 
             switch (enemyTr.name)

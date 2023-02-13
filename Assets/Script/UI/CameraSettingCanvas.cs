@@ -279,7 +279,7 @@ public class CameraSettingCanvas : BaseCanvas
         SetExpand(!expand);
     }
 
-    void SetExpand(bool value)
+    public void SetExpand(bool value)
     {
         expand = value;
         if(expand)

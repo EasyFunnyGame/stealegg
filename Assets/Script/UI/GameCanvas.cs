@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -41,23 +40,25 @@ public class GameCanvas : BaseCanvas
 
     public ItemIconOnUI icon_star;
 
-    public ItemIconOnUI icon_template_bottle;
+    public ItemIconOnUI icon_template_bottle_template;
 
-    public ItemIconOnUI icon_template_pricers;
+    public ItemIconOnUI icon_template_pricers_template;
 
-    public ItemIconOnUI icon_template_manholecover;
+    public ItemIconOnUI icon_template_manholecover_template;
 
-    public ItemIconOnUI icon_template_growth;
+    public ItemIconOnUI icon_template_growth_template;
 
-    public List<ItemIconOnUI> icon_bottles;
+    public IconsAboveEnemy icon_enemy_template;
 
-    public List<ItemIconOnUI> icon_pincers;
+    public List<ItemIconOnUI> icon_bottles = new List<ItemIconOnUI>();
 
-    public List<ItemIconOnUI> icon_manholecover;
+    public List<ItemIconOnUI> icon_pincers =  new List<ItemIconOnUI>();
 
-    public List<ItemIconOnUI> icon_growth;
+    public List<ItemIconOnUI> icon_manholecover = new List<ItemIconOnUI>();
 
-    public List<IconsAboveEnemy> icon_enemies;
+    public List<ItemIconOnUI> icon_growth = new List<ItemIconOnUI>();
+
+    public List<IconsAboveEnemy> icon_enemies = new List<IconsAboveEnemy>();
 
 
     public Image distance_up;
@@ -89,13 +90,15 @@ public class GameCanvas : BaseCanvas
 
         icon_star.gameObject.SetActive(false);
 
-        icon_template_bottle.gameObject.SetActive(false);
+        icon_template_bottle_template.gameObject.SetActive(false);
 
-        icon_template_pricers.gameObject.SetActive(false);
+        icon_template_pricers_template.gameObject.SetActive(false);
 
-        icon_template_manholecover.gameObject.SetActive(false);
+        icon_template_manholecover_template.gameObject.SetActive(false);
 
-        icon_template_growth.gameObject.SetActive(false);
+        icon_template_growth_template.gameObject.SetActive(false);
+
+        icon_enemy_template.gameObject.SetActive(false);
     }
 
     void onClickStartPlayingGameHandler()
@@ -175,6 +178,14 @@ public class GameCanvas : BaseCanvas
             UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon_graff.item.GetIconPosition(), out screenPoint);
             icon_graff.rectTransform.anchoredPosition = screenPoint;
         }
+
+        for (var index = 0; index < icon_enemies.Count; index++)
+        {
+            var icon = icon_enemies[index];
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.enemy.headPoint.position, out screenPoint);
+            icon.rectTransform.anchoredPosition = screenPoint;
+        }
+
     }
 
     void LateUpdate()
@@ -191,6 +202,8 @@ public class GameCanvas : BaseCanvas
 
         distance_right.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingRight), 2);
         txt_right.text = Math.Abs(Game.Instance.camera.playerPaddingRight).ToString();
+
+     
     }
 
 
@@ -239,6 +252,15 @@ public class GameCanvas : BaseCanvas
 
     public void InitWithBoardManager(BoardManager boardManager)
     {
+        ClearIcons();
+        InitItemIcons(boardManager);
+        InitEnemyIcons(boardManager);
+    }
+
+    void InitItemIcons(BoardManager boardManager)
+    {
+        
+        // 物品图标
         for (var index = 0; index < boardManager.itemRoot.childCount; index++)
         {
             var itemTr = boardManager.itemRoot.GetChild(index);
@@ -280,5 +302,27 @@ public class GameCanvas : BaseCanvas
                     break;
             }
         }
+    }
+
+    void InitEnemyIcons(BoardManager boardManager)
+    {
+        for(var index = 0; index < boardManager.enemies.Count; index ++)
+        {
+            var enemy = boardManager.enemies[index];
+            var enemyIcon = Instantiate(icon_enemy_template,this.playing.transform);
+            enemyIcon.enemy = enemy;
+            enemy.icons = enemyIcon;
+            icon_enemies.Add(enemyIcon);
+            enemyIcon.gameObject.SetActive(true);
+        }
+    }
+
+    void ClearIcons()
+    {
+        for(var index = 0; index < icon_enemies.Count; index++)
+        {
+            DestroyImmediate(icon_enemies[index].gameObject);
+        }
+        icon_enemies.Clear();
     }
 }

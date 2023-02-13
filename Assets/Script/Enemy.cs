@@ -25,13 +25,37 @@ public class Enemy : Character
 
     public static int count;
 
-    public bool tracingPlayer = false;
-
     public GridTile foundPlayerTile = null;
 
     public GridTile hearSoundTile = null;
 
     public GridTile originalTile = null;
+
+    public IconsAboveEnemy icons;
+
+    public Transform headPoint;
+
+    public Animator enemyMove;
+
+    public GameObject route;
+
+    public Transform routeLine;
+
+    public Transform routeArrow;
+
+    public string routeNode1Name;
+
+    public string routeNode2Name;
+
+    public List<MeshRenderer> redNodes = new List<MeshRenderer>();
+
+    public override void Start()
+    {
+        base.Start();
+        Reached();
+        OnReachedOriginal();
+        DisapearTraceTarget();
+    }
 
     public override void ResetDirection()
     {
@@ -52,7 +76,9 @@ public class Enemy : Character
                 currentAction = new ActionEnemyMove(this, hearSoundTile);
                 return;
             }
+            ShowFound();
             hearSoundTile = targetTile;
+            ShowTraceTarget(targetTile);
             var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
             if (canSeePlayer)
             {
@@ -97,17 +123,6 @@ public class Enemy : Character
             originalTile = null;
             currentAction = new ActionEnemyMove(this, hearSoundTile);
             return;
-        } 
-
-        if (originalTile != null)
-        {
-            currentAction = new ActionEnemyMove(this, originalTile);
-            return;
-        }
-
-        if (ReturnOriginal(true))
-        {
-            return;
         }
 
         var trace = TryFoundPlayer();
@@ -116,13 +131,18 @@ public class Enemy : Character
             currentAction = new ActionFoundPlayer(this, ActionType.FoundPlayer);
             return;
         }
+
+        if (originalTile != null)
+        {
+            currentAction = new ActionEnemyMove(this, originalTile);
+            return;
+        }
+
+        ReturnOriginal(true);
     }
 
-    public List<Transform> redLines = new List<Transform>();
 
-    public List<MeshRenderer> redNodes = new List<MeshRenderer>();
-
-    public bool ReturnOriginal(bool needAction)
+    public void ReturnOriginal(bool needAction)
     {
         if (currentTile.name != originalCoord.name)
         {
@@ -130,6 +150,7 @@ public class Enemy : Character
             if (originalTile != null)
             {
                 FindPathRealTime(originalTile);
+                ShowBackToOriginal();
                 if (needAction)
                 {
                     if (direction == targetDirection)
@@ -142,25 +163,14 @@ public class Enemy : Character
                     }
                 }
             }
-            
-            return true;
         }
-        return false;
-    }
-
-    public void RedLineByName(string nodeName1, string nodeName2)
-    {
-        var line = boardManager.FindLine(nodeName1, nodeName2);
-
-        if (line != null)
+        else if(direction != targetDirection)
         {
-            var lineTr = line.transform;
-            var copyLine = Instantiate(lineTr);
-            copyLine.transform.position = lineTr.position;
-            copyLine.transform.Translate(new Vector3(0, 0.001f, 0));
-            copyLine.transform.rotation = lineTr.rotation;
-            redLines.Add(copyLine);
-            copyLine.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/RouteRed");
+            currentAction = new ActionTurnDirection(this, this.originalDirection);
+        }
+        else
+        {
+            OnReachedOriginal();
         }
     }
 
@@ -172,6 +182,7 @@ public class Enemy : Character
         {
             var nodeTr = node.targetIcon;
             var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
+            copyNode.name = nodeName;
             redNodes.Add(copyNode);
             copyNode.transform.position = nodeTr.transform.position;
             copyNode.transform.Translate(new Vector3(0, 0.001f, 0));
@@ -227,6 +238,10 @@ public class Enemy : Character
 
     public virtual bool TryCatchPlayer()
     {
+        if( foundPlayerTile == null )
+        {
+            return false;
+        }
         if (Game.Instance.player == null || Game.Instance.player.currentTile == null) return false;
         var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
         var targetDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
@@ -269,15 +284,39 @@ public class Enemy : Character
         {
             xOffset = -1;
         }
-        var catchNodeX = coord.x + xOffset * 2;
-        var catchNodeZ = coord.z + zOffset * 2;
-        var next1NodeName = string.Format("{0}_{1}", catchNodeX, catchNodeZ);
-        if (Game.Instance.player.currentTile && Game.Instance.player.currentTile.name == next1NodeName)
+        var foundNodeX = coord.x + xOffset;
+        var foundNodeZ = coord.z + zOffset;
+        var next1NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+
+        var foundPlayer = false;
+        var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
+
+        if (canSeePlayer)
+        {
+            if (Game.Instance.player.currentTile && Game.Instance.player.currentTile.name == next1NodeName)
+            {
+                foundPlayer = true;
+            }
+        }
+        if( foundPlayer == false )
+        {
+            foundNodeX += xOffset;
+            foundNodeZ += zOffset;
+            next1NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+            if (Game.Instance.player.currentTile && Game.Instance.player.currentTile.name == next1NodeName)
+            {
+                foundPlayer = true;
+            }
+        }
+
+        if (foundPlayer)
         {
             var targetTile = gridManager.GetTileByName(next1NodeName);
             if (targetTile != null)
             {
                 foundPlayerTile = targetTile;
+                ShowTraceTarget(targetTile);
+                ShowFound();
                 hearSoundTile = null;
                 originalTile = null;
                 Debug.Log("开始追踪:" + targetTile.name);
@@ -295,6 +334,43 @@ public class Enemy : Character
 
     private void Update()
     {
+        if(body_looking)
+        {
+            route.SetActive(false);
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(routeNode1Name) && !string.IsNullOrEmpty(routeNode2Name))
+            {
+                route.SetActive(true);
+                var node1 = boardManager.FindNode(routeNode1Name);
+                var node2 = boardManager.FindNode(routeNode2Name);
+                if (node1==null && node2 ==null)
+                {
+                    route.SetActive(false);
+                }
+                else
+                {
+                    var endNode = node2 ? node2 : node1;
+                    var distance = Vector3.Distance(transform.position, endNode.transform.position);
+                    routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
+                    routeArrow.localPosition = new Vector3(0, 0, distance);
+
+                    for (var index = 0; index < redNodes.Count; index++)
+                    {
+                        if (redNodes[index].name == currentTile.name)
+                        {
+                            distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
+                            if (distance > 0.1f)
+                            {
+                                redNodes[index].gameObject.SetActive(false);
+                            }
+                        }
+                    }
+                    //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
+                }
+            }
+        }
         
     }
 
@@ -303,4 +379,51 @@ public class Enemy : Character
 
     }
 
+
+    public void ShowNotFound()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(true);
+        DisapearTraceTarget();
+    }
+
+    public void ShowFound()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(true);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+    }
+
+    public void ShowBackToOriginal()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(true);
+        icons.wenhao.gameObject.SetActive(false);
+    }
+
+    public void ShowSleep()
+    {
+        icons.shuijiao.gameObject.SetActive(true);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+    }
+
+    public void ShowTraceTarget(GridTile tile)
+    {
+        enemyMove.transform.parent = null;
+        enemyMove.gameObject.SetActive(true);
+        enemyMove.Play("Movement_Animation");
+        enemyMove.transform.transform.position = tile.transform.position;
+    }
+
+    public void DisapearTraceTarget()
+    {
+        enemyMove.transform.parent = transform;
+        enemyMove.gameObject.SetActive(false);
+    }
 }

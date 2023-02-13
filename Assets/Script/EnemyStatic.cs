@@ -11,12 +11,6 @@ public class EnemyStatic : Enemy
         }
         redNodes.Clear();
 
-        for (var index = 0; index < redLines.Count; index++)
-        {
-            DestroyImmediate(redLines[index].gameObject);
-        }
-        redLines.Clear();
-
         var xOffset = 0;
 
         var zOffset = 0;
@@ -48,8 +42,8 @@ public class EnemyStatic : Enemy
         var next2CoordZ = next1CoordZ + zOffset;
         var next2NodeName = string.Format("{0}_{1}", next2CoordX, next2CoordZ);
 
-        RedLineByName(curNodeName, next1NodeName);
-        RedLineByName(next1NodeName, next2NodeName);
+        routeNode1Name = next1NodeName;
+        routeNode2Name = next2NodeName;
 
         RedNodeByName(curNodeName);
         RedNodeByName(next1NodeName);
@@ -58,5 +52,10 @@ public class EnemyStatic : Enemy
 
     public override void OnReachedOriginal()
     {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        m_animator.Play("Player_Idle");
     }
 }

@@ -26,4 +26,9 @@ public class AnimationEvent : MonoBehaviour
     {
         owner.FootR();
     }
+
+    public virtual void PlayerReached()
+    {
+        owner.PlayerReached();
+    }
 }
