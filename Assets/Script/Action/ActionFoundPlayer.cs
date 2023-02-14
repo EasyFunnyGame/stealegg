@@ -6,9 +6,9 @@ public class ActionFoundPlayer : ActionBase
 {
     private float actionDuration = 1;
 
-    public ActionFoundPlayer(Enemy character, ActionType actionType) : base(character, actionType)
+    public ActionFoundPlayer(Enemy character) : base(character, ActionType.FoundPlayer)
     {
-        actionDuration = 1;
+        actionDuration = 0;
         character.m_animator.Play("Enemy_Alert");
     }
 

@@ -14,6 +14,7 @@ public class Character : MonoBehaviour
     public float rotate_speed = 1f;
     public Color col;
     public Transform tr_body;
+    public string lastTileName;
     private GridTile _currentTile;
     public GridTile currentTile
     {
@@ -21,7 +22,7 @@ public class Character : MonoBehaviour
         {
             if(_currentTile)
             {
-                //lastTileName = _currentTile.name;
+                lastTileName = _currentTile.name;
             }
             _currentTile = value;
         }
@@ -282,7 +283,7 @@ public class Character : MonoBehaviour
         });
     }
 
-    public bool CanReach(string tileName)
+    public bool CanReach(string tileName,int step = 1)
     {
         if (gridManager == null) return false;
         var tile = gridManager.GetTileByName(tileName);
@@ -293,7 +294,7 @@ public class Character : MonoBehaviour
             gridManager.find_paths_realtime(this, tile);
             pathLength = tile.db_path_lowest.Count;
             Clear();
-            return pathLength == 1;
+            return pathLength == step;
         }
         return false;
     }

@@ -12,7 +12,6 @@ public class ActionTurnDirection : ActionBase
         targetDirection = direction;
         Utils.SetDirection(character, targetDirection);
     }
-
     public override bool CheckComplete()
     {
         if(character.direction == targetDirection)
@@ -23,17 +22,7 @@ public class ActionTurnDirection : ActionBase
                 var foundPlayer = _enemy.TryFoundPlayer();
                 if (foundPlayer)
                 {
-                    _enemy.currentAction = new ActionFoundPlayer(_enemy, ActionType.FoundPlayer);
-                }
-                var canSeePlayer = Game.Instance.player.CanReach(_enemy.currentTile.name);
-                if (canSeePlayer)
-                {
-                    var targetTile = _enemy.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-                    if (targetTile != null)
-                    {
-                        _enemy.foundPlayerTile = targetTile;
-                        _enemy.hearSoundTile = null;
-                    }
+                    _enemy.currentAction = new ActionFoundPlayer(_enemy);
                 }
             }
             return true;
@@ -42,7 +31,7 @@ public class ActionTurnDirection : ActionBase
     }
     public override void Run()
     {
-        Vector3 tar_dir = character.db_moves[1].position - character.tr_body.position;
+        Vector3 tar_dir = character.db_moves[1].position - character.db_moves[0].position;//  character.tr_body.position;
         Vector3 new_dir = Vector3.RotateTowards(character.tr_body.forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
         new_dir.y = 0;
         character.tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
@@ -50,6 +39,7 @@ public class ActionTurnDirection : ActionBase
         var angle = Vector3.Angle(tar_dir, character.tr_body.forward);
         if(angle < 1)
         {
+            character.transform.forward = tar_dir;
             character.ResetDirection();
             character.body_looking = false;
         }

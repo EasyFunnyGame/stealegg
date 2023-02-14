@@ -4,11 +4,11 @@ public class ActionEnemyMove : ActionBase
 {
     private Vector3 nextStepTilePosition;
 
-    public ActionEnemyMove(Enemy character, GridTile tile) : base(character, ActionType.EnemyMove)
+    public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
-        character.FindPathRealTime(tile);
-        nextStepTilePosition = character.db_moves[0].position;
-        character.StartMove();
+        enemy.FindPathRealTime(tile);
+        nextStepTilePosition = enemy.db_moves[0].position;
+        enemy.StartMove();
     }
 
     public Enemy enemy
@@ -31,19 +31,18 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.foundPlayerTile.name)
                     {
-                        // 到达地点后更新玩家的追踪位置  todo 这里差一个转向
-                        var canSeePlayer = Game.Instance.player.CanReach(character.currentTile.name);
+                        var canSeePlayer = Game.Instance.player.CanReach(enemy.foundPlayerTile.name,2);
                         if (canSeePlayer)
                         {
                             Debug.LogWarning("todo 能够看见主角,直接抓捕");
-                            var playerLastTile = Game.Instance.player.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-                            if (playerLastTile)
+                            var playerTile1 = character.gridManager.GetTileByName(Game.Instance.player.lastTileName);
+                            if (playerTile1)
                             {
-                                var targetDirection = Utils.DirectionTo(character.currentTile, playerLastTile, character.direction);
+                                var targetDirection = Utils.DirectionTo(character.currentTile, playerTile1, character.direction);
                                 if (character.direction == targetDirection)
                                 {
-                                    Game.Instance.FailGame();
                                     character.Reached();
+                                    Game.Instance.FailGame();
                                     return true;
                                 }
                                 else
@@ -80,7 +79,7 @@ public class ActionEnemyMove : ActionBase
                     var foundPlayer = enemy.TryFoundPlayer();
                     if (foundPlayer)
                     {
-                        enemy.currentAction = new ActionFoundPlayer(enemy, ActionType.FoundPlayer);
+                        enemy.currentAction = new ActionFoundPlayer(enemy);
                     }
                     return true;
                 }
@@ -92,37 +91,72 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.hearSoundTile.name)
                     {
-                        enemy.ShowNotFound();
-                        enemy.hearSoundTile = null;
-                        character.Reached();
-                        return true;
+                        if (enemy.needLookToPlayer)// 主角吹口哨的时候能看见主角，到达响声点之后要转向   todo 这个转向 要从玩家寻路到敌人的方向相反
+                        {
+                            //var player = Game.Instance.player;
+                            //player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
+                            //Debug.Log(Game.Instance.player.path);
+
+                            var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+                            if (playerTile != null)
+                            {
+                                character.FindPathRealTime(playerTile);
+                                character.UpdateTargetDirection(character.nextTile);
+                            }
+                            if(character.direction == character.targetDirection)
+                            {
+                                enemy.ShowNotFound();
+                                enemy.hearSoundTile = null;
+                                enemy.needLookToPlayer = false;
+                                character.Reached();
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            var foundPlayer = enemy.TryFoundPlayer();
+                            if(foundPlayer)
+                            {
+                                Debug.Log("找到主角了!!!!!");
+                            }
+                            enemy.ShowNotFound();
+                            enemy.hearSoundTile = null;
+                            enemy.needLookToPlayer = false;
+                            character.Reached();
+                            return true;
+                        }
                     }
                     else
                     {
                         character.Reached();
+                        var catchPlayer = enemy.TryCatchPlayer();
+                        if(catchPlayer)
+                        {
+                            Game.Instance.FailGame();
+                        }
                         return true;
                     }
                 }
             }
-            else if(character.currentTile.name == character.originalCoord.name)
-            {
-                // 回到原点要转向
-                if (character.direction != character.originalDirection)
-                {
-                    // character.originalDirection = Direction.Up;// for test 
-                    Utils.SetDirection(character, character.originalDirection);
-                    return false;
-                }
-                else
-                {
-                    enemy.originalTile = null;
-                    enemy.OnReachedOriginal();
-                    character.Reached();
-                    return true;
-                }
-            }
             else if(enemy.originalTile!=null)
             {
+                if (character.currentTile.name == character.originalCoord.name)
+                {
+                    // 回到原点要转向
+                    if (character.direction != character.originalDirection)
+                    {
+                        // character.originalDirection = Direction.Up;// for test 
+                        Utils.SetDirection(character, character.originalDirection);
+                        return false;
+                    }
+                    else
+                    {
+                        enemy.originalTile = null;
+                        enemy.OnReachedOriginal();
+                        character.Reached();
+                        return true;
+                    }
+                }
                 character.UpdateTargetDirection(character.nextTile);
                 if (character.direction == character.targetDirection)
                 {
@@ -181,12 +215,22 @@ public class ActionEnemyMove : ActionBase
                                 enemy.ShowNotFound();
                                 enemy.foundPlayerTile = null;
                                 enemy.m_animator.Play("Player_Idle");
+                                enemy.Reached();
                             }
                         }
                         Debug.Log("追踪转向完毕");
                     }
                     if (enemy.hearSoundTile != null)
                     {
+                        var foundPlayer = enemy.TryFoundPlayer();
+                        if (!foundPlayer)
+                        {
+                            enemy.ShowNotFound();
+                            enemy.hearSoundTile = null;
+                            enemy.needLookToPlayer = false;
+                            enemy.m_animator.Play("Player_Idle");
+                            enemy.Reached();
+                        }
                         Debug.Log("巡声转向完毕");
                     }
                 }

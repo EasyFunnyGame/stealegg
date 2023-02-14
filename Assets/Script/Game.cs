@@ -14,7 +14,6 @@ public enum GameResult
 public class Game : MonoBehaviour
 {
     public static Game Instance { get; private set; }
-
     public MainCanvas mainCanvas;
     public MsgCanvas msgCanvas;
     public GameCanvas gameCanvas;
@@ -187,6 +186,8 @@ public class Game : MonoBehaviour
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
                     var enemy = boardManager.enemies[i];
+                    // enemy.PlayerWalkIntoSight();
+                    // enemy.TryFoundPlayer();
                     enemy.CheckAction();
                 }
             }
@@ -224,6 +225,14 @@ public class Game : MonoBehaviour
         {
             gameCanvas.DisableBottle();
             gameCanvas.DisableWhistle();
+        }
+        else
+        {
+            if (!player.moving)
+            {
+                player.CheckBottle();
+                player.CheckWhistle();
+            }
         }
     }
 

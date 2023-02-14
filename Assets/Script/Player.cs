@@ -15,8 +15,6 @@ public class Player : Character
     override public void Reached()
     {
         base.Reached();
-        CheckWhistle();
-        CheckBottle();
         boardManager.PickItem(currentTile.name,this);
         m_animator.CrossFade("Player_Idle",0.1f);
         ShowReached(); 
@@ -27,9 +25,6 @@ public class Player : Character
     {
         base.StartMove();
         m_animator.CrossFade("Player_Sprint", 0.1f);
-
-        Game.Instance.gameCanvas.DisableWhistle();
-        Game.Instance.gameCanvas.DisableBottle();
         //Debug.Log(string.Format("{0}开始行走{1}", gameObject.name, tar_tile_s.name));
     }
 
