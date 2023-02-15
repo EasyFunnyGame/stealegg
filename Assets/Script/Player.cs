@@ -3,7 +3,9 @@ public class Player : Character
 {
     public int bottleCount;
 
-    public Animator playerMove;
+    public Animator playerMovePlay;
+
+    public Animator whitslePlay;
 
     // Start is called before the first frame update
     public override void Start()
@@ -77,14 +79,26 @@ public class Player : Character
 
     public void ShowReached()
     {
-        playerMove.gameObject.SetActive(true);
-        playerMove.Play("Movement_Animation_01");
+        playerMovePlay.gameObject.SetActive(true);
+        playerMovePlay.Play("Movement_Animation_01");
     }
 
     public override void PlayerReached()
     {
         base.PlayerReached();
-        playerMove.gameObject.SetActive(false);
+        playerMovePlay.gameObject.SetActive(false);
+    }
+
+    public void PlayWhitsle()
+    {
+        whitslePlay.gameObject.SetActive(true);
+        whitslePlay.Play("Movement_Animation");
+    }
+
+    public override void PlayerWhitsleEnd()
+    {
+        base.PlayerWhitsleEnd();
+        whitslePlay.gameObject.SetActive(false);
     }
 
 }

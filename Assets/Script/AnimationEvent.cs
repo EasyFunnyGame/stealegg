@@ -31,4 +31,9 @@ public class AnimationEvent : MonoBehaviour
     {
         owner.PlayerReached();
     }
+
+    public virtual void PlayerWhitsleEnd()
+    {
+        owner.PlayerWhitsleEnd();
+    }
 }

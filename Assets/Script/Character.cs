@@ -316,5 +316,10 @@ public class Character : MonoBehaviour
 
     }
 
+    public virtual void PlayerWhitsleEnd()
+    {
+
+    }
+
     #endregion
 }

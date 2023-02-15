@@ -269,10 +269,11 @@ public class Enemy : Character
 
     public virtual bool TryCatchPlayer()
     {
-        if( foundPlayerTile == null )
-        {
-            return false;
-        }
+        //if( foundPlayerTile == null )
+        //{
+        //    Debug.Log("未发现敌人直接忽略抓捕!!!!!!!!!!!!!!!!!!!!!!!!");
+        //    return false;
+        //}
         if (Game.Instance.player == null || Game.Instance.player.currentTile == null) return false;
         var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
         var targetDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);

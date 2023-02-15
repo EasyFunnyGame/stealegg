@@ -310,6 +310,7 @@ public class Game : MonoBehaviour
             }
         }
         player.currentAction = null;
+        player.PlayWhitsle();
     }
 
     public void UseBottle()
