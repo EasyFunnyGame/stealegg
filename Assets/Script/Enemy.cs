@@ -49,7 +49,7 @@ public class Enemy : Character
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
 
-    public bool needLookToPlayer = false;
+    public bool sawPlayer = false;
 
     public override void Start()
     {
@@ -81,7 +81,7 @@ public class Enemy : Character
             var canSeePlayer = Game.Instance.player.CanReach(currentTile.name);
             if (canSeePlayer)
             {
-                needLookToPlayer = true;
+                sawPlayer = true;
                 hearSoundTile = targetTile;
                 ShowTraceTarget(targetTile);
                 currentAction = new ActionTurnDirection(this, Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction));
@@ -93,7 +93,7 @@ public class Enemy : Character
                 currentAction = new ActionEnemyMove(this, foundPlayerTile);
                 return;
             }
-            else if (!needLookToPlayer)
+            else if (!sawPlayer)
             {
                 ShowFound();
                 hearSoundTile = targetTile;
@@ -106,7 +106,7 @@ public class Enemy : Character
                     currentAction = new ActionTurnDirection(this, targetDirection);
                 }
             }
-            else if(needLookToPlayer)
+            else if(sawPlayer)
             {
                 currentAction = new ActionEnemyMove(this, hearSoundTile);
             }
@@ -309,7 +309,6 @@ public class Enemy : Character
                 ShowTraceTarget(targetTile);
                 ShowFound();
                 hearSoundTile = null;
-                needLookToPlayer = false;
                 originalTile = null;
                 Debug.Log("主角闯进视野:" + targetTile.name);
                 return true;
@@ -395,9 +394,9 @@ public class Enemy : Character
                 foundPlayerTile = targetTile;
                 ShowTraceTarget(targetTile);
                 ShowFound();
-                needLookToPlayer= false;
                 originalTile = null;
                 Debug.Log("开始追踪:" + targetTile.name);
+                sawPlayer = true;
                 return true;
             }
         }

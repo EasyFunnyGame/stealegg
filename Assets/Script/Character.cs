@@ -294,7 +294,7 @@ public class Character : MonoBehaviour
             gridManager.find_paths_realtime(this, tile);
             pathLength = tile.db_path_lowest.Count;
             Clear();
-            return pathLength == step;
+            return pathLength <= step;
         }
         return false;
     }

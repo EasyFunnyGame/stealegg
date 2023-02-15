@@ -31,14 +31,26 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.foundPlayerTile.name)
                     {
-                        var canSeePlayer = Game.Instance.player.CanReach(enemy.foundPlayerTile.name,2);
-                        if (canSeePlayer)
+                        if ( enemy.sawPlayer)
                         {
-                            Debug.LogWarning("todo 能够看见主角,直接抓捕");
-                            var playerTile1 = character.gridManager.GetTileByName(Game.Instance.player.lastTileName);
-                            if (playerTile1)
+                            // Debug.LogWarning("todo 能够看见主角,直接抓捕");
+                            var player = Game.Instance.player;
+                            player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
+                            var path = player.path;
+                            var nextTileName = "";
+                            if (path.Count > 1)
                             {
-                                var targetDirection = Utils.DirectionTo(character.currentTile, playerTile1, character.direction);
+                                nextTileName = path[0].name;
+                            }
+                            else
+                            {
+                                nextTileName = player.currentTile.name;
+                            }
+
+                            var lookToTile = character.gridManager.GetTileByName(nextTileName);
+                            if (lookToTile)
+                            {
+                                var targetDirection = Utils.DirectionTo(character.currentTile, lookToTile, character.direction);
                                 if (character.direction == targetDirection)
                                 {
                                     character.Reached();
@@ -52,22 +64,25 @@ public class ActionEnemyMove : ActionBase
                                 }
                             }
                         }
-
-                        var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-                        if (playerTile != null)
+                        else
                         {
-                            Debug.Log("更新追踪:" + playerTile.name);
-                            //enemy.foundPlayerTile = playerTile;
-                            character.FindPathRealTime(playerTile);
-                            character.UpdateTargetDirection(character.nextTile);
-                            //character.ResetMoves();
-                            if (character.direction == character.targetDirection)
+                            var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+                            if (playerTile != null)
                             {
-                                character.Reached();
-                                enemy.foundPlayerTile = null;
-                                enemy.ShowNotFound();
-                                // todo 显示问号，取消敌人  准备返回  取消追踪目标显示
-                                return true;
+                                // Debug.Log("更新追踪:" + playerTile.name);
+                                //enemy.foundPlayerTile = playerTile;
+                                character.FindPathRealTime(playerTile);
+                                character.UpdateTargetDirection(character.nextTile);
+                                //character.ResetMoves();
+                                if (character.direction == character.targetDirection)
+                                {
+                                    character.Reached();
+                                    enemy.foundPlayerTile = null;
+                                    enemy.ShowNotFound();
+                                    enemy.sawPlayer = false;
+                                    // todo 显示问号，取消敌人  准备返回  取消追踪目标显示
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -91,12 +106,8 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.hearSoundTile.name)
                     {
-                        if (enemy.needLookToPlayer)// 主角吹口哨的时候能看见主角，到达响声点之后要转向   todo 这个转向 要从玩家寻路到敌人的方向相反
+                        if (enemy.sawPlayer)// 主角吹口哨的时候能看见主角，到达响声点之后要转向   todo 这个转向 要从玩家寻路到敌人的方向相反
                         {
-                            //var player = Game.Instance.player;
-                            //player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
-                            //Debug.Log(Game.Instance.player.path);
-
                             var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
                             if (playerTile != null)
                             {
@@ -106,8 +117,8 @@ public class ActionEnemyMove : ActionBase
                             if(character.direction == character.targetDirection)
                             {
                                 enemy.ShowNotFound();
+                                enemy.sawPlayer = false;
                                 enemy.hearSoundTile = null;
-                                enemy.needLookToPlayer = false;
                                 character.Reached();
                                 return true;
                             }
@@ -115,13 +126,12 @@ public class ActionEnemyMove : ActionBase
                         else
                         {
                             var foundPlayer = enemy.TryFoundPlayer();
-                            if(foundPlayer)
+                            if(!foundPlayer)
                             {
-                                Debug.Log("找到主角了!!!!!");
+                                enemy.ShowNotFound();
+                                enemy.hearSoundTile = null;
+                                enemy.sawPlayer = false;
                             }
-                            enemy.ShowNotFound();
-                            enemy.hearSoundTile = null;
-                            enemy.needLookToPlayer = false;
                             character.Reached();
                             return true;
                         }
@@ -214,11 +224,12 @@ public class ActionEnemyMove : ActionBase
                             {
                                 enemy.ShowNotFound();
                                 enemy.foundPlayerTile = null;
+                                enemy.sawPlayer = false;
                                 enemy.m_animator.Play("Player_Idle");
                                 enemy.Reached();
                             }
                         }
-                        Debug.Log("追踪转向完毕");
+                        //Debug.Log("追踪转向完毕");
                     }
                     if (enemy.hearSoundTile != null)
                     {
@@ -226,12 +237,12 @@ public class ActionEnemyMove : ActionBase
                         if (!foundPlayer)
                         {
                             enemy.ShowNotFound();
+                            enemy.sawPlayer = false;
                             enemy.hearSoundTile = null;
-                            enemy.needLookToPlayer = false;
                             enemy.m_animator.Play("Player_Idle");
                             enemy.Reached();
                         }
-                        Debug.Log("巡声转向完毕");
+                        //Debug.Log("巡声转向完毕");
                     }
                 }
                 //else
