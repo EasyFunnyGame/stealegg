@@ -68,6 +68,11 @@ public class Enemy : Character
 
     public void Alert(string tileName)
     {
+        var catchPlayer = TryCatchPlayer();
+        if(catchPlayer)
+        {
+            return;
+        }
         var targetTile = gridManager.GetTileByName(tileName); 
         if(targetTile!=null)
         {

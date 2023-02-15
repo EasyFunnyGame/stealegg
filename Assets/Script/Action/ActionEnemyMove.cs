@@ -143,6 +143,7 @@ public class ActionEnemyMove : ActionBase
                         if(catchPlayer)
                         {
                             Game.Instance.FailGame();
+
                         }
                         return true;
                     }
