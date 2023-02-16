@@ -108,7 +108,17 @@ public class GameCanvas : BaseCanvas
 
     void onClickGraffHandler()
     {
-        Debug.Log("检查是否画画");
+        var tileName = Game.Instance.player.currentTile.name;
+        var allItems = Game.Instance.boardManager.allItems;
+        
+        if(allItems.ContainsKey(tileName))
+        {
+            var graffItem = allItems[tileName];
+            if (graffItem!=null)
+            {
+                Debug.Log("检查是否画画");
+            }
+        }
     }
 
     void onClickStartPlayingGameHandler()

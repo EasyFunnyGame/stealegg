@@ -75,10 +75,10 @@ public class Item : MonoBehaviour
     }
 
 
-    public void Picked(Player player)
+    public bool Picked(Player player)
     {
         Debug.Log(string.Format("拾取道具:{0}",gameObject.name));
-
+        var delete = false;
         switch(itemType)
         {
             case ItemType.Star:
@@ -87,12 +87,14 @@ public class Item : MonoBehaviour
                 gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
                 Game.Instance.energy += 5;
+                delete = true;
                 break;
 
             case ItemType.LureBottle:
                 picked = true;
                 gameObject.SetActive(false);
                 player.bottleCount++;
+                delete = true;
                 break;
 
             case ItemType.Pincers:
@@ -105,7 +107,7 @@ public class Item : MonoBehaviour
                 Game.Instance.graffable = true;
                 break;
         }
-       
+        return delete;
     }
 
     public void HideDebugSphere()

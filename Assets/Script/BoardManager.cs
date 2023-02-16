@@ -155,8 +155,10 @@ public class BoardManager : MonoBehaviour
         var item = allItems.ContainsKey(name) ? allItems[name] : null;
         if (item)
         {
-            allItems.Remove(name);
-            item.Picked(player);
+            if (item.Picked(player))
+            {
+                allItems.Remove(name);
+            }
         }
     }
 
