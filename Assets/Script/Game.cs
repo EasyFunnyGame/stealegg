@@ -244,17 +244,7 @@ public class Game : MonoBehaviour
             Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
-            if(graffable && Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Item")))
-            {
-                Debug.Log("开始画画");
-                //graffing = true;
-                //var graffCameraTransform = GameObject.Find("GraffCamera");
-                //if(graffCameraTransform != null)
-                //{
-                //    gCamera.SetGraffTarget(graffCameraTransform.transform);
-                //}
-            }
-            else if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
+            if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
             {
                 var node = hitInfo.transform.parent.parent;
                 if (node == null)

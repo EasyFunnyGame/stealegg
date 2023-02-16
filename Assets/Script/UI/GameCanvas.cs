@@ -30,6 +30,8 @@ public class GameCanvas : BaseCanvas
 
     public Button btn_pause;
 
+    public Button btn_graff;
+
     public GameObject home;
 
     public GameObject playing;
@@ -86,6 +88,8 @@ public class GameCanvas : BaseCanvas
 
         btn_start.onClick.AddListener(onClickStartPlayingGameHandler);
 
+        btn_graff.onClick.AddListener(onClickGraffHandler);
+
         icon_graff.gameObject.SetActive(false);
 
         icon_star.gameObject.SetActive(false);
@@ -99,6 +103,12 @@ public class GameCanvas : BaseCanvas
         icon_template_growth_template.gameObject.SetActive(false);
 
         icon_enemy_template.gameObject.SetActive(false);
+    }
+
+
+    void onClickGraffHandler()
+    {
+        Debug.Log("检查是否画画");
     }
 
     void onClickStartPlayingGameHandler()
