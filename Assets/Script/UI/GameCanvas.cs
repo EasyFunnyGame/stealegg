@@ -114,9 +114,11 @@ public class GameCanvas : BaseCanvas
         if(allItems.ContainsKey(tileName))
         {
             var graffItem = allItems[tileName];
-            if (graffItem!=null)
+            if (graffItem!=null && graffItem.itemType == ItemType.Graff)
             {
-                Debug.Log("检查是否画画");
+                Game.Instance.gameCanvas.Hide();
+                Game.Instance.camera.gameObject.SetActive(false);
+                Game.Instance.graffCanvas.Show();
             }
         }
     }

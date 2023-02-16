@@ -142,7 +142,12 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playing )
+        if (graffCanvas.gameObject.activeSelf)
+        {
+            return;
+        }
+
+        if (playing)
         {
             GamePlayingUpdate();
         }

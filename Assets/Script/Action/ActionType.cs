@@ -10,4 +10,6 @@ public enum ActionType
    EnemyMove,
 
    TurnDirection,
+
+   Graff,
 }

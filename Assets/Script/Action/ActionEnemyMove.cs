@@ -54,7 +54,17 @@ public class ActionEnemyMove : ActionBase
                                 if (character.direction == targetDirection)
                                 {
                                     character.Reached();
-                                    Game.Instance.FailGame();
+                                    if (enemy.TryCatchPlayer())
+                                    {
+                                        Game.Instance.FailGame();
+                                    }
+                                    else
+                                    {
+                                        enemy.foundPlayerTile = null;
+                                        enemy.hearSoundTile = null;
+                                        enemy.ShowNotFound();
+                                        enemy.sawPlayer = false;
+                                    }
                                     return true;
                                 }
                                 else
@@ -78,6 +88,7 @@ public class ActionEnemyMove : ActionBase
                                 {
                                     character.Reached();
                                     enemy.foundPlayerTile = null;
+                                    enemy.hearSoundTile = null;
                                     enemy.ShowNotFound();
                                     enemy.sawPlayer = false;
                                     // todo 显示问号，取消敌人  准备返回  取消追踪目标显示
@@ -118,6 +129,7 @@ public class ActionEnemyMove : ActionBase
                             {
                                 enemy.ShowNotFound();
                                 enemy.sawPlayer = false;
+                                enemy.foundPlayerTile = null;
                                 enemy.hearSoundTile = null;
                                 character.Reached();
                                 return true;
@@ -129,6 +141,7 @@ public class ActionEnemyMove : ActionBase
                             if(!foundPlayer)
                             {
                                 enemy.ShowNotFound();
+                                enemy.foundPlayerTile = null;
                                 enemy.hearSoundTile = null;
                                 enemy.sawPlayer = false;
                             }
@@ -143,7 +156,6 @@ public class ActionEnemyMove : ActionBase
                         if(catchPlayer)
                         {
                             Game.Instance.FailGame();
-
                         }
                         return true;
                     }
@@ -225,6 +237,7 @@ public class ActionEnemyMove : ActionBase
                             {
                                 enemy.ShowNotFound();
                                 enemy.foundPlayerTile = null;
+                                enemy.hearSoundTile = null;
                                 enemy.sawPlayer = false;
                                 enemy.m_animator.Play("Player_Idle");
                                 enemy.Reached();
@@ -239,6 +252,7 @@ public class ActionEnemyMove : ActionBase
                         {
                             enemy.ShowNotFound();
                             enemy.sawPlayer = false;
+                            enemy.foundPlayerTile = null;
                             enemy.hearSoundTile = null;
                             enemy.m_animator.Play("Player_Idle");
                             enemy.Reached();

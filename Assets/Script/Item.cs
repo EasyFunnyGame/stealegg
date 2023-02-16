@@ -112,14 +112,14 @@ public class Item : MonoBehaviour
 
     public void HideDebugSphere()
     {
-     
         if(debug_sphere)
         {
             debug_sphere.SetActive(false);
         }
     }
 
-    public float MoveSmoothTime = 0.05f;
+    public float MoveSmoothTime = 0.2f;
+    public Vector3 velocity = new Vector3();
     // Update is called once per frame
     void Update()
     {
@@ -127,7 +127,7 @@ public class Item : MonoBehaviour
         {
             return;
         }
-        Vector3 velocity = Vector3.zero;
+        
         if (upper)
         {
             iconPosition.position = Vector3.SmoothDamp(iconPosition.position, transform.position + upperPosition, ref velocity, MoveSmoothTime);
@@ -142,12 +142,14 @@ public class Item : MonoBehaviour
     {
         //if (other.gameObject.GetComponent<Character>())
             upper = true;
+        velocity = Vector3.zero;
     }
 
     private void OnTriggerExit(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())
-            upper = false;        
+            upper = false;
+        velocity = Vector3.zero;
     }
     
     public Vector3 GetIconPosition()
