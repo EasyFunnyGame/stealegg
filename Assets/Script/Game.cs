@@ -187,7 +187,6 @@ public class Game : MonoBehaviour
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
                     var enemy = boardManager.enemies[i];
-                    enemy.PlayerWalkIntoSight();
                     enemy.CheckAction();
                 }
             }
@@ -315,15 +314,12 @@ public class Game : MonoBehaviour
                 var node = hitInfo.transform.parent.parent;
                 var nodePosition = node.transform.position;
 
-                var tileIndex = Mathf.RoundToInt(nodePosition.x * player.gridManager.v2_grid.y + nodePosition.z);
-
-                // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
-                GridTile tile = player.gridManager.db_tiles[tileIndex];
+                var tile = player.gridManager.GetTileByName(node.name);
 
                 for ( var i = 0; i < boardManager.enemies.Count;  i++ )
                 {
                     var enemy = boardManager.enemies[i];
-                    if(enemy.coord.name == tile.name)
+                    if(enemy.coord.name == node.name)
                     {
                         return;
                     }
@@ -331,7 +327,7 @@ public class Game : MonoBehaviour
 
                 if (player.moving || player.currentTile != tile)
                 {
-                    player.currentAction = new ActionPlayerMove(player, ActionType.PlayerMove, tile);
+                    player.currentAction = new ActionPlayerMove(player, tile);
                     Debug.Log("主角行为====移动");
                 }
             }

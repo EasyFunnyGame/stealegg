@@ -16,10 +16,12 @@ public class ActionThrowBottle : ActionBase
 
     public string targetTileName;
 
+    public Vector3 _targetPositon;
+
     public ActionThrowBottle(Player player, string targetTile, Vector3 targetPosition) : base(player, ActionType.ThrowBottle)
     {
         player.m_animator.SetBool("bottle_select", false);
-
+        _targetPositon = targetPosition;
         targetTileName = targetTile;
         bottle = player.bottle.transform;
         bottleParent = bottle.transform.parent;
@@ -54,6 +56,11 @@ public class ActionThrowBottle : ActionBase
     {
         if (segmentIndex > linePointList.Length - 2)
         {
+            bottle.parent = bottleParent;
+            bottle.localPosition = bottleStartPosition;
+            bottle.localRotation = bottleStartRotation;
+            bottle.gameObject.SetActive(false);
+            player.PlayBottleEffect(_targetPositon);
             Game.Instance.BottleThorwed(targetTileName);
             return true;
         }

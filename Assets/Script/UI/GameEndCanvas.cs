@@ -52,7 +52,7 @@ public class GameEndCanvas : BaseCanvas
     private void onClickReplayThisLevelHandler()
     {
         Game.Instance.endCanvas.Hide();
-        SceneManager.LoadScene("1-1");
+        SceneManager.LoadScene(Game.Instance.currentLevelName);
     }
 
     private void onClickShareHandler()

@@ -7,6 +7,8 @@ public class Player : Character
 
     public Animator whitslePlay;
 
+    public Animator bottlePlay;
+
     public string startTileName;
 
     public GameObject bottle;
@@ -38,6 +40,7 @@ public class Player : Character
         Reached();
         whitslePlay.gameObject.SetActive(false);
         playerMovePlay.gameObject.SetActive(false);
+        bottlePlay.gameObject.SetActive(false);
         bottle.gameObject.SetActive(false);
         startTileName = coord.name;
     }
@@ -117,11 +120,27 @@ public class Player : Character
         playerMovePlay.gameObject.SetActive(false);
     }
 
+    public void PlayStealEffect()
+    {
+        bottlePlay.gameObject.SetActive(false);
+        bottlePlay.gameObject.SetActive(true);
+        bottlePlay.transform.localPosition = new Vector3(0,0,0);
+    }
+
+    public void PlayBottleEffect(Vector3 position)
+    {
+        bottlePlay.gameObject.SetActive(false);
+        bottlePlay.gameObject.SetActive(true);
+        bottlePlay.transform.position = position;
+    }
+
+
     public void PlayWhitsle()
     {
         PlayeWhitsleEffect();
         m_animator.SetTrigger("whistle");
     }
+
 
     public void PlayeWhitsleEffect()
     {

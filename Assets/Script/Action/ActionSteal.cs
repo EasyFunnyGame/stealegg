@@ -6,7 +6,7 @@ public class ActionSteal : ActionBase
     public ActionSteal(Player player) : base(player, ActionType.Steal)
     {
         player.m_animator.SetTrigger("graff");
-        player.PlayeWhitsleEffect();
+        player.PlayStealEffect();
     }
 
     private Player player
@@ -24,13 +24,19 @@ public class ActionSteal : ActionBase
         {
             var boardManager = Game.Instance.boardManager;
             var playerTileName = player.currentTile.name;
-            for (var index = 0; index < boardManager.enemies.Count; index++)
+
+            var targetArray = playerTileName.Split('_');
+            var x = int.Parse(targetArray[0]);
+            var z = int.Parse(targetArray[1]);
+            
+            foreach (var enemy in boardManager.enemies)
             {
-                var enemy = boardManager.enemies[index];
-                var targetTile = enemy.gridManager.GetTileByName(playerTileName);
-                if (targetTile)
+                var coord = enemy.coord;
+                var distanceFromX = Mathf.Abs(x - coord.x);
+                var distanceFromZ = Mathf.Abs(z - coord.z);
+                if (distanceFromX <= 2 && distanceFromZ <= 2)
                 {
-                    enemy.LureSteal(player.currentTile.name);
+                    enemy.LureSteal(playerTileName);
                 }
             }
             return true;

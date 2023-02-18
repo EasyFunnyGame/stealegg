@@ -2,7 +2,7 @@
 
 public class ActionPlayerMove : ActionBase
 {
-    public ActionPlayerMove(Character character, ActionType actionType, GridTile tile) : base(character, actionType)
+    public ActionPlayerMove(Character character, GridTile tile) : base(character, ActionType.PlayerMove)
     {
         character.FindPathRealTime(tile);
     }

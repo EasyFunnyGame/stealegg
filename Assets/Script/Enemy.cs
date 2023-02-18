@@ -81,7 +81,8 @@ public class Enemy : Character
                 }
                 else
                 {
-                    currentAction = new ActionEnemyMove(this, hearSoundTile);
+                    currentAction = new ActionTurnDirection(this, targetDirection);
+                    //currentAction = new ActionEnemyMove(this, hearSoundTile);
                 }
                 return;
             }
@@ -335,36 +336,38 @@ public class Enemy : Character
         var next1NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
 
         var foundPlayer = false;
-        var canReach = false;
+        //var canReach = false;
         
         var player = Game.Instance.player;
-       
+
+        var foundPlayerNode = "";
+
+        LinkLine linkLine;
         // 情况1
         if (foundPlayer == false)
         {
-            canReach = CanReachInSteps(next1NodeName);
-            if (canReach && Game.Instance.player.currentTile.name == next1NodeName)
+            linkLine = boardManager.FindLine(currentTile.name, next1NodeName);
+            if (linkLine && Game.Instance.player.currentTile.name == next1NodeName)
             {
                 foundPlayer = true;
+                foundPlayerNode = next1NodeName;
             }
         }
         
         // 情况2
-        if ( foundPlayer == false )
+        foundNodeX += xOffset;
+        foundNodeZ += zOffset;
+        var next2NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+        linkLine = boardManager.FindLine(next1NodeName, next2NodeName);
+        if (linkLine && Game.Instance.player.currentTile.name == next2NodeName)
         {
-            foundNodeX += xOffset;
-            foundNodeZ += zOffset;
-            next1NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
-            canReach = CanReachInSteps(next1NodeName,2);
-            if (canReach && Game.Instance.player.currentTile.name == next1NodeName)
-            {
-                foundPlayer = true;
-            }
+            foundPlayer = true;
+            foundPlayerNode = next2NodeName;
         }
 
         if (foundPlayer)
         {
-            var targetTile = gridManager.GetTileByName(next1NodeName);
+            var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
                 foundPlayerTile = targetTile;
