@@ -92,8 +92,7 @@ public class ActionEnemyMove : ActionBase
                         }
                     }
                     character.Reached();
-                    var foundPlayer = enemy.TryFoundPlayer();
-                    if (foundPlayer)
+                    if (enemy.TryFoundPlayer())
                     {
                         enemy.currentAction = new ActionFoundPlayer(enemy);
                     }

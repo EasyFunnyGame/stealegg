@@ -15,7 +15,7 @@ public class Character : MonoBehaviour
     public Color col;
     public Transform tr_body;
     public string lastTileName;
-    private GridTile _currentTile;
+    public GridTile _currentTile;
     public GridTile currentTile
     {
         set

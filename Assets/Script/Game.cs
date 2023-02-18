@@ -49,7 +49,7 @@ public class Game : MonoBehaviour
 
     public bool bottleSelectingTarget = false;
 
-    public static int MAX_LEVEL = 2;
+    public static int MAX_LEVEL = 4;
 
     private void Awake()
     {
@@ -187,6 +187,7 @@ public class Game : MonoBehaviour
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
                     var enemy = boardManager.enemies[i];
+                    enemy.PlayerWalkIntoSight();
                     enemy.CheckAction();
                 }
             }
@@ -421,9 +422,20 @@ public class Game : MonoBehaviour
 
     public void BottleThorwed(string targetTile)
     {
+        var targetArray = targetTile.Split('_');
+        var x = int.Parse(targetArray[0]);
+        var z = int.Parse(targetArray[1]);
+
         foreach (var enemy in boardManager.enemies)
         {
-            enemy.LureBottle(targetTile);
+            var coord = enemy.coord;
+            var distanceFromX = Mathf.Abs(x - coord.x);
+            var distanceFromZ = Mathf.Abs(z - coord.z);
+            if (distanceFromX <= 2 && distanceFromZ <= 2)
+            {
+                enemy.LureBottle(targetTile);
+            }
+            
         }
         bottleSelectingTarget = false;
     }
