@@ -47,14 +47,12 @@ public class Game : MonoBehaviour
 
     public bool graffed = false;
 
+    public bool bottleSelectingTarget = false;
 
-    public int MAX_LEVEL = 2;
+    public static int MAX_LEVEL = 2;
 
     private void Awake()
     {
-
-        //PlayerPrefs.DeleteAll();
-
         Instance = this;
         DontDestroyOnLoad(this);
 
@@ -106,6 +104,7 @@ public class Game : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Player>();
         player.bottleCount = 0;
         delayShowEndTimer = 0;
+        bottleSelectingTarget = false;
         gameCanvas.Show();
         gameCanvas.InitWithBoardManager(boardMgr);
         cameraSettingCanvas.InitWithGameCamera(camera, player);
@@ -131,6 +130,11 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(bottleSelectingTarget)
+        {
+            ListenBottleTargetSelect();
+            return;
+        }
         if (graffCanvas.gameObject.activeSelf)
         {
             return;
@@ -170,7 +174,10 @@ public class Game : MonoBehaviour
     {
         enemyActionRunning = false;
         if (player == null) return;
-        if(player.currentAction != null)
+
+        var beFound = false;
+
+        if (player.currentAction != null)
         {
             if (player.currentAction.CheckComplete())
             {
@@ -193,6 +200,10 @@ public class Game : MonoBehaviour
             for(var i = 0; i < boardManager.enemies.Count; i++)
             {
                 var enemy = boardManager.enemies[i];
+                if(!beFound && (enemy.foundPlayerTile != null || enemy.hearSoundTile != null))
+                {
+                    beFound = true;
+                }
                 if(enemy.currentAction!=null)
                 {
                     var complete = enemy.currentAction.CheckComplete();
@@ -207,6 +218,25 @@ public class Game : MonoBehaviour
                     }
                 }
             }
+        }
+        var player_idle_type = player.m_animator.GetFloat("idle_type");
+        if(beFound)
+        {
+            player_idle_type += .1f;
+            if(player_idle_type>=1)
+            {
+                player_idle_type = 1;
+            }
+            player.m_animator.SetFloat("idle_type", player_idle_type);
+        }
+        else
+        {
+            player_idle_type -= .1f;
+            if (player_idle_type <= 0)
+            {
+                player_idle_type = 0;
+            }
+            player.m_animator.SetFloat("idle_type", player_idle_type);
         }
 
         if(player.currentAction == null && !enemyActionRunning)
@@ -228,6 +258,49 @@ public class Game : MonoBehaviour
         }
     }
 
+    void ListenBottleTargetSelect()
+    {
+        if (pausing) return;
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
+            {
+                var node = hitInfo.transform.parent.parent;
+                if (bottleSelectable.IndexOf(node.name)==-1)
+                {
+                    return;
+                }
+                var nodePosition = node.transform.position;
+
+                var tileIndex = Mathf.RoundToInt(nodePosition.x * player.gridManager.v2_grid.y + nodePosition.z);
+
+                // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
+                GridTile tile = player.gridManager.db_tiles[tileIndex];
+
+                for (var i = 0; i < boardManager.enemies.Count; i++)
+                {
+                    var enemy = boardManager.enemies[i];
+                    if (enemy.coord.name == tile.name)
+                    {
+                        return;
+                    }
+                }
+
+                if (player.moving || player.currentTile != tile)
+                {
+                    player.currentAction = new ActionThrowBottle(player, node.gameObject.name, tile.transform.position);
+                    boardManager.HideAllSuqreContour();
+                    bottleSelectingTarget = false;
+                    player.CheckBottle();
+                    Debug.Log("扔瓶子:"+ node.name);
+                }
+            }
+        }
+    }
+
     void ListenClick()
     {
         if (pausing) return;
@@ -239,20 +312,9 @@ public class Game : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
             {
                 var node = hitInfo.transform.parent.parent;
-                if (node == null)
-                {
-                    Debug.Log("鼠标按下Error 1");
-                    return;
-                }
-                var nodeScript = node.GetComponent<BoardNode>();
-                if (nodeScript == null)
-                {
-                    Debug.Log("鼠标按下Error 2");
-                    return;
-                }
-                var coord = nodeScript.coord;
+                var nodePosition = node.transform.position;
 
-                var tileIndex = coord.x * boardManager.height + coord.z;
+                var tileIndex = Mathf.RoundToInt(nodePosition.x * player.gridManager.v2_grid.y + nodePosition.z);
 
                 // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
                 GridTile tile = player.gridManager.db_tiles[tileIndex];
@@ -310,12 +372,68 @@ public class Game : MonoBehaviour
         }
     }
 
+    List<string> bottleSelectable = new List<string>();
+    public void BottleSelectTarget()
+    {
+        player.bottle.gameObject.SetActive(true);
+        bottleSelectable.Clear();
+        bottleSelectingTarget = true;
+        player.m_animator.SetBool("bottle_select", true);
+        var nodes = boardManager.FindNodesAround(player.currentTile.name,3);
+        foreach(var kvp in nodes)
+        {
+            var nodeName = kvp.Key;
+            var nodeGo = kvp.Value;
+            var node = nodeGo.GetComponent<BoardNode>();
+            
+            var selectable = true;
+            foreach(var enemy in boardManager.enemies)
+            {
+                if(enemy.coord.name == nodeName)
+                {
+                    selectable = false;
+                    continue;
+                }
+            }
+            if(player.startTileName == nodeName)
+            {
+                selectable = false;
+            }
+            if(player.currentTile.name == nodeName)
+            {
+                selectable = false;
+            }
+            node.contour.gameObject.SetActive(selectable);
+            if(selectable)
+            {
+                bottleSelectable.Add(nodeName);
+            }
+        }
+    }
+
+    public void CancelBottleSelectTarget()
+    {
+        boardManager.HideAllSuqreContour();
+        player.m_animator.SetBool("bottle_cancel", true);
+        player.bottle.gameObject.SetActive(false);
+        bottleSelectingTarget = false;
+    }
+
+    public void BottleThorwed(string targetTile)
+    {
+        foreach (var enemy in boardManager.enemies)
+        {
+            enemy.LureBottle(targetTile);
+        }
+        bottleSelectingTarget = false;
+    }
+
     public void ReachEnd()
     {
         if(graffed)
         {
             var level = PlayerPrefs.GetInt("Level");
-            if(playingLevel >= level)
+            if (playingLevel >= level)
             {
                 level = playingLevel;
                 PlayerPrefs.SetInt("Level", playingLevel + 1);
@@ -324,6 +442,4 @@ public class Game : MonoBehaviour
             Save();
         }
     }
-
-    
 }

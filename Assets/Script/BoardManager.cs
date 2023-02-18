@@ -137,7 +137,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void ResetSquareNodes()
+    public void ResetSquareNodes()
     {
         for(var index = 0; index < squareRoot.childCount; index++)
         {
@@ -146,6 +146,19 @@ public class BoardManager : MonoBehaviour
             if(boardNode)
             {
                 nodes.Add(boardNode.coord.name, boardNode);
+                boardNode.contour.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void HideAllSuqreContour()
+    {
+        for (var index = 0; index < squareRoot.childCount; index++)
+        {
+            var boardNodeGameObject = squareRoot.GetChild(index);
+            var boardNode = boardNodeGameObject.GetComponent<BoardNode>();
+            if (boardNode)
+            {
                 boardNode.contour.gameObject.SetActive(false);
             }
         }

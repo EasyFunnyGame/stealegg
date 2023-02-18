@@ -32,10 +32,16 @@ public class BoardNode : MonoBehaviour
     {
         
     }
-
+    float counturScale = 1;
     // Update is called once per frame
     void Update()
     {
+
+        if (contour.gameObject.activeSelf)
+        {
+            counturScale = Mathf.Abs(Mathf.Sin(Time.time * 2))*0.05f;
+            contour.transform.localScale = new Vector3(0.15f + counturScale, 0.15f + counturScale, 0.15f + counturScale);
+        }
         
     }
 }

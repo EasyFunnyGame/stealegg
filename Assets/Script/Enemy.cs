@@ -49,11 +49,12 @@ public class Enemy : Character
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
 
-    //public bool sawPlayer = false;
+    public bool sleeping = false;
 
     public override void Start()
     {
         base.Start();
+        tr_body = transform;
         Reached();
         OnReachedOriginal();
         DisapearTraceTarget();
@@ -104,13 +105,11 @@ public class Enemy : Character
             return;
         }
 
-
         if (originalTile != null)
         {
             currentAction = new ActionEnemyMove(this, originalTile);
             return;
         }
-
         ReturnOriginal(true);
     }
 
@@ -195,7 +194,63 @@ public class Enemy : Character
 
     public virtual void UpdateRouteMark()
     {
+        for (var index = 0; index < redNodes.Count; index++)
+        {
+            DestroyImmediate(redNodes[index].gameObject);
+        }
+        redNodes.Clear();
 
+        routeNode1Name = routeNode2Name = "";
+
+        if (sleeping) return;
+
+        var xOffset = 0;
+
+        var zOffset = 0;
+
+        if (direction == Direction.Up)
+        {
+            zOffset = 1;
+        }
+        else if (direction == Direction.Down)
+        {
+            zOffset = -1;
+        }
+        else if (direction == Direction.Right)
+        {
+            xOffset = 1;
+        }
+        else if (direction == Direction.Left)
+        {
+            xOffset = -1;
+        }
+
+        var curNodeName = currentTile.gameObject.name;
+        RedNodeByName(curNodeName);
+
+        var next1CoordX = coord.x + xOffset;
+        var next1CoordZ = coord.z + zOffset;
+        var next1NodeName = string.Format("{0}_{1}", next1CoordX, next1CoordZ);
+        var line1Name = boardManager.FindLine(curNodeName, next1NodeName);
+        if(line1Name == null)
+        {
+            return;
+        }
+        
+        routeNode1Name = next1NodeName;
+        
+        RedNodeByName(next1NodeName);
+
+        var next2CoordX = next1CoordX + xOffset;
+        var next2CoordZ = next1CoordZ + zOffset;
+        var next2NodeName = string.Format("{0}_{1}", next2CoordX, next2CoordZ);
+        line1Name = boardManager.FindLine(next1NodeName, next2NodeName);
+        if (line1Name == null)
+        {
+            return;
+        }
+        routeNode2Name = next2NodeName;
+        RedNodeByName(next2NodeName);
     }
 
     public virtual bool TryCatchPlayer()
@@ -219,7 +274,7 @@ public class Enemy : Character
                 return true;
             }
         }
-        return false;;
+        return false;
     }
 
     public virtual bool PlayerWalkIntoSight()
@@ -340,7 +395,6 @@ public class Enemy : Character
         m_animator.CrossFade("Player_Sprint", 0.1f);
     }
 
-
     private void Update()
     {
         if(body_looking)
@@ -349,35 +403,32 @@ public class Enemy : Character
         }
         else
         {
-            if (!string.IsNullOrEmpty(routeNode1Name) && !string.IsNullOrEmpty(routeNode2Name))
+            route.SetActive(!sleeping);
+            var node1 = boardManager.FindNode(routeNode1Name);
+            var node2 = boardManager.FindNode(routeNode2Name);
+            if (node1==null && node2 ==null)
             {
-                route.SetActive(true);
-                var node1 = boardManager.FindNode(routeNode1Name);
-                var node2 = boardManager.FindNode(routeNode2Name);
-                if (node1==null && node2 ==null)
-                {
-                    route.SetActive(false);
-                }
-                else
-                {
-                    var endNode = node2 ? node2 : node1;
-                    var distance = Vector3.Distance(transform.position, endNode.transform.position);
-                    routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
-                    routeArrow.localPosition = new Vector3(0, 0, distance);
+                route.SetActive(false);
+            }
+            else
+            {
+                var endNode = node2 ? node2 : node1;
+                var distance = Vector3.Distance(transform.position, endNode.transform.position);
+                routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
+                routeArrow.localPosition = new Vector3(0, 0, distance);
 
-                    for (var index = 0; index < redNodes.Count; index++)
+                for (var index = 0; index < redNodes.Count; index++)
+                {
+                    if (redNodes[index].name == currentTile.name)
                     {
-                        if (redNodes[index].name == currentTile.name)
+                        distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
+                        if (distance > 0.1f)
                         {
-                            distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
-                            if (distance > 0.1f)
-                            {
-                                redNodes[index].gameObject.SetActive(false);
-                            }
+                            redNodes[index].gameObject.SetActive(false);
                         }
                     }
-                    //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
                 }
+                //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
             }
         }
         
@@ -442,8 +493,6 @@ public class Enemy : Character
         foundPlayerTile = null;
         hearSoundTile = null;
 
-
-        // 新的
         targetTileName = "";
         turnOnReached = false;
     }
@@ -523,7 +572,7 @@ public class Enemy : Character
         return false;
     }
 
-    public bool LureWhistle(string tileName)
+    public virtual bool LureWhistle(string tileName)
     {
         var playerTileName = CheckNeighborGrid();
         if(!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
@@ -538,13 +587,13 @@ public class Enemy : Character
         // 原地吹哨、被敌人看见之后继续吹哨
         if ( (hearSoundTile && (hearSoundTile.name == tileName || turnOnReached )) || foundPlayerTile)
         {
-            currentAction = new ActionEnemyMove(this, hearSoundTile??foundPlayerTile);
+            currentAction = new ActionEnemyMove(this, foundPlayerTile??hearSoundTile);
             return false;
         }
 
         var player = Game.Instance.player;
         var playerNeighbor = player.CanReachInSteps(currentTile.name);
-        if (playerNeighbor)
+        if (playerNeighbor && player.currentTile.name == tileName)
         {
             turnOnReached = true;
             UpdateTargetDirection(player.currentTile);
@@ -564,13 +613,7 @@ public class Enemy : Character
         return true;
     }
 
-    public bool LureBottle(string tileName)
-    {
-
-        return true;
-    }
-
-    public bool LureSteal(string tileName)
+    public virtual bool LureBottle(string tileName)
     {
         var playerTileName = CheckNeighborGrid();
         if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
@@ -591,7 +634,7 @@ public class Enemy : Character
 
         var player = Game.Instance.player;
         var playerNeighbor = player.CanReachInSteps(currentTile.name);
-        if (playerNeighbor)
+        if (playerNeighbor && player.currentTile.name == tileName)
         {
             turnOnReached = true;
             UpdateTargetDirection(player.currentTile);
@@ -609,6 +652,60 @@ public class Enemy : Character
         ShowTraceTarget(targetTile);
         ShowFound();
         return true;
+    }
+
+    public virtual bool LureSteal(string tileName)
+    {
+        var playerTileName = CheckNeighborGrid();
+        if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
+        {
+            return true;
+        }
+
+        var targetTile = gridManager.GetTileByName(tileName);
+        if (targetTile == null) return false;
+
+        m_animator.Play("Enemy_Alert");
+        // 原地吹哨、被敌人看见之后继续吹哨
+        if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
+        {
+            currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
+            return false;
+        }
+
+        var player = Game.Instance.player;
+        var playerNeighbor = player.CanReachInSteps(currentTile.name);
+        if (playerNeighbor && player.currentTile.name == tileName)
+        {
+            turnOnReached = true;
+            UpdateTargetDirection(player.currentTile);
+        }
+        else
+        {
+            // 判断寻路的方向  
+            FindPathRealTime(targetTile);
+            UpdateTargetDirection(nextTile);
+        }
+
+        currentAction = new ActionTurnDirection(this, targetDirection);
+
+        hearSoundTile = targetTile;
+        ShowTraceTarget(targetTile);
+        ShowFound();
+        return true;
+    }
+
+    public void OnTurnEnd()
+    {
+        body_looking = false;
+        if (foundPlayerTile == null)
+        {
+            TryFoundPlayer();
+        }
+        else
+        {
+            CatchPlayer();
+        }
     }
 
 

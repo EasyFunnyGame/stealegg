@@ -247,7 +247,6 @@ public class Character : MonoBehaviour
             Debug.Log("计算方向出错");
         }
         direction = (Direction)System.Enum.Parse(typeof(Direction), rotateY.ToString(), true);
-
         targetDirection = direction;
         //Debug.Log(gameObject.name + "方向:" + direction);
     }

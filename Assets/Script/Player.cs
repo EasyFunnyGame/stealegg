@@ -7,6 +7,30 @@ public class Player : Character
 
     public Animator whitslePlay;
 
+    public string startTileName;
+
+    public GameObject bottle;
+
+    public GameObject princers;
+
+    public GameObject whitsle;
+
+    public float idleTime = 5;
+
+    private void Update()
+    {
+        if(idleTime>0)
+        {
+            idleTime -= Time.deltaTime;
+            if(idleTime < 0)
+            {
+                var randomIdleMotion = Random.Range(0, 2);
+                m_animator.SetFloat("look_around", randomIdleMotion);
+                m_animator.SetTrigger("idle_too_long");
+                idleTime = Random.Range(3, 5);
+            }
+        }
+    }
     // Start is called before the first frame update
     public override void Start()
     {
@@ -14,6 +38,8 @@ public class Player : Character
         Reached();
         whitslePlay.gameObject.SetActive(false);
         playerMovePlay.gameObject.SetActive(false);
+        bottle.gameObject.SetActive(false);
+        startTileName = coord.name;
     }
 
     override public void Reached()
@@ -21,7 +47,8 @@ public class Player : Character
         base.Reached();
         boardManager.PickItem(currentTile.name,this);
         m_animator.SetBool("moving", false);
-        ShowReached(); 
+        ShowReached();
+        idleTime = Random.Range(3,5);
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
 
@@ -41,7 +68,6 @@ public class Player : Character
     {
         base.FootR();
     }
-
 
     public void CheckWhistle()
     {
@@ -102,8 +128,6 @@ public class Player : Character
         whitslePlay.gameObject.SetActive(false);
         whitslePlay.gameObject.SetActive(true);
     }
-
-
     public override void AnimationEnd(string clipName)
     {
         base.AnimationEnd(clipName);

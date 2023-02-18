@@ -24,6 +24,8 @@ public class GameCanvas : BaseCanvas
 
     public Button btn_bottle_disable;
 
+    public Button btn_bottle_cancel;
+
     public Button btn_whistle;
 
     public Button btn_whistle_disable;
@@ -62,7 +64,6 @@ public class GameCanvas : BaseCanvas
 
     public List<IconsAboveEnemy> icon_enemies = new List<IconsAboveEnemy>();
 
-
     public Image distance_up;
     public Text txt_up;
     public Image distance_down;
@@ -72,7 +73,6 @@ public class GameCanvas : BaseCanvas
     public Image distance_right;
     public Text txt_right;
 
-
     public Image playerPosition;
 
     Vector3 screenPoint = new Vector3();
@@ -80,6 +80,7 @@ public class GameCanvas : BaseCanvas
     {
         btn_add.onClick.AddListener(onClickShowEnergyGainCanvasHandler);
         btn_bottle.onClick.AddListener(onClickUseBottleHandler);
+        btn_bottle_cancel.onClick.AddListener(CancelBottleThrow);
         btn_whistle.onClick.AddListener(onClickUseWhistleHandler);
 
         btn_home.onClick.AddListener(onClickBackToHomeHandler);
@@ -105,7 +106,6 @@ public class GameCanvas : BaseCanvas
         icon_enemy_template.gameObject.SetActive(false);
     }
 
-
     void onClickGraffHandler()
     {
         var tileName = Game.Instance.player.currentTile.name;
@@ -116,7 +116,6 @@ public class GameCanvas : BaseCanvas
             var graffItem = allItems[tileName];
             if (graffItem!=null && graffItem.itemType == ItemType.Graff)
             {
-
                 Game.Instance.Steal();
             }
         }
@@ -156,7 +155,17 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseBottleHandler()
     {
+        Game.Instance.BottleSelectTarget();
+        btn_bottle_cancel.gameObject.SetActive(true);
+        btn_bottle.gameObject.SetActive(false);
+    }
 
+
+    void CancelBottleThrow()
+    {
+        Game.Instance.CancelBottleSelectTarget();
+        btn_bottle_cancel.gameObject.SetActive(false);
+        btn_bottle.gameObject.SetActive(true);
     }
 
     private void onClickUseWhistleHandler()
@@ -252,12 +261,14 @@ public class GameCanvas : BaseCanvas
     {
         btn_bottle.gameObject.SetActive(false);
         btn_bottle_disable.gameObject.SetActive(true);
+        btn_bottle_cancel.gameObject.SetActive(false);
     }
 
     public void EnableBottle()
     {
         btn_bottle.gameObject.SetActive(true);
         btn_bottle_disable.gameObject.SetActive(false);
+        btn_bottle_cancel.gameObject.SetActive(false);
     }
 
     public void InitWithBoardManager(BoardManager boardManager)
@@ -269,7 +280,6 @@ public class GameCanvas : BaseCanvas
 
     void InitItemIcons(BoardManager boardManager)
     {
-        
         // 物品图标
         for (var index = 0; index < boardManager.itemRoot.childCount; index++)
         {
@@ -314,7 +324,7 @@ public class GameCanvas : BaseCanvas
         for(var index = 0; index < boardManager.enemies.Count; index ++)
         {
             var enemy = boardManager.enemies[index];
-            var enemyIcon = Instantiate(icon_enemy_template,this.playing.transform);
+            var enemyIcon = Instantiate(icon_enemy_template,transform);
             enemyIcon.enemy = enemy;
             enemy.icons = enemyIcon;
             icon_enemies.Add(enemyIcon);

@@ -38,9 +38,9 @@ public class ActionEnemyMove : ActionBase
                             player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
                             var path = player.path;
                             var nextTileName = "";
-                            if (path.Count > 1)
+                            if (path.Count >= 2)
                             {
-                                nextTileName = path[0].name;
+                                nextTileName = path[path.Count-2].name;
                             }
                             else
                             {
@@ -124,12 +124,11 @@ public class ActionEnemyMove : ActionBase
                         }
                         else
                         {
-                            var foundPlayer = enemy.TryFoundPlayer();
-                            if(!foundPlayer)
+                            enemy.Reached();
+                            if(!enemy.TryFoundPlayer())
                             {
                                 enemy.LostTarget();
                             }
-                            character.Reached();
                             return true;
                         }
                     }
@@ -194,7 +193,6 @@ public class ActionEnemyMove : ActionBase
             character.tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
 
             var angle = Vector3.Angle(tar_dir, character.tr_body.forward);
-
             
             if (angle <= 1 )
             {
@@ -205,32 +203,7 @@ public class ActionEnemyMove : ActionBase
                 var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
                 if (tdist < 0.01)
                 {
-                    if (enemy.foundPlayerTile != null)
-                    {
-                        enemy.ShowTraceTarget(enemy.foundPlayerTile);
-                        var catchPlayer = enemy.CatchPlayer();
-                        if (!catchPlayer)
-                        {
-                            var foundPlayer = enemy.TryFoundPlayer();
-                            if (!foundPlayer)
-                            {
-                                enemy.LostTarget();
-                                enemy.m_animator.Play("Player_Idle");
-                                enemy.Reached();
-                            }
-                        }
-                        //Debug.Log("追踪转向完毕");
-                    }
-                    if (enemy.hearSoundTile != null)
-                    {
-                        var foundPlayer = enemy.TryFoundPlayer();
-                        if (!foundPlayer)
-                        {
-                            enemy.Reached();
-                            enemy.LostTarget();
-                            enemy.m_animator.Play("Player_Idle");
-                        }
-                    }
+                    enemy.OnTurnEnd();
                 }
             }
         }

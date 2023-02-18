@@ -22,16 +22,7 @@ public class ActionTurnDirection : ActionBase
     {
         if(character.direction == targetDirection)
         {
-            var catchPlayer = enemy.CatchPlayer();
-            if(!catchPlayer)
-            {
-                var foundPlayer = enemy.TryFoundPlayer();
-                if (foundPlayer)
-                {
-                    enemy.currentAction = new ActionFoundPlayer(enemy);
-                }
-            }
-            enemy.body_looking = false;
+            enemy.OnTurnEnd();
             return true;
         }
         return false;

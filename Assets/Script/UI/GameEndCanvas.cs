@@ -33,9 +33,13 @@ public class GameEndCanvas : BaseCanvas
     private void onClickPlayNextLevelHandler()
     {
         Game.Instance.endCanvas.Hide();
-        var playingLevel = Game.Instance.playingLevel;
+        var playingLevel = Game.Instance.playingLevel+1;
+        if(playingLevel>Game.MAX_LEVEL)
+        {
+            playingLevel = 0;
+        }
         var playingChapter = (playingLevel % 12) / 12 + 1;
-        var playingIndex = playingLevel % 12 + 1 + 1;
+        var playingIndex = playingLevel % 12 + 1;
         if(playingIndex>=12)
         {
             playingIndex = 0;

@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 1840849078840307989}
+  owner: {fileID: 4444633865494400755}
 --- !u!1 &2657412368217548371
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 1840849078840307989}
+  owner: {fileID: 4444633865494400755}
 --- !u!1 &6983690951974486597
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,7 +720,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1437979140120115682}
-  - component: {fileID: 1840849078840307989}
   - component: {fileID: 4444633865494400755}
   m_Layer: 0
   m_Name: Enemy_Distracted
@@ -753,7 +752,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1840849078840307989
+--- !u!114 &4444633865494400755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -762,7 +761,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9096376541638636844}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d144ee87105571142ac20b989ef931bc, type: 3}
+  m_Script: {fileID: 11500000, guid: e90aa42396e3e4e498bd62d7339c58e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gridManager: {fileID: 0}
@@ -788,7 +787,7 @@ MonoBehaviour:
   max_tiles: 7
   num_tile: 0
   boardManager: {fileID: 0}
-  direction: 0
+  direction: 1
   rotation: 0
   reachedTile: 0
   originalDirection: 0
@@ -820,69 +819,7 @@ MonoBehaviour:
   routeNode1Name: 
   routeNode2Name: 
   redNodes: []
-  turnOnReached: 0
-  targetTileName: 
---- !u!114 &4444633865494400755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9096376541638636844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90aa42396e3e4e498bd62d7339c58e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridManager: {fileID: 0}
-  m_animator: {fileID: 0}
-  body_looking: 0
-  moving: 0
-  moving_tiles: 0
-  move_speed: 1
-  rotate_speed: 1
-  col: {r: 0, g: 0, b: 0, a: 0}
-  tr_body: {fileID: 0}
-  lastTileName: 
-  tar_tile_s: {fileID: 0}
-  selected_tile_s: {fileID: 0}
-  nextTile: {fileID: 0}
-  db_moves: []
-  max_tiles: 7
-  num_tile: 0
-  boardManager: {fileID: 0}
-  direction: 0
-  rotation: 0
-  reachedTile: 0
-  originalDirection: 0
-  targetDirection: 0
-  originalCoord:
-    x: 0
-    z: 0
-    height: 0
-    name: 
-  coord:
-    x: 0
-    z: 0
-    height: 0
-    name: 
-  path: []
-  currentAction:
-    character: {fileID: 0}
-    actionType: 0
-  enemyType: 0
-  foundPlayerTile: {fileID: 0}
-  hearSoundTile: {fileID: 0}
-  originalTile: {fileID: 0}
-  icons: {fileID: 0}
-  headPoint: {fileID: 0}
-  enemyMove: {fileID: 0}
-  route: {fileID: 0}
-  routeLine: {fileID: 0}
-  routeArrow: {fileID: 0}
-  routeNode1Name: 
-  routeNode2Name: 
-  redNodes: []
+  sleeping: 0
   turnOnReached: 0
   targetTileName: 
 --- !u!1 &9103667222968600252
@@ -1117,15 +1054,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e0bd21ecf7633f489995ab68f47a908, type: 3}
---- !u!95 &8995497986450057926 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6034882587053710581, guid: 3e0bd21ecf7633f489995ab68f47a908,
-    type: 3}
-  m_PrefabInstance: {fileID: 3392996672603567667}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9028462210016077356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5935131832085762079, guid: 3e0bd21ecf7633f489995ab68f47a908,
+    type: 3}
+  m_PrefabInstance: {fileID: 3392996672603567667}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8995497986450057926 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6034882587053710581, guid: 3e0bd21ecf7633f489995ab68f47a908,
     type: 3}
   m_PrefabInstance: {fileID: 3392996672603567667}
   m_PrefabAsset: {fileID: 0}

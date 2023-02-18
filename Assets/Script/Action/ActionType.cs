@@ -14,4 +14,6 @@ public enum ActionType
    Steal,
 
    BlowWhistle,
+
+   ThrowBottle,
 }

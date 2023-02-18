@@ -93,6 +93,7 @@ public class Item : MonoBehaviour
                 picked = true;
                 gameObject.SetActive(false);
                 player.bottleCount++;
+                player.m_animator.Play("Player_PickUp");
                 delete = true;
                 break;
 
