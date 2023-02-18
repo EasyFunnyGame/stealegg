@@ -92,6 +92,7 @@ public class Item : MonoBehaviour
             case ItemType.LureBottle:
                 picked = true;
                 gameObject.SetActive(false);
+                icon.gameObject.SetActive(false);
                 player.bottleCount++;
                 player.m_animator.Play("Player_PickUp");
                 delete = true;

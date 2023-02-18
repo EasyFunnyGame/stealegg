@@ -207,6 +207,17 @@ public class GameCanvas : BaseCanvas
             icon.rectTransform.anchoredPosition = screenPoint;
         }
 
+        for (var index = 0; index < icon_bottles.Count; index++)
+        {
+            var icon = icon_bottles[index];
+            if (icon.gameObject.activeSelf)
+            {
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                icon.rectTransform.anchoredPosition = screenPoint;
+            }
+            
+        }
+
     }
 
     void LateUpdate()
@@ -302,6 +313,11 @@ public class GameCanvas : BaseCanvas
                 case ItemName.Item_ManholeCover:
                     break;
                 case ItemName.Item_LureBottle:
+                    var bottleIcon = Instantiate(icon_template_bottle_template, transform);
+                    bottleIcon.gameObject.SetActive(true);
+                    icon_bottles.Add(bottleIcon);
+                    bottleIcon.item = item;
+                    item.icon = bottleIcon;
                     break;
                 case ItemName.item_Growth:
                     break;
@@ -339,5 +355,10 @@ public class GameCanvas : BaseCanvas
             DestroyImmediate(icon_enemies[index].gameObject);
         }
         icon_enemies.Clear();
+        for (var index = 0; index < icon_bottles.Count; index++)
+        {
+            DestroyImmediate(icon_bottles[index].gameObject);
+        }
+        icon_bottles.Clear();
     }
 }

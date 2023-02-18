@@ -99,7 +99,7 @@ public class Game : MonoBehaviour
         var chapter = int.Parse(nameArr[0]);
         var index = int.Parse(nameArr[1]);
         playingLevel = (chapter - 1) * 12 + (index - 1);
-        currentLevelName = name;
+        currentLevelName = sceneName;
         camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
         player = GameObject.Find("Player").GetComponent<Player>();
         player.bottleCount = 0;
