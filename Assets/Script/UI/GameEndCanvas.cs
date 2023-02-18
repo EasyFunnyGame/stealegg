@@ -33,7 +33,16 @@ public class GameEndCanvas : BaseCanvas
     private void onClickPlayNextLevelHandler()
     {
         Game.Instance.endCanvas.Hide();
-        SceneManager.LoadScene("1-1");
+        var playingLevel = Game.Instance.playingLevel;
+        var playingChapter = (playingLevel % 12) / 12 + 1;
+        var playingIndex = playingLevel % 12 + 1 + 1;
+        if(playingIndex>=12)
+        {
+            playingIndex = 0;
+            playingChapter++;
+        }
+        var nextLevelName = string.Format("{0}-{1}", playingChapter, playingIndex);
+        SceneManager.LoadScene(nextLevelName);
     }
 
     private void onClickReplayThisLevelHandler()

@@ -12,13 +12,15 @@ public class Player : Character
     {
         base.Start();
         Reached();
+        whitslePlay.gameObject.SetActive(false);
+        playerMovePlay.gameObject.SetActive(false);
     }
 
     override public void Reached()
     {
         base.Reached();
         boardManager.PickItem(currentTile.name,this);
-        m_animator.CrossFade("Player_Idle",0.1f);
+        m_animator.SetBool("moving", false);
         ShowReached(); 
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
@@ -26,7 +28,7 @@ public class Player : Character
     override public void StartMove()
     {
         base.StartMove();
-        m_animator.CrossFade("Player_Sprint", 0.1f);
+        m_animator.SetBool("moving", true);
         //Debug.Log(string.Format("{0}开始行走{1}", gameObject.name, tar_tile_s.name));
     }
 
@@ -91,14 +93,28 @@ public class Player : Character
 
     public void PlayWhitsle()
     {
-        whitslePlay.gameObject.SetActive(true);
-        whitslePlay.Play("Movement_Animation");
+        PlayeWhitsleEffect();
+        m_animator.SetTrigger("whistle");
     }
 
-    public override void PlayerWhitsleEnd()
+    public void PlayeWhitsleEffect()
     {
-        base.PlayerWhitsleEnd();
         whitslePlay.gameObject.SetActive(false);
+        whitslePlay.gameObject.SetActive(true);
+    }
+
+
+    public override void AnimationEnd(string clipName)
+    {
+        base.AnimationEnd(clipName);
+    }
+
+    public override void AfterStealVegetable()
+    {
+        base.AfterStealVegetable();
+        Game.Instance.gameCanvas.Hide();
+        Game.Instance.camera.gameObject.SetActive(false);
+        Game.Instance.graffCanvas.Show();
     }
 
 }

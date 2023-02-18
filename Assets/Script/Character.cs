@@ -209,6 +209,14 @@ public class Character : MonoBehaviour
         }
     }
 
+    public bool Goto(string tileName)
+    {
+        var tile = gridManager.GetTileByName(tileName);
+        if (!tile) return false;
+        FindPathRealTime(tile);
+        return true;
+    }
+
     public void FindPathRealTime(GridTile t)
     {
         selected_tile_s = t;
@@ -283,7 +291,7 @@ public class Character : MonoBehaviour
         });
     }
 
-    public bool CanReach(string tileName,int step = 1)
+    public bool CanReachInSteps(string tileName,int step = 1)
     {
         if (gridManager == null) return false;
         var tile = gridManager.GetTileByName(tileName);
@@ -316,7 +324,17 @@ public class Character : MonoBehaviour
 
     }
 
-    public virtual void PlayerWhitsleEnd()
+    public virtual void AnimationEnd(string clipName)
+    {
+
+    }
+
+    public virtual void ReadyThrowBottle()
+    {
+
+    }
+
+    public virtual void AfterStealVegetable()
     {
 
     }

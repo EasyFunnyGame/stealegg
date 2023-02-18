@@ -11,5 +11,7 @@ public enum ActionType
 
    TurnDirection,
 
-   Graff,
+   Steal,
+
+   BlowWhistle,
 }

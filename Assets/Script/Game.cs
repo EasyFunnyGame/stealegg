@@ -29,17 +29,11 @@ public class Game : MonoBehaviour
 
     public int energy;
 
-    public int level;
+    public int playingLevel;
 
     public string currentLevelName;
 
     public BoardManager boardManager;
-
-    public bool graffable = false;
-
-    public bool graffing = false;
-
-    public bool graffed = false;
 
     public new GameCamera camera;
 
@@ -51,13 +45,18 @@ public class Game : MonoBehaviour
 
     public GameResult result;
 
+    public bool graffed = false;
+
+
+    public int MAX_LEVEL = 2;
+
     private void Awake()
     {
+
+        //PlayerPrefs.DeleteAll();
+
         Instance = this;
         DontDestroyOnLoad(this);
-
-        level = PlayerPrefs.GetInt("Level");
-        if (level > 36) level = 36;
 
         energy = PlayerPrefs.GetInt("Energy", -1);
         if (energy == -1)
@@ -96,33 +95,23 @@ public class Game : MonoBehaviour
 
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
-        boardManager = boardMgr;
-        
-        currentLevelName = sceneName;
-
-        camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
-
-        player = GameObject.Find("Player").GetComponent<Player>();
-
         graffed = false;
-
-        graffable = false;
-
-        graffing = false;
-
+        boardManager = boardMgr;
+        var nameArr = sceneName.Split('-');
+        var chapter = int.Parse(nameArr[0]);
+        var index = int.Parse(nameArr[1]);
+        playingLevel = (chapter - 1) * 12 + (index - 1);
+        currentLevelName = name;
+        camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
+        player = GameObject.Find("Player").GetComponent<Player>();
+        player.bottleCount = 0;
         delayShowEndTimer = 0;
-
         gameCanvas.Show();
-
         gameCanvas.InitWithBoardManager(boardMgr);
-
         cameraSettingCanvas.InitWithGameCamera(camera, player);
-
-        Debug.Log("当前场景名称:" + sceneName);
-
         cameraSettingCanvas.SetExpand(false);
-
         result = GameResult.NONE;
+        Debug.Log("当前场景名称:" + sceneName);
     }
 
     public void EndGame()
@@ -179,7 +168,7 @@ public class Game : MonoBehaviour
 
     void GamePlayingUpdate()
     {
-        var enemyActionRunning = false;
+        enemyActionRunning = false;
         if (player == null) return;
         if(player.currentAction != null)
         {
@@ -191,8 +180,6 @@ public class Game : MonoBehaviour
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
                     var enemy = boardManager.enemies[i];
-                    // enemy.PlayerWalkIntoSight();
-                    // enemy.TryFoundPlayer();
                     enemy.CheckAction();
                 }
             }
@@ -222,7 +209,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        if(player.currentAction == null && !enemyActionRunning && !graffing)
+        if(player.currentAction == null && !enemyActionRunning)
         {
             ListenClick();
         }
@@ -288,24 +275,9 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void UseWhistle()
+    public void BlowWhistle()
     {
-        var nodes = boardManager.FindNodesAround(player.currentTile.name ,2);
-        foreach(var kvp in nodes)
-        {
-            var name = kvp.Key;
-            for(var index = 0; index < boardManager.enemies.Count; index++)
-            {
-                var enemy = boardManager.enemies[index];
-                if (enemy.coord.name == name)
-                {
-                    enemy.Alert(player.currentTile.name);
-                    Debug.Log("主角行为====吹哨");
-                }
-            }
-        }
-        player.currentAction = null;
-        player.PlayWhitsle();
+        player.currentAction = new ActionBlowWhistle(player);
     }
 
     public void UseBottle()
@@ -321,6 +293,36 @@ public class Game : MonoBehaviour
     public void Save()
     {
         PlayerPrefs.SetInt("Energy", energy);
+    }
+
+    bool enemyActionRunning = false;
+
+    public void Steal()
+    {
+        if(enemyActionRunning)
+        {
+            return;
+        }
+        if(!graffed)
+        {
+            graffed = true;
+            player.currentAction = new ActionSteal(player);
+        }
+    }
+
+    public void ReachEnd()
+    {
+        if(graffed)
+        {
+            var level = PlayerPrefs.GetInt("Level");
+            if(playingLevel >= level)
+            {
+                level = playingLevel;
+                PlayerPrefs.SetInt("Level", playingLevel + 1);
+            }
+            WinGame();
+            Save();
+        }
     }
 
     

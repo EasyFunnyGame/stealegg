@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ActionFoundPlayer : ActionBase
 {
-    private float actionDuration = 1;
+    private float actionDuration = 0.5f;
 
     public ActionFoundPlayer(Enemy character) : base(character, ActionType.FoundPlayer)
     {

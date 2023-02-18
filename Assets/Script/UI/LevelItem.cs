@@ -70,13 +70,13 @@ public class LevelItem : MonoBehaviour
     void onClickChapterLevelHandler()
     {
         var sceneName = string.Format("{0}-{1}", chapter + 1, index + 1);
-
-        if(level == Game.Instance.level+1)
+        var level = PlayerPrefs.GetInt("Level");
+        if (level == level + 1)
         {
             Game.Instance.msgCanvas.PopMessage("观看视频可直接试玩此关!");
             return;
         }
-        if(level > Game.Instance.level+1)
+        if(level > level + 1)
         {
             Game.Instance.msgCanvas.PopMessage("请先通过前一关!");
             return;

@@ -5,13 +5,12 @@ Shader "Graff/Default"
     Properties
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-        _Color ("Tint", Color) = (1,1,1,1)
+        // _Color ("Tint", Color) = (1,1,1,1)
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
         [HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
         [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
         [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
-        _Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
     }
 
     SubShader
@@ -45,7 +44,11 @@ Shader "Graff/Default"
 
             fixed4 SpriteFragment(v2f IN) : SV_Target
             {
-                fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
+                fixed4 c = SampleSpriteTexture (IN.texcoord);
+                if(c.r >= 0.5f && c.g >= 0.5f && c.b >= 0.5f)
+                {
+                    discard;
+                }
                 return c;
             }
         ENDCG

@@ -5,30 +5,38 @@ using UnityEngine;
 public class ActionTurnDirection : ActionBase
 {
     private Direction targetDirection;
-    private Enemy _enemy;
     public ActionTurnDirection(Enemy enemy,  Direction direction) : base(enemy, ActionType.TurnDirection)
     {
-        _enemy = enemy;
         targetDirection = direction;
         Utils.SetDirection(character, targetDirection);
+    }
+
+    public Enemy enemy
+    {
+        get
+        {
+            return this.character as Enemy;
+        }
     }
     public override bool CheckComplete()
     {
         if(character.direction == targetDirection)
         {
-            var catchPlayer = _enemy.TryCatchPlayer();
+            var catchPlayer = enemy.CatchPlayer();
             if(!catchPlayer)
             {
-                var foundPlayer = _enemy.TryFoundPlayer();
+                var foundPlayer = enemy.TryFoundPlayer();
                 if (foundPlayer)
                 {
-                    _enemy.currentAction = new ActionFoundPlayer(_enemy);
+                    enemy.currentAction = new ActionFoundPlayer(enemy);
                 }
             }
+            enemy.body_looking = false;
             return true;
         }
         return false;
     }
+
     public override void Run()
     {
         Vector3 tar_dir = character.db_moves[1].position - character.db_moves[0].position;//  character.tr_body.position;

@@ -22,18 +22,33 @@ public class AnimationEvent : MonoBehaviour
         owner.FootL();
     }
 
-    public virtual void FootR()
+    public void FootR()
     {
         owner.FootR();
     }
 
-    public virtual void PlayerReached()
+    public void PlayerReached()
     {
         owner.PlayerReached();
     }
 
-    public virtual void PlayerWhitsleEnd()
+    public void AnimationEnd(string clipName)
     {
-        owner.PlayerWhitsleEnd();
+        owner.AnimationEnd(clipName);
+    }
+
+    public void ReadyThrowBottle()
+    {
+        owner.ReadyThrowBottle();
+    }
+
+    public virtual void AfterStealVegetable()
+    {
+        owner.AfterStealVegetable();
+    }
+
+    public void Hit()
+    {
+
     }
 }

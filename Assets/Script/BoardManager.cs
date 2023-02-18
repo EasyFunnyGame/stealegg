@@ -55,6 +55,7 @@ public class BoardManager : MonoBehaviour
         Game.Instance.SceneLoaded(this, name);
     }
 
+
     // Update is called once per frame
     void Update() {
         
@@ -366,7 +367,7 @@ public class BoardManager : MonoBehaviour
                 minZ = coordZ;
             }
 
-            nodeTransform.transform.localPosition = new Vector3(coordX, 0, coordZ);
+            //nodeTransform.transform.localPosition = new Vector3(coordX, 0, coordZ);
 
             var script = nodeTransform.GetComponent<BoardNode>();
 

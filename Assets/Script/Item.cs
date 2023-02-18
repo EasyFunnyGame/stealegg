@@ -82,7 +82,6 @@ public class Item : MonoBehaviour
         switch(itemType)
         {
             case ItemType.Star:
-
                 picked = true;
                 gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
@@ -101,10 +100,11 @@ public class Item : MonoBehaviour
                 break;
 
             case ItemType.End:
+                Game.Instance.ReachEnd();
                 break;
 
             case ItemType.Graff:
-                Game.Instance.graffable = true;
+                // Game.Instance.Graff();
                 break;
         }
         return delete;

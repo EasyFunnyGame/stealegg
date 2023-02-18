@@ -75,7 +75,7 @@ public class GameCanvas : BaseCanvas
 
     public Image playerPosition;
 
-
+    Vector3 screenPoint = new Vector3();
     private void Awake()
     {
         btn_add.onClick.AddListener(onClickShowEnergyGainCanvasHandler);
@@ -116,9 +116,8 @@ public class GameCanvas : BaseCanvas
             var graffItem = allItems[tileName];
             if (graffItem!=null && graffItem.itemType == ItemType.Graff)
             {
-                Game.Instance.gameCanvas.Hide();
-                Game.Instance.camera.gameObject.SetActive(false);
-                Game.Instance.graffCanvas.Show();
+
+                Game.Instance.Steal();
             }
         }
     }
@@ -162,22 +161,13 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseWhistleHandler()
     {
-        Game.Instance.UseWhistle();
+        Game.Instance.BlowWhistle();
     }
 
     private void onClickPauseGameHandler()
     {
         Game.Instance.UseBottle();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-
-    Vector3 screenPoint = new Vector3();
 
     // Update is called once per frame
     void Update()
@@ -225,9 +215,7 @@ public class GameCanvas : BaseCanvas
         distance_right.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingRight), 2);
         txt_right.text = Math.Abs(Game.Instance.camera.playerPaddingRight).ToString();
 
-     
     }
-
 
     protected override void OnShow()
     {
@@ -300,16 +288,12 @@ public class GameCanvas : BaseCanvas
                     icon_star.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_Pincers:
-                    //pincerses.Add(itemTr.GetComponent<Item>());
                     break;
                 case ItemName.Item_ManholeCover:
-                    //manholeCovers.Add(item);
                     break;
                 case ItemName.Item_LureBottle:
-                    //bottles.Add(item);
                     break;
                 case ItemName.item_Growth:
-                    //grouthes.Add(item);
                     break;
                 case ItemName.Item_Graff:
                     icon_graff.item = item;
@@ -317,7 +301,6 @@ public class GameCanvas : BaseCanvas
                     icon_graff.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_End:
-                    //end = item;
                     break;
                 default:
                     Debug.LogError(string.Format("未处理未定义Item{0}", itemTr.name));
