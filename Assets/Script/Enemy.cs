@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum EnemyType
@@ -176,20 +175,7 @@ public class Enemy : Character
             currentAction = new ActionFoundPlayer(this);
             return;
         }
-
-        if (Game.Instance.result == GameResult.FAIL)
-        {
-            m_animator.CrossFade("Enemy_Caught", 0.1f);
-        }
-        else if (foundPlayerTile != null || hearSoundTile != null)
-        {
-            m_animator.CrossFade("Enemy_Alert", 0.1f);
-        }
-        else
-        {
-            m_animator.CrossFade("Player_Idle", 0.1f);
-        }
-
+        m_animator.SetBool("moving", false);
         //Debug.Log("敌人到达路径点:"+ currentTile.name);
     }
 
@@ -254,29 +240,27 @@ public class Enemy : Character
         RedNodeByName(next2NodeName);
     }
 
-    public virtual bool TryCatchPlayer()
-    {
-        if (Game.Instance.player == null || Game.Instance.player.currentTile == null) return false;
-        var canSeePlayer = Game.Instance.player.CanReachInSteps(currentTile.name);
-        var targetDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
-        if(targetDirection == direction)
-        {
-            if (foundPlayerTile != null && canSeePlayer)
-            {
-                m_animator.CrossFade("Enemy_Caught", 0.1f);
-                Game.Instance.FailGame();
-                return true;
-            }
-            var canReach = CanReachInSteps(Game.Instance.player.currentTile.name);
-            if (canReach)
-            {
-                m_animator.CrossFade("Enemy_Caught", 0.1f);
-                Game.Instance.FailGame();
-                return true;
-            }
-        }
-        return false;
-    }
+    //public virtual bool TryCatchPlayer()
+    //{
+    //    if (Game.Instance.player == null || Game.Instance.player.currentTile == null) return false;
+    //    var canSeePlayer = Game.Instance.player.CanReachInSteps(currentTile.name);
+    //    var targetDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
+    //    if(targetDirection == direction)
+    //    {
+    //        if (foundPlayerTile != null && canSeePlayer)
+    //        {
+    //            Game.Instance.FailGame();
+    //            return true;
+    //        }
+    //        var canReach = CanReachInSteps(Game.Instance.player.currentTile.name);
+    //        if (canReach)
+    //        {
+    //            Game.Instance.FailGame();
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
 
     public virtual bool PlayerWalkIntoSight()
     {
@@ -385,7 +369,7 @@ public class Enemy : Character
 
     public override void StartMove()
     {
-        m_animator.CrossFade("Player_Sprint", 0.1f);
+        m_animator.SetBool("moving", true);
     }
 
     private void Update()
@@ -424,68 +408,48 @@ public class Enemy : Character
                 //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
             }
         }
+
+        updateAnimatorParams();
+    }
+
+    private void updateAnimatorParams()
+    {
+        if (targetIdleType < idleType)
+        {
+            idleType -= 0.025f;
+            if (targetIdleType >= idleType)
+            {
+                idleType = targetIdleType;
+            }
+        }
+
+        if (targetIdleType > idleType)
+        {
+            idleType += 0.025f;
+            if (targetIdleType <= idleType)
+            {
+                idleType = targetIdleType;
+            }
+        }
+        m_animator.SetFloat("idle_type", idleType);
+
+        if(targetIdleType == 0.5f)
+        {
+            if (lookAroundTime > 0)
+            {
+                lookAroundTime -= Time.deltaTime;
+                if (lookAroundTime <= 0)
+                {
+                    m_animator.SetTrigger("look_around");
+                }
+            }
+        }
+        
     }
 
     public virtual void OnReachedOriginal()
     {
 
-    }
-
-    public void ShowNotFound()
-    {
-        icons.shuijiao.gameObject.SetActive(false);
-        icons.tanhao.gameObject.SetActive(false);
-        icons.fanhui.gameObject.SetActive(false);
-        icons.wenhao.gameObject.SetActive(true);
-        DisapearTraceTarget();
-    }
-
-    public void ShowFound()
-    {
-        icons.shuijiao.gameObject.SetActive(false);
-        icons.tanhao.gameObject.SetActive(true);
-        icons.fanhui.gameObject.SetActive(false);
-        icons.wenhao.gameObject.SetActive(false);
-    }
-
-    public void ShowBackToOriginal()
-    {
-        icons.shuijiao.gameObject.SetActive(false);
-        icons.tanhao.gameObject.SetActive(false);
-        icons.fanhui.gameObject.SetActive(true);
-        icons.wenhao.gameObject.SetActive(false);
-    }
-
-    public void ShowSleep()
-    {
-        icons.shuijiao.gameObject.SetActive(true);
-        icons.tanhao.gameObject.SetActive(false);
-        icons.fanhui.gameObject.SetActive(false);
-        icons.wenhao.gameObject.SetActive(false);
-    }
-
-    public void ShowTraceTarget(GridTile tile)
-    {
-        enemyMove.transform.parent = null;
-        enemyMove.gameObject.SetActive(true);
-        enemyMove.Play("Movement_Animation");
-        enemyMove.transform.transform.position = tile.transform.position;
-    }
-
-    public void DisapearTraceTarget()
-    {
-        enemyMove.transform.parent = transform;
-        enemyMove.gameObject.SetActive(false);
-    }
-
-    public void LostTarget()
-    {
-        ShowNotFound();
-        foundPlayerTile = null;
-        hearSoundTile = null;
-
-        targetTileName = "";
-        turnOnReached = false;
     }
 
     // =======================================================================================
@@ -542,8 +506,8 @@ public class Enemy : Character
         var targetDirection = Utils.DirectionTo(currentTile.name, tileName, direction);
         if (targetDirection == direction && player.CanReachInSteps(currentTile.name))
         {
-            m_animator.CrossFade("Enemy_Caught", 0.1f);
             Game.Instance.FailGame();
+            m_animator.SetBool("catch", true);
             return true;
         }
         return false;
@@ -556,8 +520,8 @@ public class Enemy : Character
         var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);
         if (targetDirection == direction && player.CanReachInSteps(currentTile.name))
         {
-            m_animator.CrossFade("Enemy_Caught", 0.1f);
             Game.Instance.FailGame();
+            m_animator.SetBool("catch", true);
             return true;
         }
         return false;
@@ -574,7 +538,6 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
-        m_animator.Play("Enemy_Alert");
         // 原地吹哨、被敌人看见之后继续吹哨
         if ( (hearSoundTile && (hearSoundTile.name == tileName || turnOnReached )) || foundPlayerTile)
         {
@@ -615,7 +578,6 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
-        m_animator.Play("Enemy_Alert");
         // 原地吹哨、被敌人看见之后继续吹哨
         if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
         {
@@ -656,7 +618,6 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
-        m_animator.Play("Enemy_Alert");
         // 原地吹哨、被敌人看见之后继续吹哨
         if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
         {
@@ -697,10 +658,71 @@ public class Enemy : Character
         {
             CatchPlayer();
         }
+        m_animator.SetBool("moving",false);
     }
 
+    public virtual void ShowNotFound()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(true);
+        DisapearTraceTarget();
+    }
 
+    public virtual void ShowFound()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(true);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        targetIdleType = 0.5f;
+    }
 
+    public virtual void ShowBackToOriginal()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(true);
+        icons.wenhao.gameObject.SetActive(false);
+        targetIdleType = 1;
+    }
 
+    public virtual void ShowSleep()
+    {
+        icons.shuijiao.gameObject.SetActive(true);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+    }
+
+    public virtual void ShowTraceTarget(GridTile tile)
+    {
+        enemyMove.transform.parent = null;
+        enemyMove.gameObject.SetActive(true);
+        enemyMove.Play("Movement_Animation");
+        enemyMove.transform.transform.position = tile.transform.position;
+    }
+
+    public virtual void DisapearTraceTarget()
+    {
+        enemyMove.transform.parent = transform;
+        enemyMove.gameObject.SetActive(false);
+    }
+
+    public virtual void LostTarget()
+    {
+        ShowNotFound();
+        foundPlayerTile = null;
+        hearSoundTile = null;
+        targetTileName = "";
+        turnOnReached = false;
+        targetIdleType = 1;
+        m_animator.SetTrigger("not_found");
+    }
+
+    protected float idleType;
+    protected float targetIdleType;
+    protected float lookAroundTime = 0;
 
 }

@@ -3,6 +3,8 @@
 public class ActionPlayerMove : ActionBase
 {
     Vector3 velocity = new Vector3();
+
+    bool crounching=false;
     public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
         velocity = new Vector3();
@@ -33,6 +35,7 @@ public class ActionPlayerMove : ActionBase
 
                     case "Hor_Doted_Visual":
                         player.m_animator.SetFloat("crouch", 1);
+                        crounching = true;
                         break;
                 }
             }
@@ -95,10 +98,18 @@ public class ActionPlayerMove : ActionBase
 
         if (character.moving)
         {
-            float step = character.move_speed * Time.deltaTime;
-            //character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position, step);
+           
+
+            if(crounching)
+            {
+                float step = character.move_speed * Time.deltaTime;
+                character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position, step);
+            }
+            else
+            {
+                character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position, ref velocity, 0.12f);
+            }
             
-            character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position, ref velocity, 0.12f);
             var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
             if (tdist < 0.001f)
             {

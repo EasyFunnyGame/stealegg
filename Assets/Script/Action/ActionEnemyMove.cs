@@ -54,11 +54,7 @@ public class ActionEnemyMove : ActionBase
                                 if (character.direction == targetDirection)
                                 {
                                     character.Reached();
-                                    if (enemy.TryCatchPlayer())
-                                    {
-                                        Game.Instance.FailGame();
-                                    }
-                                    else
+                                    if (!enemy.CatchPlayer())
                                     {
                                         enemy.LostTarget();
                                     }
@@ -199,11 +195,11 @@ public class ActionEnemyMove : ActionBase
                 character.ResetDirection();
                 character.body_looking = false;
 
-                var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
-                if (tdist < 0.01)
-                {
+                //var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
+                //if (tdist < 0.01f)
+                //{
                     enemy.OnTurnEnd();
-                }
+                //}
             }
         }
         else if (character.moving)

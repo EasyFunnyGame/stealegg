@@ -7,7 +7,7 @@ public class ActionSteal : ActionBase
     public ActionSteal(Player player, Item item) : base(player, ActionType.Steal)
     {
         graffItem = item;
-        player.m_animator.SetTrigger("graff");
+        player.m_animator.SetTrigger("pick");
         player.PlayStealEffect();
     }
 

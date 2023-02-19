@@ -7,7 +7,6 @@
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
-        m_animator.CrossFade("Enemy_Sleeping",0.3f);
         sleeping = true;
         UpdateRouteMark();
     }

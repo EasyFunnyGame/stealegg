@@ -2,10 +2,23 @@
 
 public class EnemyStatic : Enemy
 {
+    private void Awake()
+    {
+        
+    }
+
     public override void Reached()
     {
-        sleeping = false;
         base.Reached();
+        sleeping = false;
+        if(foundPlayerTile == null && hearSoundTile == null)
+        {
+
+        }
+        else
+        {
+
+        }
     }
 
     public override void OnReachedOriginal()
@@ -15,6 +28,6 @@ public class EnemyStatic : Enemy
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
         sleeping = false;
-        m_animator.Play("Player_Idle");
+        targetIdleType = 0;
     }
 }

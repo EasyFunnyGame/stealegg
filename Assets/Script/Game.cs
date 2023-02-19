@@ -158,9 +158,9 @@ public class Game : MonoBehaviour
     public void FailGame()
     {
         result = GameResult.FAIL;
-        player.m_animator.CrossFade("Player_GiveUp",0.1f);
         delayShowEndTimer = 2;
         playing = false;
+        player.m_animator.SetTrigger("fail");
     }
 
     public void WinGame()

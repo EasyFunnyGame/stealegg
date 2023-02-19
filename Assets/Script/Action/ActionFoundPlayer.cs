@@ -9,7 +9,6 @@ public class ActionFoundPlayer : ActionBase
     public ActionFoundPlayer(Enemy character) : base(character, ActionType.FoundPlayer)
     {
         actionDuration = 0;
-        character.m_animator.Play("Enemy_Alert");
     }
 
     public override bool CheckComplete()

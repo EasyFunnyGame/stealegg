@@ -94,8 +94,8 @@ public class Item : MonoBehaviour
                 picked = true;
                 gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
+                player.m_animator.SetTrigger("pick");
                 player.bottleCount++;
-                player.m_animator.Play("Player_PickUp");
                 delete = true;
                 break;
 
