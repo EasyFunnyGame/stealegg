@@ -650,13 +650,9 @@ public class Enemy : Character
     public void OnTurnEnd()
     {
         body_looking = false;
-        if (foundPlayerTile == null)
+        if (!CatchPlayer())
         {
             TryFoundPlayer();
-        }
-        else
-        {
-            CatchPlayer();
         }
         m_animator.SetBool("moving",false);
     }

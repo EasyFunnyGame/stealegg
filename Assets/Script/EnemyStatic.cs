@@ -11,14 +11,6 @@ public class EnemyStatic : Enemy
     {
         base.Reached();
         sleeping = false;
-        if(foundPlayerTile == null && hearSoundTile == null)
-        {
-
-        }
-        else
-        {
-
-        }
     }
 
     public override void OnReachedOriginal()
