@@ -86,6 +86,7 @@ public class Item : MonoBehaviour
                 gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
                 Game.Instance.energy += 5;
+                PlayerPrefs.SetInt("Energy", Game.Instance.energy);
                 delete = true;
                 break;
 

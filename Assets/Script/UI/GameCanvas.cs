@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameCanvas : BaseCanvas
 {
-    public int index;
+    public int level;
 
     public RawImage img_level;
 
@@ -240,7 +240,7 @@ public class GameCanvas : BaseCanvas
     protected override void OnShow()
     {
         RefreshEnergy();
-        img_level.texture = Resources.Load<Texture>("UI/Sprite/Num/" + (index+1).ToString());
+        img_level.texture = Resources.Load<Texture>("UI/Sprite/Num/" + level.ToString());
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
@@ -323,7 +323,7 @@ public class GameCanvas : BaseCanvas
                     break;
                 case ItemName.Item_Graff:
                     icon_graff.item = item;
-                    item.icon = icon_star;
+                    item.icon = icon_graff;
                     icon_graff.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_End:

@@ -2,9 +2,49 @@
 
 public class ActionPlayerMove : ActionBase
 {
-    public ActionPlayerMove(Character character, GridTile tile) : base(character, ActionType.PlayerMove)
+    Vector3 velocity = new Vector3();
+    public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
+        velocity = new Vector3();
         character.FindPathRealTime(tile);
+        player.m_animator.SetFloat("crouch", 0);
+        var currentNodeName = player.currentTile.name;
+        var targetNodeName = tile.name;
+        var linkLine = player.boardManager.FindLine(currentNodeName, targetNodeName);
+        if(linkLine!=null)
+        {
+            Transform lineType = null;
+            for(var index = 0; index < linkLine.transform.childCount; index++)
+            {
+                if(linkLine.transform.GetChild(index).gameObject.activeSelf)
+                {
+                    lineType = linkLine.transform.GetChild(index);
+                    break;
+                }
+            }
+            if(lineType != null)
+            {
+                // Debug.Log("连线类型：" + lineType.name);
+                switch(lineType.name)
+                {
+                    case "Hor_Normal_Visual":
+                        player.m_animator.SetFloat("crouch",0);
+                        break;
+
+                    case "Hor_Doted_Visual":
+                        player.m_animator.SetFloat("crouch", 1);
+                        break;
+                }
+            }
+        }
+    }
+
+    public Player player
+    {
+        get
+        {
+            return character as Player;
+        }
     }
 
     public override bool CheckComplete()
@@ -56,7 +96,9 @@ public class ActionPlayerMove : ActionBase
         if (character.moving)
         {
             float step = character.move_speed * Time.deltaTime;
-            character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position, step);
+            //character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position, step);
+            
+            character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position, ref velocity, 0.12f);
             var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
             if (tdist < 0.001f)
             {

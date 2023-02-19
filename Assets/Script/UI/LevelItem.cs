@@ -82,7 +82,7 @@ public class LevelItem : MonoBehaviour
             return;
         }
 
-        Game.Instance.StartGame(sceneName, index);
+        Game.Instance.StartGame(sceneName);
     }
 
 }

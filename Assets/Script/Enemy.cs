@@ -190,7 +190,7 @@ public class Enemy : Character
             m_animator.CrossFade("Player_Idle", 0.1f);
         }
 
-        Debug.Log("敌人到达路径点:"+ currentTile.name);
+        //Debug.Log("敌人到达路径点:"+ currentTile.name);
     }
 
     public virtual void UpdateRouteMark()
@@ -313,6 +313,7 @@ public class Enemy : Character
             return false;
         }
         if (Game.Instance.result == GameResult.FAIL) return false;
+        if (sleeping) return false;
         var xOffset = 0;
         var zOffset = 0;
         if (direction == Direction.Up)

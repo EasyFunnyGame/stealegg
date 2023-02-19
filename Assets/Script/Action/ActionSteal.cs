@@ -3,8 +3,10 @@
 public class ActionSteal : ActionBase
 {
     private float actionDuration = 1;
-    public ActionSteal(Player player) : base(player, ActionType.Steal)
+    private Item graffItem;
+    public ActionSteal(Player player, Item item) : base(player, ActionType.Steal)
     {
+        graffItem = item;
         player.m_animator.SetTrigger("graff");
         player.PlayStealEffect();
     }
@@ -15,7 +17,6 @@ public class ActionSteal : ActionBase
         {
             return character as Player;
         }
-
     }
 
     public override bool CheckComplete()
@@ -39,6 +40,10 @@ public class ActionSteal : ActionBase
                     enemy.LureSteal(playerTileName);
                 }
             }
+
+            graffItem.picked = true;
+            graffItem.gameObject.SetActive(false);
+            graffItem.icon.gameObject.SetActive(false);
             return true;
         }
         return false;

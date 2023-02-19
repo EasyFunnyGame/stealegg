@@ -59,6 +59,7 @@ public class Game : MonoBehaviour
         energy = PlayerPrefs.GetInt("Energy", -1);
         if (energy == -1)
             energy = 10;
+
         mainCanvas.Show();
         msgCanvas.Show();
         gameCanvas.Hide();
@@ -71,15 +72,13 @@ public class Game : MonoBehaviour
         cameraSettingCanvas.Show();
     }
 
-    public void StartGame(string sceneName, int index)
+    public void StartGame(string sceneName)
     {
         PlayLevel(sceneName);
 
         energy--;
 
         chapterCanvas.Hide();
-
-        gameCanvas.index = index;
 
         result = GameResult.NONE;
 
@@ -105,6 +104,7 @@ public class Game : MonoBehaviour
         player.bottleCount = 0;
         delayShowEndTimer = 0;
         bottleSelectingTarget = false;
+        gameCanvas.level = playingLevel+1;
         gameCanvas.Show();
         gameCanvas.InitWithBoardManager(boardMgr);
         cameraSettingCanvas.InitWithGameCamera(camera, player);
@@ -365,7 +365,7 @@ public class Game : MonoBehaviour
         if(!graffed)
         {
             graffed = true;
-            player.currentAction = new ActionSteal(player);
+            player.currentAction = new ActionSteal(player, boardManager.allItems[player.currentTile.name]);
         }
     }
 

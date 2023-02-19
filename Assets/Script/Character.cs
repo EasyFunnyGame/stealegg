@@ -244,7 +244,7 @@ public class Character : MonoBehaviour
         if (rotateY > 3)
         {
             rotateY -= 4;
-            Debug.Log("计算方向出错");
+            //Debug.Log("计算方向出错");
         }
         direction = (Direction)System.Enum.Parse(typeof(Direction), rotateY.ToString(), true);
         targetDirection = direction;
