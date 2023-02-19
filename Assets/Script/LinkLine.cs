@@ -8,6 +8,7 @@ public class LinkLine : MonoBehaviour
 
     public string node2;
 
+    public bool through = true;
 
     // Start is called before the first frame update
     void Start()

@@ -4,40 +4,57 @@ public class ActionPlayerMove : ActionBase
 {
     Vector3 velocity = new Vector3();
 
+    float height = 0f;
+
     bool crounching=false;
     public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
         velocity = new Vector3();
-        character.FindPathRealTime(tile);
+        player.FindPathRealTime(tile);
         player.m_animator.SetFloat("crouch", 0);
         var currentNodeName = player.currentTile.name;
         var targetNodeName = tile.name;
         var linkLine = player.boardManager.FindLine(currentNodeName, targetNodeName);
-        if(linkLine!=null)
+        if(linkLine == null)
         {
-            Transform lineType = null;
-            for(var index = 0; index < linkLine.transform.childCount; index++)
+            player.Clear();
+            return;
+        }
+        //if(linkLine.through==false)
+        //{
+        //    player.Clear();
+        //    return;
+        //}
+        Transform lineType = null;
+        for(var index = 0; index < linkLine.transform.childCount; index++)
+        {
+            if(linkLine.transform.GetChild(index).gameObject.activeSelf)
             {
-                if(linkLine.transform.GetChild(index).gameObject.activeSelf)
-                {
-                    lineType = linkLine.transform.GetChild(index);
-                    break;
-                }
+                lineType = linkLine.transform.GetChild(index);
+                break;
             }
-            if(lineType != null)
-            {
-                // Debug.Log("连线类型：" + lineType.name);
-                switch(lineType.name)
-                {
-                    case "Hor_Normal_Visual":
-                        player.m_animator.SetFloat("crouch",0);
-                        break;
+        }
 
-                    case "Hor_Doted_Visual":
-                        player.m_animator.SetFloat("crouch", 1);
-                        crounching = true;
-                        break;
-                }
+        var targetNode = player.boardManager.FindNode(tile.name);
+        height = targetNode.transform.position.y-player.transform.position.y;
+
+        if (lineType != null)
+        {
+            // Debug.Log("连线类型：" + lineType.name);
+            switch(lineType.name)
+            {
+                case "Hor_Normal_Visual":
+                    player.m_animator.SetFloat("crouch",0);
+                    break;
+
+                case "Hor_Doted_Visual":
+                    player.m_animator.SetFloat("crouch", 1);
+                    crounching = true;
+                    break;
+
+                case "StairsUp_Normal_Visual":
+                    //var currentNode = player.boardManager.FindNode(player.currentTile.name);
+                    break;
             }
         }
     }
@@ -54,7 +71,9 @@ public class ActionPlayerMove : ActionBase
     {
         if(character.selected_tile_s != null && character.selected_tile_s.db_path_lowest.Count==1)
         {
-            var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
+            var myPosition = character.tr_body.position;
+            var targetPosition = character.db_moves[0].position;
+            var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
             if (tdist < 0.001f)
             {
                 character.Reached();
@@ -99,18 +118,18 @@ public class ActionPlayerMove : ActionBase
         if (character.moving)
         {
            
-
             if(crounching)
             {
                 float step = character.move_speed * Time.deltaTime;
-                character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position, step);
+                character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);
             }
             else
             {
-                character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position, ref velocity, 0.12f);
+                character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), ref velocity, 0.12f);
             }
-            
-            var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
+            var myPosition = character.tr_body.position;
+            var targetPosition = character.db_moves[0].position;
+            var tdist = Vector3.Distance(new Vector3(myPosition.x,0, myPosition.z), new Vector3(targetPosition.x,0, targetPosition.z));
             if (tdist < 0.001f)
             {
                 character.currentTile = character.tar_tile_s.db_path_lowest[character.num_tile];

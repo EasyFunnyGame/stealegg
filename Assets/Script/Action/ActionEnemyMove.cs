@@ -3,12 +3,15 @@
 public class ActionEnemyMove : ActionBase
 {
     private Vector3 nextStepTilePosition;
-
+    float height = 0f;
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         enemy.FindPathRealTime(tile);
         nextStepTilePosition = enemy.db_moves[0].position;
         enemy.StartMove();
+
+        var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
+        height = targetNode.transform.position.y - enemy.transform.position.y;
     }
 
     public Enemy enemy
@@ -21,7 +24,9 @@ public class ActionEnemyMove : ActionBase
 
     public override bool CheckComplete()
     {
-        var tdist = Vector3.Distance(character.tr_body.position, nextStepTilePosition);
+        var myPosition = character.tr_body.position;
+        var targetPosition = nextStepTilePosition;
+        var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist < 0.001f)
         {
             if(enemy.foundPlayerTile)
@@ -206,8 +211,10 @@ public class ActionEnemyMove : ActionBase
         else if (character.moving)
         {
             float step = character.move_speed * Time.deltaTime;
-            character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position, step);
-            var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
+            character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position+new Vector3(0,height,0), step);
+            var myPosition = character.tr_body.position;
+            var targetPosition = character.db_moves[0].position;
+            var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
             if (tdist < 0.001f)
             {
                 character.currentTile = character.tar_tile_s.db_path_lowest[character.num_tile];

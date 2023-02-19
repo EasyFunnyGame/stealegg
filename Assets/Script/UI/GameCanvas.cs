@@ -215,7 +215,16 @@ public class GameCanvas : BaseCanvas
                 UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
-            
+        }
+
+        for (var index = 0; index < icon_pincers.Count; index++)
+        {
+            var icon = icon_pincers[index];
+            if (icon.gameObject.activeSelf)
+            {
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                icon.rectTransform.anchoredPosition = screenPoint;
+            }
         }
 
     }
@@ -289,6 +298,29 @@ public class GameCanvas : BaseCanvas
         InitEnemyIcons(boardManager);
     }
 
+    public void OnClickPricersHandler()
+    {
+        
+        if(Game.Instance.player == null || Game.Instance.player.currentTile == null)
+        {
+            return;
+        }
+        var player = Game.Instance.player;
+        var tileName = player.currentTile.name;
+        var allItems = Game.Instance.boardManager.allItems;
+        if(!allItems.ContainsKey(tileName))
+        {
+            return;
+        }
+        var pincersItem = allItems[tileName];
+        if (pincersItem == null || pincersItem.itemType != ItemType.Pincers)
+        {
+            return;
+        }
+        Game.Instance.CutBarbedWire(pincersItem as PincersItem);
+        Debug.Log("剪铁丝网");
+    }
+
     void InitItemIcons(BoardManager boardManager)
     {
         // 物品图标
@@ -309,6 +341,12 @@ public class GameCanvas : BaseCanvas
                     icon_star.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_Pincers:
+                    var pincersIcon = Instantiate(icon_template_pricers_template, transform);
+                    pincersIcon.gameObject.SetActive(true);
+                    icon_pincers.Add(pincersIcon);
+                    pincersIcon.item = item;
+                    item.icon = pincersIcon;
+                    pincersIcon.button.onClick.AddListener(OnClickPricersHandler);
                     break;
                 case ItemName.Item_ManholeCover:
                     break;
@@ -360,5 +398,11 @@ public class GameCanvas : BaseCanvas
             DestroyImmediate(icon_bottles[index].gameObject);
         }
         icon_bottles.Clear();
+
+        for (var index = 0; index < icon_pincers.Count; index++)
+        {
+            DestroyImmediate(icon_pincers[index].gameObject);
+        }
+        icon_pincers.Clear();
     }
 }

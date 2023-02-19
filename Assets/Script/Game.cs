@@ -325,6 +325,12 @@ public class Game : MonoBehaviour
                     }
                 }
 
+                var linkLine = player.boardManager.FindLine(player.currentTile.name, tile.name);
+                if(linkLine == null || linkLine.through== false)
+                {
+                    return;
+                }
+
                 if (player.moving || player.currentTile != tile)
                 {
                     player.currentAction = new ActionPlayerMove(player, tile);
@@ -449,5 +455,10 @@ public class Game : MonoBehaviour
             WinGame();
             Save();
         }
+    }
+
+    public void CutBarbedWire(PincersItem item)
+    {
+        player.currentAction = new ActionPincersCut(player, item);
     }
 }
