@@ -309,7 +309,7 @@ public class BoardManager : MonoBehaviour
         ProcessLinkedNodes();
         ProcessItem();
         ProcessEnemy();
-        SaveAsPrefab(Selection.activeGameObject);
+        // SaveAsPrefab(Selection.activeGameObject);
     }
 
 
@@ -504,9 +504,10 @@ public class BoardManager : MonoBehaviour
         {
             var enemyTransform = enemyRoot.GetChild(index);
             var prefapUrl = string.Format(prefabRoot, enemyTransform.name);
-            Debug.Log(prefapUrl);
+            //Debug.Log(prefapUrl);
             var enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefapUrl);
             var enemyInstance = Instantiate(enemyPrefab);
+            //PrefabUtility.ApplyPrefabInstance(enemyInstance, InteractionMode.UserAction);
             enemyInstance.transform.parent = enemyRoot;
             enemyInstance.gameObject.name = enemyTransform.name;
             enemyInstance.transform.localPosition = new Vector3(Mathf.RoundToInt(enemyTransform.localPosition.x), enemyTransform.localPosition.y, Mathf.RoundToInt(enemyTransform.localPosition.z));
