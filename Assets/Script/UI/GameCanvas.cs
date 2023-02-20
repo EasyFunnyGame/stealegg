@@ -227,6 +227,26 @@ public class GameCanvas : BaseCanvas
             }
         }
 
+        for (var index = 0; index < icon_manholecover.Count; index++)
+        {
+            var icon = icon_manholecover[index];
+            if (icon.gameObject.activeSelf)
+            {
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                icon.rectTransform.anchoredPosition = screenPoint;
+            }
+        }
+
+        for (var index = 0; index < icon_growth.Count; index++)
+        {
+            var icon = icon_growth[index];
+            if (icon.gameObject.activeSelf)
+            {
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                icon.rectTransform.anchoredPosition = screenPoint;
+            }
+        }
+
     }
 
     void LateUpdate()
@@ -300,7 +320,6 @@ public class GameCanvas : BaseCanvas
 
     public void OnClickPricersHandler()
     {
-        
         if(Game.Instance.player == null || Game.Instance.player.currentTile == null)
         {
             return;
@@ -318,7 +337,63 @@ public class GameCanvas : BaseCanvas
             return;
         }
         Game.Instance.CutBarbedWire(pincersItem as PincersItem);
-        Debug.Log("剪铁丝网");
+    }
+
+    void OnClickManholeCoverIconHandler(ItemIconOnUI itemIcon)
+    {
+        if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
+        {
+            return;
+        }
+        var player = Game.Instance.player;
+        var tileName = player.currentTile.name;
+        var allItems = Game.Instance.boardManager.allItems;
+        if (!allItems.ContainsKey(tileName))
+        {
+            return;
+        }
+        var manHoleCover = allItems[tileName];
+        if (manHoleCover == null || manHoleCover.itemType != ItemType.ManHoleCover)
+        {
+            return;
+        }
+        if(itemIcon.item == null || itemIcon.item.itemType != ItemType.ManHoleCover)
+        {
+            return;
+        }
+        if(itemIcon.item.transform.position == manHoleCover.transform.position)
+        {
+            return;
+        }
+        foreach(var enemy in Game.Instance.boardManager.enemies)
+        {
+            if(enemy.coord.name == itemIcon.item.coord.name)
+            {
+                return;
+            }
+        }
+        Game.Instance.JumpIntoManholeCover(itemIcon.item as ManholeCoverItem);
+    }
+
+    void OnClickGrowthHandler(GrowthItem item)
+    {
+        if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
+        {
+            return;
+        }
+        var player = Game.Instance.player;
+        var tileName = player.currentTile.name;
+        var allItems = Game.Instance.boardManager.allItems;
+        if (!allItems.ContainsKey(tileName))
+        {
+            return;
+        }
+        var pincersItem = allItems[tileName];
+        if (pincersItem == null || pincersItem.itemType != ItemType.Growth)
+        {
+            return;
+        }
+        Game.Instance.SkipPlayerTurn();
     }
 
     void InitItemIcons(BoardManager boardManager)
@@ -349,6 +424,14 @@ public class GameCanvas : BaseCanvas
                     pincersIcon.button.onClick.AddListener(OnClickPricersHandler);
                     break;
                 case ItemName.Item_ManholeCover:
+                    var manCoverIcon = Instantiate(icon_template_manholecover_template, transform);
+                    manCoverIcon.gameObject.SetActive(true);
+                    icon_manholecover.Add(manCoverIcon);
+                    manCoverIcon.item = item;
+                    item.icon = manCoverIcon;
+                    manCoverIcon.button.onClick.AddListener(delegate() {
+                        OnClickManholeCoverIconHandler(manCoverIcon);
+                    });
                     break;
                 case ItemName.Item_LureBottle:
                     var bottleIcon = Instantiate(icon_template_bottle_template, transform);
@@ -358,6 +441,16 @@ public class GameCanvas : BaseCanvas
                     item.icon = bottleIcon;
                     break;
                 case ItemName.item_Growth:
+
+                    var growthIcon = Instantiate(icon_template_growth_template, transform);
+                    growthIcon.gameObject.SetActive(true);
+                    icon_growth.Add(growthIcon);
+                    growthIcon.item = item;
+                    item.icon = growthIcon;
+                    growthIcon.button.onClick.AddListener(delegate () {
+                        OnClickGrowthHandler(item as GrowthItem);
+                    });
+
                     break;
                 case ItemName.Item_Graff:
                     icon_graff.item = item;
@@ -404,5 +497,17 @@ public class GameCanvas : BaseCanvas
             DestroyImmediate(icon_pincers[index].gameObject);
         }
         icon_pincers.Clear();
+
+        for (var index = 0; index < icon_manholecover.Count; index++)
+        {
+            DestroyImmediate(icon_manholecover[index].gameObject);
+        }
+        icon_manholecover.Clear();
+
+        for (var index = 0; index < icon_growth.Count; index++)
+        {
+            DestroyImmediate(icon_growth[index].gameObject);
+        }
+        icon_growth.Clear();
     }
 }

@@ -18,4 +18,6 @@ public enum ActionType
    ThrowBottle,
 
    PincersCut,
+
+   ManHoleCover,
 }

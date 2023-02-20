@@ -461,4 +461,15 @@ public class Game : MonoBehaviour
     {
         player.currentAction = new ActionPincersCut(player, item);
     }
+
+    public void JumpIntoManholeCover(ManholeCoverItem item)
+    {
+        player.currentAction = new ActionJumpManholeCover(player, item);
+
+    }
+
+    public void SkipPlayerTurn()
+    {
+        player.currentAction = new ActionTurnDirection(player, player.direction);
+    }
 }

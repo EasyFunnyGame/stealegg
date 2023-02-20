@@ -69,7 +69,7 @@ public class LevelItem : MonoBehaviour
 
     void onClickChapterLevelHandler()
     {
-        var sceneName = string.Format("{0}-{1}", chapter + 1, index + 1);
+            var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
         var level = PlayerPrefs.GetInt("Level");
         if (level == level + 1)
         {

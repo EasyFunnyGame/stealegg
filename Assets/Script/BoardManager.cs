@@ -498,7 +498,7 @@ public class BoardManager : MonoBehaviour
     //[ContextMenu("替换敌人预设")]
     void ProcessEnemy()
     {
-        var prefabRoot = "Assets/__Resources/Prefab/Character/{0}.prefab";
+        var prefabRoot = "Assets/__Resources/Prefab/{0}.prefab";
         var childCount = enemyRoot.childCount;
         for (var index = 0; index < childCount; index++)
         {

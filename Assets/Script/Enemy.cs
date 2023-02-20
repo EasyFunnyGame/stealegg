@@ -50,6 +50,10 @@ public class Enemy : Character
 
     public bool sleeping = false;
 
+    public bool patroling = false;
+
+    public bool waiting = false;
+
     public override void Start()
     {
         base.Start();
@@ -153,11 +157,11 @@ public class Enemy : Character
             var nodeTr = node.targetIcon;
             var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
             copyNode.name = nodeName;
-            redNodes.Add(copyNode);
             copyNode.transform.position = nodeTr.transform.position;
             copyNode.transform.Translate(new Vector3(0, 0.001f, 0));
             copyNode.transform.rotation = nodeTr.transform.rotation;
             copyNode.material = Resources.Load<Material>("Material/RouteRed");
+            redNodes.Add(copyNode);
         }
     }
 
@@ -240,55 +244,33 @@ public class Enemy : Character
         RedNodeByName(next2NodeName);
     }
 
-    //public virtual bool TryCatchPlayer()
+    //public virtual bool PlayerWalkIntoSight()
     //{
-    //    if (Game.Instance.player == null || Game.Instance.player.currentTile == null) return false;
-    //    var canSeePlayer = Game.Instance.player.CanReachInSteps(currentTile.name);
-    //    var targetDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
-    //    if(targetDirection == direction)
+    //    if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
     //    {
-    //        if (foundPlayerTile != null && canSeePlayer)
+    //        return false;
+    //    }
+    //    var canReach = false;
+    //    // 情况1
+    //    canReach = Game.Instance.player.CanReachInSteps(currentTile.name);
+    //    var foundPlayerDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
+    //    if (canReach && foundPlayerDirection == direction)
+    //    {
+    //        var targetTile = gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+    //        if (targetTile != null)
     //        {
-    //            Game.Instance.FailGame();
-    //            return true;
-    //        }
-    //        var canReach = CanReachInSteps(Game.Instance.player.currentTile.name);
-    //        if (canReach)
-    //        {
-    //            Game.Instance.FailGame();
+    //            hearSoundTile = targetTile;
+    //            turnOnReached = true;
+    //            ShowTraceTarget(targetTile);
+    //            ShowFound();
+    //            originalTile = null;
+    //            currentAction = new ActionTurnDirection(this, targetDirection);
+    //            Debug.Log("主角闯进视野:" + targetTile.name);
     //            return true;
     //        }
     //    }
     //    return false;
     //}
-
-    public virtual bool PlayerWalkIntoSight()
-    {
-        if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
-        {
-            return false;
-        }
-        var canReach = false;
-        // 情况1
-        canReach = Game.Instance.player.CanReachInSteps(currentTile.name);
-        var foundPlayerDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
-        if (canReach && foundPlayerDirection == direction)
-        {
-            var targetTile = gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-            if (targetTile != null)
-            {
-                hearSoundTile = targetTile;
-                turnOnReached = true;
-                ShowTraceTarget(targetTile);
-                ShowFound();
-                originalTile = null;
-                currentAction = new ActionTurnDirection(this, targetDirection);
-                Debug.Log("主角闯进视野:" + targetTile.name);
-                return true;
-            }
-        }
-        return false;
-    }
 
     public virtual bool TryFoundPlayer()
     {
@@ -321,10 +303,7 @@ public class Enemy : Character
         var next1NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
 
         var foundPlayer = false;
-        //var canReach = false;
         
-        var player = Game.Instance.player;
-
         var foundPlayerNode = "";
 
         LinkLine linkLine;
@@ -336,6 +315,7 @@ public class Enemy : Character
             {
                 foundPlayer = true;
                 foundPlayerNode = next1NodeName;
+                
             }
         }
         
@@ -359,8 +339,9 @@ public class Enemy : Character
                 ShowTraceTarget(targetTile);
                 ShowFound();
                 originalTile = null;
-                Debug.Log("开始追踪:" + targetTile.name);
+                //Debug.Log("开始追踪:" + targetTile.name);
                 turnOnReached = true;
+                patroling = false;
                 return true;
             }
         }
@@ -372,7 +353,7 @@ public class Enemy : Character
         m_animator.SetBool("moving", true);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if(body_looking)
         {
@@ -380,39 +361,43 @@ public class Enemy : Character
         }
         else
         {
-            route.SetActive(!sleeping);
-            var node1 = boardManager.FindNode(routeNode1Name);
-            var node2 = boardManager.FindNode(routeNode2Name);
-            if (node1==null && node2 ==null)
-            {
-                route.SetActive(false);
-            }
-            else
-            {
-                var endNode = node2 ? node2 : node1;
-                var distance = Vector3.Distance(transform.position, endNode.transform.position);
-                routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
-                routeArrow.localPosition = new Vector3(0, 0, distance);
-
-                for (var index = 0; index < redNodes.Count; index++)
-                {
-                    if (redNodes[index].name == currentTile.name)
-                    {
-                        distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
-                        if (distance > 0.1f)
-                        {
-                            redNodes[index].gameObject.SetActive(false);
-                        }
-                    }
-                }
-                //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
-            }
+            UpdateRouteRedLine();
         }
-
-        updateAnimatorParams();
+        UpdateAnimatorParams();
     }
 
-    private void updateAnimatorParams()
+    protected virtual void UpdateRouteRedLine()
+    {
+        route.SetActive(!sleeping);
+        var node1 = boardManager.FindNode(routeNode1Name);
+        var node2 = boardManager.FindNode(routeNode2Name);
+        if (node1 == null && node2 == null)
+        {
+            route.SetActive(false);
+        }
+        else
+        {
+            var endNode = node2 ? node2 : node1;
+            var distance = Vector3.Distance(transform.position, endNode.transform.position);
+            routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
+            routeArrow.localPosition = new Vector3(0, 0, distance);
+
+            for (var index = 0; index < redNodes.Count; index++)
+            {
+                if (redNodes[index].name == currentTile.name)
+                {
+                    distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
+                    if (distance > 0.1f)
+                    {
+                        redNodes[index].gameObject.SetActive(false);
+                    }
+                }
+            }
+            //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
+        }
+    }
+
+    private void UpdateAnimatorParams()
     {
         if (targetIdleType < idleType)
         {
