@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +14,13 @@ class GridTileEditor : Editor
         GridTile tile_s = (GridTile)target;
         if (GUILayout.Button("Disable Walls"))
             tile_s.disable_walls();
-        if (GUILayout.Button("Top"))
-            tile_s.add_wall(0);
-        if (GUILayout.Button("Right"))
-            tile_s.add_wall(1);
-        if (GUILayout.Button("Bottom"))
-            tile_s.add_wall(2);
         if (GUILayout.Button("Left"))
+            tile_s.add_wall(0);
+        if (GUILayout.Button("Top"))
+            tile_s.add_wall(1);
+        if (GUILayout.Button("Right"))
+            tile_s.add_wall(2);
+        if (GUILayout.Button("Bottom"))
             tile_s.add_wall(3);
 
         DrawDefaultInspector();

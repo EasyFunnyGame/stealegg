@@ -226,11 +226,43 @@ public class GameCanvas : BaseCanvas
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
+        // 水井盖图标显示，能用的才显示出来
 
+        var showManHoleCoverIcon = false;
+        var playerTileName = Game.Instance.player?.currentTile?.name;
+        if(!string.IsNullOrEmpty(playerTileName))
+        {
+            var items = Game.Instance.boardManager.allItems;
+            if(items.ContainsKey(playerTileName))
+            {
+                var item = items[playerTileName];
+                if(item?.itemType == ItemType.ManHoleCover)
+                {
+                    showManHoleCoverIcon = true;
+                }
+            }
+        }
+        
         for (var index = 0; index < icon_manholecover.Count; index++)
         {
             var icon = icon_manholecover[index];
-            if (icon.gameObject.activeSelf)
+            var item = icon.item;
+            var iconShow = true;
+            if(item.coord.name == playerTileName)
+            {
+                iconShow = false;
+            }
+            foreach(var enemy in Game.Instance.boardManager.enemies)
+            {
+                if(enemy.coord.name == item.coord.name)
+                {
+                    iconShow = false;
+                    break;
+                }
+            }
+            icon.gameObject.SetActive(iconShow && showManHoleCoverIcon);
+
+            if (icon.gameObject.activeSelf )
             {
                 UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;

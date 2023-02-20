@@ -16,10 +16,10 @@ public class PincersItem : Item
         Instantiate(dotLinePrefab, linkline.transform);
 
         var originalLine = linkline.transform.GetChild(0);
-        originalLine.gameObject.SetActive(false);
+        originalLine?.gameObject.SetActive(false);
 
         var texture = Resources.Load<Texture>("Texture/grillage_03_cutted");
-        wireNetMesh.material.SetTexture("_MainTex", texture);
+        wireNetMesh?.material.SetTexture("_MainTex", texture);
 
     }
 
