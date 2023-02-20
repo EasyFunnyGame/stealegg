@@ -118,6 +118,34 @@ public class EnemyPatrol : Enemy
         }
     }
 
+
+    public bool needTurn()
+    {
+        var reachEdge = false;
+        var nextIndex = patrolPointIndex + patrolDirection;
+        if (patrolPoints.Count == nextIndex)
+        {
+            reachEdge = true;
+        }
+        else if (nextIndex < 0)
+        {
+            reachEdge = true;
+        }
+        else if (patrolPoints.Count < nextIndex)
+        {
+            reachEdge = true;
+        }
+        if(reachEdge)
+        {
+            var rechEdgeDirection = Utils.DirectionTo(currentTile, gridManager.GetTileByName(lastTileName), direction);
+            if(direction != rechEdgeDirection)
+            {
+                targetDirection = rechEdgeDirection;
+                return true;
+            }
+        }return false;
+    }
+
     protected override void UpdateRouteRedLine()
     {
         if(patroling == false)
@@ -241,11 +269,6 @@ public class EnemyPatrol : Enemy
         {
             patrolDirection = -1;
         }
-        //else if(nextIndex < 0)
-        //{
-        //    patrolDirection = 1;
-        //}
-        
         nextIndex = patrolPointIndex + patrolDirection;
 
         patrolPointIndex = nextIndex;

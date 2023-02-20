@@ -16,6 +16,7 @@ public class ActionTurnDirection : ActionBase
         if(character.direction == targetDirection)
         {
             (character as Enemy)?.OnTurnEnd();
+            //character.body_looking = false;
             return true;
         }
         return false;

@@ -165,6 +165,19 @@ public class ActionEnemyMove : ActionBase
                     return true;
                 }
             }
+            else if(enemy.patroling)
+            {
+                var patrolEnemy = enemy as EnemyPatrol;
+                if(patrolEnemy.needTurn())
+                {
+                    Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
+                }
+                else
+                {
+                    character.Reached();
+                    return true;
+                }
+            }
             else 
             {
                 character.Reached();
@@ -204,7 +217,7 @@ public class ActionEnemyMove : ActionBase
                 //if (tdist < 0.01f)
                 //{
                 enemy.Reached();
-                enemy.OnTurnEnd();
+                //enemy.OnTurnEnd();
                 //}
             }
         }

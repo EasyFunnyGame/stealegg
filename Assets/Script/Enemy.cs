@@ -177,7 +177,6 @@ public class Enemy : Character
         if (foundPlayer)
         {
             currentAction = new ActionFoundPlayer(this);
-            return;
         }
         m_animator.SetBool("moving", false);
         //Debug.Log("敌人到达路径点:"+ currentTile.name);
@@ -635,9 +634,26 @@ public class Enemy : Character
     public void OnTurnEnd()
     {
         body_looking = false;
-        if (!CatchPlayer())
+        if (foundPlayerTile == null)
         {
             TryFoundPlayer();
+            if (foundPlayerTile != null)
+            {
+                if (hearSoundTile == null)
+                {
+                    currentAction = new ActionFoundPlayer(this);
+                }
+                else
+                {
+                    currentAction = new ActionTurnDirection(this, targetDirection);
+                    //currentAction = new ActionEnemyMove(this, hearSoundTile);
+                }
+                return;
+            }
+        }
+        else
+        {
+            if (CatchPlayer()) return;
         }
         m_animator.SetBool("moving",false);
     }

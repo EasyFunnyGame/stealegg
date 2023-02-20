@@ -22,18 +22,18 @@ public class ActionJumpManholeCover : ActionBase
         if (actionDuration < 0)
         {
             var boardManager = Game.Instance.boardManager;
-            var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
-            foreach (var kvp in nodes)
-            {
-                for (var index = 0; index < boardManager.enemies.Count; index++)
-                {
-                    var enemy = boardManager.enemies[index];
-                    if (enemy.coord.name == kvp.Key)
-                    {
-                        enemy.LureWhistle(player.currentTile.name);
-                    }
-                }
-            }
+            //var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
+            //foreach (var kvp in nodes)
+            //{
+            //    for (var index = 0; index < boardManager.enemies.Count; index++)
+            //    {
+            //        var enemy = boardManager.enemies[index];
+            //        if (enemy.coord.name == kvp.Key)
+            //        {
+            //            enemy.LureWhistle(player.currentTile.name);
+            //        }
+            //    }
+            //}
             manholecover.JumpOut();
             var tile = player.gridManager.GetTileByName(manholecover.coord.name);
             if(tile)

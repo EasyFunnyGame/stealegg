@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 0}
+  owner: {fileID: 2088232885017753737}
 --- !u!1 &2657412368217548371
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,6 +821,8 @@ MonoBehaviour:
   routeNode2Name: 
   redNodes: []
   sleeping: 0
+  patroling: 0
+  waiting: 0
   turnOnReached: 0
   targetTileName: 
 --- !u!1 &9103667222968600252
@@ -953,12 +955,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 802fbcd5018662c4786b0ae0c348151b, type: 3}
---- !u!95 &3352430559203129792 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 287686409816462162, guid: 802fbcd5018662c4786b0ae0c348151b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3276413358196533906}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4697362588524032566 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7802568774414571684, guid: 802fbcd5018662c4786b0ae0c348151b,
@@ -968,6 +964,12 @@ GameObject:
 --- !u!4 &3617569255942812930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2255204474031071120, guid: 802fbcd5018662c4786b0ae0c348151b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3276413358196533906}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3352430559203129792 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 287686409816462162, guid: 802fbcd5018662c4786b0ae0c348151b,
     type: 3}
   m_PrefabInstance: {fileID: 3276413358196533906}
   m_PrefabAsset: {fileID: 0}
