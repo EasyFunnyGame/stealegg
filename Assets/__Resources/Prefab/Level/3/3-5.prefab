@@ -312,12 +312,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db5e5d22ee9240c88942128adad7f4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 0
+  height: 0
   squareRoot: {fileID: 2882604156961600325}
   visualRoot: {fileID: 4005820037316556728}
   enemyRoot: {fileID: 4831267124654422680}
   linkRoot: {fileID: 6360600721715731151}
   itemRoot: {fileID: 1042394055053555307}
+  playerGridManager: {fileID: 0}
+  enemyGridManager: {fileID: 0}
   tirggerVisibleNode: 1
+  name: 
+  player: {fileID: 0}
+  enemies: []
+  dangerNodeNames: []
 --- !u!1 &309668592208295235
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,6 +435,11 @@ MonoBehaviour:
   targetIcon: {fileID: 736433857301471172}
   contour: {fileID: 736433857295221007}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &437228231857094946
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,6 +487,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054836035161}
   contour: {fileID: 1042394055591443848}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &512616899760263173
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,6 +754,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054914132788}
   contour: {fileID: 1042394054067832240}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &614562870985174675
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,6 +916,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394053886269010}
   contour: {fileID: 1042394055154707700}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &736433857295221004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1098,6 +1126,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055362457867}
   contour: {fileID: 1042394054072435071}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &867773422833506835
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1178,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055115948737}
   contour: {fileID: 1042394054284086734}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1042394053860278494
 GameObject:
   m_ObjectHideFlags: 0
@@ -8701,6 +8739,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055772539525}
   contour: {fileID: 1042394055754090949}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1219297491265666772
 GameObject:
   m_ObjectHideFlags: 0
@@ -8889,6 +8932,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054805109030}
   contour: {fileID: 1042394054125676244}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1336191727767253916
 GameObject:
   m_ObjectHideFlags: 0
@@ -9015,6 +9063,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055397131077}
   contour: {fileID: 1042394054446885203}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1361450458116723333
 GameObject:
   m_ObjectHideFlags: 0
@@ -9172,6 +9225,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394053899324038}
   contour: {fileID: 1042394055554633597}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1507764868840468333
 GameObject:
   m_ObjectHideFlags: 0
@@ -9219,6 +9277,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054198916008}
   contour: {fileID: 1042394055127930121}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1513552134957492596
 GameObject:
   m_ObjectHideFlags: 0
@@ -9266,6 +9329,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055444662790}
   contour: {fileID: 1042394054110342174}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1516175186645466630
 GameObject:
   m_ObjectHideFlags: 0
@@ -9313,6 +9381,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055726973112}
   contour: {fileID: 1042394055645981107}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1582848188297029907
 GameObject:
   m_ObjectHideFlags: 0
@@ -9518,6 +9591,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054236826188}
   contour: {fileID: 1042394055269029087}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1747030458284867498
 GameObject:
   m_ObjectHideFlags: 0
@@ -9724,6 +9802,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054047354354}
   contour: {fileID: 1042394054122634135}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &1981649621083249566
 GameObject:
   m_ObjectHideFlags: 0
@@ -10211,6 +10294,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054273491696}
   contour: {fileID: 1042394054022765537}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &2622521652780167326
 GameObject:
   m_ObjectHideFlags: 0
@@ -10289,6 +10377,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055042989736}
   contour: {fileID: 1042394055922340418}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &2691124621784309907
 GameObject:
   m_ObjectHideFlags: 0
@@ -10477,6 +10570,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055784126656}
   contour: {fileID: 1042394054138688775}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &2949975220901352188
 GameObject:
   m_ObjectHideFlags: 0
@@ -11034,6 +11132,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054450514218}
   contour: {fileID: 1042394054415437579}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &3525355990403836159
 GameObject:
   m_ObjectHideFlags: 0
@@ -11081,6 +11184,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055478864342}
   contour: {fileID: 1042394054635164748}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &3547397520952984464
 GameObject:
   m_ObjectHideFlags: 0
@@ -11269,6 +11377,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055932444036}
   contour: {fileID: 1042394053860278493}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &3872839018410057550
 GameObject:
   m_ObjectHideFlags: 0
@@ -11316,6 +11429,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055392244137}
   contour: {fileID: 1042394055255535734}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &3930298381285141187
 GameObject:
   m_ObjectHideFlags: 0
@@ -11552,6 +11670,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054031024072}
   contour: {fileID: 1042394054997295292}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &4302564543342547841
 GameObject:
   m_ObjectHideFlags: 0
@@ -11634,6 +11757,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054720673482}
   contour: {fileID: 1042394055875885027}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &4481243103688696603
 GameObject:
   m_ObjectHideFlags: 0
@@ -12025,6 +12153,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054141985813}
   contour: {fileID: 1042394055400467093}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &5841500947913712204
 GameObject:
   m_ObjectHideFlags: 0
@@ -12275,6 +12408,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054131955261}
   contour: {fileID: 1042394053908752407}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &6549941505110864582
 GameObject:
   m_ObjectHideFlags: 0
@@ -12353,6 +12491,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055190282284}
   contour: {fileID: 1042394055414338917}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &6830057152902142699
 GameObject:
   m_ObjectHideFlags: 0
@@ -12400,6 +12543,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054147526820}
   contour: {fileID: 1042394054153907930}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &6862827501254063204
 GameObject:
   m_ObjectHideFlags: 0
@@ -12636,6 +12784,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055689605439}
   contour: {fileID: 1042394054040524900}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7090573323049791578
 GameObject:
   m_ObjectHideFlags: 0
@@ -12714,6 +12867,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054151911442}
   contour: {fileID: 1042394054243139826}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7181296361002979610
 GameObject:
   m_ObjectHideFlags: 0
@@ -12761,6 +12919,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055034352925}
   contour: {fileID: 1042394055665227645}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7186453924294248998
 GameObject:
   m_ObjectHideFlags: 0
@@ -12808,6 +12971,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055208108037}
   contour: {fileID: 1042394055534675628}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7250210544479131367
 GameObject:
   m_ObjectHideFlags: 0
@@ -12965,6 +13133,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055310306299}
   contour: {fileID: 1042394055019239025}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7411424429890047527
 GameObject:
   m_ObjectHideFlags: 0
@@ -13091,6 +13264,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054209834360}
   contour: {fileID: 1042394055014528564}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7542958312130313386
 GameObject:
   m_ObjectHideFlags: 0
@@ -13406,6 +13584,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054617607569}
   contour: {fileID: 1042394055587695317}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7680984308934273838
 GameObject:
   m_ObjectHideFlags: 0
@@ -13453,6 +13636,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054694320498}
   contour: {fileID: 1042394054588203279}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7718119608548723955
 GameObject:
   m_ObjectHideFlags: 0
@@ -13500,6 +13688,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394056001088294}
   contour: {fileID: 1042394053915119879}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &7779347061226600961
 GameObject:
   m_ObjectHideFlags: 0
@@ -13956,6 +14149,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394054046785669}
   contour: {fileID: 1042394054321015247}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &8334827951195688991
 GameObject:
   m_ObjectHideFlags: 0
@@ -14003,6 +14201,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394055295247600}
   contour: {fileID: 1042394055105745637}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &8372608199999270408
 GameObject:
   m_ObjectHideFlags: 0
@@ -14192,6 +14395,11 @@ MonoBehaviour:
   targetIcon: {fileID: 1042394053922111436}
   contour: {fileID: 1042394055259452567}
   height: 0
+  coord:
+    x: 0
+    z: 0
+    height: 0
+    name: 
 --- !u!1 &8614096990964039952
 GameObject:
   m_ObjectHideFlags: 0

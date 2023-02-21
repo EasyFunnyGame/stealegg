@@ -2,10 +2,12 @@
 
 public class ActionEnemyMove : ActionBase
 {
+    Vector3 velocity = new Vector3();
     private Vector3 nextStepTilePosition;
     float height = 0f;
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
+        velocity = new Vector3();
         enemy.FindPathRealTime(tile);
         nextStepTilePosition = enemy.db_moves[0].position;
         enemy.StartMove();
@@ -202,6 +204,7 @@ public class ActionEnemyMove : ActionBase
         {
             Vector3 tar_dir = character.db_moves[1].position - character.tr_body.position;
             Vector3 new_dir = Vector3.RotateTowards(character.tr_body.forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
+
             new_dir.y = 0;
             character.tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
 
@@ -224,7 +227,9 @@ public class ActionEnemyMove : ActionBase
         else if (character.moving)
         {
             float step = character.move_speed * Time.deltaTime;
-            character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position+new Vector3(0,height,0), step);
+            //character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position+new Vector3(0,height,0), step);
+
+            character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), ref velocity, 0.12f);
             var myPosition = character.tr_body.position;
             var targetPosition = character.db_moves[0].position;
             var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
