@@ -387,6 +387,7 @@ public class Game : MonoBehaviour
         bottleSelectable.Clear();
         bottleSelectingTarget = true;
         player.m_animator.SetBool("bottle_select", true);
+        player.m_animator.SetBool("bottle_cancel", false);
         var nodes = boardManager.FindNodesAround(player.currentTile.name,3);
         foreach(var kvp in nodes)
         {
@@ -423,6 +424,7 @@ public class Game : MonoBehaviour
     {
         boardManager.HideAllSuqreContour();
         player.m_animator.SetBool("bottle_cancel", true);
+        player.m_animator.SetBool("bottle_select", false);
         player.bottle.gameObject.SetActive(false);
         bottleSelectingTarget = false;
     }
