@@ -20,7 +20,7 @@ public class ActionThrowBottle : ActionBase
 
     public ActionThrowBottle(Player player, string targetTile, Vector3 targetPosition) : base(player, ActionType.ThrowBottle)
     {
-        player.m_animator.SetBool("bottle_select", false);
+        player.m_animator.SetInteger("bottle", 1);
         _targetPositon = targetPosition;
         targetTileName = targetTile;
         bottle = player.bottle.transform;

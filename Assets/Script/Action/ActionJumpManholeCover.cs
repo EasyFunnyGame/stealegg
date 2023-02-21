@@ -9,6 +9,7 @@ public class ActionJumpManholeCover : ActionBase
     public ActionJumpManholeCover(Player player, ManholeCoverItem item) : base(player, ActionType.ManHoleCover)
     {
         manholecover = item;
+        player.m_animator.SetBool("jumping",true);
     }
     public Player player
     {
@@ -35,6 +36,7 @@ public class ActionJumpManholeCover : ActionBase
             //    }
             //}
             manholecover.JumpOut();
+            player.m_animator.SetBool("jumping", false);
             var tile = player.gridManager.GetTileByName(manholecover.coord.name);
             if(tile)
             {

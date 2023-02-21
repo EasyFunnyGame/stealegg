@@ -11,7 +11,7 @@ public class ActionPlayerMove : ActionBase
     {
         velocity = new Vector3();
         player.FindPathRealTime(tile);
-        player.m_animator.SetFloat("crouch", 0);
+        
         var currentNodeName = player.currentTile.name;
         var targetNodeName = tile.name;
         var linkLine = player.boardManager.FindLine(currentNodeName, targetNodeName);
@@ -20,6 +20,8 @@ public class ActionPlayerMove : ActionBase
             player.Clear();
             return;
         }
+        
+        player.m_animator.SetInteger("crouch", 0);
         //if(linkLine.through==false)
         //{
         //    player.Clear();
@@ -44,11 +46,11 @@ public class ActionPlayerMove : ActionBase
             switch(lineType.name)
             {
                 case "Hor_Normal_Visual":
-                    player.m_animator.SetFloat("crouch",0);
+                    player.m_animator.SetInteger("crouch",0);
                     break;
 
                 case "Hor_Doted_Visual":
-                    player.m_animator.SetFloat("crouch", 1);
+                    player.m_animator.SetInteger("crouch", 1);
                     crounching = true;
                     break;
 

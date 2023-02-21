@@ -21,15 +21,18 @@ public class Player : Character
 
     private void Update()
     {
-        if(idleTime>0)
+        if(currentAction==null)
         {
-            idleTime -= Time.deltaTime;
-            if(idleTime < 0)
+            if (idleTime > 0)
             {
-                var randomIdleMotion = Random.Range(0, 2);
-                m_animator.SetFloat("look_around", randomIdleMotion);
-                m_animator.SetTrigger("idle_too_long");
-                idleTime = Random.Range(3, 5);
+                idleTime -= Time.deltaTime;
+                if (idleTime < 0)
+                {
+                    var randomIdleMotion = Random.Range(0, 2);
+                    m_animator.SetFloat("look_around", randomIdleMotion);
+                    m_animator.SetTrigger("idle_too_long");
+                    idleTime = Random.Range(3, 5);
+                }
             }
         }
     }
@@ -50,6 +53,8 @@ public class Player : Character
         base.Reached();
         boardManager.PickItem(currentTile.name,this);
         m_animator.SetBool("moving", false);
+        m_animator.SetInteger("bottle",-1);
+        m_animator.SetInteger("jump", -1);
         ShowReached();
         idleTime = Random.Range(3,5);
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
