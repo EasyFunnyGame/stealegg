@@ -784,6 +784,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Unity.InstantGame.Editor.csproj">
+      <Project>{033BB85B-F4C7-0E1A-35E3-FC2095B024C7}</Project>
+      <Name>Unity.InstantGame.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
