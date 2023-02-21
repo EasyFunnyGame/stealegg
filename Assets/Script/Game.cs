@@ -328,6 +328,11 @@ public class Game : MonoBehaviour
                 var linkLine = player.boardManager.FindLine(player.currentTile.name, tile.name);
                 if(linkLine == null || linkLine.through== false)
                 {
+                    if(linkLine==null)
+                    {
+                        Debug.Log("路径点连接GameObject名字出错");
+                    }
+                    
                     return;
                 }
 

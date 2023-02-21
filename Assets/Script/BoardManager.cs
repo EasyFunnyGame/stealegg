@@ -357,7 +357,7 @@ public class BoardManager : MonoBehaviour
                 childCount = nodeTransform.childCount;
             }
 
-            var base_Square = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/__Resources/Prefab/Item/Base_Square.prefab");
+            var base_Square = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/__Resources/Prefab/Base_Square.prefab");
             var base_SquareInstance = Instantiate(base_Square);
             base_SquareInstance.transform.parent = nodeTransform;
             base_SquareInstance.name = "Base_Square";
@@ -444,7 +444,7 @@ public class BoardManager : MonoBehaviour
     //[ContextMenu("替换物品预设")]
     void ProcessItem()
     {
-        var prefabRoot = "Assets/__Resources/Prefab/Item/{0}.prefab";
+        var prefabRoot = "Assets/__Resources/Prefab/{0}.prefab";
         var childCount = itemRoot.childCount;
         for ( var index = 0; index < childCount; index++ )
         {
