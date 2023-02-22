@@ -309,6 +309,7 @@ public class BoardManager : MonoBehaviour
         ProcessLinkedNodes();
         ProcessItem();
         ProcessEnemy();
+        ProcessPlayer();
         // SaveAsPrefab(Selection.activeGameObject);
     }
 
@@ -570,6 +571,20 @@ public class BoardManager : MonoBehaviour
             }
             DestroyImmediate(enemyTransform.gameObject);
         }
+    }
+
+    void ProcessPlayer()
+    {
+        var go = GameObject.Find("Player");
+        var player = go.GetComponent<Player>();
+        var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/__Resources/Prefab/Player.prefab");
+        var playerInstance = Instantiate(prefab);
+        //PrefabUtility.RevertPrefabInstance(playerInstance, InteractionMode.UserAction);
+        //PrefabUtility.ConnectGameObjectToPrefab(playerInstance,prefab);
+        playerInstance.name = player.name;
+        playerInstance.transform.position = go.transform.position;
+        playerInstance.transform.rotation = go.transform.rotation;
+        DestroyImmediate(go);
     }
 
     [ContextMenu("保存预设")]
