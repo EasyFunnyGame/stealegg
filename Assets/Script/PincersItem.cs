@@ -8,6 +8,14 @@ public class PincersItem : Item
 
     public MeshRenderer wireNetMesh;
 
+    private void Awake()
+    {
+        if(linkline!=null)
+        {
+            linkline.through = false;
+        }
+    }
+
     public void Cut()
     {
         linkline.through = true;

@@ -57,6 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\MeshCombiner\Editor\MeshCombinerEditor.cs" />
+    <Compile Include="Assets\Samples\Addressables\1.18.19\Disable AssetImport on Build\Editor\DisableAssetImportOnBuild.cs" />
+    <Compile Include="Assets\Samples\Addressables\1.18.19\Import Groups Tool\Editor\ImportExistingGroup.cs" />
     <Compile Include="Assets\Script\Editor\LayoutHelpers.cs" />
     <Compile Include="Assets\Script\Editor\RTS_CameraEditor.cs" />
     <Compile Include="Assets\WX-WASM-SDK\Editor\MinigameAssetAnalysis\Analysis.cs" />
@@ -771,6 +773,24 @@
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.CacheServer">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.CacheServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -12,17 +12,16 @@ class GridTileEditor : Editor
     public override void OnInspectorGUI()
     {
         GridTile tile_s = (GridTile)target;
-        if (GUILayout.Button("Disable Walls"))
+        if (GUILayout.Button("Disable Walls", GUILayout.Height(26)))
             tile_s.disable_walls();
-        if (GUILayout.Button("Left"))
+        if (GUILayout.Button("Left",GUILayout.Height(36)))
             tile_s.add_wall(0);
-        if (GUILayout.Button("Top"))
+        if (GUILayout.Button("Top",GUILayout.Height(36)))
             tile_s.add_wall(1);
-        if (GUILayout.Button("Right"))
+        if (GUILayout.Button("Right",GUILayout.Height(36)))
             tile_s.add_wall(2);
-        if (GUILayout.Button("Bottom"))
+        if (GUILayout.Button("Bottom",GUILayout.Height(36)))
             tile_s.add_wall(3);
-
         DrawDefaultInspector();
     }
 }

@@ -438,6 +438,28 @@ public class BoardManager : MonoBehaviour
             var names = linkNodeGameObject.gameObject.name.Split('=');
             linkLine.node1 = names[0];
             linkLine.node2 = names[1];
+
+            var lineGameObject = linkNodeGameObject.GetChild(0);
+            var lineName = lineGameObject.name;
+            switch(lineName)
+            {
+                case "Hor_Doted_Visual":
+                case "Hor_Fenced_Visual":
+                case "Hor_Normal_Visual":
+                    break;
+            }
+            var prefab = Resources.Load("Prefab/" + lineName);
+            if(prefab!=null)
+            {
+                DestroyImmediate(lineGameObject.gameObject);
+                var linInstance = Instantiate(prefab, linkNodeGameObject.transform) as GameObject;
+                linInstance.transform.localPosition = Vector3.zero;
+                linInstance.name = lineName;
+            }
+            else
+            {
+                Debug.LogError("No Line Preafab Named:" + lineName);
+            }
         }
     }
 
