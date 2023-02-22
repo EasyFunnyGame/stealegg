@@ -633,13 +633,13 @@ public class BoardManager : MonoBehaviour
     }
 
     [ContextMenu("保存预设")]
-    void SaveAsPrefab(GameObject go)
+    void SaveAsPrefab()
     {
-        var chapterAndLevel = go.name.Split('-');
+        var chapterAndLevel = gameObject.name.Split('-');
         var chapter = int.Parse(chapterAndLevel[0]);
         var level = int.Parse(chapterAndLevel[1]);
         var url = string.Format("Assets/__Resources/Prefab/Level/{0}/{1}.prefab", chapter, gameObject.name);
-        PrefabUtility.SaveAsPrefabAssetAndConnect(go, url,InteractionMode.UserAction);
+        PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, url,InteractionMode.UserAction);
         Debug.Log(string.Format("保存关卡预设{0}", url));
     }
 #endif
