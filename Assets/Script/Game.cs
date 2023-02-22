@@ -101,6 +101,7 @@ public class Game : MonoBehaviour
         currentLevelName = sceneName;
         camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
         player = GameObject.Find("Player").GetComponent<Player>();
+        player.m_animator.SetInteger("result", 0);
         player.bottleCount = 0;
         delayShowEndTimer = 0;
         bottleSelectingTarget = false;
@@ -160,7 +161,7 @@ public class Game : MonoBehaviour
         result = GameResult.FAIL;
         delayShowEndTimer = 2;
         playing = false;
-        player.m_animator.SetTrigger("fail");
+        player.m_animator.SetInteger("result",-1);
     }
 
     public void WinGame()
@@ -168,6 +169,7 @@ public class Game : MonoBehaviour
         result = GameResult.WIN;
         delayShowEndTimer = 2;
         playing = false;
+        player.m_animator.SetInteger("result",1);
     }
 
     void GamePlayingUpdate()
