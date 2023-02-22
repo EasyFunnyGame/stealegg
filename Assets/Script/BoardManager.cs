@@ -531,16 +531,24 @@ public class BoardManager : MonoBehaviour
             var enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefapUrl);
             var enemyInstance = Instantiate(enemyPrefab);
             var eulerY = enemyTransform.transform.eulerAngles.y;
-            var isDown = (eulerY + 360) % 180 == 0;
-            var isUp = (eulerY + 360) % 360 == 0;
-            var isLeft = (eulerY + 360) % 270 == 0;
-            var isRight = (eulerY + 360) % 90 == 0;
+            while(eulerY < 0)
+            {
+                eulerY += 360;
+            }
+            while (eulerY > 360)
+            {
+                eulerY -= 360;
+            }
+            var isDown = eulerY == 180;
+            var isUp = eulerY ==360 || eulerY == 0;
+            var isLeft = eulerY == 270;
+            var isRight = eulerY == 90;
             var direction = Direction.Up;
-            if(isDown)
+            if (isDown)
             {
                 direction = Direction.Down;
             }
-            else if(isUp)
+            else if (isUp)
             {
                 direction = Direction.Up;
             }
@@ -552,7 +560,7 @@ public class BoardManager : MonoBehaviour
             {
                 direction = Direction.Right;
             }
-            
+
             enemyInstance.GetComponent<Enemy>().direction = direction;
             enemyInstance.transform.parent = enemyRoot;
             enemyInstance.gameObject.name = enemyTransform.name;
@@ -605,12 +613,20 @@ public class BoardManager : MonoBehaviour
         playerInstance.name = player.name;
         playerInstance.transform.position = go.transform.position;
         playerInstance.transform.rotation = go.transform.rotation;
-        DestroyImmediate(go);
+        
         var eulerY = playerInstance.transform.eulerAngles.y;
-        var isDown = (eulerY + 360) % 180 == 0;
-        var isUp = (eulerY + 360) % 360 == 0;
-        var isLeft = (eulerY + 360) % 270 == 0;
-        var isRight = (eulerY + 360) % 90 == 0;
+        while (eulerY < 0)
+        {
+            eulerY += 360;
+        }
+        while (eulerY > 360)
+        {
+            eulerY -= 360;
+        }
+        var isDown = eulerY == 180;
+        var isUp = eulerY == 360 || eulerY == 0;
+        var isLeft = eulerY == 270;
+        var isRight = eulerY == 90;
         var direction = Direction.Up;
         if (isDown)
         {
@@ -630,6 +646,7 @@ public class BoardManager : MonoBehaviour
         }
         Debug.Log("主角:" + playerInstance.name + " 方向:" + direction);
         playerInstance.GetComponent<Player>().direction = direction;
+        DestroyImmediate(go);
     }
 
     [ContextMenu("保存预设")]
