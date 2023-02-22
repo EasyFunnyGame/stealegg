@@ -473,7 +473,7 @@ public class BoardManager : MonoBehaviour
         {
             var itemTransform = itemRoot.GetChild(index);
             var prefapUrl = string.Format(prefabRoot, itemTransform.name);
-            Debug.Log(prefapUrl);
+            //Debug.Log(prefapUrl);
             var itemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefapUrl);
             var itemInstance = Instantiate(itemPrefab);
             itemInstance.transform.parent = itemRoot;
@@ -530,14 +530,37 @@ public class BoardManager : MonoBehaviour
             //Debug.Log(prefapUrl);
             var enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefapUrl);
             var enemyInstance = Instantiate(enemyPrefab);
-            //PrefabUtility.ApplyPrefabInstance(enemyInstance, InteractionMode.UserAction);
+            var eulerY = enemyTransform.transform.eulerAngles.y;
+            var isDown = (eulerY + 360) % 180 == 0;
+            var isUp = (eulerY + 360) % 360 == 0;
+            var isLeft = (eulerY + 360) % 270 == 0;
+            var isRight = (eulerY + 360) % 90 == 0;
+            var direction = Direction.Up;
+            if(isDown)
+            {
+                direction = Direction.Down;
+            }
+            else if(isUp)
+            {
+                direction = Direction.Up;
+            }
+            else if (isLeft)
+            {
+                direction = Direction.Left;
+            }
+            else if (isRight)
+            {
+                direction = Direction.Right;
+            }
+            
+            enemyInstance.GetComponent<Enemy>().direction = direction;
             enemyInstance.transform.parent = enemyRoot;
             enemyInstance.gameObject.name = enemyTransform.name;
             enemyInstance.transform.localPosition = new Vector3(Mathf.RoundToInt(enemyTransform.localPosition.x), enemyTransform.localPosition.y, Mathf.RoundToInt(enemyTransform.localPosition.z));
             enemyInstance.transform.localRotation = enemyTransform.localRotation;
             enemyInstance.transform.SetSiblingIndex(enemyTransform.GetSiblingIndex());
             Enemy enemyScript = enemyInstance.GetComponent<Enemy>();
-            
+            Debug.Log("敌人:" + enemyInstance.name + " 方向:" + direction);
             switch (enemyTransform.name)
             {
                 case EnemyName.Enemy_Static:
@@ -579,12 +602,34 @@ public class BoardManager : MonoBehaviour
         var player = go.GetComponent<Player>();
         var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/__Resources/Prefab/Player.prefab");
         var playerInstance = Instantiate(prefab);
-        //PrefabUtility.RevertPrefabInstance(playerInstance, InteractionMode.UserAction);
-        //PrefabUtility.ConnectGameObjectToPrefab(playerInstance,prefab);
         playerInstance.name = player.name;
         playerInstance.transform.position = go.transform.position;
         playerInstance.transform.rotation = go.transform.rotation;
         DestroyImmediate(go);
+        var eulerY = playerInstance.transform.eulerAngles.y;
+        var isDown = (eulerY + 360) % 180 == 0;
+        var isUp = (eulerY + 360) % 360 == 0;
+        var isLeft = (eulerY + 360) % 270 == 0;
+        var isRight = (eulerY + 360) % 90 == 0;
+        var direction = Direction.Up;
+        if (isDown)
+        {
+            direction = Direction.Down;
+        }
+        else if (isUp)
+        {
+            direction = Direction.Up;
+        }
+        else if (isLeft)
+        {
+            direction = Direction.Left;
+        }
+        else if (isRight)
+        {
+            direction = Direction.Right;
+        }
+        Debug.Log("主角:" + playerInstance.name + " 方向:" + direction);
+        playerInstance.GetComponent<Player>().direction = direction;
     }
 
     [ContextMenu("保存预设")]
