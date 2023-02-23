@@ -310,6 +310,9 @@ public class BoardManager : MonoBehaviour
         ProcessItem();
         ProcessEnemy();
         ProcessPlayer();
+
+        var SceneNodeGameObject = GameObject.Find("Scene");
+        SceneNodeGameObject.transform.localPosition = Vector3.zero;
         // SaveAsPrefab(Selection.activeGameObject);
     }
 

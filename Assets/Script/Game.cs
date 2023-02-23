@@ -122,8 +122,10 @@ public class Game : MonoBehaviour
     {
         Debug.Log("加载好的远程场景预设");
         var sceneNode = GameObject.Find("Scene");
+        sceneNode.transform.localPosition = Vector3.zero;
         var instance = Instantiate(obj.Result);
         instance.transform.parent = sceneNode.transform;
+        instance.transform.localPosition = Vector3.zero;
     }
 
     public void EndGame()
