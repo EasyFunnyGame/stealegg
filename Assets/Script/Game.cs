@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 public enum GameResult
@@ -112,6 +113,17 @@ public class Game : MonoBehaviour
         cameraSettingCanvas.SetExpand(false);
         result = GameResult.NONE;
         Debug.Log("当前场景名称:" + sceneName);
+
+        Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
+    }
+
+
+    void onScenePrefabLoaded(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj)
+    {
+        Debug.Log("加载好的远程场景预设");
+        var sceneNode = GameObject.Find("Scene");
+        var instance = Instantiate(obj.Result);
+        instance.transform.parent = sceneNode.transform;
     }
 
     public void EndGame()
