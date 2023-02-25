@@ -11,7 +11,10 @@ public class ItemIconOnUI : IconOnUI
     // Start is called before the first frame update
     void Start()
     {
-        icon = transform.GetChild(1).GetComponent<Image>();
+        if(transform.childCount>1)
+        {
+            icon = transform.GetChild(1).GetComponent<Image>();
+        }
     }
 
     // Update is called once per frame

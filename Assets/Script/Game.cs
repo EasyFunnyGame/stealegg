@@ -117,7 +117,8 @@ public class Game : MonoBehaviour
         cameraSettingCanvas.SetExpand(false);
         result = GameResult.NONE;
 
-        guideArrow = GameObject.Find("GuideArrow").transform;
+
+        guideArrow = (GameObject.Instantiate(Resources.Load("Prefab/GuideArrow")) as GameObject).transform;
         guideArrow.gameObject.SetActive(false);
 
         Debug.Log("当前场景名称:" + sceneName);
@@ -374,6 +375,24 @@ public class Game : MonoBehaviour
 
                 gameCanvas.ShowWhitsleGuide();
             }
+            else if (currentStep.actionType == ActionType.ThrowBottle)
+            {
+                guideArrow.gameObject.SetActive(false);
+                gameCanvas.HideItemGuides();
+                if (currentStep.tileName == "")
+                {
+                    gameCanvas.ShowBottleGuide();
+                }
+                else
+                {
+                    var node = boardManager.FindNode(currentStep.tileName);
+                    if (node)
+                    {
+                        guideArrow.gameObject.SetActive(true);
+                        guideArrow.transform.position = node.transform.position;
+                    }
+                }
+            }
             else if(currentStep.actionType == ActionType.Steal)
             {
                 guideArrow.gameObject.SetActive(false);
@@ -497,6 +516,16 @@ public class Game : MonoBehaviour
             {
                 bottleSelectable.Add(nodeName);
             }
+        }
+
+        if(showingStep!=null)
+        {
+            if(showingStep.actionType == ActionType.ThrowBottle && showingStep.tileName == "")
+            {
+                boardManager.steps.RemoveAt(0);
+                ShowGuide();
+            }
+
         }
     }
 
