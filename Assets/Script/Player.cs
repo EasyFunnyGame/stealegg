@@ -77,9 +77,17 @@ public class Player : Character
         base.FootR();
     }
 
-    public void CheckWhistle()
+    public void CheckWhitsle()
     {
         Game.Instance.gameCanvas.DisableWhistle();
+        if( moving || body_looking )
+        {
+            return;
+        }
+        if( Game.Instance.playingLevel == 1 )
+        {
+            return;
+        }
         var nodes = boardManager.FindNodesAround(currentTile.name, 2);
         var stop = false;
         foreach (var kvp in nodes)
@@ -125,11 +133,12 @@ public class Player : Character
         playerMovePlay.gameObject.SetActive(false);
     }
 
-    public void PlayStealEffect()
+    public void PlayStealEffect(Vector3 position)
     {
         bottlePlay.gameObject.SetActive(false);
         bottlePlay.gameObject.SetActive(true);
-        bottlePlay.transform.localPosition = new Vector3(0,0,0);
+        bottlePlay.transform.position = position;
+        bottlePlay.transform.parent = null;
     }
 
     public void PlayBottleEffect(Vector3 position)
@@ -137,21 +146,24 @@ public class Player : Character
         bottlePlay.gameObject.SetActive(false);
         bottlePlay.gameObject.SetActive(true);
         bottlePlay.transform.position = position;
+        bottlePlay.transform.parent = null;
     }
-
+    public void PlayeWhitsleEffect(Vector3 position)
+    {
+        whitslePlay.gameObject.SetActive(false);
+        whitslePlay.gameObject.SetActive(true);
+        whitslePlay.transform.position = position;
+        whitslePlay.transform.parent = null;
+    }
 
     public void PlayWhitsle()
     {
-        PlayeWhitsleEffect();
+        PlayeWhitsleEffect(transform.position);
         m_animator.SetTrigger("whistle");
     }
 
 
-    public void PlayeWhitsleEffect()
-    {
-        whitslePlay.gameObject.SetActive(false);
-        whitslePlay.gameObject.SetActive(true);
-    }
+   
     public override void AnimationEnd(string clipName)
     {
         base.AnimationEnd(clipName);

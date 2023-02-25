@@ -40,7 +40,7 @@ public class ActionThrowBottle : ActionBase
         wayPoints.Add(middlePoint);
         wayPoints.Add(targetPosition);
         segmentIndex = 0;
-        linePointList = BezierUtils.GetBeizerPointList(150, wayPoints);
+        linePointList = BezierUtils.GetBeizerPointList(100, wayPoints);
         player.bottleCount--;
     }
 

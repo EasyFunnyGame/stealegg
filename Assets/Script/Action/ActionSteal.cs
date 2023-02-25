@@ -8,7 +8,7 @@ public class ActionSteal : ActionBase
     {
         graffItem = item;
         player.m_animator.SetTrigger("pick");
-        player.PlayStealEffect();
+        player.PlayStealEffect(player.transform.position);
     }
 
     private Player player

@@ -10,7 +10,8 @@ public class PincersItem : Item
 
     private void Awake()
     {
-        if(linkline!=null)
+        HideDebugSphere();
+        if (linkline!=null)
         {
             linkline.through = false;
         }

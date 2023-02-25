@@ -41,7 +41,7 @@ public class ActionPincersCut : ActionBase
                 }
             }
             pincers.Cut();
-            player.PlayeWhitsleEffect();
+            player.PlayeWhitsleEffect(player.transform.position);
             pincers.picked = true;
             pincers.gameObject.SetActive(false);
             pincers.icon.gameObject.SetActive(false);

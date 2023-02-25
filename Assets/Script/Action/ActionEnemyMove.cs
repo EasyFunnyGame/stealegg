@@ -38,16 +38,17 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.foundPlayerTile.name)
                     {
-                        if ( enemy.turnOnReached)
+                        if ( enemy.turnOnReached && enemy.hearSoundTile == null)
                         {
                             // Debug.LogWarning("todo 能够看见主角,直接抓捕");
+                            
                             var player = Game.Instance.player;
                             player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
                             var path = player.path;
                             var nextTileName = "";
                             if (path.Count >= 2)
                             {
-                                nextTileName = path[path.Count-2].name;
+                                nextTileName = path[path.Count - 2].name;
                             }
                             else
                             {
@@ -79,8 +80,6 @@ public class ActionEnemyMove : ActionBase
                             var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
                             if (playerTile != null)
                             {
-                                // Debug.Log("更新追踪:" + playerTile.name);
-                                //enemy.foundPlayerTile = playerTile;
                                 character.FindPathRealTime(playerTile);
                                 character.UpdateTargetDirection(character.nextTile);
                                 //character.ResetMoves();
@@ -88,8 +87,12 @@ public class ActionEnemyMove : ActionBase
                                 {
                                     character.Reached();
                                     enemy.LostTarget();
-                                    // todo 显示问号，取消敌人  准备返回  取消追踪目标显示
                                     return true;
+                                }
+                                else
+                                {
+                                    Utils.SetDirection(character, character.targetDirection);
+                                    return false;
                                 }
                             }
                         }

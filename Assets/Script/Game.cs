@@ -50,7 +50,7 @@ public class Game : MonoBehaviour
 
     public bool bottleSelectingTarget = false;
 
-    public static int MAX_LEVEL = 4;
+    public static int MAX_LEVEL = 35;
 
     private void Awake()
     {
@@ -269,7 +269,7 @@ public class Game : MonoBehaviour
             if (!player.moving)
             {
                 player.CheckBottle();
-                player.CheckWhistle();
+                player.CheckWhitsle();
             }
         }
     }
@@ -355,7 +355,7 @@ public class Game : MonoBehaviour
                 if (player.moving || player.currentTile != tile)
                 {
                     player.currentAction = new ActionPlayerMove(player, tile);
-                    Debug.Log("主角行为====移动");
+                    //Debug.Log("主角行为====移动");
                 }
             }
         }

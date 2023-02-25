@@ -277,6 +277,7 @@ public class Enemy : Character
         {
             return false;
         }
+        var player = Game.Instance.player;
         if (Game.Instance.result == GameResult.FAIL) return false;
         if (sleeping) return false;
         var xOffset = 0;
@@ -310,11 +311,15 @@ public class Enemy : Character
         if (foundPlayer == false)
         {
             linkLine = boardManager.FindLine(currentTile.name, next1NodeName);
-            if (linkLine && Game.Instance.player.currentTile.name == next1NodeName)
+            if (linkLine)
             {
-                foundPlayer = true;
-                foundPlayerNode = next1NodeName;
-                
+                var linkLineName = linkLine.transform.GetChild(0).name;
+                var canReach = linkLineName.Contains("Normal");
+                if (hearSoundTile == null && linkLine && canReach && player.currentTile.name == next1NodeName)
+                {
+                    foundPlayer = true;
+                    foundPlayerNode = next1NodeName;
+                }
             }
         }
         
@@ -331,6 +336,7 @@ public class Enemy : Character
 
         if (foundPlayer)
         {
+            hearSoundTile = null;
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
