@@ -64,6 +64,10 @@ public class GameCanvas : BaseCanvas
 
     public List<IconsAboveEnemy> icon_enemies = new List<IconsAboveEnemy>();
 
+    public Animator whitsleGuide;
+
+    public Animator bottleGuide;
+
     public Image distance_up;
     public Text txt_up;
     public Image distance_down;
@@ -91,6 +95,8 @@ public class GameCanvas : BaseCanvas
 
         btn_graff.onClick.AddListener(onClickGraffHandler);
 
+        btn_hint.onClick.AddListener(onClickHintHandler);
+
         icon_graff.gameObject.SetActive(false);
 
         icon_star.gameObject.SetActive(false);
@@ -104,6 +110,11 @@ public class GameCanvas : BaseCanvas
         icon_template_growth_template.gameObject.SetActive(false);
 
         icon_enemy_template.gameObject.SetActive(false);
+    }
+
+    void onClickHintHandler()
+    {
+        Game.Instance.hintGainCanvas.Show();
     }
 
     void onClickGraffHandler()
@@ -319,18 +330,21 @@ public class GameCanvas : BaseCanvas
 
     public void DisableWhistle()
     {
+        if (!btn_whistle.gameObject.activeSelf) return;
         btn_whistle.gameObject.SetActive(false);
         btn_whistle_disable.gameObject.SetActive(true);
     }
 
     public void EnableWhistle()
     {
+        if (btn_whistle.gameObject.activeSelf) return;
         btn_whistle.gameObject.SetActive(true);
         btn_whistle_disable.gameObject.SetActive(false);
     }
 
     public void DisableBottle()
     {
+        if (!btn_bottle.gameObject.activeSelf) return;
         btn_bottle.gameObject.SetActive(false);
         btn_bottle_disable.gameObject.SetActive(true);
         btn_bottle_cancel.gameObject.SetActive(false);
@@ -338,6 +352,7 @@ public class GameCanvas : BaseCanvas
 
     public void EnableBottle()
     {
+        if (btn_bottle.gameObject.activeSelf) return;
         btn_bottle.gameObject.SetActive(true);
         btn_bottle_disable.gameObject.SetActive(false);
         btn_bottle_cancel.gameObject.SetActive(false);
@@ -541,5 +556,33 @@ public class GameCanvas : BaseCanvas
             DestroyImmediate(icon_growth[index].gameObject);
         }
         icon_growth.Clear();
+    }
+
+    public void ShowBottleGuide()
+    {
+        bottleGuide.gameObject.SetActive(true);
+        //bottleGuide.Play("UI_Bottle_Guide");
+    }
+
+    public void HideGuides()
+    {
+        bottleGuide.gameObject.SetActive(false);
+        whitsleGuide.gameObject.SetActive(false);
+    }
+
+    public void ShowWhitsleGuide()
+    {
+        whitsleGuide.gameObject.SetActive(true);
+        //whitsleGuide.Play("UI_Whitsle_Guide");
+    }
+
+    public void ShowStealGuide()
+    {
+        icon_graff.ShowGuide();
+    }
+
+    public void HideItemGuides()
+    {
+        icon_graff.HideGuide();
     }
 }

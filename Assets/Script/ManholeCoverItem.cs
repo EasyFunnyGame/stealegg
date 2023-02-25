@@ -12,4 +12,5 @@ public class ManholeCoverItem : Item
     {
         Debug.Log("跳出来");
     }
+
 }

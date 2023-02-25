@@ -53,6 +53,8 @@ public class Game : MonoBehaviour
     public static int MAX_LEVEL = 35;
 
     public static bool teaching = false;
+
+    public Transform guideArrow;
     private void Awake()
     {
         Instance = this;
@@ -90,8 +92,9 @@ public class Game : MonoBehaviour
     public void PlayLevel(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+        resLoaded = false;
     }
-
+    bool resLoaded = false;
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
         graffed = false;
@@ -113,8 +116,11 @@ public class Game : MonoBehaviour
         cameraSettingCanvas.InitWithGameCamera(camera, player);
         cameraSettingCanvas.SetExpand(false);
         result = GameResult.NONE;
-        Debug.Log("当前场景名称:" + sceneName);
 
+        guideArrow = GameObject.Find("GuideArrow").transform;
+        guideArrow.gameObject.SetActive(false);
+
+        Debug.Log("当前场景名称:" + sceneName);
         Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
     }
 
@@ -127,6 +133,7 @@ public class Game : MonoBehaviour
         var instance = Instantiate(obj.Result);
         instance.transform.parent = sceneNode.transform;
         instance.transform.localPosition = Vector3.zero;
+        resLoaded = true;
     }
 
     public void EndGame()
@@ -186,6 +193,7 @@ public class Game : MonoBehaviour
         playing = false;
         player.m_animator.SetInteger("result",1);
     }
+    
 
     void GamePlayingUpdate()
     {
@@ -236,6 +244,8 @@ public class Game : MonoBehaviour
                 }
             }
         }
+
+        // 更新主角站立狀態
         var player_idle_type = player.m_animator.GetFloat("idle_type");
         if(beFound)
         {
@@ -255,9 +265,10 @@ public class Game : MonoBehaviour
             }
             player.m_animator.SetFloat("idle_type", player_idle_type);
         }
-
-        if(player.currentAction == null && !enemyActionRunning)
+        
+        if (player.currentAction == null && !enemyActionRunning)
         {
+            ShowGuide();
             ListenClick();
         }
         if(enemyActionRunning)
@@ -274,7 +285,7 @@ public class Game : MonoBehaviour
             }
         }
     }
-
+    
     void ListenBottleTargetSelect()
     {
         if (pausing) return;
@@ -308,6 +319,65 @@ public class Game : MonoBehaviour
                     player.CheckBottle();
                     Debug.Log("扔瓶子:"+ node.name);
                 }
+            }
+        }
+    }
+
+    public void HideGuide()
+    {
+        if (guideArrow == null) return;
+        guideArrow.gameObject.SetActive(false);
+    }
+    
+
+
+    WalkThroughStep showingStep = null;
+    void ShowGuide()
+    {
+        if (resLoaded == false) return;
+        if (guideArrow == null) return;
+        if (teaching == false)
+        {
+            guideArrow.gameObject.SetActive(false);
+            gameCanvas.HideGuides();
+            gameCanvas.HideItemGuides();
+            return;
+        }
+        if (boardManager.steps?.Count>0)
+        {
+            var currentStep = boardManager.steps[0];
+            if( showingStep?.actionType == currentStep.actionType && showingStep?.tileName == currentStep.tileName)
+            {
+                return ;
+            }
+            showingStep = currentStep;
+
+            if (currentStep.actionType == ActionType.PlayerMove)
+            {
+                gameCanvas.HideGuides();
+                gameCanvas.HideItemGuides();
+
+                guideArrow.gameObject.SetActive(true);
+
+                var node = boardManager.FindNode(currentStep.tileName);
+                if (node)
+                {
+                    guideArrow.gameObject.SetActive(true);
+                    //guideArrow.transform.GetChild(0).GetComponent<Animator>().Play("Guide");
+                    guideArrow.transform.position = node.transform.position;
+                }
+            }
+            else if (currentStep.actionType == ActionType.BlowWhistle)
+            {
+                guideArrow.gameObject.SetActive(false);
+                gameCanvas.HideItemGuides();
+
+                gameCanvas.ShowWhitsleGuide();
+            }
+            else if(currentStep.actionType == ActionType.Steal)
+            {
+                guideArrow.gameObject.SetActive(false);
+                gameCanvas.ShowStealGuide();
             }
         }
     }
@@ -358,7 +428,7 @@ public class Game : MonoBehaviour
 
     public void BlowWhistle()
     {
-        player.currentAction = new ActionBlowWhistle(player);
+        player.currentAction = Utils.CreatePlayerAction(ActionType.BlowWhistle,player.currentTile);
     }
 
     public void UseBottle()

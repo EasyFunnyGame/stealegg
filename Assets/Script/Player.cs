@@ -79,13 +79,14 @@ public class Player : Character
 
     public void CheckWhitsle()
     {
-        Game.Instance.gameCanvas.DisableWhistle();
         if( moving || body_looking )
         {
+            Game.Instance.gameCanvas.DisableWhistle();
             return;
         }
         if( Game.Instance.playingLevel == 1 )
         {
+            Game.Instance.gameCanvas.DisableWhistle();
             return;
         }
         var nodes = boardManager.FindNodesAround(currentTile.name, 2);

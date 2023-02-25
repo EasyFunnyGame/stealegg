@@ -91,12 +91,34 @@ public static class Utils
         }
     }
 
-
-
     public static ActionBase CreatePlayerAction(ActionType actionType, GridTile tile)
     {
         var player = Game.Instance.player;
         if (player == null) return null;
+
+        if (Game.teaching)
+        {
+            var rightStep = false;
+            var steps = Game.Instance.boardManager.steps;
+            if (steps.Count>0)
+            {
+                var currentStep = Game.Instance.boardManager.steps[0];
+                if(currentStep.actionType == actionType)
+                {
+                    if(currentStep.tileName == tile.name)
+                    {
+                        rightStep = true;
+                        Game.Instance.boardManager.steps.RemoveAt(0);
+                    }
+                }
+            }
+            if(rightStep==false)
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return null;
+            }
+        }
+        Game.Instance.HideGuide();
         switch(actionType)
         {
             case ActionType.PlayerMove:
