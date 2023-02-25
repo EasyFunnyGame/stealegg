@@ -90,4 +90,24 @@ public static class Utils
             character.db_moves[1].position = character.db_moves[0].position + new Vector3(0, 0, -1);
         }
     }
+
+
+
+    public static ActionBase CreatePlayerAction(ActionType actionType, GridTile tile)
+    {
+        var player = Game.Instance.player;
+        if (player == null) return null;
+        switch(actionType)
+        {
+            case ActionType.PlayerMove:
+                return new ActionPlayerMove(player, tile);
+            case ActionType.Steal:
+                return new ActionSteal(player, player.boardManager.allItems[player.currentTile.name]);
+            case ActionType.ThrowBottle:
+                return new ActionThrowBottle(player, tile.name, tile.transform.position);
+            case ActionType.BlowWhistle:
+                return new ActionBlowWhistle(player);
+        }
+        return null;
+    }
 }

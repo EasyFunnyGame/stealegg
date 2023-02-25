@@ -52,6 +52,7 @@ public class Game : MonoBehaviour
 
     public static int MAX_LEVEL = 35;
 
+    public static bool teaching = false;
     private void Awake()
     {
         Instance = this;
@@ -289,13 +290,7 @@ public class Game : MonoBehaviour
                 {
                     return;
                 }
-                var nodePosition = node.transform.position;
-
-                var tileIndex = Mathf.RoundToInt(nodePosition.x * player.gridManager.v2_grid.y + nodePosition.z);
-
-                // Debug.Log("节点:" + coord.name + "块的名称" + tile.name);
-                GridTile tile = player.gridManager.db_tiles[tileIndex];
-
+                GridTile tile = player.gridManager.GetTileByName(node.name);
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
                     var enemy = boardManager.enemies[i];
@@ -307,7 +302,7 @@ public class Game : MonoBehaviour
 
                 if (player.moving || player.currentTile != tile)
                 {
-                    player.currentAction = new ActionThrowBottle(player, node.gameObject.name, tile.transform.position);
+                    player.currentAction = Utils.CreatePlayerAction(ActionType.ThrowBottle, tile); // 
                     boardManager.HideAllSuqreContour();
                     bottleSelectingTarget = false;
                     player.CheckBottle();
@@ -354,7 +349,7 @@ public class Game : MonoBehaviour
 
                 if (player.moving || player.currentTile != tile)
                 {
-                    player.currentAction = new ActionPlayerMove(player, tile);
+                    player.currentAction = Utils.CreatePlayerAction( ActionType.PlayerMove, tile);
                     //Debug.Log("主角行为====移动");
                 }
             }
@@ -392,7 +387,7 @@ public class Game : MonoBehaviour
         if(!graffed)
         {
             graffed = true;
-            player.currentAction = new ActionSteal(player, boardManager.allItems[player.currentTile.name]);
+            player.currentAction = Utils.CreatePlayerAction(ActionType.Steal, player.currentTile);
         }
     }
 

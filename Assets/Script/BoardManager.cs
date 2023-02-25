@@ -43,6 +43,8 @@ public class BoardManager : MonoBehaviour
 
     public List<string> dangerNodeNames = new List<string>();
 
+    public List<WalkThroughStep> steps = new List<WalkThroughStep>();
+
     private void Awake()
     {
         playerGridManager.gameObject.SetActive(true);
