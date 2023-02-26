@@ -174,6 +174,12 @@ public class GameCanvas : BaseCanvas
 
     void CancelBottleThrow()
     {
+        var teachingStep = Game.Instance.showingStep;
+        if(teachingStep?.actionType == ActionType.ThrowBottle && teachingStep?.tileName!="")
+        {
+            Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+            return;
+        }
         Game.Instance.CancelBottleSelectTarget();
         btn_bottle_cancel.gameObject.SetActive(false);
         btn_bottle.gameObject.SetActive(true);
@@ -316,6 +322,7 @@ public class GameCanvas : BaseCanvas
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
+        btn_bottle_cancel.gameObject.SetActive(false);
     }
 
     protected override void OnHide()
@@ -330,32 +337,32 @@ public class GameCanvas : BaseCanvas
 
     public void DisableWhistle()
     {
+        btn_whistle_disable.gameObject.SetActive(true);
         if (!btn_whistle.gameObject.activeSelf) return;
         btn_whistle.gameObject.SetActive(false);
-        btn_whistle_disable.gameObject.SetActive(true);
     }
 
     public void EnableWhistle()
     {
+        btn_whistle_disable.gameObject.SetActive(false);
         if (btn_whistle.gameObject.activeSelf) return;
         btn_whistle.gameObject.SetActive(true);
-        btn_whistle_disable.gameObject.SetActive(false);
     }
 
     public void DisableBottle()
     {
-        if (!btn_bottle.gameObject.activeSelf) return;
-        btn_bottle.gameObject.SetActive(false);
         btn_bottle_disable.gameObject.SetActive(true);
         btn_bottle_cancel.gameObject.SetActive(false);
+        if (!btn_bottle.gameObject.activeSelf) return;
+        btn_bottle.gameObject.SetActive(false);
     }
 
     public void EnableBottle()
     {
-        if (btn_bottle.gameObject.activeSelf) return;
-        btn_bottle.gameObject.SetActive(true);
         btn_bottle_disable.gameObject.SetActive(false);
         btn_bottle_cancel.gameObject.SetActive(false);
+        if (btn_bottle.gameObject.activeSelf) return;
+        btn_bottle.gameObject.SetActive(true);
     }
 
     public void InitWithBoardManager(BoardManager boardManager)

@@ -54,6 +54,8 @@ public class Game : MonoBehaviour
 
     public static bool teaching = false;
 
+    public static int clearTeaching = 0;
+
     public Transform guideArrow;
     private void Awake()
     {
@@ -117,7 +119,6 @@ public class Game : MonoBehaviour
         cameraSettingCanvas.SetExpand(false);
         result = GameResult.NONE;
 
-
         guideArrow = (GameObject.Instantiate(Resources.Load("Prefab/GuideArrow")) as GameObject).transform;
         guideArrow.gameObject.SetActive(false);
 
@@ -135,6 +136,16 @@ public class Game : MonoBehaviour
         instance.transform.parent = sceneNode.transform;
         instance.transform.localPosition = Vector3.zero;
         resLoaded = true;
+
+        if(teaching)
+        {
+            clearTeaching++;
+            if(clearTeaching>1)
+            {
+                teaching = false;
+                clearTeaching = 0;
+            }
+        }
     }
 
     public void EndGame()
@@ -318,7 +329,7 @@ public class Game : MonoBehaviour
                     boardManager.HideAllSuqreContour();
                     bottleSelectingTarget = false;
                     player.CheckBottle();
-                    Debug.Log("扔瓶子:"+ node.name);
+                    gameCanvas.btn_bottle_cancel.gameObject.SetActive(false);
                 }
             }
         }
@@ -332,7 +343,7 @@ public class Game : MonoBehaviour
     
 
 
-    WalkThroughStep showingStep = null;
+    public WalkThroughStep showingStep = null;
     void ShowGuide()
     {
         if (resLoaded == false) return;
@@ -372,7 +383,6 @@ public class Game : MonoBehaviour
             {
                 guideArrow.gameObject.SetActive(false);
                 gameCanvas.HideItemGuides();
-
                 gameCanvas.ShowWhitsleGuide();
             }
             else if (currentStep.actionType == ActionType.ThrowBottle)

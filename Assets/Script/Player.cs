@@ -114,6 +114,7 @@ public class Player : Character
     {
         if (bottleCount > 0)
         {
+
             Game.Instance.gameCanvas.EnableBottle();
         }
         else
