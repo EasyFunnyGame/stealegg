@@ -173,7 +173,7 @@ public class ActionEnemyMove : ActionBase
             else if(enemy.patroling)
             {
                 var patrolEnemy = enemy as EnemyPatrol;
-                if(patrolEnemy.needTurn())
+                if (patrolEnemy.needTurn())
                 {
                     Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
                 }

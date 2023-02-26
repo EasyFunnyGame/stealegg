@@ -4,38 +4,97 @@ using UnityEngine;
 
 public class EnemyPatrol : Enemy
 {
-    private List<string> patrolPoints = new List<string>();
-    private int patrolPointIndex = 0;
+    //private List<string> patrolPoints = new List<string>();
+    //private int patrolPointIndex = 0;
+
+    public List<Coord> edgeCoords = new List<Coord>();
+
+    public GridTile patrolTile;
 
     public override void Start()
     {
         base.Start();
+        InitEdgeTiles();
     }
 
-    public override void OnReachedOriginal()
+    void InitEdgeTiles()
     {
-        icons.shuijiao.gameObject.SetActive(false);
-        icons.tanhao.gameObject.SetActive(false);
-        icons.fanhui.gameObject.SetActive(false);
-        icons.wenhao.gameObject.SetActive(false);
-        patroling = true;
-        UpdateRouteMark();
-    }
+        edgeCoords.Add(coord.Clone());
+        var xOffset = 0;
+        var zOffset = 0;
+        if (direction == Direction.Up)
+        {
+            zOffset = 1;
+        }
+        else if (direction == Direction.Down)
+        {
+            zOffset = -1;
+        }
+        else if (direction == Direction.Right)
+        {
+            xOffset = 1;
+        }
+        else if (direction == Direction.Left)
+        {
+            xOffset = -1;
+        }
 
-    string routeNode3Name;
-    string routeNode4Name;
+        GridTile anotherEdgeTile = currentTile;
+
+        var coordX = coord.x;
+        var coordZ = coord.z;
+
+
+        var findEdge = false;
+
+        while(!findEdge)
+        {
+            var currentTileName = string.Format("{0}_{1}", coordX, coordZ);
+
+            var nextPatrolTileName = string.Format("{0}_{1}", coordX + xOffset, coordZ + zOffset);
+
+            var node = boardManager.FindNode(nextPatrolTileName);
+
+            if (node == null)
+            {
+                findEdge = true;
+            }
+            var linkLine = boardManager.FindLine(currentTileName, nextPatrolTileName);
+            if (linkLine)
+            {
+                var lineType = linkLine.transform.GetChild(0);
+                if (lineType)
+                {
+                    if (!lineType.name.Contains("Normal"))
+                    {
+                        findEdge = true;
+
+                    }
+                }
+            }
+            if(findEdge)
+            {
+                anotherEdgeTile = gridManager.GetTileByName(currentTileName);
+                if(anotherEdgeTile)
+                {
+                    edgeCoords.Add(new Coord(anotherEdgeTile.name, anotherEdgeTile.transform.position.y));
+                }
+            }
+            coordX = coordX + xOffset;
+            coordZ = coordZ + zOffset;
+        }
+        
+    }
 
     public override void UpdateRouteMark()
     {
-        var points = new List<string>();
-
         for (var index = 0; index < redNodes.Count; index++)
         {
             DestroyImmediate(redNodes[index].gameObject);
         }
         redNodes.Clear();
 
-        routeNode1Name = routeNode2Name = routeNode3Name = routeNode4Name = "";
+        routeNode1Name = routeNode2Name = "";// routeNode3Name = routeNode4Name = 
 
         if (sleeping) return;
 
@@ -62,7 +121,6 @@ public class EnemyPatrol : Enemy
 
         var curNodeName = currentTile.gameObject.name;
         RedNodeByName(curNodeName);
-        points.Add(curNodeName);
         // 1
         var next1CoordX = coord.x + xOffset;
         var next1CoordZ = coord.z + zOffset;
@@ -72,7 +130,6 @@ public class EnemyPatrol : Enemy
         {
             routeNode1Name = next1NodeName;
             RedNodeByName(next1NodeName);
-            points.Add(next1NodeName);
         }
         
         // 2
@@ -84,66 +141,137 @@ public class EnemyPatrol : Enemy
         {
             routeNode2Name = next2NodeName;
             RedNodeByName(next2NodeName);
-            points.Add(next2NodeName);
-        }
-        
-        // 3
-        var next3CoordX = next2CoordX + xOffset;
-        var next3CoordZ = next2CoordZ + zOffset;
-        var next3NodeName = string.Format("{0}_{1}", next3CoordX, next3CoordZ);
-        lineName = boardManager.FindLine(next2NodeName, next3NodeName);
-        if (lineName != null)
-        {
-            routeNode3Name = next3NodeName;
-            RedNodeByName(next3NodeName);
-            points.Add(next3NodeName);
-        }
-        
-        // 4
-        var next4CoordX = next3CoordX + xOffset;
-        var next4CoordZ = next3CoordZ + zOffset;
-        var next4NodeName = string.Format("{0}_{1}", next4CoordX, next4CoordZ);
-        lineName = boardManager.FindLine(next3NodeName, next4NodeName);
-        if (lineName != null)
-        {
-            routeNode4Name = next4NodeName;
-            RedNodeByName(next4NodeName);
-            points.Add(next4NodeName);
-        }
-        
-        if(patrolPoints.Count == 0)
-        {
-            patrolPoints = points;
-            patrolPointIndex = patrolPoints.IndexOf(currentTile.name);
         }
     }
-
 
     public bool needTurn()
     {
         var reachEdge = false;
-        var nextIndex = patrolPointIndex + patrolDirection;
-        if (patrolPoints.Count == nextIndex)
+        var nextOffsetX = 0;
+        var nextOffSetZ = 0;
+        if (direction == Direction.Up)
+        {
+            nextOffSetZ = 1;
+        }
+        else if (direction == Direction.Down)
+        {
+            nextOffSetZ = -1;
+        }
+        else if (direction == Direction.Left)
+        {
+            nextOffsetX = -1;
+        }
+        else if (direction == Direction.Right)
+        {
+            nextOffsetX = 1;
+        }
+        var position = transform.position;
+        var curentIndex = string.Format("{0}_{1}", Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
+        var nextPatrolTileName = string.Format("{0}_{1}", Mathf.RoundToInt(position.x) + nextOffsetX, Mathf.RoundToInt(position.z) + nextOffSetZ);
+        var node = boardManager.FindNode(nextPatrolTileName);
+        if(node==null)
         {
             reachEdge = true;
         }
-        else if (nextIndex < 0)
+        var linkLine = boardManager.FindLine(curentIndex, nextPatrolTileName);
+        if (linkLine)
         {
-            reachEdge = true;
+            var lineType = linkLine.transform.GetChild(0);
+            if (lineType)
+            {
+                if(!lineType.name.Contains("Normal"))
+                {
+                    reachEdge = true;
+                }
+            }
         }
-        else if (patrolPoints.Count < nextIndex)
-        {
-            reachEdge = true;
-        }
-        if(reachEdge)
+        if (reachEdge)
         {
             var rechEdgeDirection = Utils.DirectionTo(currentTile, gridManager.GetTileByName(lastTileName), direction);
-            if(direction != rechEdgeDirection)
+            if (direction != rechEdgeDirection)
             {
                 targetDirection = rechEdgeDirection;
+                
+                
+                originalDirection = targetDirection;
+                for(var index = 0; index < edgeCoords.Count; index++)
+                {
+                    if(edgeCoords[index].name != curentIndex)
+                    {
+                        originalCoord = edgeCoords[index].Clone();
+                        break;
+                    }
+                }
                 return true;
             }
-        }return false;
+        }
+        return false;
+    }
+
+    void UpdateNextPatrolPoint()
+    {
+        if (patroling)
+        {
+            var nextOffsetX = 0;
+            var nextOffSetZ = 0;
+            if (direction == Direction.Up)
+            {
+                nextOffSetZ = 1;
+            }
+            else if (direction == Direction.Down)
+            {
+                nextOffSetZ = -1;
+            }
+            else if (direction == Direction.Left)
+            {
+                nextOffsetX = -1;
+            }
+            else if (direction == Direction.Right)
+            {
+                nextOffsetX = 1;
+            }
+            var nextPatrolTileName = string.Format("{0}_{1}", coord.x + nextOffsetX, coord.z + nextOffSetZ);
+            var node = boardManager.FindNode(nextPatrolTileName);
+
+            if (node)
+            {
+                var linkLine = boardManager.FindLine(coord.name, nextPatrolTileName);
+                if (linkLine)
+                {
+                    var lineType = linkLine.transform.GetChild(0);
+                    var lineName = lineType.name;
+                    if (lineName.Contains("Normal"))
+                    {
+                        var tile = gridManager.GetTileByName(nextPatrolTileName);
+                        if (tile != null)
+                        {
+                            patrolTile = tile;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public override void Reached()
+    {
+        base.Reached();
+        UpdateNextPatrolPoint();
+
+    }
+
+    public override void OnReachedOriginal()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        if (hearSoundTile == null && foundPlayerTile == null)
+        {
+            patroling = true;
+        }
+        UpdateNextPatrolPoint();
+        UpdateRouteMark();
     }
 
     protected override void UpdateRouteRedLine()
@@ -156,9 +284,7 @@ public class EnemyPatrol : Enemy
         {
             var node1 = boardManager.FindNode(routeNode1Name);
             var node2 = boardManager.FindNode(routeNode2Name);
-            var node3 = boardManager.FindNode(routeNode3Name);
-            var node4 = boardManager.FindNode(routeNode4Name);
-            if (node1 == null && node2 == null && node3 == null && node4 == null )
+            if (node1 == null && node2 == null  )
             {
                 route.SetActive(false);
             }
@@ -174,14 +300,7 @@ public class EnemyPatrol : Enemy
                 {
                     endNode = node2;
                 }
-                if (node3 != null)
-                {
-                    endNode = node3;
-                }
-                if (node4 != null)
-                {
-                    endNode = node4;
-                }
+                
                 var distance = Vector3.Distance(transform.position, endNode.transform.position);
                 routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
                 routeArrow.localPosition = new Vector3(0, 0, distance);
@@ -242,54 +361,19 @@ public class EnemyPatrol : Enemy
             return;
         }
 
+        if(!patroling && originalTile == null)
+        {
+            ReturnOriginal(true);
+            return;
+        }
         if (originalTile != null)
         {
             currentAction = new ActionEnemyMove(this, originalTile);
             return;
         }
-
-        Patrol();
-    }
-
-    int patrolDirection = 1;
-    void Patrol()
-    {
-        patroling = true;
-        var nextIndex = patrolPointIndex + patrolDirection;
-
-       if(patrolPoints.Count == nextIndex)
+        if(patrolTile!=null)
         {
-            patrolDirection = -1;
-        }
-        else if(nextIndex < 0)
-        {
-            patrolDirection = 1;
-        }
-        else if (patrolPoints.Count < nextIndex)
-        {
-            patrolDirection = -1;
-        }
-        nextIndex = patrolPointIndex + patrolDirection;
-
-        patrolPointIndex = nextIndex;
-
-        var tileName = patrolPoints[nextIndex];
-        var tile = gridManager.GetTileByName(tileName);
-        if(tile!=null)
-        {
-            currentAction = new ActionEnemyMove(this, tile);
-            
-        }
-        Debug.Log("下一个巡逻点" + tileName);
-    }
-
-    public override void Reached()
-    {
-        base.Reached();
-        if(patroling)
-        {
-            originalCoord = coord.Clone();
-            originalDirection = direction;
+            currentAction = new ActionEnemyMove(this, patrolTile);
         }
     }
 }

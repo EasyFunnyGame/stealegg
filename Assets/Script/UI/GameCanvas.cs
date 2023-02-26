@@ -470,6 +470,15 @@ public class GameCanvas : BaseCanvas
 
     void OnClickGrowthHandler(GrowthItem item)
     {
+        var teachingStep = Game.Instance.showingStep;
+        if (Game.teaching && teachingStep != null)
+        {
+            if (teachingStep.actionType != ActionType.TurnDirection)
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return;
+            }
+        }
         if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
         {
             return;
@@ -638,6 +647,10 @@ public class GameCanvas : BaseCanvas
         {
             icon_manholecover[index].HideGuide();
         }
+        for (var index = 0; index < icon_growth.Count; index++)
+        {
+            icon_growth[index].HideGuide();
+        }
     }
 
     public void ShowPincersGuide(string tileName)
@@ -658,6 +671,17 @@ public class GameCanvas : BaseCanvas
             if (icon_manholecover[index]?.item?.coord.name == tileName)
             {
                 icon_manholecover[index].ShowGuide();
+            }
+        }
+    }
+
+    public void ShowSkipTurnGuide(string tileName)
+    {
+        for (var index = 0; index < icon_growth.Count; index++)
+        {
+            if (icon_growth[index]?.item?.coord.name == tileName)
+            {
+                icon_growth[index].ShowGuide();
             }
         }
     }

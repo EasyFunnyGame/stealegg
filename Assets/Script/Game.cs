@@ -424,6 +424,13 @@ public class Game : MonoBehaviour
                 gameCanvas.HideItemGuides();
                 gameCanvas.ShowManHoleCoverGuide(currentStep.tileName);
             }
+            else if (currentStep.actionType == ActionType.TurnDirection)
+            {
+                guideArrow.gameObject.SetActive(false);
+                gameCanvas.HideWhitsleAndBottleGuides();
+                gameCanvas.HideItemGuides();
+                gameCanvas.ShowSkipTurnGuide(currentStep.tileName);
+            }
         }
     }
 
@@ -628,6 +635,15 @@ public class Game : MonoBehaviour
 
     public void SkipPlayerTurn()
     {
+
         player.currentAction = new ActionTurnDirection(player, player.direction);
+        if (teaching && showingStep != null)
+        {
+            if (showingStep.actionType == ActionType.TurnDirection)
+            {
+                boardManager.steps.RemoveAt(0);
+                ShowGuide();
+            }
+        }
     }
 }

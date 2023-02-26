@@ -532,6 +532,7 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
+        patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
         if ( (hearSoundTile && (hearSoundTile.name == tileName || turnOnReached )) || foundPlayerTile)
         {
@@ -572,6 +573,8 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
+
+        patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
         if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
         {
@@ -612,6 +615,7 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
+        patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
         if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
         {
