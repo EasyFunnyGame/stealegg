@@ -166,6 +166,15 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseBottleHandler()
     {
+        var teachingStep = Game.Instance.showingStep;
+        if (Game.teaching && teachingStep != null)
+        {
+            if (teachingStep.actionType != ActionType.ThrowBottle)
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return;
+            }
+        }
         Game.Instance.BottleSelectTarget();
         btn_bottle_cancel.gameObject.SetActive(true);
         btn_bottle.gameObject.SetActive(false);
@@ -175,10 +184,13 @@ public class GameCanvas : BaseCanvas
     void CancelBottleThrow()
     {
         var teachingStep = Game.Instance.showingStep;
-        if(teachingStep?.actionType == ActionType.ThrowBottle && teachingStep?.tileName!="")
+        if (Game.teaching && teachingStep != null)
         {
-            Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
-            return;
+            if (teachingStep.actionType == ActionType.ThrowBottle && teachingStep?.tileName != "")
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return;
+            }
         }
         Game.Instance.CancelBottleSelectTarget();
         btn_bottle_cancel.gameObject.SetActive(false);
@@ -187,6 +199,15 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseWhistleHandler()
     {
+        var teachingStep = Game.Instance.showingStep;
+        if ( Game.teaching && teachingStep !=null  )
+        {
+            if(teachingStep.actionType != ActionType.BlowWhistle)
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return;
+            }
+        }
         Game.Instance.BlowWhistle();
     }
 
@@ -571,7 +592,7 @@ public class GameCanvas : BaseCanvas
         //bottleGuide.Play("UI_Bottle_Guide");
     }
 
-    public void HideGuides()
+    public void HideWhitsleAndBottleGuides()
     {
         bottleGuide.gameObject.SetActive(false);
         whitsleGuide.gameObject.SetActive(false);
@@ -591,5 +612,20 @@ public class GameCanvas : BaseCanvas
     public void HideItemGuides()
     {
         icon_graff.HideGuide();
+        for (var index = 0; index < icon_pincers.Count; index++)
+        {
+            icon_pincers[index].HideGuide();
+        }
+    }
+
+    public void ShowPincersGuide(string tileName)
+    {
+        for(var index = 0; index < icon_pincers.Count; index++)
+        {
+            if (icon_pincers[index]?.item?.coord.name == tileName)
+            {
+                icon_pincers[index].ShowGuide();
+            }
+        }
     }
 }

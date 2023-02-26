@@ -14,8 +14,8 @@ public class BoardManager : MonoBehaviour
     [SerializeField]
     public Transform squareRoot;
 
-    [SerializeField]
-    public Transform visualRoot;
+    //[SerializeField]
+    //public Transform visualRoot;
 
     [SerializeField]
     public Transform enemyRoot;
@@ -293,7 +293,7 @@ public class BoardManager : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        visualRoot?.gameObject.SetActive(tirggerVisibleNode);
+        //visualRoot?.gameObject.SetActive(tirggerVisibleNode);
     }
 
 
@@ -326,12 +326,11 @@ public class BoardManager : MonoBehaviour
         var boardNode = transform.Find("Board_1");
         if(boardNode != null)
         {
-            squareRoot = boardNode.GetChild(0);
-            visualRoot = boardNode.GetChild(1);
-            enemyRoot = boardNode.GetChild(2);
-            linkRoot = boardNode.GetChild(3);
+            squareRoot = boardNode.Find("BoardSquares_Root");
+            //visualRoot = boardNode.GetChild(1);
+            enemyRoot = boardNode.Find("Enemies_Root");
+            linkRoot = boardNode.Find("Links_Root");
             linkRoot.gameObject.SetActive(true);
-
             itemRoot = boardNode.Find("ItemRoot");
             if(itemRoot==null)
             {
@@ -414,13 +413,13 @@ public class BoardManager : MonoBehaviour
 
     void ProcessVisialNodes()
     {
-        if (visualRoot == null) return;
-        for (var index = 0; index < visualRoot.childCount; index++)
-        {
-            var nodeGameObject = visualRoot.GetChild(index);
-            var nameArr = nodeGameObject.name.Split(' ');
-            nodeGameObject.name = nameArr[0];
-        }
+        //if (visualRoot == null) return;
+        //for (var index = 0; index < visualRoot.childCount; index++)
+        //{
+        //    var nodeGameObject = visualRoot.GetChild(index);
+        //    var nameArr = nodeGameObject.name.Split(' ');
+        //    nodeGameObject.name = nameArr[0];
+        //}
     }
 
     void ProcessLinkedNodes()

@@ -23,6 +23,8 @@ public class GameCamera : MonoBehaviour
 
 	public float height;
 
+	public float targetHeight;
+
 	public Camera m_camera;
 
 	public GameObject[] _targets = new GameObject[0];
@@ -39,6 +41,8 @@ public class GameCamera : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
+
+		targetHeight = height;
 		_debugProjection = DebugProjection.ROTATED;
 	}
 
@@ -57,9 +61,9 @@ public class GameCamera : MonoBehaviour
 		float projectionPlaneZ = furthestPointDistanceFromCamera + 3f;
 
 		ProjectionHits viewProjectionLeftAndRightEdgeHits =
-			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.LEFT_RIGHT, projectionPlaneZ, halfHorizontalFovRad).AddPadding(PaddingRight, PaddingLeft);
+			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.LEFT_RIGHT, projectionPlaneZ, halfHorizontalFovRad).AddPadding(UpperPaddingRight, UpperPaddingLeft);
 		ProjectionHits viewProjectionTopAndBottomEdgeHits =
-			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.TOP_BOTTOM, projectionPlaneZ, halfVerticalFovRad).AddPadding(PaddingUp, PaddingDown);
+			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.TOP_BOTTOM, projectionPlaneZ, halfVerticalFovRad).AddPadding(UpperPaddingUp, UpperPaddingDown);
 
 		var requiredCameraPerpedicularDistanceFromProjectionPlane =
 			Mathf.Max(
@@ -179,9 +183,23 @@ public class GameCamera : MonoBehaviour
 	public float playerPaddingRight;
 	public Vector3 targetPosition = new Vector3();
 
+	public float UpperPaddingUp=0.5f;
+	public float UpperPaddingDown = 0.5f;
+	public float UpperPaddingLeft = 0.5f;
+	public float UpperPaddingRight = 0.5f;
+
 	private void LateUpdate()
 	{
-		if(playerPaddingDown < PaddingDown)
+		if (upper && _targets.Length > 0)
+		{
+			var targetPositionAndRotation = TargetPositionAndRotation(_targets);
+			Vector3 velocity = Vector3.zero;
+			transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, 0.05f);
+			transform.rotation = targetPositionAndRotation.Rotation;
+			return;
+		}
+
+		if (playerPaddingDown < PaddingDown)
         {
 			transform.Translate(new Vector3(0,0,-MoveSmoothTime), Space.World);
 		}
@@ -198,34 +216,29 @@ public class GameCamera : MonoBehaviour
 			transform.Translate(new Vector3(MoveSmoothTime, 0, 0), Space.World);
 		}
 
-		if (transform.position.y < height)
+		//if(upper)
+  //      {
+		//	targetHeight = height + 1;
+  //      }
+  //      else
+  //      {
+		//	targetHeight = height;
+  //      }
+
+		if (transform.position.y < targetHeight)
         {
 			transform.Translate(new Vector3(0, MoveSmoothTime, 0), Space.World);
 		}
 
-		if (transform.position.y > height)
+		if (transform.position.y > targetHeight)
 		{
 			transform.Translate(new Vector3(0, -MoveSmoothTime, 0), Space.World);
 		}
 		var rotation = Quaternion.Euler(Pitch, Yaw, Roll);
 		transform.rotation = rotation;
 
-		//Vector3 v = Vector3.zero;
-		//transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref v, MoveSmoothTime);
-
-
-		if (_targets.Length > 0)
-		{
-			var targetPositionAndRotation = TargetPositionAndRotation(_targets);
-
-			Vector3 velocity = Vector3.zero;
-
-			transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, MoveSmoothTime);
-			transform.rotation = targetPositionAndRotation.Rotation;
-		}
 	}
 
-	private float ration;
 
 	public void UpdatePlayerPositionOnScreen(RectTransform canvasRect, Vector3 position, Image playerImage)
     {
@@ -233,8 +246,6 @@ public class GameCamera : MonoBehaviour
 		float resolutionRotioHeight = canvasRect.sizeDelta.y;
 		float widthRatio = resolutionRotioWidth / Screen.width;
 		float heightRatio = resolutionRotioHeight / Screen.height;
-
-		ration = widthRatio;
 
 		float posX = position.x *= widthRatio;
 

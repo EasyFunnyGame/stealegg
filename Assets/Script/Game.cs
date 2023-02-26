@@ -123,7 +123,7 @@ public class Game : MonoBehaviour
         guideArrow.gameObject.SetActive(false);
 
         Debug.Log("当前场景名称:" + sceneName);
-        Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
+        Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
     }
 
 
@@ -146,6 +146,7 @@ public class Game : MonoBehaviour
                 clearTeaching = 0;
             }
         }
+        camera.upper = false;
     }
 
     public void EndGame()
@@ -331,6 +332,7 @@ public class Game : MonoBehaviour
                     player.CheckBottle();
                     gameCanvas.btn_bottle_cancel.gameObject.SetActive(false);
                 }
+                camera.upper = false;
             }
         }
     }
@@ -351,7 +353,7 @@ public class Game : MonoBehaviour
         if (teaching == false)
         {
             guideArrow.gameObject.SetActive(false);
-            gameCanvas.HideGuides();
+            gameCanvas.HideWhitsleAndBottleGuides();
             gameCanvas.HideItemGuides();
             return;
         }
@@ -366,7 +368,7 @@ public class Game : MonoBehaviour
 
             if (currentStep.actionType == ActionType.PlayerMove)
             {
-                gameCanvas.HideGuides();
+                gameCanvas.HideWhitsleAndBottleGuides();
                 gameCanvas.HideItemGuides();
 
                 guideArrow.gameObject.SetActive(true);
@@ -406,7 +408,14 @@ public class Game : MonoBehaviour
             else if(currentStep.actionType == ActionType.Steal)
             {
                 guideArrow.gameObject.SetActive(false);
+                gameCanvas.HideItemGuides();
                 gameCanvas.ShowStealGuide();
+            }
+            else if(currentStep.actionType == ActionType.PincersCut)
+            {
+                guideArrow.gameObject.SetActive(false);
+                gameCanvas.HideWhitsleAndBottleGuides();
+                gameCanvas.ShowPincersGuide(currentStep.tileName);
             }
         }
     }
@@ -493,6 +502,15 @@ public class Game : MonoBehaviour
     List<string> bottleSelectable = new List<string>();
     public void BottleSelectTarget()
     {
+        camera.upper = true;
+        List<GameObject> allNodes = new List<GameObject>();
+        foreach(var kvp in boardManager.nodes)
+        {
+            allNodes.Add(kvp.Value.gameObject);
+        }
+        camera.SetTargets(allNodes.ToArray());
+
+
         player.bottle.gameObject.SetActive(true);
         bottleSelectable.Clear();
         bottleSelectingTarget = true;
@@ -535,7 +553,6 @@ public class Game : MonoBehaviour
                 boardManager.steps.RemoveAt(0);
                 ShowGuide();
             }
-
         }
     }
 
@@ -545,6 +562,7 @@ public class Game : MonoBehaviour
         player.m_animator.SetInteger("bottle", -1);
         player.bottle.gameObject.SetActive(false);
         bottleSelectingTarget = false;
+        camera.upper = false;
     }
 
     public void BottleThorwed(string targetTile)
@@ -585,6 +603,14 @@ public class Game : MonoBehaviour
     public void CutBarbedWire(PincersItem item)
     {
         player.currentAction = new ActionPincersCut(player, item);
+        if (showingStep != null)
+        {
+            if (showingStep.actionType == ActionType.PincersCut && showingStep.tileName == item.coord.name)
+            {
+                boardManager.steps.RemoveAt(0);
+                ShowGuide();
+            }
+        }
     }
 
     public void JumpIntoManholeCover(ManholeCoverItem item)
