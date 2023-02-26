@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HintGainCanvas : BaseCanvas
@@ -26,6 +23,7 @@ public class HintGainCanvas : BaseCanvas
     {
         Game.Instance.hintGainCanvas.Hide();
         Game.teaching = true;
+        Game.clearTeaching = 0;
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         Game.Instance.playing = false;

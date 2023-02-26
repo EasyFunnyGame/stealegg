@@ -321,6 +321,10 @@ public class Enemy : Character
                     foundPlayerNode = next1NodeName;
                 }
             }
+            else
+            {
+                return false;
+            }
         }
         
         // 情况2

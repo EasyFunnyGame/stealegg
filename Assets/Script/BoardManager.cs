@@ -293,11 +293,7 @@ public class BoardManager : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if(visualRoot==null)
-        {
-            return;
-        }
-        visualRoot.gameObject.SetActive(tirggerVisibleNode);
+        visualRoot?.gameObject.SetActive(tirggerVisibleNode);
     }
 
 
@@ -418,6 +414,7 @@ public class BoardManager : MonoBehaviour
 
     void ProcessVisialNodes()
     {
+        if (visualRoot == null) return;
         for (var index = 0; index < visualRoot.childCount; index++)
         {
             var nodeGameObject = visualRoot.GetChild(index);

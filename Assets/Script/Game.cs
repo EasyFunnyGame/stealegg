@@ -123,7 +123,7 @@ public class Game : MonoBehaviour
         guideArrow.gameObject.SetActive(false);
 
         Debug.Log("当前场景名称:" + sceneName);
-        Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
+        Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
     }
 
 
@@ -513,10 +513,10 @@ public class Game : MonoBehaviour
                     continue;
                 }
             }
-            if(player.startTileName == nodeName)
-            {
-                selectable = false;
-            }
+            //if(player.startTileName == nodeName)
+            //{
+            //    selectable = false;
+            //}
             if(player.currentTile.name == nodeName)
             {
                 selectable = false;
