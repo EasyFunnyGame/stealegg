@@ -395,7 +395,16 @@ public class GameCanvas : BaseCanvas
 
     public void OnClickPricersHandler()
     {
-        if(Game.Instance.player == null || Game.Instance.player.currentTile == null)
+        var teachingStep = Game.Instance.showingStep;
+        if (Game.teaching && teachingStep != null)
+        {
+            if (teachingStep.actionType != ActionType.PincersCut)
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return;
+            }
+        }
+        if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
         {
             return;
         }
@@ -416,6 +425,15 @@ public class GameCanvas : BaseCanvas
 
     void OnClickManholeCoverIconHandler(ItemIconOnUI itemIcon)
     {
+        var teachingStep = Game.Instance.showingStep;
+        if (Game.teaching && teachingStep != null)
+        {
+            if (teachingStep.actionType != ActionType.ManHoleCover)
+            {
+                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                return;
+            }
+        }
         if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
         {
             return;
@@ -616,6 +634,10 @@ public class GameCanvas : BaseCanvas
         {
             icon_pincers[index].HideGuide();
         }
+        for (var index = 0; index < icon_manholecover.Count; index++)
+        {
+            icon_manholecover[index].HideGuide();
+        }
     }
 
     public void ShowPincersGuide(string tileName)
@@ -625,6 +647,17 @@ public class GameCanvas : BaseCanvas
             if (icon_pincers[index]?.item?.coord.name == tileName)
             {
                 icon_pincers[index].ShowGuide();
+            }
+        }
+    }
+
+    public void ShowManHoleCoverGuide(string tileName)
+    {
+        for (var index = 0; index < icon_manholecover.Count; index++)
+        {
+            if (icon_manholecover[index]?.item?.coord.name == tileName)
+            {
+                icon_manholecover[index].ShowGuide();
             }
         }
     }

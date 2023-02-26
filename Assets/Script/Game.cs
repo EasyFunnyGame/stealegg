@@ -346,7 +346,7 @@ public class Game : MonoBehaviour
 
 
     public WalkThroughStep showingStep = null;
-    void ShowGuide()
+    public void ShowGuide()
     {
         if (resLoaded == false) return;
         if (guideArrow == null) return;
@@ -416,6 +416,13 @@ public class Game : MonoBehaviour
                 guideArrow.gameObject.SetActive(false);
                 gameCanvas.HideWhitsleAndBottleGuides();
                 gameCanvas.ShowPincersGuide(currentStep.tileName);
+            }
+            else if(currentStep.actionType == ActionType.ManHoleCover)
+            {
+                guideArrow.gameObject.SetActive(false);
+                gameCanvas.HideWhitsleAndBottleGuides();
+                gameCanvas.HideItemGuides();
+                gameCanvas.ShowManHoleCoverGuide(currentStep.tileName);
             }
         }
     }
@@ -546,7 +553,7 @@ public class Game : MonoBehaviour
             }
         }
 
-        if(showingStep!=null)
+        if(teaching && showingStep!=null)
         {
             if(showingStep.actionType == ActionType.ThrowBottle && showingStep.tileName == "")
             {
@@ -603,7 +610,7 @@ public class Game : MonoBehaviour
     public void CutBarbedWire(PincersItem item)
     {
         player.currentAction = new ActionPincersCut(player, item);
-        if (showingStep != null)
+        if (teaching && showingStep != null)
         {
             if (showingStep.actionType == ActionType.PincersCut && showingStep.tileName == item.coord.name)
             {

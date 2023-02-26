@@ -43,6 +43,14 @@ public class ActionJumpManholeCover : ActionBase
                 player.currentTile = tile;
                 player.transform.position = tile.transform.position;
             }
+            if (Game.teaching && Game.Instance.showingStep != null)
+            {
+                if (Game.Instance.showingStep.actionType == ActionType.ManHoleCover && Game.Instance.showingStep.tileName == manholecover.coord.name)
+                {
+                    boardManager.steps.RemoveAt(0);
+                    Game.Instance.ShowGuide();
+                }
+            }
             return true;
         }
         return false;
