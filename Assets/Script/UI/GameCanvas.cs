@@ -264,8 +264,8 @@ public class GameCanvas : BaseCanvas
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
-        // 水井盖图标显示，能用的才显示出来
 
+        // 水井盖图标显示，能用的才显示出来
         var showManHoleCoverIcon = false;
         var playerTileName = Game.Instance.player?.currentTile?.name;
         if(!string.IsNullOrEmpty(playerTileName))
@@ -310,6 +310,7 @@ public class GameCanvas : BaseCanvas
         for (var index = 0; index < icon_growth.Count; index++)
         {
             var icon = icon_growth[index];
+            icon.gameObject.SetActive(playerTileName == icon.item.coord.name);
             if (icon.gameObject.activeSelf)
             {
                 UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);

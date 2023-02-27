@@ -192,13 +192,20 @@ public class EnemyPatrol : Enemy
             {
                 targetDirection = rechEdgeDirection;
                 
-                
                 originalDirection = targetDirection;
                 for(var index = 0; index < edgeCoords.Count; index++)
                 {
                     if(edgeCoords[index].name != curentIndex)
                     {
                         originalCoord = edgeCoords[index].Clone();
+                        break;
+                    }
+                }
+                for (var index = 0; index < edgeCoords.Count; index++)
+                {
+                    if (edgeCoords[index].name != originalCoord.name)
+                    {
+                        originalDirection = Utils.DirectionTo(originalCoord.name, edgeCoords[index].name,direction);
                         break;
                     }
                 }
