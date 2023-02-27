@@ -1175,7 +1175,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493444716800326033}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3174,6 +3174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3477017798921599588}
   - component: {fileID: 3477017798921599589}
+  - component: {fileID: 3477017800096497815}
   m_Layer: 0
   m_Name: Character_setup_005
   m_TagString: Untagged
@@ -3216,6 +3217,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3477017800096497815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3477017798921599611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 57507487130578607}
 --- !u!1 &3477017798947707886
 GameObject:
   m_ObjectHideFlags: 0
@@ -8284,6 +8298,8 @@ MonoBehaviour:
   waiting: 0
   turnOnReached: 0
   targetTileName: 
+  edgeCoords: []
+  patrolTile: {fileID: 0}
 --- !u!1 &5835762960289429652
 GameObject:
   m_ObjectHideFlags: 0
@@ -9229,7 +9245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 0}
+  owner: {fileID: 57507487130578607}
 --- !u!1 &8212982530342265267
 GameObject:
   m_ObjectHideFlags: 0

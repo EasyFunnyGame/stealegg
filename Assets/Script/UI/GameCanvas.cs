@@ -166,6 +166,8 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseBottleHandler()
     {
+        if (buttonClickCd > 0) return;
+        buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
@@ -183,6 +185,8 @@ public class GameCanvas : BaseCanvas
 
     void CancelBottleThrow()
     {
+        if (buttonClickCd > 0) return;
+        buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
@@ -199,6 +203,8 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseWhistleHandler()
     {
+        if (buttonClickCd > 0) return;
+        buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
         if ( Game.teaching && teachingStep !=null  )
         {
@@ -216,9 +222,17 @@ public class GameCanvas : BaseCanvas
         Game.Instance.UseBottle();
     }
 
+    float buttonClickCd = 1.5f;
+
     // Update is called once per frame
     void Update()
     {
+        if(buttonClickCd>0)
+        {
+            buttonClickCd -= Time.deltaTime;
+        }
+
+
         if (Game.Instance.player != null)
         {
             UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
@@ -334,7 +348,6 @@ public class GameCanvas : BaseCanvas
 
         distance_right.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingRight), 2);
         txt_right.text = Math.Abs(Game.Instance.camera.playerPaddingRight).ToString();
-
     }
 
     protected override void OnShow()
@@ -396,6 +409,8 @@ public class GameCanvas : BaseCanvas
 
     public void OnClickPricersHandler()
     {
+        if (buttonClickCd > 0) return;
+        buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
@@ -426,10 +441,12 @@ public class GameCanvas : BaseCanvas
 
     void OnClickManholeCoverIconHandler(ItemIconOnUI itemIcon)
     {
+        if (buttonClickCd > 0) return;
+        buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
-            if (teachingStep.actionType != ActionType.ManHoleCover)
+            if (teachingStep.actionType != ActionType.ManHoleCover || teachingStep.tileName != itemIcon.item.coord.name)
             {
                 Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
                 return;
@@ -471,6 +488,8 @@ public class GameCanvas : BaseCanvas
 
     void OnClickGrowthHandler(GrowthItem item)
     {
+        if (buttonClickCd > 0) return;
+        buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {

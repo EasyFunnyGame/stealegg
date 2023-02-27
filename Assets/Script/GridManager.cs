@@ -32,10 +32,10 @@ public class GridManager : MonoBehaviour
     public List<int> db_direction_order;
 
     //**On_hover/On_Click Pathfinding**//
-    public void find_paths_realtime(Character tchar, GridTile tar_tile_s)
+    public void find_paths_realtime(Character tchar, GridTile tar_tile_s, GridTile fromTile = null)
     {
         tchar.num_tile = 0;
-        var ttile = tchar.currentTile;
+        var ttile = fromTile ?? tchar.currentTile;
         for (int x = 0; x < db_tiles.Count; x++)
             db_tiles[x].db_path_lowest.Clear(); //Clear all previous lowest paths for this char//
 
@@ -47,21 +47,32 @@ public class GridManager : MonoBehaviour
         db_direction_order.Clear();
         if (up >= right && up >= down && up >= left)
         {
-            db_direction_order.Add(0);
             db_direction_order.Add(1);
             db_direction_order.Add(2);
             db_direction_order.Add(3);
+            db_direction_order.Add(0);
+
+            // original
+            //db_direction_order.Add(0);
+            //db_direction_order.Add(1);
+            //db_direction_order.Add(2);
+            //db_direction_order.Add(3);
         }
-        else
-        if (right >= up && right >= down && right >= left)
+        else if (right >= up && right >= down && right >= left)
         {
+            db_direction_order.Add(0);
             db_direction_order.Add(1);
             db_direction_order.Add(2);
             db_direction_order.Add(3);
-            db_direction_order.Add(0);
+
+            // original
+            //db_direction_order.Add(1);
+            //db_direction_order.Add(2);
+            //db_direction_order.Add(3);
+            //db_direction_order.Add(0);
         }
-        else
-        if (down >= up && down >= right && down >= left)
+
+        else if (down >= up && down >= right && down >= left)
         {
             db_direction_order.Add(2);
             db_direction_order.Add(3);

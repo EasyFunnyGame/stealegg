@@ -260,6 +260,7 @@ public class Game : MonoBehaviour
 
         // 更新主角站立狀態
         var player_idle_type = player.m_animator.GetFloat("idle_type");
+        player.founded = beFound;
         if(beFound)
         {
             player_idle_type += .1f;
@@ -439,6 +440,8 @@ public class Game : MonoBehaviour
         if (pausing) return;
         if (Input.GetMouseButtonDown(0))
         {
+            //FindPathTest("3_2","3_4");
+            //return;
             Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
@@ -645,5 +648,15 @@ public class Game : MonoBehaviour
                 ShowGuide();
             }
         }
+    }
+
+    private void FindPathTest(string from , string to )
+    {
+        var fromTile = player.gridManager.GetTileByName(from);
+        var toTile = player.gridManager.GetTileByName (to);
+        player.gridManager.find_paths_realtime(player, toTile, fromTile);
+        //player.UpdateMoves(player.nextTile);
+        player.path = toTile.db_path_lowest;
+        player.UpdateTargetDirection(player.nextTile);
     }
 }

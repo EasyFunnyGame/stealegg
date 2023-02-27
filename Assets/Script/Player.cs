@@ -19,6 +19,10 @@ public class Player : Character
 
     public float idleTime = 5;
 
+    public bool hidding = false;
+
+    public bool founded = false;
+
     private void Update()
     {
         if(currentAction==null)
@@ -47,7 +51,7 @@ public class Player : Character
         bottle.gameObject.SetActive(false);
         startTileName = coord.name;
     }
-
+    
     override public void Reached()
     {
         base.Reached();
@@ -57,6 +61,17 @@ public class Player : Character
         m_animator.SetInteger("jump", -1);
         ShowReached();
         idleTime = Random.Range(3,5);
+
+        hidding = false;
+        foreach (var kvp in boardManager.allItems)
+        {
+            var item = kvp.Value;
+            if (item.itemType == ItemType.Growth && coord.name == item.coord.name)
+            {
+                hidding = !founded && true;
+                break;
+            }
+        }
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
 

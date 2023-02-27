@@ -315,7 +315,7 @@ public class Enemy : Character
             {
                 var linkLineName = linkLine.transform.GetChild(0).name;
                 var canReach = linkLineName.Contains("Normal");
-                if (hearSoundTile == null && linkLine && canReach && player.currentTile.name == next1NodeName)
+                if (hearSoundTile == null && linkLine && canReach && player.currentTile.name == next1NodeName && !player.hidding)
                 {
                     foundPlayer = true;
                     foundPlayerNode = next1NodeName;
@@ -332,7 +332,7 @@ public class Enemy : Character
         foundNodeZ += zOffset;
         var next2NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
         linkLine = boardManager.FindLine(next1NodeName, next2NodeName);
-        if (linkLine && Game.Instance.player.currentTile.name == next2NodeName)
+        if (linkLine && Game.Instance.player.currentTile.name == next2NodeName && !player.hidding)
         {
             foundPlayer = true;
             foundPlayerNode = next2NodeName;
@@ -498,7 +498,7 @@ public class Enemy : Character
         if (player == null || player.currentTile == null) return false;
 
         var targetDirection = Utils.DirectionTo(currentTile.name, tileName, direction);
-        if (targetDirection == direction && player.CanReachInSteps(currentTile.name))
+        if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
         {
             Game.Instance.FailGame();
             m_animator.SetBool("catch", true);
@@ -512,7 +512,7 @@ public class Enemy : Character
         var player = Game.Instance.player;
         if (player == null || player.currentTile == null) return false;
         var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);
-        if (targetDirection == direction && player.CanReachInSteps(currentTile.name))
+        if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
         {
             Game.Instance.FailGame();
             m_animator.SetBool("catch", true);
