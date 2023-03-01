@@ -42,9 +42,15 @@ public class Enemy : Character
 
     public Transform routeArrow;
 
-    public string routeNode1Name;
+    //public string routeNode1Name;
 
-    public string routeNode2Name;
+    //public string routeNode2Name;
+
+    //public string routeNode3Name;
+
+    //public string routeNode4Name;
+
+    public List<string> routeNodeNames;
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
 
@@ -61,12 +67,6 @@ public class Enemy : Character
         Reached();
         OnReachedOriginal();
         DisapearTraceTarget();
-    }
-
-    public override void ResetDirection()
-    {
-        base.ResetDirection();
-        UpdateRouteMark();
     }
 
     public virtual void CheckAction()
@@ -189,8 +189,7 @@ public class Enemy : Character
             DestroyImmediate(redNodes[index].gameObject);
         }
         redNodes.Clear();
-
-        routeNode1Name = routeNode2Name = "";
+        routeNodeNames.Clear();
 
         if (sleeping) return;
 
@@ -214,33 +213,27 @@ public class Enemy : Character
         {
             xOffset = -1;
         }
+        var distance = 2;
+        var foundNodeX = coord.x;
+        var foundNodeZ = coord.z;
 
-        var curNodeName = currentTile.gameObject.name;
-        RedNodeByName(curNodeName);
-
-        var next1CoordX = coord.x + xOffset;
-        var next1CoordZ = coord.z + zOffset;
-        var next1NodeName = string.Format("{0}_{1}", next1CoordX, next1CoordZ);
-        var line1Name = boardManager.FindLine(curNodeName, next1NodeName);
-        if(line1Name == null)
+        while (distance >= 0)
         {
-            return;
+            var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+            foundNodeX = foundNodeX + xOffset;
+            foundNodeZ = foundNodeZ + zOffset;
+            var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+            var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
+            routeNodeNames.Add(currentNodeName);
+            RedNodeByName(currentNodeName);
+            distance--;
+            if (linkLine == null)
+                break;
+            if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
+            {
+                break;
+            }
         }
-        
-        routeNode1Name = next1NodeName;
-        
-        RedNodeByName(next1NodeName);
-
-        var next2CoordX = next1CoordX + xOffset;
-        var next2CoordZ = next1CoordZ + zOffset;
-        var next2NodeName = string.Format("{0}_{1}", next2CoordX, next2CoordZ);
-        line1Name = boardManager.FindLine(next1NodeName, next2NodeName);
-        if (line1Name == null)
-        {
-            return;
-        }
-        routeNode2Name = next2NodeName;
-        RedNodeByName(next2NodeName);
     }
 
     //public virtual bool PlayerWalkIntoSight()
@@ -314,7 +307,7 @@ public class Enemy : Character
             if (linkLine)
             {
                 var linkLineName = linkLine.transform.GetChild(0).name;
-                var canReach = linkLineName.Contains("Normal");
+                var canReach = linkLineName.Contains("Visual");
                 if (hearSoundTile == null && linkLine && canReach && player.currentTile.name == next1NodeName && !player.hidding)
                 {
                     foundPlayer = true;
@@ -378,15 +371,9 @@ public class Enemy : Character
     protected virtual void UpdateRouteRedLine()
     {
         route.SetActive(!sleeping);
-        var node1 = boardManager.FindNode(routeNode1Name);
-        var node2 = boardManager.FindNode(routeNode2Name);
-        if (node1 == null && node2 == null)
+        if(routeNodeNames.Count>0)
         {
-            route.SetActive(false);
-        }
-        else
-        {
-            var endNode = node2 ? node2 : node1;
+            BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
             var distance = Vector3.Distance(transform.position, endNode.transform.position);
             routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
             routeArrow.localPosition = new Vector3(0, 0, distance);
@@ -404,6 +391,11 @@ public class Enemy : Character
             }
             //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
         }
+        else
+        {
+            route.SetActive(false);
+        }
+
     }
 
     private void UpdateAnimatorParams()

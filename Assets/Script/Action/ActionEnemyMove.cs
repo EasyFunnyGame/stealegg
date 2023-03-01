@@ -205,7 +205,8 @@ public class ActionEnemyMove : ActionBase
         // 先转向 再位移
         if (character.body_looking)
         {
-            Vector3 tar_dir = character.db_moves[1].position - character.tr_body.position;
+            var dirPos = character.db_moves[1].position;
+            Vector3 tar_dir = new Vector3(dirPos.x, character.tr_body.position.y, dirPos.z)  - character.tr_body.position;
             Vector3 new_dir = Vector3.RotateTowards(character.tr_body.forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
 
             new_dir.y = 0;

@@ -65,7 +65,7 @@ public class EnemyPatrol : Enemy
                 var lineType = linkLine.transform.GetChild(0);
                 if (lineType)
                 {
-                    if (!lineType.name.Contains("Normal"))
+                    if (!lineType.name.Contains("Visual"))
                     {
                         findEdge = true;
 
@@ -94,8 +94,6 @@ public class EnemyPatrol : Enemy
         }
         redNodes.Clear();
 
-        routeNode1Name = routeNode2Name = "";// routeNode3Name = routeNode4Name = 
-
         if (sleeping) return;
 
         var xOffset = 0;
@@ -119,28 +117,26 @@ public class EnemyPatrol : Enemy
             xOffset = -1;
         }
 
-        var curNodeName = currentTile.gameObject.name;
-        RedNodeByName(curNodeName);
-        // 1
-        var next1CoordX = coord.x + xOffset;
-        var next1CoordZ = coord.z + zOffset;
-        var next1NodeName = string.Format("{0}_{1}", next1CoordX, next1CoordZ);
-        var lineName = boardManager.FindLine(curNodeName, next1NodeName);
-        if (lineName != null)
+        var distance = 20;
+        var foundNodeX = coord.x;
+        var foundNodeZ = coord.z;
+        while ( distance >= 0)
         {
-            routeNode1Name = next1NodeName;
-            RedNodeByName(next1NodeName);
-        }
-        
-        // 2
-        var next2CoordX = next1CoordX + xOffset;
-        var next2CoordZ = next1CoordZ + zOffset;
-        var next2NodeName = string.Format("{0}_{1}", next2CoordX, next2CoordZ);
-        lineName = boardManager.FindLine(next1NodeName, next2NodeName);
-        if (lineName != null)
-        {
-            routeNode2Name = next2NodeName;
-            RedNodeByName(next2NodeName);
+            var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+            foundNodeX = foundNodeX + xOffset;
+            foundNodeZ = foundNodeZ + zOffset;
+            var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+            routeNodeNames.Add(currentNodeName);
+            RedNodeByName(currentNodeName);
+            distance--;
+            var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
+            if (linkLine == null)
+                break;
+            if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
+            {
+                break;
+            }
+            
         }
     }
 
@@ -179,7 +175,7 @@ public class EnemyPatrol : Enemy
             var lineType = linkLine.transform.GetChild(0);
             if (lineType)
             {
-                if(!lineType.name.Contains("Normal"))
+                if(!lineType.name.Contains("Visual"))
                 {
                     reachEdge = true;
                 }
@@ -247,7 +243,7 @@ public class EnemyPatrol : Enemy
                 {
                     var lineType = linkLine.transform.GetChild(0);
                     var lineName = lineType.name;
-                    if (lineName.Contains("Normal"))
+                    if (lineName.Contains("Visual"))
                     {
                         var tile = gridManager.GetTileByName(nextPatrolTileName);
                         if (tile != null)
@@ -281,52 +277,52 @@ public class EnemyPatrol : Enemy
         UpdateRouteMark();
     }
 
-    protected override void UpdateRouteRedLine()
-    {
-        if(patroling == false)
-        {
-            base.UpdateRouteRedLine();
-        }
-        else
-        {
-            var node1 = boardManager.FindNode(routeNode1Name);
-            var node2 = boardManager.FindNode(routeNode2Name);
-            if (node1 == null && node2 == null  )
-            {
-                route.SetActive(false);
-            }
-            else
-            {
-                route.SetActive(true);
-                BoardNode endNode = null;
-                if(node1 != null)
-                {
-                    endNode = node1;
-                }
-                if (node2 != null)
-                {
-                    endNode = node2;
-                }
+    //protected override void UpdateRouteRedLine()
+    //{
+    //    if(patroling == false)
+    //    {
+    //        base.UpdateRouteRedLine();
+    //    }
+    //    else
+    //    {
+    //        var node1 = boardManager.FindNode(routeNode1Name);
+    //        var node2 = boardManager.FindNode(routeNode2Name);
+    //        if (node1 == null && node2 == null  )
+    //        {
+    //            route.SetActive(false);
+    //        }
+    //        else
+    //        {
+    //            route.SetActive(true);
+    //            BoardNode endNode = null;
+    //            if(node1 != null)
+    //            {
+    //                endNode = node1;
+    //            }
+    //            if (node2 != null)
+    //            {
+    //                endNode = node2;
+    //            }
                 
-                var distance = Vector3.Distance(transform.position, endNode.transform.position);
-                routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
-                routeArrow.localPosition = new Vector3(0, 0, distance);
+    //            var distance = Vector3.Distance(transform.position, endNode.transform.position);
+    //            routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
+    //            routeArrow.localPosition = new Vector3(0, 0, distance);
 
-                for (var index = 0; index < redNodes.Count; index++)
-                {
-                    if (redNodes[index].name == currentTile.name)
-                    {
-                        distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
-                        if (distance > 0.1f)
-                        {
-                            redNodes[index].gameObject.SetActive(false);
-                        }
-                    }
-                }
-                //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
-            }
-        }
-    }
+    //            for (var index = 0; index < redNodes.Count; index++)
+    //            {
+    //                if (redNodes[index].name == currentTile.name)
+    //                {
+    //                    distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
+    //                    if (distance > 0.1f)
+    //                    {
+    //                        redNodes[index].gameObject.SetActive(false);
+    //                    }
+    //                }
+    //            }
+    //            //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
+    //        }
+    //    }
+    //}
 
 
     public override void CheckAction()
