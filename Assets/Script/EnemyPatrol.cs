@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class EnemyPatrol : Enemy
 {
-    //private List<string> patrolPoints = new List<string>();
-    //private int patrolPointIndex = 0;
+    public int patrolDistance = 2;
 
     public List<Coord> edgeCoords = new List<Coord>();
 
@@ -93,7 +92,7 @@ public class EnemyPatrol : Enemy
             DestroyImmediate(redNodes[index].gameObject);
         }
         redNodes.Clear();
-
+        routeNodeNames.Clear();
         if (sleeping) return;
 
         var xOffset = 0;
@@ -117,7 +116,7 @@ public class EnemyPatrol : Enemy
             xOffset = -1;
         }
 
-        var distance = 20;
+        var distance = patrolDistance;
         var foundNodeX = coord.x;
         var foundNodeZ = coord.z;
         while ( distance >= 0)
