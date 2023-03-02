@@ -38,12 +38,17 @@ public class GameEndCanvas : BaseCanvas
         {
             playingLevel = 0;
         }
-        var playingChapter = (playingLevel % 12) / 12 + 1;
+        var playingChapter = Mathf.FloorToInt(playingLevel/12) + 1;
         var playingIndex = playingLevel % 12 + 1;
-        if(playingIndex>=12)
+        //if(playingIndex>12)
+        //{
+        //    playingIndex = 0;
+        //    playingChapter++;
+        //}
+        if(playingLevel % 12 == 0)
         {
-            playingIndex = 0;
             playingChapter++;
+            playingIndex = 1;
         }
         var nextLevelName = string.Format("{0}-{1}", playingChapter, playingIndex);
         SceneManager.LoadScene(nextLevelName);
