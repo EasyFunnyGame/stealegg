@@ -16,6 +16,7 @@ public class EnemyPatrol : Enemy
         InitEdgeTiles();
     }
 
+    // todo 这里要手动填进去
     void InitEdgeTiles()
     {
         edgeCoords.Add(coord.Clone());
@@ -64,10 +65,9 @@ public class EnemyPatrol : Enemy
                 var lineType = linkLine.transform.GetChild(0);
                 if (lineType)
                 {
-                    if (!lineType.name.Contains("Visual"))
+                    if (lineType.name.Contains("Doted") || !lineType.name.Contains("Visual"))
                     {
                         findEdge = true;
-
                     }
                 }
             }
@@ -82,7 +82,6 @@ public class EnemyPatrol : Enemy
             coordX = coordX + xOffset;
             coordZ = coordZ + zOffset;
         }
-        
     }
 
     public override void UpdateRouteMark()
@@ -131,11 +130,15 @@ public class EnemyPatrol : Enemy
             var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
             if (linkLine == null)
                 break;
-            if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
+            if(linkLine.transform.childCount<1)
             {
                 break;
             }
-            
+            var lineType = linkLine.transform.GetChild(0);
+            if (lineType.name.Contains("Doted") || !lineType.name.Contains("Visual"))
+            {
+                break;
+            }
         }
     }
 
@@ -174,7 +177,7 @@ public class EnemyPatrol : Enemy
             var lineType = linkLine.transform.GetChild(0);
             if (lineType)
             {
-                if(!lineType.name.Contains("Visual"))
+                if(lineType.name.Contains("Doted") || !lineType.name.Contains("Visual") )
                 {
                     reachEdge = true;
                 }
