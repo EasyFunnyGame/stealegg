@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-
+using System.Collections.Generic;
 public class EnemySentinel : Enemy
 {
+    public List<Direction> directions; 
     public bool turn;
 
     public override void ResetDirection()
