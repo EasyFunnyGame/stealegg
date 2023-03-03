@@ -2,7 +2,6 @@
 
 public class EnemySentinel : Enemy
 {
-
     public bool turn;
 
     public override void ResetDirection()

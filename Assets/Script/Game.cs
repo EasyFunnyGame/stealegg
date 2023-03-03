@@ -122,18 +122,18 @@ public class Game : MonoBehaviour
         guideArrow = (GameObject.Instantiate(Resources.Load("Prefab/GuideArrow")) as GameObject).transform;
         guideArrow.gameObject.SetActive(false);
 
-        Debug.Log("当前场景名称:" + sceneName);
-        Addressables.LoadAssetAsync<GameObject>(string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter+"-"+index)).Completed += onScenePrefabLoaded;
+        //var scenePrefabUrl = string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter + "-" + index);
+        Debug.Log("开始加载场景:" + sceneName);
+        Addressables.LoadAssetAsync<GameObject>(sceneName).Completed += onScenePrefabLoaded;
     }
-
 
     void onScenePrefabLoaded(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj)
     {
-        Debug.Log("加载好的远程场景预设");
+        Debug.Log("加载好的远程场景预设" + obj.Result.name);
         var sceneNode = GameObject.Find("Scene");
         sceneNode.transform.localPosition = Vector3.zero;
         var instance = Instantiate(obj.Result);
-        instance.transform.parent = sceneNode.transform;
+        //instance.transform.parent = sceneNode.transform;
         instance.transform.localPosition = Vector3.zero;
         resLoaded = true;
 
