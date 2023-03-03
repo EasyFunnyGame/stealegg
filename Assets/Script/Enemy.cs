@@ -42,14 +42,6 @@ public class Enemy : Character
 
     public Transform routeArrow;
 
-    //public string routeNode1Name;
-
-    //public string routeNode2Name;
-
-    //public string routeNode3Name;
-
-    //public string routeNode4Name;
-
     public List<string> routeNodeNames;
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
@@ -235,34 +227,6 @@ public class Enemy : Character
             }
         }
     }
-
-    //public virtual bool PlayerWalkIntoSight()
-    //{
-    //    if (Game.Instance.player == null || Game.Instance.player.currentTile == null)
-    //    {
-    //        return false;
-    //    }
-    //    var canReach = false;
-    //    // 情况1
-    //    canReach = Game.Instance.player.CanReachInSteps(currentTile.name);
-    //    var foundPlayerDirection = Utils.DirectionTo(currentTile, Game.Instance.player.currentTile, direction);
-    //    if (canReach && foundPlayerDirection == direction)
-    //    {
-    //        var targetTile = gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-    //        if (targetTile != null)
-    //        {
-    //            hearSoundTile = targetTile;
-    //            turnOnReached = true;
-    //            ShowTraceTarget(targetTile);
-    //            ShowFound();
-    //            originalTile = null;
-    //            currentAction = new ActionTurnDirection(this, targetDirection);
-    //            Debug.Log("主角闯进视野:" + targetTile.name);
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
 
     public virtual bool TryFoundPlayer()
     {
@@ -670,6 +634,8 @@ public class Enemy : Character
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(true);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(false);
         DisapearTraceTarget();
     }
 
@@ -679,6 +645,8 @@ public class Enemy : Character
         icons.tanhao.gameObject.SetActive(true);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(false);
         targetIdleType = 0.5f;
     }
 
@@ -688,6 +656,8 @@ public class Enemy : Character
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(true);
         icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(false);
         targetIdleType = 1;
     }
 
@@ -697,7 +667,40 @@ public class Enemy : Character
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(false);
     }
+
+    public virtual void ShowCCW()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(true);
+        icons.cw.gameObject.SetActive(false);
+    }
+
+    public virtual void ShowCW()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(true);
+    }
+
+    public virtual void HideSentinelTurn()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(false);
+    }
+
 
     public virtual void ShowTraceTarget(GridTile tile)
     {

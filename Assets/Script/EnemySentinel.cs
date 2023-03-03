@@ -2,8 +2,29 @@
 using System.Collections.Generic;
 public class EnemySentinel : Enemy
 {
-    public List<Direction> directions; 
     public bool turn;
+
+    public List<Direction> sentinelDirections;
+
+    public int indexTurn = 1;
+
+    public bool willTurn = false;
+
+    const string Up = "Up";
+
+    const string Down = "Down";
+
+    const string Left = "Left";
+
+    const string Right = "Right";
+
+    
+
+    // 顺时针
+    const string CW = "CW";
+
+    // 逆时针
+    const string CCW = "CCW";
 
     public override void ResetDirection()
     {
@@ -12,7 +33,7 @@ public class EnemySentinel : Enemy
     }
     public override void UpdateRouteMark()
     {
-        
+
         for (var index = 0; index < redNodes.Count; index++)
         {
             DestroyImmediate(redNodes[index].gameObject);
@@ -61,14 +82,14 @@ public class EnemySentinel : Enemy
             {
                 break;
             }
-            for(var i = 0; i < boardManager.enemies.Count; i++)
+            for (var i = 0; i < boardManager.enemies.Count; i++)
             {
                 var enemy = boardManager.enemies[i];
                 var enemyPosition = enemy.transform.position;
                 var enemyCoordX = Mathf.RoundToInt(enemyPosition.x);
                 var enemyCoordZ = Mathf.RoundToInt(enemyPosition.z);
                 var enemyCoordName = string.Format("{0}_{1}", enemyCoordX, enemyCoordZ);
-                if(enemyCoordName == nextNodeName)
+                if (enemyCoordName == nextNodeName)
                 {
                     distance = -1;
                     break;
@@ -76,57 +97,124 @@ public class EnemySentinel : Enemy
             }
         }
     }
-    //public override void CheckAction()
-    //{
-    //    if (currentAction != null) return;
 
-    //    if (foundPlayerTile == null)
-    //    {
-    //        TryFoundPlayer();
-    //        if (foundPlayerTile != null)
-    //        {
-    //            if (hearSoundTile == null)
-    //            {
-    //                currentAction = new ActionFoundPlayer(this);
-    //            }
-    //            else
-    //            {
-    //                currentAction = new ActionTurnDirection(this, targetDirection);
-    //            }
-    //            return;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (CatchPlayer()) return;
-    //    }
 
-    //    if (foundPlayerTile != null)
-    //    {
-    //        originalTile = null;
-    //        currentAction = new ActionEnemyMove(this, foundPlayerTile);
-    //        return;
-    //    }
+    public override void CheckAction()
+    {
+        if (currentAction != null) return;
 
-    //    if (hearSoundTile != null)
-    //    {
-    //        originalTile = null;
-    //        currentAction = new ActionEnemyMove(this, hearSoundTile);
-    //        return;
-    //    }
+        if (foundPlayerTile == null)
+        {
+            TryFoundPlayer();
+            if (foundPlayerTile != null)
+            {
+                if (hearSoundTile == null)
+                {
+                    currentAction = new ActionFoundPlayer(this);
+                }
+                else
+                {
+                    currentAction = new ActionTurnDirection(this, targetDirection);
+                }
+                return;
+            }
+        }
+        else
+        {
+            if (CatchPlayer()) return;
+        }
 
-    //    if (!patroling && originalTile == null)
-    //    {
-    //        ReturnOriginal(true);
-    //        return;
-    //    }
-    //    if (originalTile != null)
-    //    {
-    //        currentAction = new ActionEnemyMove(this, originalTile);
-    //        return;
-    //    }
-        
-    //}
+        if (foundPlayerTile != null)
+        {
+            originalTile = null;
+            currentAction = new ActionEnemyMove(this, foundPlayerTile);
+            return;
+        }
+
+        if (hearSoundTile != null)
+        {
+            originalTile = null;
+            currentAction = new ActionEnemyMove(this, hearSoundTile);
+            return;
+        }
+
+        if (originalTile != null)
+        {
+            currentAction = new ActionEnemyMove(this, originalTile);
+            return;
+        }
+
+        Sentinel();
+    }
+
+
+
+    public void Sentinel()
+    {
+        if (!willTurn)
+        {
+            var currentDirectionIndex = sentinelDirections.IndexOf(direction);
+            if (currentDirectionIndex == 0 )
+            {
+                indexTurn = 1;
+            }
+            else if(currentDirectionIndex == sentinelDirections.Count - 1)
+            {
+                indexTurn = -1;
+            }
+
+            if(indexTurn == 1)
+            {
+                ShowCCW();
+            }
+            else
+            {
+                ShowCW();
+            }
+            
+            var tryTurnDirectionIndex = currentDirectionIndex + indexTurn;
+            if(tryTurnDirectionIndex < 0)
+            {
+                tryTurnDirectionIndex = sentinelDirections.Count - 1;
+            }
+            else if(tryTurnDirectionIndex >= sentinelDirections.Count)
+            {
+                tryTurnDirectionIndex = 0;
+            }
+            var tryTurnDirection = sentinelDirections[tryTurnDirectionIndex];
+
+            var turnDirectionNeighbourNodeName = "";
+            if(tryTurnDirection == Direction.Up)
+            {
+                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z + 1);
+            }
+            else if(tryTurnDirection == Direction.Down)
+            {
+                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z - 1);
+            }
+            else if(tryTurnDirection == Direction.Left)
+            {
+                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x - 1, coord.z + 0);
+            }
+            else if(tryTurnDirection == Direction.Right)
+            {
+                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 1, coord.z + 0);
+            }
+
+            //Debug.Log("巡视方向" + tryTurnDirection + " 转向后临近点:" + turnDirectionNeighbourNodeName);
+            //direction = tryTurnDirection;
+
+            targetDirection = tryTurnDirection;
+            willTurn = true;
+        }
+        else
+        {
+            // 执行转向动作
+            currentAction = new ActionTurnDirection(this, targetDirection);
+            willTurn = false;
+            HideSentinelTurn();
+        }
+    }
 
     public override bool TryFoundPlayer()
     {
@@ -159,7 +247,7 @@ public class EnemySentinel : Enemy
         var foundPlayer = false;
         var foundPlayerNode = "";
 
-        var distance = hearSoundTile == null ? 4 : 2;
+        var distance = hearSoundTile == null ? 10 : 2;
         var foundNodeX = coord.x;
         var foundNodeZ = coord.z;
         while (foundPlayer==false && distance > 0)
@@ -235,5 +323,11 @@ public class EnemySentinel : Enemy
         var result = base.LureWhistle(tileName);
         UpdateRouteMark();
         return result;
+    }
+
+    public override void OnReachedOriginal()
+    {
+        base.OnReachedOriginal();
+        HideSentinelTurn();
     }
 }
