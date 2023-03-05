@@ -45,6 +45,8 @@ public class GridManager : MonoBehaviour
         int left = (int)ttile.v2xy.y - (int)tar_tile_s.v2xy.y;
 
         db_direction_order.Clear();
+
+        
         if (up >= right && up >= down && up >= left)
         {
             db_direction_order.Add(1);
@@ -58,7 +60,7 @@ public class GridManager : MonoBehaviour
             //db_direction_order.Add(2);
             //db_direction_order.Add(3);
         }
-        else if (right >= up && right >= down && right >= left)
+        else if (right >= up && right >= down && right >= left )
         {
             db_direction_order.Add(0);
             db_direction_order.Add(1);
@@ -74,14 +76,26 @@ public class GridManager : MonoBehaviour
 
         else if (down >= up && down >= right && down >= left)
         {
-            db_direction_order.Add(2);
             db_direction_order.Add(3);
             db_direction_order.Add(0);
             db_direction_order.Add(1);
+            db_direction_order.Add(2);
+
+            // original
+            //db_direction_order.Add(2);
+            //db_direction_order.Add(3);
+            //db_direction_order.Add(0);
+            //db_direction_order.Add(1);
         }
         else
         //if (left >= up && left >= right && left >= down)
         {
+            //db_direction_order.Add(2);
+            //db_direction_order.Add(3);
+            //db_direction_order.Add(0);
+            //db_direction_order.Add(1);
+
+            // original
             db_direction_order.Add(3);
             db_direction_order.Add(0);
             db_direction_order.Add(1);

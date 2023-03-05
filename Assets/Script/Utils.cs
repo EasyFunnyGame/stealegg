@@ -126,7 +126,7 @@ public static class Utils
             case ActionType.Steal:
                 return new ActionSteal(player, player.boardManager.allItems[player.currentTile.name]);
             case ActionType.ThrowBottle:
-                return new ActionThrowBottle(player, tile.name, tile.transform.position);
+                return new ActionThrowBottle(player, tile.name);
             case ActionType.BlowWhistle:
                 return new ActionBlowWhistle(player);
         }

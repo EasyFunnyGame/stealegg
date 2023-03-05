@@ -18,10 +18,11 @@ public class ActionThrowBottle : ActionBase
 
     public Vector3 _targetPositon;
 
-    public ActionThrowBottle(Player player, string targetTile, Vector3 targetPosition) : base(player, ActionType.ThrowBottle)
+    public ActionThrowBottle(Player player, string targetTile) : base(player, ActionType.ThrowBottle)
     {
         player.m_animator.SetInteger("bottle", 1);
-        _targetPositon = targetPosition;
+        var boardNode = player.boardManager.FindNode(targetTile);
+        _targetPositon = boardNode.transform.position;
         targetTileName = targetTile;
         bottle = player.bottle.transform;
         bottleParent = bottle.transform.parent;
@@ -29,16 +30,16 @@ public class ActionThrowBottle : ActionBase
         bottleStartRotation = bottle.transform.localRotation;
         bottle.transform.parent = null;
 
-        var direction = (targetPosition - bottle.transform.position).normalized;
-        var distance = Vector3.Distance(bottle.transform.position, targetPosition);
+        var direction = (_targetPositon - bottle.transform.position).normalized;
+        var distance = Vector3.Distance(bottle.transform.position, _targetPositon);
         var middlePoint = direction * distance / 2 + bottle.transform.position;
 
-        middlePoint.y = 2.5f;
+        middlePoint.y = 3.5f;
         
         var wayPoints = new List<Vector3>();
         wayPoints.Add(bottle.transform.position);
         wayPoints.Add(middlePoint);
-        wayPoints.Add(targetPosition);
+        wayPoints.Add(_targetPositon);
         segmentIndex = 0;
         linePointList = BezierUtils.GetBeizerPointList(100, wayPoints);
         player.bottleCount--;

@@ -18,7 +18,7 @@ public class EnemySentinel : Enemy
 
     const string Right = "Right";
 
-    
+    public bool watching = true;
 
     // 顺时针
     const string CW = "CW";
@@ -138,6 +138,12 @@ public class EnemySentinel : Enemy
             return;
         }
 
+        if (!watching && originalTile == null)
+        {
+            ReturnOriginal(true);
+            return;
+        }
+
         if (originalTile != null)
         {
             currentAction = new ActionEnemyMove(this, originalTile);
@@ -151,6 +157,7 @@ public class EnemySentinel : Enemy
 
     public void Sentinel()
     {
+        if (sentinelDirections == null || sentinelDirections.Count < 1) return;
         if (!willTurn)
         {
             var currentDirectionIndex = sentinelDirections.IndexOf(direction);
@@ -183,23 +190,23 @@ public class EnemySentinel : Enemy
             }
             var tryTurnDirection = sentinelDirections[tryTurnDirectionIndex];
 
-            var turnDirectionNeighbourNodeName = "";
-            if(tryTurnDirection == Direction.Up)
-            {
-                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z + 1);
-            }
-            else if(tryTurnDirection == Direction.Down)
-            {
-                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z - 1);
-            }
-            else if(tryTurnDirection == Direction.Left)
-            {
-                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x - 1, coord.z + 0);
-            }
-            else if(tryTurnDirection == Direction.Right)
-            {
-                turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 1, coord.z + 0);
-            }
+            //var turnDirectionNeighbourNodeName = "";
+            //if(tryTurnDirection == Direction.Up)
+            //{
+            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z + 1);
+            //}
+            //else if(tryTurnDirection == Direction.Down)
+            //{
+            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z - 1);
+            //}
+            //else if(tryTurnDirection == Direction.Left)
+            //{
+            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x - 1, coord.z + 0);
+            //}
+            //else if(tryTurnDirection == Direction.Right)
+            //{
+            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 1, coord.z + 0);
+            //}z
 
             //Debug.Log("巡视方向" + tryTurnDirection + " 转向后临近点:" + turnDirectionNeighbourNodeName);
             //direction = tryTurnDirection;
@@ -298,6 +305,7 @@ public class EnemySentinel : Enemy
                 //Debug.Log("开始追踪:" + targetTile.name);
                 turnOnReached = true;
                 patroling = false;
+                watching = false;
                 return true;
             }
         }
@@ -308,6 +316,7 @@ public class EnemySentinel : Enemy
     {
         var result = base.LureBottle(tileName);
         UpdateRouteMark();
+        watching = false;
         return result;
     }
 
@@ -315,6 +324,7 @@ public class EnemySentinel : Enemy
     {
         var result = base.LureSteal(tileName);
         UpdateRouteMark();
+        watching = false;
         return result;
     }
 
@@ -322,6 +332,7 @@ public class EnemySentinel : Enemy
     {
         var result = base.LureWhistle(tileName);
         UpdateRouteMark();
+        watching = false;
         return result;
     }
 
@@ -329,5 +340,7 @@ public class EnemySentinel : Enemy
     {
         base.OnReachedOriginal();
         HideSentinelTurn();
+        watching = true;
+        willTurn = false;
     }
 }
