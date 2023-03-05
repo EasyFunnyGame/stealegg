@@ -52,6 +52,7 @@ public class Enemy : Character
 
     public bool waiting = false;
 
+
     public override void Start()
     {
         base.Start();

@@ -12,4 +12,15 @@ public class IconsAboveEnemy : IconOnUI
     public GameObject shuijiao;
     public GameObject ccw;
     public GameObject cw;
+
+
+    private void Awake()
+    {
+        tanhao.gameObject.SetActive(false);
+        wenhao.gameObject.SetActive(false);
+        fanhui.gameObject.SetActive(false);
+        shuijiao.gameObject.SetActive(false);
+        ccw.gameObject.SetActive(false);
+        cw.gameObject.SetActive(false);
+    }
 }

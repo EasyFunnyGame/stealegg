@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
@@ -93,9 +94,37 @@ public class Game : MonoBehaviour
 
     public void PlayLevel(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        if(sceneName == "1-1" || sceneName == "1-2" || sceneName == "1-3")
+        {
+            SceneManager.LoadScene(sceneName);
+        }
+        else
+        {
+            loadingSceneName = sceneName;
+            StartCoroutine("LoadsScene");
+        }
         resLoaded = false;
     }
+
+    string loadingSceneName = "";
+
+    IEnumerator LoadsScene()
+    {
+        var handle = Addressables.LoadSceneAsync(loadingSceneName, LoadSceneMode.Single, true);
+        handle.Completed += (obj) =>
+        {
+            Debug.LogWarning($"Load async scene complete{obj.Status}");
+            SceneManager.LoadScene(loadingSceneName);
+        };
+
+        while (!handle.IsDone)
+        {
+            // 在此可使用handle.PercentComplete进行进度展示
+            Debug.Log("场景加载进度");
+            yield return null;
+        }
+    }
+
     bool resLoaded = false;
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
@@ -123,8 +152,23 @@ public class Game : MonoBehaviour
         guideArrow.gameObject.SetActive(false);
 
         //var scenePrefabUrl = string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter + "-" + index);
-        Debug.Log("开始加载场景:" + sceneName);
-        Addressables.LoadAssetAsync<GameObject>(sceneName).Completed += onScenePrefabLoaded;
+        //Debug.Log("开始加载场景:" + sceneName);
+        //if(sceneName != "1-1" && sceneName != "1-2" && sceneName != "1-3")
+        //{
+        //    Addressables.LoadAssetAsync<GameObject>(sceneName).Completed += onScenePrefabLoaded;
+        //}
+        //
+
+        //if (teaching)
+        //{
+        //    clearTeaching++;
+        //    if (clearTeaching > 1)
+        //    {
+        //        teaching = false;
+        //        clearTeaching = 0;
+        //    }
+        //}
+        //camera.upper = false;
     }
 
     void onScenePrefabLoaded(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj)
