@@ -2,10 +2,7 @@
 
 public class EnemyStatic : Enemy
 {
-    private void Awake()
-    {
-        
-    }
+
 
     public override void Reached()
     {
@@ -15,6 +12,7 @@ public class EnemyStatic : Enemy
 
     public override void OnReachedOriginal()
     {
+        base.OnReachedOriginal();
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);

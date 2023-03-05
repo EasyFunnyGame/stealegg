@@ -1,8 +1,8 @@
 ﻿public class EnemyDistracted : Enemy
 {
-    
     public override void OnReachedOriginal()
     {
+        base.OnReachedOriginal();
         icons.shuijiao.gameObject.SetActive(true);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);

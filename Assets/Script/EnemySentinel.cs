@@ -39,6 +39,11 @@ public class EnemySentinel : Enemy
             DestroyImmediate(redNodes[index].gameObject);
         }
         redNodes.Clear();
+        for (var index = 0; index < redLines.Count; index++)
+        {
+            DestroyImmediate(redLines[index].gameObject);
+        }
+        redLines.Clear();
         routeNodeNames.Clear();
         if (sleeping) return;
 
@@ -74,10 +79,15 @@ public class EnemySentinel : Enemy
             var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
             routeNodeNames.Add(currentNodeName);
             RedNodeByName(currentNodeName);
-            distance--;
+            
             var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
             if (linkLine == null)
                 break;
+
+            if (distance > 0)
+            {
+                RedLineByName(linkLine);
+            }
             if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
             {
                 break;
@@ -95,7 +105,12 @@ public class EnemySentinel : Enemy
                     break;
                 }
             }
+            distance--;
         }
+
+        BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
+        var endDistance = Vector3.Distance(transform.position, endNode.transform.position);
+        routeArrow.position = endNode.transform.position;//new Vector3(0, endNode.transform.position.y, endDistance);
     }
 
 

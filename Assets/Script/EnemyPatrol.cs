@@ -91,6 +91,13 @@ public class EnemyPatrol : Enemy
             DestroyImmediate(redNodes[index].gameObject);
         }
         redNodes.Clear();
+
+        for (var index = 0; index < redLines.Count; index++)
+        {
+            DestroyImmediate(redLines[index].gameObject);
+        }
+        redLines.Clear();
+
         routeNodeNames.Clear();
         if (sleeping) return;
 
@@ -126,11 +133,17 @@ public class EnemyPatrol : Enemy
             var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
             routeNodeNames.Add(currentNodeName);
             RedNodeByName(currentNodeName);
-            distance--;
+            
             var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
             if (linkLine == null)
                 break;
-            if(linkLine.transform.childCount<1)
+
+            if (distance > 0)
+            {
+                RedLineByName(linkLine);
+            }
+
+            if (linkLine.transform.childCount<1)
             {
                 break;
             }
@@ -139,7 +152,11 @@ public class EnemyPatrol : Enemy
             {
                 break;
             }
+            distance--;
         }
+        BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
+        var endDistance = Vector3.Distance(transform.position, endNode.transform.position);
+        routeArrow.position = endNode.transform.position;//new Vector3(endNode.transform.position.x, endNode.transform.position.y, endDistance);
     }
 
     public bool needTurn()
@@ -267,6 +284,7 @@ public class EnemyPatrol : Enemy
 
     public override void OnReachedOriginal()
     {
+        base.OnReachedOriginal();
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);

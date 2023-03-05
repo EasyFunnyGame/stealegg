@@ -38,13 +38,15 @@ public class Enemy : Character
 
     public GameObject route;
 
-    public Transform routeLine;
+    //public Transform routeLine;
 
     public Transform routeArrow;
 
     public List<string> routeNodeNames;
 
     public List<MeshRenderer> redNodes = new List<MeshRenderer>();
+
+    public List<LinkLine> redLines = new List<LinkLine>();
 
     public bool sleeping = false;
 
@@ -78,7 +80,6 @@ public class Enemy : Character
                 else
                 {
                     currentAction = new ActionTurnDirection(this, targetDirection);
-                    //currentAction = new ActionEnemyMove(this, hearSoundTile);
                 }
                 return;
             }
@@ -141,6 +142,18 @@ public class Enemy : Character
         }
     }
 
+    public void RedLineByName(LinkLine line)
+    {
+        var copy = Instantiate(line);
+        copy.name = line.name;
+        copy.transform.position = line.transform.position;
+        copy.transform.Translate(new Vector3(0, 0.001f, 0));
+        copy.transform.rotation = line.transform.rotation;
+        var renderer = copy.transform.GetChild(0).GetComponent<MeshRenderer>();
+        renderer.material = Resources.Load<Material>("Material/RouteRed");
+        redLines.Add(copy);
+    }
+
     public void RedNodeByName(string nodeName)
     {
         var node = boardManager.FindNode(nodeName);
@@ -182,6 +195,13 @@ public class Enemy : Character
             DestroyImmediate(redNodes[index].gameObject);
         }
         redNodes.Clear();
+
+        for (var index = 0; index < redLines.Count; index++)
+        {
+            DestroyImmediate(redLines[index].gameObject);
+        }
+        redLines.Clear();
+
         routeNodeNames.Clear();
 
         if (sleeping) return;
@@ -217,16 +237,28 @@ public class Enemy : Character
             foundNodeZ = foundNodeZ + zOffset;
             var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
             var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
+            
             routeNodeNames.Add(currentNodeName);
             RedNodeByName(currentNodeName);
-            distance--;
+
             if (linkLine == null)
                 break;
+
+            if (distance > 0)
+            {
+                RedLineByName(linkLine);
+            }
+
             if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
             {
                 break;
             }
+            distance--;
         }
+
+        BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
+        var endDistance = Vector3.Distance(transform.position, endNode.transform.position);
+        routeArrow.position = endNode.transform.position;//new Vector3(0, endNode.transform.position.y, endDistance);
     }
 
     public virtual bool TryFoundPlayer()
@@ -309,6 +341,7 @@ public class Enemy : Character
                 //Debug.Log("开始追踪:" + targetTile.name);
                 turnOnReached = true;
                 patroling = false;
+                routeArrow.gameObject.SetActive(true);
                 return true;
             }
         }
@@ -338,22 +371,22 @@ public class Enemy : Character
         route.SetActive(!sleeping);
         if(routeNodeNames.Count>0)
         {
-            BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-            var distance = Vector3.Distance(transform.position, endNode.transform.position);
-            routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
-            routeArrow.localPosition = new Vector3(0, 0, distance);
+            //BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
+            //var distance = Vector3.Distance(transform.position, endNode.transform.position);
+            //routeArrow.localPosition = new Vector3(0, 0, distance);
+            //routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
+            //for (var index = 0; index < redNodes.Count; index++)
+            //{
+            //    if (redNodes[index].name == currentTile.name)
+            //    {
+            //        distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
+            //        if (distance > 0.1f)
+            //        {
+            //            redNodes[index].gameObject.SetActive(false);
+            //        }
+            //    }
+            //}
 
-            for (var index = 0; index < redNodes.Count; index++)
-            {
-                if (redNodes[index].name == currentTile.name)
-                {
-                    distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
-                    if (distance > 0.1f)
-                    {
-                        redNodes[index].gameObject.SetActive(false);
-                    }
-                }
-            }
             //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
         }
         else
@@ -400,7 +433,7 @@ public class Enemy : Character
 
     public virtual void OnReachedOriginal()
     {
-
+        routeArrow.gameObject.SetActive(false);
     }
 
     // =======================================================================================
@@ -516,6 +549,7 @@ public class Enemy : Character
         hearSoundTile = targetTile;
         ShowTraceTarget(targetTile);
         ShowFound();
+        
         return true;
     }
 
@@ -627,6 +661,7 @@ public class Enemy : Character
             if (CatchPlayer()) return;
         }
         m_animator.SetBool("moving",false);
+        UpdateRouteMark();
     }
 
     public virtual void ShowNotFound()
@@ -649,6 +684,7 @@ public class Enemy : Character
         icons.ccw.gameObject.SetActive(false);
         icons.cw.gameObject.SetActive(false);
         targetIdleType = 0.5f;
+        routeArrow.gameObject.SetActive(true);
     }
 
     public virtual void ShowBackToOriginal()
