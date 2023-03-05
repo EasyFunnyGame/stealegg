@@ -257,8 +257,10 @@ public class Enemy : Character
         }
 
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        var endDistance = Vector3.Distance(transform.position, endNode.transform.position);
-        routeArrow.position = endNode.transform.position;//new Vector3(0, endNode.transform.position.y, endDistance);
+        routeArrow.position = endNode.transform.position;
+        routeArrow.rotation = transform.rotation;
+        routeArrow.Rotate(new Vector3(0, 0, 180));
+        routeArrow.parent = null;
     }
 
     public virtual bool TryFoundPlayer()
@@ -763,6 +765,7 @@ public class Enemy : Character
         turnOnReached = false;
         targetIdleType = 1;
         m_animator.SetTrigger("not_found");
+
     }
 
     protected float idleType;

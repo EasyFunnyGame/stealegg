@@ -109,8 +109,10 @@ public class EnemySentinel : Enemy
         }
 
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        var endDistance = Vector3.Distance(transform.position, endNode.transform.position);
-        routeArrow.position = endNode.transform.position;//new Vector3(0, endNode.transform.position.y, endDistance);
+        routeArrow.position = endNode.transform.position;
+        routeArrow.rotation = transform.rotation;
+        routeArrow.Rotate(new Vector3(0, 0, 180));
+        routeArrow.parent = null;
     }
 
 

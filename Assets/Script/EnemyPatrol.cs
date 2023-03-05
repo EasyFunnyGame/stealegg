@@ -155,8 +155,10 @@ public class EnemyPatrol : Enemy
             distance--;
         }
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        var endDistance = Vector3.Distance(transform.position, endNode.transform.position);
-        routeArrow.position = endNode.transform.position;//new Vector3(endNode.transform.position.x, endNode.transform.position.y, endDistance);
+        routeArrow.position = endNode.transform.position;
+        routeArrow.rotation = transform.rotation;
+        routeArrow.Rotate(new Vector3(0, 0, 180));
+        routeArrow.parent = null;
     }
 
     public bool needTurn()
