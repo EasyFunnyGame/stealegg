@@ -744,7 +744,8 @@ public class Enemy : Character
         enemyMove.transform.parent = null;
         enemyMove.gameObject.SetActive(true);
         enemyMove.Play("Movement_Animation");
-        enemyMove.transform.transform.position = tile.transform.position;
+        var node = boardManager.FindNode(tile.name);
+        enemyMove.transform.transform.position = node.transform.position;
     }
 
     public virtual void DisapearTraceTarget()
