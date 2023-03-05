@@ -94,15 +94,15 @@ public class Game : MonoBehaviour
 
     public void PlayLevel(string sceneName)
     {
-        if(sceneName == "1-1" || sceneName == "1-2" || sceneName == "1-3")
+        //if(!sceneName.StartsWith("3"))
         {
             SceneManager.LoadScene(sceneName);
         }
-        else
-        {
-            loadingSceneName = sceneName;
-            StartCoroutine("LoadsScene");
-        }
+        //else
+        //{
+        //    loadingSceneName = sceneName;
+        //    StartCoroutine("LoadsScene");
+        //}
         resLoaded = false;
     }
 
@@ -151,6 +151,18 @@ public class Game : MonoBehaviour
         guideArrow = (GameObject.Instantiate(Resources.Load("Prefab/GuideArrow")) as GameObject).transform;
         guideArrow.gameObject.SetActive(false);
 
+        resLoaded = true;
+
+        if (teaching)
+        {
+            clearTeaching++;
+            if (clearTeaching > 1)
+            {
+                teaching = false;
+                clearTeaching = 0;
+            }
+        }
+        camera.upper = false;
         //var scenePrefabUrl = string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter + "-" + index);
         //Debug.Log("开始加载场景:" + sceneName);
         //if(sceneName != "1-1" && sceneName != "1-2" && sceneName != "1-3")
@@ -179,18 +191,7 @@ public class Game : MonoBehaviour
         var instance = Instantiate(obj.Result);
         //instance.transform.parent = sceneNode.transform;
         instance.transform.localPosition = Vector3.zero;
-        resLoaded = true;
-
-        if(teaching)
-        {
-            clearTeaching++;
-            if(clearTeaching>1)
-            {
-                teaching = false;
-                clearTeaching = 0;
-            }
-        }
-        camera.upper = false;
+      
     }
 
     public void EndGame()
