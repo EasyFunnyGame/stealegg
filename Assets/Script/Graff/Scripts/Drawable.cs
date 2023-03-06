@@ -152,7 +152,7 @@ namespace FreeDraw
                 Debug.DrawRay(ray.origin, ray.direction,Color.green);
                 RaycastHit rayCastHit;
                 var hitted = Physics.Raycast(ray, out rayCastHit,100);
-                Debug.Log("ÉäÏß¼ì²â½á¹û" + hitted + "   ÊÀ½ç×ø±ê:" + rayCastHit.point);
+                // Debug.Log("ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½" + hitted + "   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" + rayCastHit.point);
                 if (hitted)
                 {
                     current_brush(rayCastHit.point);
@@ -169,7 +169,7 @@ namespace FreeDraw
                     //}
                 }
 
-                Debug.Log("±Ê´¥Canvas×ø±ê" + Input.mousePosition);
+                // Debug.Log("ï¿½Ê´ï¿½Canvasï¿½ï¿½ï¿½ï¿½" + Input.mousePosition);
                 // Check if the current mouse position overlaps our image
                 //Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
                 //if (hit != null && hit.transform != null)
@@ -248,7 +248,7 @@ namespace FreeDraw
         {
             // Need to transform x and y coordinates to flat coordinates of array
             int array_pos = y * (int)drawable_sprite.rect.width + x;
-
+            //Debug.Log("é¢œè‰²æ•°ç»„ä½ç½®:  x" + x + "  y:" + y);
             // Check if this is a valid position
             if (array_pos > cur_colors.Length || array_pos < 0)
                 return;
@@ -288,12 +288,12 @@ namespace FreeDraw
         {
             // Change coordinates to local coordinates of this image
             Vector3 local_pos = transform.InverseTransformPoint(world_position);
-            Debug.Log("±Ê´¥  ÊÀ½ç×ø±ê:" + world_position + " »­²¼×ø±ê:" + local_pos);
+            // Debug.Log("å°„ä¸­çš„ç‚¹çš„ä½ç½®:" + world_position + " Box2Dçš„ä½ç½®:" + local_pos);
             // local_pos = new Vector3(local_pos.x / transform.localScale.x, local_pos.y / transform.localScale.y, local_pos.z / transform.localScale.z);
             // Change these to coordinates of pixels
             float pixelWidth = drawable_sprite.rect.width;
             float pixelHeight = drawable_sprite.rect.height;
-            float unitsToPixels = pixelWidth / drawable_sprite.bounds.size.x * transform.localScale.x;
+            float unitsToPixels = pixelWidth / drawable_sprite.bounds.size.x;// * transform.localScale.x;
 
             // Need to center our coordinates
             float centered_x = local_pos.x * unitsToPixels + pixelWidth / 2;
