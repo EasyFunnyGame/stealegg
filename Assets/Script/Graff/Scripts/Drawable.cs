@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace FreeDraw
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    [RequireComponent(typeof(Collider2D))]  // REQUIRES A COLLIDER2D to function
+    //[RequireComponent(typeof(Collider2D))]  // REQUIRES A COLLIDER2D to function
     // 1. Attach this to a read/write enabled sprite image
     // 2. Set the drawing_layers  to use in the raycast
     // 3. Attach a 2D collider (like a Box Collider 2D) to this sprite
@@ -148,26 +148,48 @@ namespace FreeDraw
                 // Convert mouse coordinates to world coordinates
                 Vector2 mouse_world_position = cam.ScreenToWorldPoint(Input.mousePosition);// Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                // Check if the current mouse position overlaps our image
-                Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
-                if (hit != null && hit.transform != null)
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                Debug.DrawRay(ray.origin, ray.direction,Color.green);
+                RaycastHit rayCastHit;
+                var hitted = Physics.Raycast(ray, out rayCastHit,100);
+                Debug.Log("射线检测结果" + hitted + "   世界坐标:" + rayCastHit.point);
+                if (hitted)
                 {
-                    // We're over the texture we're drawing on!
-                    // Use whatever function the current brush is
-                    current_brush(mouse_world_position);
+                    current_brush(rayCastHit.point);
                 }
-
                 else
                 {
                     // We're not over our destination texture
-                    previous_drag_position = Vector2.zero;
-                    if (!mouse_was_previously_held_down)
-                    {
-                        // This is a new drag where the user is left clicking off the canvas
-                        // Ensure no drawing happens until a new drag is started
-                        no_drawing_on_current_drag = true;
-                    }
+                    //previous_drag_position = Vector2.zero;
+                    //if (!mouse_was_previously_held_down)
+                    //{
+                    //    // This is a new drag where the user is left clicking off the canvas
+                    //    // Ensure no drawing happens until a new drag is started
+                    //    no_drawing_on_current_drag = true;
+                    //}
                 }
+
+                Debug.Log("笔触Canvas坐标" + Input.mousePosition);
+                // Check if the current mouse position overlaps our image
+                //Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
+                //if (hit != null && hit.transform != null)
+                //{
+                //    // We're over the texture we're drawing on!
+                //    // Use whatever function the current brush is
+                //    current_brush(mouse_world_position);
+                //}
+
+                //else
+                //{
+                //    // We're not over our destination texture
+                //    previous_drag_position = Vector2.zero;
+                //    if (!mouse_was_previously_held_down)
+                //    {
+                //        // This is a new drag where the user is left clicking off the canvas
+                //        // Ensure no drawing happens until a new drag is started
+                //        no_drawing_on_current_drag = true;
+                //    }
+                //}
             }
             // Mouse is released
             else if (!mouse_held_down)
@@ -266,7 +288,8 @@ namespace FreeDraw
         {
             // Change coordinates to local coordinates of this image
             Vector3 local_pos = transform.InverseTransformPoint(world_position);
-
+            Debug.Log("笔触  世界坐标:" + world_position + " 画布坐标:" + local_pos);
+            // local_pos = new Vector3(local_pos.x / transform.localScale.x, local_pos.y / transform.localScale.y, local_pos.z / transform.localScale.z);
             // Change these to coordinates of pixels
             float pixelWidth = drawable_sprite.rect.width;
             float pixelHeight = drawable_sprite.rect.height;
