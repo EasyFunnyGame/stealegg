@@ -80,8 +80,8 @@ public class GraffCanvas : BaseCanvas
     {
         if(Game.Instance.camera!=null)
             Game.Instance.camera?.gameObject.SetActive(true);
-        if (Game.Instance.draw_able != null)
-            Game.Instance.draw_able?.gameObject.SetActive(false);
+        //if (Game.Instance.draw_able != null)
+        //    Game.Instance.draw_able?.gameObject.SetActive(false);
         if (Game.Instance.draw_setting != null)
             Game.Instance.draw_setting?.gameObject.SetActive(false);
         if (Game.Instance.draw_camera != null)
