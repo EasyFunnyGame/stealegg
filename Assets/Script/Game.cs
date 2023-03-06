@@ -39,6 +39,12 @@ public class Game : MonoBehaviour
 
     public new GameCamera camera;
 
+    public FreeDraw.DrawingSettings draw_setting;
+
+    public FreeDraw.Drawable draw_able;
+
+    public Camera draw_camera;
+
     public Player player;
 
     public bool pausing = false;
@@ -135,6 +141,18 @@ public class Game : MonoBehaviour
         var index = int.Parse(nameArr[1]);
         playingLevel = (chapter - 1) * 12 + (index - 1);
         currentLevelName = sceneName;
+
+        draw_camera = GameObject.Find("draw_camera").GetComponent<Camera>();
+        draw_camera?.gameObject.SetActive(false);
+        draw_setting = GameObject.Find("DrawingSettings").GetComponent<FreeDraw.DrawingSettings>();
+        draw_setting?.gameObject.SetActive(false);
+        draw_able = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+        draw_able?.gameObject.SetActive(false);
+        if (draw_camera && draw_able)
+        {
+            draw_able.cam = draw_camera;
+        }
+
         camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
         player = GameObject.Find("Player").GetComponent<Player>();
         player.m_animator.SetInteger("result", 0);

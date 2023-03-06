@@ -2,7 +2,7 @@
 
 public class ActionSteal : ActionBase
 {
-    private float actionDuration = 1;
+    private float actionDuration = 2;
     private Item graffItem;
     public ActionSteal(Player player, Item item) : base(player, ActionType.Steal)
     {
@@ -44,6 +44,9 @@ public class ActionSteal : ActionBase
             graffItem.picked = true;
             graffItem.gameObject.SetActive(false);
             graffItem.icon.gameObject.SetActive(false);
+
+            Game.Instance.graffCanvas.Show();
+            Game.Instance.gameCanvas.Hide();
             return true;
         }
         return false;
