@@ -41,11 +41,10 @@ Shader "Graff/Default"
             #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
             #include "UnitySprites.cginc"
 
-
             fixed4 SpriteFragment(v2f IN) : SV_Target
             {
                 fixed4 c = SampleSpriteTexture (IN.texcoord);
-                if(c.r >= 0.5f && c.g >= 0.5f && c.b >= 0.5f)
+                if(c.r >= 0.35f && c.g >= 0.35f && c.b >= 0.35f )
                 {
                     discard;
                 }

@@ -45,8 +45,11 @@ public class ActionSteal : ActionBase
             graffItem.gameObject.SetActive(false);
             graffItem.icon.gameObject.SetActive(false);
 
-            Game.Instance.graffCanvas.Show();
-            Game.Instance.gameCanvas.Hide();
+            if(Game.Instance.draw_able)
+            {
+                Game.Instance.graffCanvas.Show();
+                Game.Instance.gameCanvas.Hide();
+            }
             return true;
         }
         return false;

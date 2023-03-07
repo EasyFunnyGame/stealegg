@@ -169,27 +169,6 @@ namespace FreeDraw
                     //}
                 }
 
-                // Debug.Log("�ʴ�Canvas����" + Input.mousePosition);
-                // Check if the current mouse position overlaps our image
-                //Collider2D hit = Physics2D.OverlapPoint(mouse_world_position, Drawing_Layers.value);
-                //if (hit != null && hit.transform != null)
-                //{
-                //    // We're over the texture we're drawing on!
-                //    // Use whatever function the current brush is
-                //    current_brush(mouse_world_position);
-                //}
-
-                //else
-                //{
-                //    // We're not over our destination texture
-                //    previous_drag_position = Vector2.zero;
-                //    if (!mouse_was_previously_held_down)
-                //    {
-                //        // This is a new drag where the user is left clicking off the canvas
-                //        // Ensure no drawing happens until a new drag is started
-                //        no_drawing_on_current_drag = true;
-                //    }
-                //}
             }
             // Mouse is released
             else if (!mouse_held_down)
@@ -222,9 +201,6 @@ namespace FreeDraw
         }
 
 
-
-
-
         public void MarkPixelsToColour(Vector2 center_pixel, int pen_thickness, Color color_of_pen)
         {
             // Figure out how many pixels we need to colour in each direction (x and y)
@@ -248,11 +224,8 @@ namespace FreeDraw
         {
             // Need to transform x and y coordinates to flat coordinates of array
             int array_pos = y * (int)drawable_sprite.rect.width + x;
-            //Debug.Log("颜色数组位置:  x" + x + "  y:" + y);
-            // Check if this is a valid position
             if (array_pos > cur_colors.Length || array_pos < 0)
                 return;
-
             cur_colors[array_pos] = color;
         }
         public void ApplyMarkedPixelChanges()
