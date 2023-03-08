@@ -64,6 +64,8 @@ public class Game : MonoBehaviour
     public static int clearTeaching = 0;
 
     public Transform guideArrow;
+
+
     private void Awake()
     {
         Instance = this;
