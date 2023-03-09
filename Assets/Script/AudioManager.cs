@@ -20,6 +20,12 @@ public class AudioManager : MonoBehaviour
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_1.mp3",
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_2.mp3",
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_3.mp3",
+
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
     };
 
     // 正在播放的音频对象列表
