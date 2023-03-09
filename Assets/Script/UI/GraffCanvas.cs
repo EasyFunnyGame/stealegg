@@ -92,10 +92,10 @@ public class GraffCanvas : BaseCanvas
                 setting.SetMarkerColour(new Color(0, 0, 0, 1));
                 break;
             case "gray":
-                setting.SetMarkerColour(new Color(142f / 255, 142f / 255, 142f / 255, 1));
+                setting.SetMarkerColour(new Color(25f / 255, 4f / 255, 222f / 255, 1));
                 break;
             case "white":
-                setting.SetMarkerColour(new Color(0.8f, 0.8f, 0.8f, 1));
+                setting.SetMarkerColour(new Color(3 / 255f, 226 / 255f, 240 / 255f, 1));
                 break;
             case "yellow":
                 setting.SetMarkerColour(new Color(247f / 255, 188f / 255, 0f / 255, 1));
