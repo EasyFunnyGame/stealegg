@@ -12,31 +12,185 @@ public class AudioManager : MonoBehaviour
     private static Queue<WXInnerAudioContext> audioPool = new Queue<WXInnerAudioContext>();
 
     // 当前场景需要预下载的音频列表
-    private static string[] audioList = {
-        // 短音频
-        
+    public static string[] audioList = {
         // 长音频
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_main.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_1.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_2.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/background_3.mp3",
+        // 短音频
 
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
-        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/__Resources/Sound_Effects/start_game_1.mp3",
+        // 背景音乐-主界面
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/background_main.mp3",// 0
+        // 关卡音乐-纯音乐
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/background_1.mp3",// 1
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/background_2.mp3",// 2
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/background_3.mp3",// 3
+        // 关卡音乐-节奏音乐
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/start_game_1.mp3",// 4
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/start_game_2.mp3",// 5 
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/start_game_3.mp3",// 6
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/start_game_4.mp3",// 7
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/start_game_5.mp3",// 8
+        // 盗窃者-脚步声-左
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_normal_left_1.mp3",// 9
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_normal_left_2.mp3",// 10
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_normal_left_3.mp3",// 11
+        // 盗窃者-脚步声-右
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_normal_right_1.mp3",// 12
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_normal_right_2.mp3",// 13
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_normal_right_3.mp3",// 14
+        // 盗窃者-脚步声-台阶-上
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_stair_up_1.mp3",// 15
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_stair_up_2.mp3",// 16
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_stair_up_3.mp3",// 17
+        // 盗窃者-脚步声-台阶-下
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_stair_down_1.mp3",// 18
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_stair_down_2.mp3",// 19
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_stair_down_3.mp3",// 20
+        // 盗窃者-出口逃离的脚步声
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_step_exit.mp3",// 21
+        // 盗窃者-无效移动
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_deny_1.mp3",// 22
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_deny_2.mp3",// 23
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_deny_3.mp3",// 24
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_deny_4.mp3",// 25
+        // 盗窃者-吹口哨
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_whistle_1.mp3",// 26
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_whistle_2.mp3",// 27
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_whistle_3.mp3",// 28
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_whistle_4.mp3",// 29
+        // 盗窃者-跳上  
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_climb_up.mp3",// 30
+        // 盗窃者-跳下
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_climb_down.mp3",// 31
+        // 盗窃者-拿到酒瓶
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/lure_bottle_get_1.mp3",// 32
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/lure_bottle_get_2.mp3",// 33
+        // 盗窃者-投掷酒瓶的声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/lure_bottle_throw_1.mp3",// 34
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/lure_bottle_throw_2.mp3",// 35
+        // 酒瓶破碎的声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_lure_break.mp3",// 36
+        // 盗窃者-跳入下水道声音 
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/manhole_jump_in.mp3",// 37
+        // 盗窃者-跳出下水道声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/manhole_jump_out.mp3",// 38
+        // 盗窃者-位置锁定的声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/mystery_pluck_1.mp3",// 39
+        // 声波引起的-位置锁定
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/mystery_pluck_2.mp3",// 40
+        // 盗窃者-穿越破的铁丝网的声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/player_crossfence.mp3",// 41
+        // 盗窃者-穿越剪开的铁丝网
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_grilling_cut_pick.mp3",// 42
+        // 盗窃者-剪铁丝网
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_grilling_cut_01.mp3",// 43
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_grilling_cut_02.mp3",// 44
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_grilling_cut_shake_01.mp3",// 45
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_grilling_cut_shake_02.mp3",// 46
+        // 盗窃者-藏进树里
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_hiding_in.mp3",// 47
+        // 盗窃者-树里出来
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_hiding_out.mp3",// 48
+        // 下水道 跳入点  打开+关闭
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_manhole_openstart.mp3",// 49 
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_manhole_opendest.mp3",// 50
+        // 下水道 跳出点  打开+关闭
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_manhole_closestart.mp3",// 51
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_manhole_closedest.mp3",// 52
+        // 所有农主-脚步声
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_01.mp3",// 53
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_02.mp3",// 54
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_03.mp3",// 55
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_04.mp3",// 56
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_05.mp3",// 57
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_06.mp3",// 58
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_07.mp3",// 59
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_08.mp3",// 60
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_footsteps_concrete_09.mp3",// 61
+        // 所有农主-脚步音-下楼梯
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_move_stairs_down.mp3",// 62
+        // 所有农主-脚步音-上楼梯
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_move_stairs_up.mp3",// 63
+        // 女农主-警觉-！ 进入追击状态
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_alerted_01.mp3",// 64
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_alerted_02.mp3",// 65
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_alerted_03.mp3",// 66
+        // 女农主-放弃-？追击结束  疑问
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_abandon_01.mp3",// 67
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_abandon_02.mp3",// 68
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_abandon_03.mp3",// 69
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_abandon_04.mp3",// 70
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_abandon_05.mp3",// 71
+        // 女农主（拿望远镜）-转向的声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_change_direction_01.mp3",// 72
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_change_direction_02.mp3",// 73
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_change_direction_03.mp3",// 74
+        // 女农主-逮捕到  呼喊声
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_arrest_01.mp3",// 75
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_arrest_02.mp3",// 76
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_female_arrest_03.mp3",// 77
+        // 男农主--放弃-？追击结束  疑问
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_abandon_01.mp3",// 78
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_abandon_02.mp3",// 79
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_abandon_03.mp3",// 80
+        // 男农主-警觉-！ 进入追击状态
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_alerted_01.mp3",// 81
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_alerted_02.mp3",// 82
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_alerted_03.mp3",// 83
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_alerted_04.mp3",// 84
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_alerted_05.mp3",// 85
+        // 男农主-睡觉声音-Z  呼入
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_snore_inhale_01.mp3",// 86
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_snore_inhale_02.mp3",// 87
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_snore_inhale_03.mp3",// 88
+        // 男农主-睡觉声音-Z  呼出
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_snore_exhale_01.mp3",// 89
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_snore_exhale_02.mp3",// 90
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_guard_snore_exhale_03.mp3",// 91
+        // 男农主-逮捕到 呼喊声
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_arrest_01.mp3",// 92
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_arrest_02.mp3",// 93
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/guard_male_arrest_03.mp3",// 94 
+        // ui-游戏logo出现的声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_city_reveal.mp3",// 95
+        // ui-点击喷漆图标
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_graph_start.mp3",// 96
+        // ui-开始手动喷漆声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_player_graff_pov_loop.mp3",// 97
+        // ui-点击声音
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_click.mp3",// 98
+        // ui-得到奖励的声音-体力
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/Music_Jingle_Bonus_v2.mp3",// 99
+        // ui-成功逃脱音效
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_success_1.mp3",// 100
+        // ui-关卡成功完成
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_success_2.mp3",// 101
+        // ui-被追捕到音效
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_fail_1.mp3",// 102
+        // ui-关卡失败
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_fail_2.mp3",// 103
+        // ui-关卡结束-照相机
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_endlevel_photograph.mp3",// 104
+        // ui-无效/错误点击
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_click_wrong.mp3",// 105
     };
 
     // 正在播放的音频对象列表
     private static List<WXInnerAudioContext> audioPlayArray = new List<WXInnerAudioContext>();
 
     // 背景音乐
-    private WXInnerAudioContext audioBGM = null;
+    public WXInnerAudioContext audioBGM = null;
 
     private bool isDestroyed = false;
 
     private int createdAudioCount = 0;
+
+    private bool _loaded = false;
+    public bool loaded
+    {
+        get
+        {
+            return _loaded;
+        }
+    }
 
     // 初始化
     public void Start()
@@ -77,7 +231,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // 从缓存池中获取音频实例
-    private WXInnerAudioContext createAudio()
+    public WXInnerAudioContext CreateAudio()
     {
         if (this.isDestroyed)
         {
@@ -95,7 +249,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // 销毁或回收实例
-    private void removeAudio(WXInnerAudioContext audio, bool needDestroy = true)
+    public void RemoveAudio(WXInnerAudioContext audio, bool needDestroy = true)
     {
         audio.OffCanplay();
         if (audioPlayArray.Contains(audio))
@@ -140,7 +294,7 @@ public class AudioManager : MonoBehaviour
         audio.OnEnded(() =>
         {
             Debug.Log(audio.instanceId + " OnEnded");
-            removeAudio(audio, needDestroy);
+            RemoveAudio(audio, needDestroy);
         });
 
         // 加载出错
@@ -148,14 +302,14 @@ public class AudioManager : MonoBehaviour
         {
             Debug.Log(audio.instanceId + "audio OnError");
             audio.Stop();
-            removeAudio(audio, needDestroy);
+            RemoveAudio(audio, needDestroy);
         });
 
         // 手动停止
         audio.OnStop(() =>
         {
             Debug.Log(audio.instanceId + "audio OnStop");
-            removeAudio(audio, needDestroy);
+            RemoveAudio(audio, needDestroy);
         });
 
         // 暂停
@@ -186,6 +340,7 @@ public class AudioManager : MonoBehaviour
         {
             if (res == 0)
             {
+                _loaded = true;
                 // 下载成功
                 //playAfterDownload(0,false);
 
@@ -199,10 +354,47 @@ public class AudioManager : MonoBehaviour
         });
     }
 
+    public void Play(int index, bool isShort) {
+        var audioIndex = CreateAudio();
+
+        if (audioIndex == null)
+        {
+            return;
+        }
+
+        // 如果要设置的src和原音频对象一致，可以直接播放
+        if (audioIndex.src == audioList[index])
+        {
+            audioIndex.Play();
+        }
+        else
+        {
+            // 对于已经设置了needDownload为true的audio，设置src后就会开始下载对应的音频文件
+            // 如果该文件已经下载过，并且配置了缓存本地，就不会重复下载
+            // 如果该文件没有下载过，等同于先调用WX.PreDownloadAudios下载后再播放
+            audioIndex.src = audioList[index];
+
+            // 短音频可以直接调用Play
+            if (isShort)
+            {
+                audioIndex.Play();
+            }
+            else
+            {
+                // 长音频在可以播放时播放
+                audioIndex.OnCanplay(() =>
+                {
+                    audioIndex.Play();
+                });
+            }
+        }
+    }
+
+
     // 播放音频
     public void playAfterDownload(int index, bool isShort)
     {
-        var audioIndex = createAudio();
+        var audioIndex = CreateAudio();
 
         if (audioIndex == null)
         {
@@ -242,7 +434,7 @@ public class AudioManager : MonoBehaviour
     {
         // 如果是需要在当前场景立刻播放的音频，则不设置needDownload，音频会边下边播
         // 但是再次使用该音频时会因为没有下载而需要再次下载，并不推荐这样使用
-        var audioPlayRightNow = createAudio();
+        var audioPlayRightNow = CreateAudio();
 
         audioPlayRightNow.needDownload = false;
 
@@ -324,10 +516,10 @@ public class AudioManager : MonoBehaviour
 
         if (audioBGM != null)
         {
-            removeAudio(audioBGM, true);
+            RemoveAudio(audioBGM, true);
         }
         // 长音频在使用后需要销毁
-        audioBGM = createAudio();
+        audioBGM = CreateAudio();
         // audioBGM.loop = true;
         audioBGM.src = audioList[index];
         audioBGM.OnCanplay(() =>
