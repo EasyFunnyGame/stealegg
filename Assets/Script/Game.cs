@@ -85,8 +85,6 @@ public class Game : MonoBehaviour
         chapterCanvas.Hide();
         graffCanvas.Hide();
         cameraSettingCanvas.Show();
-
-        AudioPlay.Instance.PlayBackGroundMusic();
     }
 
     public void StartGame(string sceneName)

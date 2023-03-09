@@ -18,23 +18,34 @@ public class AudioPlay : MonoBehaviour
         if(_init==false)
         {
             _init = manager.loaded;
-            Debug.Log("音乐资源加载完毕");
+            PlayBackGround();
         }
     }
 
-    public void PlayBackGroundMusic()
+    public void PlayBackGround()
     {
-        var index = new System.Random().Next(5, 10);
-        Debug.Log("Play:" + index);
+        if(Game.Instance.mainCanvas.gameObject.activeSelf)
+        {
+            PlayMain();
+        }
+        else
+        {
+            PlayBackGround();
+        }
+    }
 
+
+    public void PlayMain()
+    {
+        if (!_init) return;
         if (manager.audioBGM != null)
         {
             manager.RemoveAudio(manager.audioBGM, true);
         }
         // 长音频在使用后需要销毁
         manager.audioBGM = manager.CreateAudio();
-        // audioBGM.loop = true;
-        manager.audioBGM.src = audioList[index];
+        manager.audioBGM.loop = true;
+        manager.audioBGM.src = AudioManager.audioList[0];
         manager.audioBGM.OnCanplay(() =>
         {
             manager.audioBGM.Play();
@@ -42,7 +53,39 @@ public class AudioPlay : MonoBehaviour
         // 自动播放停止
         manager.audioBGM.OnEnded(() =>
         {
+            //manager.audioBGM = null;
+            Debug.Log("循环播放");
+        });
+        // 手动停止
+        manager.audioBGM.OnStop(() =>
+        {
             manager.audioBGM = null;
+        });
+        Debug.Log("播放主界面音乐");
+    }
+
+
+    public void PlayStartGame()
+    {
+        if (!_init) return;
+        var index = new System.Random().Next(1, 3);
+        Debug.Log("Play:" + index);
+        if (manager.audioBGM != null)
+        {
+            manager.RemoveAudio(manager.audioBGM, true);
+        }
+        // 长音频在使用后需要销毁
+        manager.audioBGM = manager.CreateAudio();
+        // audioBGM.loop = true;
+        manager.audioBGM.src = AudioManager.audioList[index];
+        manager.audioBGM.OnCanplay(() =>
+        {
+            manager.audioBGM.Play();
+        });
+        // 自动播放停止
+        manager.audioBGM.OnEnded(() =>
+        {
+            PlayBackGroundMusic();
         });
         // 手动停止
         manager.audioBGM.OnStop(() =>
@@ -51,18 +94,34 @@ public class AudioPlay : MonoBehaviour
         });
     }
 
-    public void StopBackGroundMusic()
+    public void PlayBackGroundMusic()
     {
-
+        if (!_init) return;
+        var index = new System.Random().Next(4, 8);
+        Debug.Log("Play:" + index);
+        if (manager.audioBGM != null)
+        {
+            manager.RemoveAudio(manager.audioBGM, true);
+        }
+        // 长音频在使用后需要销毁
+        manager.audioBGM = manager.CreateAudio();
+        // audioBGM.loop = true;
+        manager.audioBGM.src = AudioManager.audioList[index];
+        manager.audioBGM.OnCanplay(() =>
+        {
+            manager.audioBGM.Play();
+        });
+        // 自动播放停止
+        manager.audioBGM.OnEnded(() =>
+        {
+            index = new System.Random().Next(4, 8);
+            manager.audioBGM.src = AudioManager.audioList[index];
+        });
+        // 手动停止
+        manager.audioBGM.OnStop(() =>
+        {
+            manager.audioBGM = null;
+        });
     }
 
-    public void PlayStartGameMusic()
-    {
-
-    }
-
-    public void StopStartGameMusic()
-    {
-
-    }
 }
