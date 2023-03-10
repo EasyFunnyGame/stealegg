@@ -98,6 +98,8 @@ public class Game : MonoBehaviour
         result = GameResult.NONE;
 
         Save();
+
+        AudioPlay.Instance.PlayStartGame();
     }
 
     public void PlayLevel(string sceneName)
