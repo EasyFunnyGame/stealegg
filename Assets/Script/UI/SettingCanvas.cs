@@ -9,7 +9,7 @@ public class SettingCanvas : BaseCanvas
 
     private void Awake()
     {
-        btn_clz.onClick.AddListener(this.Hide);
+        btn_clz.onClick.AddListener(() => { this.Hide(); AudioPlay.Instance.PlayClick(); });
     }
     // Start is called before the first frame update
     void Start()

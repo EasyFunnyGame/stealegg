@@ -27,6 +27,7 @@ public class GameEndCanvas : BaseCanvas
     {
         SceneManager.LoadScene("Main");
         Game.Instance.endCanvas.Hide();
+        AudioPlay.Instance.PlayClick();
         //throw new NotImplementedException();
     }
 
@@ -48,6 +49,7 @@ public class GameEndCanvas : BaseCanvas
         
         var nextLevelName = string.Format("{0}-{1}", playingChapter, playingIndex);
         Game.Instance.PlayLevel(nextLevelName);
+        AudioPlay.Instance.PlayClick();
 
     }
 
@@ -55,11 +57,12 @@ public class GameEndCanvas : BaseCanvas
     {
         Game.Instance.endCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
+        AudioPlay.Instance.PlayClick();
     }
 
     private void onClickShareHandler()
     {
-        throw new NotImplementedException();
+        AudioPlay.Instance.PlayClick();
     }
 
     // Start is called before the first frame update

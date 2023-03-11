@@ -102,7 +102,7 @@ public class AudioPlay : MonoBehaviour
     public void PlaySFX(int index)
     {
         var src = AudioManager.sfxList[index];
-
+        Debug.Log("sound url:" + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
         var audioPlayRightNow = manager.CreateAudio();
         if (audioPlayRightNow == null)
         {

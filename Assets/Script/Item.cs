@@ -145,14 +145,14 @@ public class Item : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())
             upper = true;
         velocity = Vector3.zero;
     }
 
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())
             upper = false;

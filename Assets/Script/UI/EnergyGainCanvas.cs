@@ -50,10 +50,12 @@ public class EnergyGainCanvas : BaseCanvas
         Game.Instance.energyGainCanvas.Hide();
         Game.Instance.msgCanvas.PopMessage("获得" + gain + "点体力");
         Game.Instance.gameCanvas.RefreshEnergy();
+        AudioPlay.Instance.PlayClick();
     }
 
     void onClickCloseCanvasHandler()
     {
         Game.Instance.energyGainCanvas.Hide();
+        AudioPlay.Instance.PlayClick();
     }
 }

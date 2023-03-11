@@ -115,6 +115,7 @@ public class GameCanvas : BaseCanvas
     void onClickHintHandler()
     {
         Game.Instance.hintGainCanvas.Show();
+        AudioPlay.Instance.PlayClick();
     }
 
     void onClickGraffHandler()
@@ -137,12 +138,14 @@ public class GameCanvas : BaseCanvas
         home.gameObject.SetActive(false);
         playing.gameObject.SetActive(true);
         Game.Instance.playing = true;
+        AudioPlay.Instance.PlayClick();
     }
 
     private void onClickPasueGameHandler()
     {
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
+        AudioPlay.Instance.PlayClick();
     }
 
     void onClickReStartLevelHandler()
@@ -150,6 +153,7 @@ public class GameCanvas : BaseCanvas
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         Game.Instance.playing = false;
+        AudioPlay.Instance.PlayClick();
     }
 
     void onClickBackToHomeHandler()
@@ -157,11 +161,13 @@ public class GameCanvas : BaseCanvas
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene("Main");
         Game.Instance.playing = false;
+        AudioPlay.Instance.PlayClick();
     }
 
     private void onClickShowEnergyGainCanvasHandler()
     {
         Game.Instance.energyGainCanvas.Show();
+        AudioPlay.Instance.PlayClick();
     }
 
     private void onClickUseBottleHandler()
@@ -199,6 +205,7 @@ public class GameCanvas : BaseCanvas
         Game.Instance.CancelBottleSelectTarget();
         btn_bottle_cancel.gameObject.SetActive(false);
         btn_bottle.gameObject.SetActive(true);
+        AudioPlay.Instance.PlayClick();
     }
 
     private void onClickUseWhistleHandler()

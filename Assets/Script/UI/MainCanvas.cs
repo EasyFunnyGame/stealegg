@@ -31,11 +31,13 @@ public class MainCanvas : BaseCanvas
     {
         Game.Instance.mainCanvas.Hide();
         Game.Instance.chapterCanvas.Show();
+        AudioPlay.Instance.PlayClick();
     }
 
     void ShowSettingCanvas()
     {
         Game.Instance.settingCanvas.gameObject.SetActive(true);
+        AudioPlay.Instance.PlayClick();
     }
 
     protected override void OnShow()

@@ -146,6 +146,8 @@ public class Player : Character
     {
         playerMovePlay.gameObject.SetActive(true);
         playerMovePlay.Play("Movement_Animation_01");
+        playerMovePlay.transform.parent = null;
+        playerMovePlay.transform.position = transform.position;
     }
 
     public override void PlayerReached()

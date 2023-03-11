@@ -46,24 +46,24 @@ public class GraffCanvas : BaseCanvas
         btn_changeColor.onClick.AddListener(ShowColorPlateHandler);
         btn_thickness.onClick.AddListener(ShowLineThicknessHandler);
 
-        btn_black.onClick.AddListener(() => { ChangeColorHandler("black"); });
-        btn_gray.onClick.AddListener(() => { ChangeColorHandler("gray"); });
-        btn_white.onClick.AddListener(() => { ChangeColorHandler("white"); });
+        btn_black.onClick.AddListener(() => { ChangeColorHandler("black"); AudioPlay.Instance.PlayClick(); });
+        btn_gray.onClick.AddListener(() => { ChangeColorHandler("gray"); AudioPlay.Instance.PlayClick(); });
+        btn_white.onClick.AddListener(() => { ChangeColorHandler("white"); AudioPlay.Instance.PlayClick(); });
 
-        btn_yellow.onClick.AddListener(() => { ChangeColorHandler("yellow"); });
-        btn_orange.onClick.AddListener(() => { ChangeColorHandler("orange"); });
-        btn_red.onClick.AddListener(() => { ChangeColorHandler("red"); });
+        btn_yellow.onClick.AddListener(() => { ChangeColorHandler("yellow"); AudioPlay.Instance.PlayClick(); });
+        btn_orange.onClick.AddListener(() => { ChangeColorHandler("orange"); AudioPlay.Instance.PlayClick(); });
+        btn_red.onClick.AddListener(() => { ChangeColorHandler("red"); AudioPlay.Instance.PlayClick(); });
 
-        btn_purple.onClick.AddListener(() => { ChangeColorHandler("purple"); });
-        btn_blue.onClick.AddListener(() => { ChangeColorHandler("blue"); });
-        btn_green.onClick.AddListener(() => { ChangeColorHandler("green"); });
+        btn_purple.onClick.AddListener(() => { ChangeColorHandler("purple"); AudioPlay.Instance.PlayClick(); });
+        btn_blue.onClick.AddListener(() => { ChangeColorHandler("blue"); AudioPlay.Instance.PlayClick(); });
+        btn_green.onClick.AddListener(() => { ChangeColorHandler("green"); AudioPlay.Instance.PlayClick(); });
 
 
-        btn_thick.onClick.AddListener(() => { ChangThicknessHandler(10); });
-        btn_normal.onClick.AddListener(() => { ChangThicknessHandler(5); });
-        btn_slime.onClick.AddListener(() => { ChangThicknessHandler(2); });
+        btn_thick.onClick.AddListener(() => { ChangThicknessHandler(10); AudioPlay.Instance.PlayClick(); });
+        btn_normal.onClick.AddListener(() => { ChangThicknessHandler(5); AudioPlay.Instance.PlayClick(); });
+        btn_slime.onClick.AddListener(() => { ChangThicknessHandler(2); AudioPlay.Instance.PlayClick(); });
 
-        btn_eraser.onClick.AddListener(() => { ChangeColorHandler("transparent"); });
+        btn_eraser.onClick.AddListener(() => { ChangeColorHandler("transparent"); AudioPlay.Instance.PlayClick(); });
 
         btn_complete.onClick.AddListener(onCloseGraffCanvasHandler);
 
@@ -131,13 +131,14 @@ public class GraffCanvas : BaseCanvas
     {
         rect_colorPlate.gameObject.SetActive(false);
         rect_thickNessPlate.gameObject.SetActive(!rect_thickNessPlate.gameObject.activeSelf);
+        AudioPlay.Instance.PlayClick();
     }
 
     void ShowColorPlateHandler()
     {
         rect_thickNessPlate.gameObject.SetActive(false);
         rect_colorPlate.gameObject.SetActive(!rect_colorPlate.gameObject.activeSelf);
-
+        AudioPlay.Instance.PlayClick();
     }
 
     // Start is called before the first frame update
@@ -155,11 +156,10 @@ public class GraffCanvas : BaseCanvas
     void onCloseGraffCanvasHandler()
     {
         Game.Instance.graffCanvas.Hide(); Game.Instance.gameCanvas.Show();
+        AudioPlay.Instance.PlayClick();
     }
     protected override void OnShow()
     {
-
-
         img_default.gameObject.SetActive(true); 
 
         if (Game.Instance.camera != null)
@@ -187,5 +187,32 @@ public class GraffCanvas : BaseCanvas
             Game.Instance.draw_setting?.gameObject.SetActive(false);
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera?.gameObject.SetActive(false);
+
+
+        if(Game.Instance.player)
+        {
+            var playerTileName = Game.Instance.player.currentTile.name;
+            var item = Game.Instance.boardManager.allItems[playerTileName];
+            if(item.itemType == ItemType.Graff)
+            {
+                var player = Game.Instance.player;
+                var boardManager = Game.Instance.boardManager;
+
+                var targetArray = playerTileName.Split('_');
+                var x = int.Parse(targetArray[0]);
+                var z = int.Parse(targetArray[1]);
+
+                foreach (var enemy in boardManager.enemies)
+                {
+                    var coord = enemy.coord;
+                    var distanceFromX = Mathf.Abs(x - coord.x);
+                    var distanceFromZ = Mathf.Abs(z - coord.z);
+                    if (distanceFromX <= 2 && distanceFromZ <= 2)
+                    {
+                        enemy.LureSteal(playerTileName);
+                    }
+                }
+            }
+        }
     }
 }

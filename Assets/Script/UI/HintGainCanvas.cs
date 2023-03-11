@@ -17,6 +17,7 @@ public class HintGainCanvas : BaseCanvas
     void onCloseCanvasHandler()
     {
         Game.Instance.hintGainCanvas.Hide();
+        AudioPlay.Instance.PlayClick();
     }
 
     void onWatchVideoHandler()
@@ -27,6 +28,7 @@ public class HintGainCanvas : BaseCanvas
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         Game.Instance.playing = false;
+        AudioPlay.Instance.PlayClick();
     }
     // Update is called once per frame
     void Update()
