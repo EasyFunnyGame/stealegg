@@ -340,7 +340,7 @@ public class Enemy : Character
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
-                ShowTraceTarget(targetTile , foundPlayerTile== null);
+                ShowTraceTarget(targetTile , foundPlayerTile== null,2);
                 foundPlayerTile = targetTile;
                 ShowFound();
                 originalTile = null;
@@ -536,7 +536,7 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-        ShowTraceTarget(targetTile, hearSoundTile == null);
+        ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
         ShowFound();
         
@@ -578,7 +578,7 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-        ShowTraceTarget(targetTile, hearSoundTile== null);
+        ShowTraceTarget(targetTile, hearSoundTile== null,1);
         hearSoundTile = targetTile;
         
         ShowFound();
@@ -619,7 +619,7 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-        ShowTraceTarget(targetTile, hearSoundTile == null);
+        ShowTraceTarget(targetTile, hearSoundTile == null,1);
 
         hearSoundTile = targetTile;
         
@@ -730,18 +730,18 @@ public class Enemy : Character
     }
 
 
-    public virtual void ShowTraceTarget(GridTile tile, bool playSound = false)
+    public virtual void ShowTraceTarget(GridTile tile, bool playSound, int soundType)
     {
         enemyMove.transform.parent = null;
         enemyMove.gameObject.SetActive(true);
         enemyMove.Play("Movement_Animation");
         var node = boardManager.FindNode(tile.name);
         enemyMove.transform.transform.position = node.transform.position;
-        if (hearSoundTile && playSound)
+        if (soundType == 1 && playSound)
         {
             AudioPlay.Instance.PlayHeard();
         }
-        if(foundPlayerTile && playSound)
+        if(soundType == 2 && playSound)
         {
             AudioPlay.Instance.PlayFound();
         }

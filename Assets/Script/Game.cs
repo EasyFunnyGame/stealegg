@@ -84,7 +84,7 @@ public class Game : MonoBehaviour
         settingCanvas.Hide();
         chapterCanvas.Hide();
         graffCanvas.Hide();
-        cameraSettingCanvas.Show();
+        cameraSettingCanvas.Hide();
     }
 
     public void StartGame(string sceneName)

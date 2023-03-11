@@ -264,15 +264,6 @@ public class CameraSettingCanvas : BaseCanvas
         base.OnHide();
     }
 
-    void CameraNear()
-    {
-        if (!m_gamecamera) return;
-    }
-
-    void CameraFar()
-    {
-        if (!m_gamecamera) return;
-    }
 
     void ExpandOrHide()
     {

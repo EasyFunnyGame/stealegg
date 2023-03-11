@@ -5,6 +5,9 @@ public class ActionEnemyMove : ActionBase
     Vector3 velocity = new Vector3();
     private Vector3 nextStepTilePosition;
     float height = 0f;
+
+    bool tracingTarget = false;
+
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         velocity = new Vector3();
@@ -34,6 +37,17 @@ public class ActionEnemyMove : ActionBase
                 enemy.walkingLineType = lineType.name;
                 enemy.up = height > 0 ? 1 : height < 0 ? -1 : 0;
             }
+        }
+
+        if(enemy.hearSoundTile != null || enemy.foundPlayerTile !=null)
+        {
+            enemy.m_animator.SetFloat("move_type", 1);
+            tracingTarget = true;
+        }
+        else
+        {
+            enemy.m_animator.SetFloat("move_type", 0);
+            tracingTarget = false;
         }
     }
 
@@ -228,6 +242,9 @@ public class ActionEnemyMove : ActionBase
         {
             var dirPos = character.db_moves[1].position;
             Vector3 tar_dir = new Vector3(dirPos.x, character.tr_body.position.y, dirPos.z)  - character.tr_body.position;
+
+
+
             Vector3 new_dir = Vector3.RotateTowards(character.tr_body.forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
 
             new_dir.y = 0;
@@ -252,9 +269,16 @@ public class ActionEnemyMove : ActionBase
         else if (character.moving)
         {
             float step = character.move_speed * Time.deltaTime;
-            //character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position+new Vector3(0,height,0), step);
 
-            character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), ref velocity, 0.12f);
+            if(tracingTarget)
+            {
+                character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), ref velocity, 0.12f);
+            }
+            else
+            {
+                character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);
+            }
+            
             var myPosition = character.tr_body.position;
             var targetPosition = character.db_moves[0].position;
             var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
