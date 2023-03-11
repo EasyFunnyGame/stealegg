@@ -7,6 +7,19 @@ public class AnimationEvent : MonoBehaviour
 
     public Item item;
 
+    public void EnemySleep()
+    {
+        if (owner != null)
+        {
+            AudioPlay.Instance.Speep(owner as EnemyDistracted);
+        }
+    }
+
+    public void EnemySleepOut()
+    {
+        AudioPlay.Instance.EnemySleepOut();
+    }
+
     public void ManHoleCoverOpen()
     {
         if (item == null) return;

@@ -362,4 +362,54 @@ public class AudioPlay : MonoBehaviour
         var index = new System.Random().Next(63, 66);
         Instance.PlaySFX(index);
     }
+
+    public void PlayReachExit()
+    {
+        Instance.PlaySFX(91);
+    }
+
+    public void PlayBeCaught()
+    {
+        Instance.PlaySFX(93);
+    }
+
+    public void PlayWin()
+    {
+        Instance.PlaySFX(92);
+    }
+
+    public void PlayFail()
+    {
+        Instance.PlaySFX(94);
+    }
+
+    public void PlayClick()
+    {
+        Instance.PlaySFX(89);
+    }
+
+    public void Speep(EnemyDistracted enemy)
+    {
+        if(enemy.breath == 1)
+        {
+            EnemySleepIn();
+        }
+        else
+        {
+            EnemySleepOut();
+        }
+        enemy.breath *= -1;
+    }
+
+    public void EnemySleepIn()
+    {
+        var index = new System.Random().Next(77, 80);
+        Instance.PlaySFX(index);
+    }
+
+    public void EnemySleepOut()
+    {
+        var index = new System.Random().Next(80, 83);
+        Instance.PlaySFX(89);
+    }
 }

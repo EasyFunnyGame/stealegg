@@ -218,6 +218,7 @@ public class Game : MonoBehaviour
         delayShowEndTimer = 2;
         playing = false;
         player.m_animator.SetInteger("result",-1);
+        AudioPlay.Instance.PlayBeCaught();
     }
 
     public void WinGame()

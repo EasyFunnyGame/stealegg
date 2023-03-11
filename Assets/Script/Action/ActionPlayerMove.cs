@@ -98,6 +98,10 @@ public class ActionPlayerMove : ActionBase
             if (tdist < 0.001f)
             {
                 character.Reached();
+                if(walkingExit)
+                {
+                    AudioPlay.Instance.PlayReachExit();
+                }
                 return true;
             }
             return false;

@@ -64,7 +64,7 @@ public class Enemy : Character
         tr_body = transform;
         Reached();
         OnReachedOriginal();
-        DisapearTraceTarget();
+        DisapearTraceTarget(false);
     }
 
     public virtual void CheckAction()
@@ -742,11 +742,15 @@ public class Enemy : Character
         }
     }
 
-    public virtual void DisapearTraceTarget()
+    public virtual void DisapearTraceTarget(bool play = true)
     {
         enemyMove.transform.parent = transform;
         enemyMove.gameObject.SetActive(false);
-        AudioPlay.Instance.PlayNotFound(this);
+        if(play)
+        {
+            AudioPlay.Instance.PlayNotFound(this);
+        }
+        
     }
 
     public virtual void LostTarget()

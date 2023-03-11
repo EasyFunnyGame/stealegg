@@ -1,5 +1,6 @@
 ﻿public class EnemyDistracted : Enemy
 {
+    public int breath = 1;
     public override void OnReachedOriginal()
     {
         base.OnReachedOriginal();

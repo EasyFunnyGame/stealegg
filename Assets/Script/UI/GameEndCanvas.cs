@@ -80,12 +80,14 @@ public class GameEndCanvas : BaseCanvas
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0049");
             btn_nxtLevel.gameObject.SetActive(true);
             btn_replay.gameObject.SetActive(false);
+            AudioPlay.Instance.PlayWin();
         }
         else if(Game.Instance.result == GameResult.FAIL)
         {
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0048");
             btn_nxtLevel.gameObject.SetActive(false);
             btn_replay.gameObject.SetActive(true);
+            AudioPlay.Instance.PlayFail();
         }
     }
 
