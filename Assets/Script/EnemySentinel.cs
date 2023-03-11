@@ -207,27 +207,6 @@ public class EnemySentinel : Enemy
             }
             var tryTurnDirection = sentinelDirections[tryTurnDirectionIndex];
 
-            //var turnDirectionNeighbourNodeName = "";
-            //if(tryTurnDirection == Direction.Up)
-            //{
-            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z + 1);
-            //}
-            //else if(tryTurnDirection == Direction.Down)
-            //{
-            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 0, coord.z - 1);
-            //}
-            //else if(tryTurnDirection == Direction.Left)
-            //{
-            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x - 1, coord.z + 0);
-            //}
-            //else if(tryTurnDirection == Direction.Right)
-            //{
-            //    turnDirectionNeighbourNodeName = string.Format("{0}_{1}", coord.x + 1, coord.z + 0);
-            //}z
-
-            //Debug.Log("巡视方向" + tryTurnDirection + " 转向后临近点:" + turnDirectionNeighbourNodeName);
-            //direction = tryTurnDirection;
-
             targetDirection = tryTurnDirection;
             willTurn = true;
         }
@@ -235,6 +214,7 @@ public class EnemySentinel : Enemy
         {
             // 执行转向动作
             currentAction = new ActionTurnDirection(this, targetDirection);
+            AudioPlay.Instance.PlayWatchTurn();
             willTurn = false;
             HideSentinelTurn();
         }

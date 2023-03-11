@@ -476,6 +476,7 @@ public class Enemy : Character
         {
             Game.Instance.FailGame();
             m_animator.SetBool("catch", true);
+            AudioPlay.Instance.PlayCatch(this);
             return true;
         }
         return false;
@@ -490,6 +491,7 @@ public class Enemy : Character
         {
             Game.Instance.FailGame();
             m_animator.SetBool("catch", true);
+            AudioPlay.Instance.PlayCatch(this);
             return true;
         }
         return false;
@@ -744,6 +746,7 @@ public class Enemy : Character
     {
         enemyMove.transform.parent = transform;
         enemyMove.gameObject.SetActive(false);
+        AudioPlay.Instance.PlayNotFound(this);
     }
 
     public virtual void LostTarget()

@@ -296,6 +296,57 @@ public class AudioPlay : MonoBehaviour
         Instance.PlaySFX(30);
     }
 
+    public void PlayCatch(Enemy enemy)
+    {
+        var index = -1;
+        if (enemy is EnemyStatic)
+        {
+            index = new System.Random().Next(83, 86);
+        }
+        else if (enemy is EnemyDistracted)
+        {
+            index = new System.Random().Next(83, 86);
+        }
+        else if (enemy is EnemyPatrol)
+        {
+            index = new System.Random().Next(66, 69);
+        }
+        else if (enemy is EnemySentinel)
+        {
+            index = new System.Random().Next(66, 69);
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+    }
+
+    public void PlayNotFound(Enemy enemy)
+    {
+        var index = -1;
+        if (enemy is EnemyStatic)
+        {
+            index = new System.Random().Next(69, 72);
+        }
+        else if(enemy is EnemyDistracted)
+        {
+            index = new System.Random().Next(69, 72);
+        }
+        else if (enemy is EnemyPatrol)
+        {
+            index = new System.Random().Next(58, 63);
+        }
+        else if (enemy is EnemySentinel)
+        {
+            index = new System.Random().Next(58, 63);
+        }
+        if(index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+        
+    }
+
     public void PlayHeard()
     {
         Instance.PlaySFX(31);
@@ -304,5 +355,11 @@ public class AudioPlay : MonoBehaviour
     public void PlayStarGain()
     {
         Instance.PlaySFX(87);
+    }
+
+    public void PlayWatchTurn()
+    {
+        var index = new System.Random().Next(63, 66);
+        Instance.PlaySFX(index);
     }
 }
