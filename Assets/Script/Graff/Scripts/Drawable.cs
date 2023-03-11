@@ -14,6 +14,9 @@ namespace FreeDraw
     {
         public Camera cam;
 
+        public Transform worldPos;
+
+        public Transform localPos;
 
         // PEN COLOUR
         public static Color Pen_Colour = Color.red;     // Change these to change the default drawing settings
@@ -21,7 +24,7 @@ namespace FreeDraw
         public static int Pen_Width = 3;
 
 
-        public delegate void Brush_Function(Vector2 world_position);
+        public delegate void Brush_Function(Vector3 world_position);
         // This is the function called when a left click happens
         // Pass in your own custom one to change the brush type
         // Set the default function in the Awake method
@@ -100,10 +103,11 @@ namespace FreeDraw
         // Default brush type. Has width and colour.
         // Pass in a point in WORLD coordinates
         // Changes the surrounding pixels of the world_point to the static pen_colour
-        public void PenBrush(Vector2 world_point)
+        public void PenBrush(Vector3 world_point)
         {
+            
             Vector2 pixel_pos = WorldToPixelCoordinates(world_point);
-
+            
             cur_colors = drawable_texture.GetPixels32();
 
             if (previous_drag_position == Vector2.zero)
@@ -155,6 +159,7 @@ namespace FreeDraw
                 // Debug.Log("���߼����" + hitted + "   ��������:" + rayCastHit.point);
                 if (hitted)
                 {
+                    worldPos.position = rayCastHit.point;
                     current_brush(rayCastHit.point);
                 }
                 else
@@ -261,10 +266,11 @@ namespace FreeDraw
         }
 
 
-        public Vector2 WorldToPixelCoordinates(Vector2 world_position)
+        public Vector2 WorldToPixelCoordinates(Vector3 world_position)
         {
             // Change coordinates to local coordinates of this image
             Vector3 local_pos = transform.InverseTransformPoint(world_position);
+            localPos.localPosition = local_pos;
             // Debug.Log("射中的点的位置:" + world_position + " Box2D的位置:" + local_pos);
             // local_pos = new Vector3(local_pos.x / transform.localScale.x, local_pos.y / transform.localScale.y, local_pos.z / transform.localScale.z);
             // Change these to coordinates of pixels
