@@ -40,6 +40,10 @@ public class MainCanvas : BaseCanvas
 
     protected override void OnShow()
     {
+        if(AudioPlay.Instance != null)
+        {
+            AudioPlay.Instance.PlayMain();
+        }
     }
 
     protected override void OnHide()

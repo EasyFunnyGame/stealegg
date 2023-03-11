@@ -43,6 +43,7 @@ public class ActionThrowBottle : ActionBase
         segmentIndex = 0;
         linePointList = BezierUtils.GetBeizerPointList(100, wayPoints);
         player.bottleCount--;
+        AudioPlay.Instance.PlayerThrowBottle();
     }
 
     private Player player
@@ -63,6 +64,7 @@ public class ActionThrowBottle : ActionBase
             bottle.gameObject.SetActive(false);
             player.PlayBottleEffect(_targetPositon);
             Game.Instance.BottleThorwed(targetTileName);
+            AudioPlay.Instance.PlayerBottleGrounded();
             return true;
         }
         return false;

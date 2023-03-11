@@ -190,6 +190,7 @@ public class GameCamera : MonoBehaviour
 
 	private void LateUpdate()
 	{
+		if (Game.Instance.result != GameResult.NONE) return;
 		if (upper && _targets.Length > 0)
 		{
 			var targetPositionAndRotation = TargetPositionAndRotation(_targets);

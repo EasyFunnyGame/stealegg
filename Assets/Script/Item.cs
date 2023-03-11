@@ -77,6 +77,8 @@ public class Item : MonoBehaviour
 
     public bool Picked(Player player)
     {
+        player.pickedBottle = false;
+
         Debug.Log(string.Format("拾取道具:{0}",gameObject.name));
         var delete = false;
         switch(itemType)
@@ -97,6 +99,7 @@ public class Item : MonoBehaviour
                 player.m_animator.SetTrigger("pick");
                 player.bottleCount++;
                 delete = true;
+                player.pickedBottle = true;
                 break;
 
             case ItemType.Pincers:

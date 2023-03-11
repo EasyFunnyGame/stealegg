@@ -53,7 +53,7 @@ public class Game : MonoBehaviour
 
     public GameResult result;
 
-    public bool graffed = false;
+    public bool stealed = false;
 
     public bool bottleSelectingTarget = false;
 
@@ -99,7 +99,7 @@ public class Game : MonoBehaviour
 
         Save();
 
-        AudioPlay.Instance.PlayStartGame();
+        AudioPlay.Instance.PlayBackGroundMusic();
     }
 
     public void PlayLevel(string sceneName)
@@ -116,29 +116,11 @@ public class Game : MonoBehaviour
         resLoaded = false;
     }
 
-    string loadingSceneName = "";
-
-    IEnumerator LoadsScene()
-    {
-        var handle = Addressables.LoadSceneAsync(loadingSceneName, LoadSceneMode.Single, true);
-        handle.Completed += (obj) =>
-        {
-            Debug.LogWarning($"Load async scene complete{obj.Status}");
-            SceneManager.LoadScene(loadingSceneName);
-        };
-
-        while (!handle.IsDone)
-        {
-            // 在此可使用handle.PercentComplete进行进度展示
-            Debug.Log("场景加载进度");
-            yield return null;
-        }
-    }
 
     bool resLoaded = false;
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
-        graffed = false;
+        stealed = false;
         boardManager = boardMgr;
         var nameArr = sceneName.Split('-');
         var chapter = int.Parse(nameArr[0]);
@@ -190,47 +172,13 @@ public class Game : MonoBehaviour
             }
         }
         camera.upper = false;
-        //var scenePrefabUrl = string.Format("Assets/__Resources/Prefab/Scene/{0}/{1}.prefab", chapter, chapter + "-" + index);
-        //Debug.Log("开始加载场景:" + sceneName);
-        //if(sceneName != "1-1" && sceneName != "1-2" && sceneName != "1-3")
-        //{
-        //    Addressables.LoadAssetAsync<GameObject>(sceneName).Completed += onScenePrefabLoaded;
-        //}
-        //
-
-        //if (teaching)
-        //{
-        //    clearTeaching++;
-        //    if (clearTeaching > 1)
-        //    {
-        //        teaching = false;
-        //        clearTeaching = 0;
-        //    }
-        //}
-        //camera.upper = false;
     }
 
-    void onScenePrefabLoaded(UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> obj)
-    {
-        Debug.Log("加载好的远程场景预设" + obj.Result.name);
-        var sceneNode = GameObject.Find("Scene");
-        sceneNode.transform.localPosition = Vector3.zero;
-        var instance = Instantiate(obj.Result);
-        //instance.transform.parent = sceneNode.transform;
-        instance.transform.localPosition = Vector3.zero;
-      
-    }
 
     public void EndGame()
     {
         gameCanvas.Hide();
         endCanvas.Show();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
     }
 
     public float delayShowEndTimer = 0;
@@ -529,6 +477,7 @@ public class Game : MonoBehaviour
                     var enemy = boardManager.enemies[i];
                     if(enemy.coord.name == node.name)
                     {
+                        AudioPlay.Instance.ClickUnWalkable();
                         return;
                     }
                 }
@@ -540,15 +489,17 @@ public class Game : MonoBehaviour
                     {
                         Debug.Log("路径点连接GameObject名字出错");
                     }
-                    
+                    AudioPlay.Instance.ClickUnWalkable();
                     return;
                 }
+
 
                 if (player.moving || player.currentTile != tile)
                 {
                     player.currentAction = Utils.CreatePlayerAction( ActionType.PlayerMove, tile);
                     //Debug.Log("主角行为====移动");
                 }
+
             }
         }
     }
@@ -581,9 +532,9 @@ public class Game : MonoBehaviour
         {
             return;
         }
-        if(!graffed)
+        if(!stealed)
         {
-            graffed = true;
+            stealed = true;
             player.currentAction = Utils.CreatePlayerAction(ActionType.Steal, player.currentTile);
         }
     }
@@ -676,7 +627,7 @@ public class Game : MonoBehaviour
 
     public void ReachEnd()
     {
-        if(graffed)
+        if(stealed)
         {
             var level = PlayerPrefs.GetInt("Level");
             if (playingLevel >= level)

@@ -10,6 +10,11 @@ public class ActionJumpManholeCover : ActionBase
     {
         manholecover = item;
         player.m_animator.SetBool("jumping",true);
+        var manholeCover = player.boardManager.allItems[player.currentTile.name];
+        if(manholeCover && manholeCover.itemType == ItemType.ManHoleCover)
+        {
+            (manholeCover as ManholeCoverItem).JumpIn();
+        }
     }
     public Player player
     {

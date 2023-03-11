@@ -1,54 +1,99 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class AnimationEvent : MonoBehaviour
 {
     public Character owner;
-    // Start is called before the first frame update
-    void Start()
+
+    public Item item;
+
+    public void ManHoleCoverOpen()
     {
-        
+        if (item == null) return;
+        var manHoleCover = item as ManholeCoverItem;
+        if(manHoleCover == null) return;
+        manHoleCover.OpenSound();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ManHoleCoverClose()
     {
-        
-    }
-
-    public void FootL()
-    {
-        owner.FootL();
-    }
-
-    public void FootR()
-    {
-        owner.FootR();
-    }
-
-    public void PlayerReached()
-    {
-        owner.PlayerReached();
+        if (item == null) return;
+        var manHoleCover = item as ManholeCoverItem;
+        if (manHoleCover == null) return;
+        manHoleCover.CloseSound();
     }
 
     public void AnimationEnd(string clipName)
     {
         owner.AnimationEnd(clipName);
     }
-
-    public void ReadyThrowBottle()
+    public void PlayerMoveEnd()
     {
-        owner.ReadyThrowBottle();
+        owner?.PlayerReached();
     }
 
-    public virtual void AfterStealVegetable()
+    public void PlayerFootRight()
     {
-        owner.AfterStealVegetable();
+        if (!owner) return;
+        if(owner is Player)
+        {
+            AudioPlay.Instance.PlayerFootRight();
+        }
+        else if(owner is EnemyStatic)
+        {
+
+        }
+        else if (owner is EnemyDistracted)
+        {
+
+        }
+        else if (owner is EnemyPatrol)
+        {
+
+        }
+        else if (owner is EnemySentinel)
+        {
+
+        }
     }
 
-    public void Hit()
+    public void PlayerFootLeft()
     {
+        if (!owner) return;
+        if (owner is Player)
+        {
+            AudioPlay.Instance.PlayerFootLeft();
+        }
+        else if (owner is EnemyStatic)
+        {
 
+        }
+        else if (owner is EnemyDistracted)
+        {
+
+        }
+        else if (owner is EnemyPatrol)
+        {
+
+        }
+        else if (owner is EnemySentinel)
+        {
+
+        }
+    }
+
+    public void PlayerWalkingExit()
+    {
+        AudioPlay.Instance.PlaySFX(12);
+    }
+
+    public void Pick()
+    {
+        AudioPlay.Instance.PlayPickSfx();
+    }
+
+    public void BlowWhitsle()
+    {
+        AudioPlay.Instance.PlayerBlowWhitsle();
     }
 }

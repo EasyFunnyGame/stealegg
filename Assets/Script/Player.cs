@@ -23,6 +23,10 @@ public class Player : Character
 
     public bool founded = false;
 
+    public string walkingLineType;
+    public int up = 0;
+    public bool pickedBottle = false;
+
     private void Update()
     {
         if(currentAction==null)
@@ -178,7 +182,6 @@ public class Player : Character
         PlayeWhitsleEffect(transform.position);
         m_animator.SetTrigger("whistle");
     }
-
 
    
     public override void AnimationEnd(string clipName)

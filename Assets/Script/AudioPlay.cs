@@ -11,18 +11,18 @@ public class AudioPlay : MonoBehaviour
         Instance = this;
     }
 
-    bool _init = false;
+    static bool init = false;
 
     private void Update()
     {
-        if(_init==false)
+        if(init == false)
         {
-            _init = manager.loaded;
-            PlayBackGround();
+            init = AudioManager.loaded;
+            PlayMusic();
         }
     }
 
-    public void PlayBackGround()
+    public void PlayMusic()
     {
         if(Game.Instance.mainCanvas.gameObject.activeSelf)
         {
@@ -30,98 +30,225 @@ public class AudioPlay : MonoBehaviour
         }
         else
         {
-            PlayBackGround();
+            PlayBackGroundMusic();
         }
     }
 
 
     public void PlayMain()
     {
-        if (!_init) return;
-        if (manager.audioBGM != null)
+        if (!init) return;
+        if (AudioManager.audioBGM != null)
         {
-            manager.RemoveAudio(manager.audioBGM, true);
+            manager.RemoveAudio(AudioManager.audioBGM, true);
         }
+        var audioSrc = AudioManager.audioList[0];
         // 长音频在使用后需要销毁
-        manager.audioBGM = manager.CreateAudio();
-        manager.audioBGM.loop = true;
-        manager.audioBGM.src = AudioManager.audioList[0];
-        manager.audioBGM.OnCanplay(() =>
+        AudioManager.audioBGM = manager.CreateAudio();
+        AudioManager.audioBGM.loop = true;
+        AudioManager.audioBGM.src = audioSrc;
+        AudioManager.audioBGM.OnCanplay(() =>
         {
-            manager.audioBGM.Play();
+            AudioManager.audioBGM.Play();
+            Debug.Log("播放主界面背景音乐:" + audioSrc);
         });
         // 自动播放停止
-        manager.audioBGM.OnEnded(() =>
+        AudioManager.audioBGM.OnEnded(() =>
         {
-            //manager.audioBGM = null;
-            Debug.Log("循环播放");
+            PlayMain();
         });
         // 手动停止
-        manager.audioBGM.OnStop(() =>
+        AudioManager.audioBGM.OnStop(() =>
         {
-            manager.audioBGM = null;
+            AudioManager.audioBGM = null;
         });
-        Debug.Log("播放主界面音乐");
     }
 
 
-    public void PlayStartGame()
-    {
-        if (!_init) return;
-        var index = new System.Random().Next(1, 3);
-        Debug.Log("Play:" + index);
-        if (manager.audioBGM != null)
-        {
-            manager.RemoveAudio(manager.audioBGM, true);
-        }
-        // 长音频在使用后需要销毁
-        manager.audioBGM = manager.CreateAudio();
-        // audioBGM.loop = true;
-        manager.audioBGM.src = AudioManager.audioList[index];
-        manager.audioBGM.OnCanplay(() =>
-        {
-            manager.audioBGM.Play();
-        });
-        // 自动播放停止
-        manager.audioBGM.OnEnded(() =>
-        {
-            PlayBackGroundMusic();
-        });
-        // 手动停止
-        manager.audioBGM.OnStop(() =>
-        {
-            manager.audioBGM = null;
-        });
-    }
-
+    string inGameAudioSrc = "";
     public void PlayBackGroundMusic()
     {
-        if (!_init) return;
-        var index = new System.Random().Next(4, 8);
-        Debug.Log("Play:" + index);
-        if (manager.audioBGM != null)
+        if (!init) return;
+        var index = new System.Random().Next(4, 9);
+        
+        if (AudioManager.audioBGM != null)
         {
-            manager.RemoveAudio(manager.audioBGM, true);
+            manager.RemoveAudio(AudioManager.audioBGM, true);
         }
+        inGameAudioSrc = AudioManager.audioList[index];
         // 长音频在使用后需要销毁
-        manager.audioBGM = manager.CreateAudio();
+        AudioManager.audioBGM = manager.CreateAudio();
         // audioBGM.loop = true;
-        manager.audioBGM.src = AudioManager.audioList[index];
-        manager.audioBGM.OnCanplay(() =>
+        AudioManager.audioBGM.src = inGameAudioSrc;
+        AudioManager.audioBGM.OnCanplay(() =>
         {
-            manager.audioBGM.Play();
+            AudioManager.audioBGM.Play();
+            Debug.Log("播放场景内背景音乐:" + inGameAudioSrc);
         });
         // 自动播放停止
-        manager.audioBGM.OnEnded(() =>
+        AudioManager.audioBGM.OnEnded(() =>
         {
-            index = new System.Random().Next(4, 8);
-            manager.audioBGM.src = AudioManager.audioList[index];
+            AudioManager.audioBGM.Play();
         });
         // 手动停止
-        manager.audioBGM.OnStop(() =>
+        AudioManager.audioBGM.OnStop(() =>
         {
-            manager.audioBGM = null;
+            AudioManager.audioBGM = null;
         });
     }
 
+
+    public void PlaySFX(int index)
+    {
+        var src = AudioManager.sfxList[index];
+
+        var audioPlayRightNow = manager.CreateAudio();
+        if (audioPlayRightNow == null)
+        {
+            return;
+        }
+        // 自动播放停止
+        audioPlayRightNow.OnEnded(() =>
+        {
+            manager.RemoveAudio(audioPlayRightNow);
+        });
+        // 手动停止
+        audioPlayRightNow.OnStop(() =>
+        {
+            manager.RemoveAudio(audioPlayRightNow);
+        });
+        // 如果要设置的src和原音频对象一致，可以直接播放
+        if (audioPlayRightNow.src == src)
+        {
+            audioPlayRightNow.Play();
+        }
+        else
+        {
+            // 如果当前音频已经下载过，并且配置了缓存本地，就算设置needDownload为false也不会重复下载
+            audioPlayRightNow.src = src;
+            audioPlayRightNow.Play();
+        }
+    }
+
+    public void PlayerFootLeft()
+    {
+        var lineName = Game.Instance.player.walkingLineType;
+        var height = Game.Instance.player.up;
+        Debug.Log("玩家行进路线左"+ lineName + " 高度:" + height);
+        var index = -1;
+        if (lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")
+        {
+            index = new System.Random().Next(0, 4);
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == 1)
+        {
+            index = new System.Random().Next(6, 9);
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == -1)
+        {
+            index = new System.Random().Next(9, 12);
+        }
+        else if (lineName == "ClimbUp_Doted_Visual" && height == 1)
+        {
+            index = 21;
+        }
+        else if (lineName == "ClimbUp_Doted_Visual" && height == -1)
+        {
+            index = 22;
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+    }
+
+    public void PlayerFootRight()
+    {
+        var lineName = Game.Instance.player.walkingLineType;
+        var height = Game.Instance.player.up;
+        Debug.Log("玩家行进路线右" + lineName + " 高度:" + height);
+        var index = -1;
+        if(lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")
+        {
+            index = new System.Random().Next(3, 6);
+        }
+        else if(lineName == "StairsUp_Normal_Visual" && height == 1)
+        {
+            index = new System.Random().Next(6, 9);
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == -1)
+        {
+            index = new System.Random().Next(9, 12);
+        }
+        else if (lineName == "ClimbUp_Doted_Visual" && height == 1)
+        {
+            index = 21;
+        }
+        else if (lineName == "ClimbUp_Doted_Visual" && height == -1)
+        {
+            index = 22;
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+    }
+
+    public void ClickUnWalkable()
+    {
+        var index = new System.Random().Next(13, 17);
+        Instance.PlaySFX(index);
+    }
+
+    public void PlayerBlowWhitsle()
+    {
+        var index = new System.Random().Next(17, 21);
+        Instance.PlaySFX(index);
+    }
+
+    public void PlayPickSfx()
+    {
+        var player = Game.Instance.player;
+        if(player.pickedBottle)
+        {
+            PlayerPickBottle();
+        }
+    }
+
+    public void PlayerPickBottle()
+    {
+        var index = new System.Random().Next(23, 25);
+        Instance.PlaySFX(index);
+    }
+
+
+    public void PlayerThrowBottle()
+    {
+        var index = new System.Random().Next(25, 27);
+        Instance.PlaySFX(index);
+    }
+
+    public void PlayerBottleGrounded()
+    {
+        Instance.PlaySFX(27);
+    }
+
+    public void PlayJumpOut()
+    {
+        Instance.PlaySFX(29);
+    }
+    public void PlayJumpIn()
+    {
+        Instance.PlaySFX(28);
+    }
+
+    public void PlayFound()
+    {
+        Instance.PlaySFX(30);
+    }
+
+    public void PlayHeard()
+    {
+        Instance.PlaySFX(31);
+    }
 }

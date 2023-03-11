@@ -7,8 +7,12 @@ public class ActionPlayerMove : ActionBase
     float height = 0f;
 
     bool crounching=false;
+
+    bool walkingExit = false;
+
     public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
+        walkingExit = false;
         velocity = new Vector3();
         player.FindPathRealTime(tile);
         
@@ -20,8 +24,8 @@ public class ActionPlayerMove : ActionBase
             player.Clear();
             return;
         }
-        
-        player.m_animator.SetInteger("crouch", 0);
+
+        player.m_animator.SetFloat("move_type", 0);
         //if(linkLine.through==false)
         //{
         //    player.Clear();
@@ -38,25 +42,40 @@ public class ActionPlayerMove : ActionBase
         }
 
         var targetNode = player.boardManager.FindNode(tile.name);
-        height = targetNode.transform.position.y-player.transform.position.y;
+        height = targetNode.transform.position.y - player.transform.position.y;
 
         if (lineType != null)
         {
+            player.walkingLineType = lineType.name;
+            player.up = height > 0 ?  1 :  height < 0 ? -1 : 0;
             // Debug.Log("连线类型：" + lineType.name);
-            switch(lineType.name)
+            switch (lineType.name)
             {
                 case "Hor_Normal_Visual":
-                    player.m_animator.SetInteger("crouch",0);
+                    player.m_animator.SetFloat("move_type", 0);
                     break;
 
                 case "Hor_Doted_Visual":
-                    player.m_animator.SetInteger("crouch", 1);
+                    player.m_animator.SetFloat("move_type", 0.5f);
                     crounching = true;
                     break;
 
                 case "StairsUp_Normal_Visual":
-                    //var currentNode = player.boardManager.FindNode(player.currentTile.name);
+                    
                     break;
+            }
+        }
+
+        if (Game.Instance.stealed)
+        {
+            if(player.boardManager.allItems.ContainsKey(tile.name))
+            {
+                var endItem = player.boardManager.allItems[tile.name];
+                if (endItem != null && endItem.itemType == ItemType.End)
+                {
+                    player.m_animator.SetFloat("move_type", 1);
+                    walkingExit = true;
+                }
             }
         }
     }
@@ -120,7 +139,7 @@ public class ActionPlayerMove : ActionBase
         if (character.moving)
         {
            
-            if(crounching)
+            if(crounching || walkingExit)
             {
                 float step = character.move_speed * Time.deltaTime;
                 character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);

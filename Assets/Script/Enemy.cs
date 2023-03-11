@@ -257,7 +257,7 @@ public class Enemy : Character
         }
 
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        routeArrow.position = endNode.transform.position;
+        routeArrow.position = endNode.transform.position+new Vector3(0,0.02f,0);
         routeArrow.rotation = transform.rotation;
         routeArrow.Rotate(new Vector3(0, 0, 180));
         routeArrow.parent = null;
@@ -371,31 +371,10 @@ public class Enemy : Character
     protected virtual void UpdateRouteRedLine()
     {
         route.SetActive(!sleeping);
-        if(routeNodeNames.Count>0)
-        {
-            //BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-            //var distance = Vector3.Distance(transform.position, endNode.transform.position);
-            //routeArrow.localPosition = new Vector3(0, 0, distance);
-            //routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
-            //for (var index = 0; index < redNodes.Count; index++)
-            //{
-            //    if (redNodes[index].name == currentTile.name)
-            //    {
-            //        distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
-            //        if (distance > 0.1f)
-            //        {
-            //            redNodes[index].gameObject.SetActive(false);
-            //        }
-            //    }
-            //}
-
-            //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
-        }
-        else
+        if(routeNodeNames.Count<=0)
         {
             route.SetActive(false);
         }
-
     }
 
     private void UpdateAnimatorParams()
@@ -748,6 +727,14 @@ public class Enemy : Character
         enemyMove.Play("Movement_Animation");
         var node = boardManager.FindNode(tile.name);
         enemyMove.transform.transform.position = node.transform.position;
+        if (hearSoundTile!=null)
+        {
+            AudioPlay.Instance.PlayHeard();
+        }
+        if(foundPlayerTile)
+        {
+            AudioPlay.Instance.PlayFound();
+        }
     }
 
     public virtual void DisapearTraceTarget()

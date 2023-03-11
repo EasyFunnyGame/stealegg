@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -18994,7 +18994,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51c68fb2654739409b556aaf031c599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findPathCCWFirst: 1
   gridManager: {fileID: 0}
   m_animator: {fileID: 1053773198}
   body_looking: 0
@@ -19046,10 +19045,10 @@ MonoBehaviour:
   headPoint: {fileID: 1386414284}
   enemyMove: {fileID: 1071361514}
   route: {fileID: 1378532831}
-  routeLine: {fileID: 213376531}
   routeArrow: {fileID: 153133043}
   routeNodeNames: []
   redNodes: []
+  redLines: []
   sleeping: 0
   patroling: 0
   waiting: 0
@@ -32801,7 +32800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93a7c93f35c8417cbd23679d95e2b54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 0}
+  owner: {fileID: 634825848}
 --- !u!95 &1071361514
 Animator:
   serializedVersion: 3
@@ -35620,7 +35619,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d144ee87105571142ac20b989ef931bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  findPathCCWFirst: 1
   gridManager: {fileID: 0}
   m_animator: {fileID: 405711919}
   body_looking: 0
@@ -35672,10 +35670,10 @@ MonoBehaviour:
   headPoint: {fileID: 929517273}
   enemyMove: {fileID: 913019944}
   route: {fileID: 173110465}
-  routeLine: {fileID: 1318722984}
   routeArrow: {fileID: 1915850626}
   routeNodeNames: []
   redNodes: []
+  redLines: []
   sleeping: 0
   patroling: 0
   waiting: 0
