@@ -63,7 +63,13 @@ public class GraffCanvas : BaseCanvas
         btn_normal.onClick.AddListener(() => { ChangThicknessHandler(5); AudioPlay.Instance.PlayClick(); });
         btn_slime.onClick.AddListener(() => { ChangThicknessHandler(2); AudioPlay.Instance.PlayClick(); });
 
-        btn_eraser.onClick.AddListener(() => { ChangeColorHandler("transparent"); AudioPlay.Instance.PlayClick(); });
+        //ChangeColorHandler("transparent");
+        //ChangThicknessHandler(50);
+        //AudioPlay.Instance.PlayClick();
+        btn_eraser.onClick.AddListener(() => {
+            var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+            drawable.ResetCanvas();
+             });
 
         btn_complete.onClick.AddListener(onCloseGraffCanvasHandler);
 

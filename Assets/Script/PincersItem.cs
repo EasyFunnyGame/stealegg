@@ -22,8 +22,8 @@ public class PincersItem : Item
         linkline.through = true;
 
         var dotLinePrefab = Resources.Load("Prefab/Hor_Doted_Visual");
-        Instantiate(dotLinePrefab, linkline.transform);
-
+        var copy = Instantiate(dotLinePrefab, linkline.transform);
+        copy.name = "Hor_Doted_Visual";
         var originalLine = linkline.transform.GetChild(0);
         originalLine?.gameObject.SetActive(false);
 

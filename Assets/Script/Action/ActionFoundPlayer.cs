@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ActionFoundPlayer : ActionBase
 {
@@ -15,6 +13,7 @@ public class ActionFoundPlayer : ActionBase
     {
         if(actionDuration < 0)
         {
+            AudioPlay.Instance.PlayEnemyAlert(character as Enemy);
             return true;
         }
         return false;

@@ -339,8 +339,8 @@ public class Enemy : Character
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
+                ShowTraceTarget(targetTile , foundPlayerTile== null);
                 foundPlayerTile = targetTile;
-                ShowTraceTarget(targetTile);
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
@@ -531,9 +531,8 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-
+        ShowTraceTarget(targetTile, hearSoundTile == null);
         hearSoundTile = targetTile;
-        ShowTraceTarget(targetTile);
         ShowFound();
         
         return true;
@@ -574,9 +573,9 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-
+        ShowTraceTarget(targetTile, hearSoundTile== null);
         hearSoundTile = targetTile;
-        ShowTraceTarget(targetTile);
+        
         ShowFound();
         return true;
     }
@@ -615,9 +614,10 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
+        ShowTraceTarget(targetTile, hearSoundTile == null);
 
         hearSoundTile = targetTile;
-        ShowTraceTarget(targetTile);
+        
         ShowFound();
         return true;
     }
@@ -725,18 +725,18 @@ public class Enemy : Character
     }
 
 
-    public virtual void ShowTraceTarget(GridTile tile)
+    public virtual void ShowTraceTarget(GridTile tile, bool playSound = false)
     {
         enemyMove.transform.parent = null;
         enemyMove.gameObject.SetActive(true);
         enemyMove.Play("Movement_Animation");
         var node = boardManager.FindNode(tile.name);
         enemyMove.transform.transform.position = node.transform.position;
-        if (hearSoundTile!=null)
+        if (hearSoundTile && playSound)
         {
             AudioPlay.Instance.PlayHeard();
         }
-        if(foundPlayerTile)
+        if(foundPlayerTile && playSound)
         {
             AudioPlay.Instance.PlayFound();
         }

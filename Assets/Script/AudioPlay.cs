@@ -64,7 +64,7 @@ public class AudioPlay : MonoBehaviour
             AudioManager.audioBGM = null;
         });
     }
-
+    string backgroundSrc = "";
 
     string inGameAudioSrc = "";
     public void PlayBackGroundMusic()
@@ -89,6 +89,37 @@ public class AudioPlay : MonoBehaviour
         // 自动播放停止
         AudioManager.audioBGM.OnEnded(() =>
         {
+            PlaySilencMusic();
+            //AudioManager.audioBGM.Play();
+        });
+        // 手动停止
+        AudioManager.audioBGM.OnStop(() =>
+        {
+            AudioManager.audioBGM = null;
+        });
+    }
+    public void PlaySilencMusic()
+    {
+        if (!init) return;
+        var index = new System.Random().Next(1, 4);
+        backgroundSrc = AudioManager.audioList[index];
+        if (AudioManager.audioBGM != null)
+        {
+            manager.RemoveAudio(AudioManager.audioBGM, true);
+        }
+        inGameAudioSrc = backgroundSrc;
+        // 长音频在使用后需要销毁
+        AudioManager.audioBGM = manager.CreateAudio();
+        // audioBGM.loop = true;
+        AudioManager.audioBGM.src = inGameAudioSrc;
+        AudioManager.audioBGM.OnCanplay(() =>
+        {
+            AudioManager.audioBGM.Play();
+            //Debug.Log("播放场景内背景音乐:" + inGameAudioSrc);
+        });
+        // 自动播放停止
+        AudioManager.audioBGM.OnEnded(() =>
+        {
             AudioManager.audioBGM.Play();
         });
         // 手动停止
@@ -98,26 +129,15 @@ public class AudioPlay : MonoBehaviour
         });
     }
 
-
     public void PlaySFX(int index)
     {
         var src = AudioManager.sfxList[index];
-        Debug.Log("sound url:" + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
+        Debug.Log("sound url:       " + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
         var audioPlayRightNow = manager.CreateAudio();
         if (audioPlayRightNow == null)
         {
             return;
         }
-        // 自动播放停止
-        audioPlayRightNow.OnEnded(() =>
-        {
-            manager.RemoveAudio(audioPlayRightNow);
-        });
-        // 手动停止
-        audioPlayRightNow.OnStop(() =>
-        {
-            manager.RemoveAudio(audioPlayRightNow);
-        });
         // 如果要设置的src和原音频对象一致，可以直接播放
         if (audioPlayRightNow.src == src)
         {
@@ -135,11 +155,43 @@ public class AudioPlay : MonoBehaviour
     {
         var lineName = Game.Instance.player.walkingLineType;
         var height = Game.Instance.player.up;
-        Debug.Log("玩家行进路线左"+ lineName + " 高度:" + height);
+        //Debug.Log("玩家行进路线左"+ lineName + " 高度:" + height);
         var index = -1;
         if (lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")
         {
-            index = new System.Random().Next(0, 4);
+            index = new System.Random().Next(0, 3);
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == 1)
+        {
+            index = new System.Random().Next(6, 9);
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == -1)
+        {
+            index = new System.Random().Next(9, 12);
+        }
+        else if (lineName == "ClimbUp_Doted_Visual" && height == 1)
+        {
+            index = 21;
+        }
+        else if (lineName == "ClimbUp_Doted_Visual" && height == -1)
+        {
+            index = 22;
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+    }
+
+    public void PlayerFootRight()
+    {
+        var lineName = Game.Instance.player.walkingLineType;
+        var height = Game.Instance.player.up;
+        //Debug.Log("玩家行进路线右" + lineName + " 高度:" + height);
+        var index = -1;
+        if (lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")
+        {
+            index = new System.Random().Next(3, 6);
         }
         else if (lineName == "StairsUp_Normal_Visual" && height == 1)
         {
@@ -211,37 +263,7 @@ public class AudioPlay : MonoBehaviour
         }
     }
 
-    public void PlayerFootRight()
-    {
-        var lineName = Game.Instance.player.walkingLineType;
-        var height = Game.Instance.player.up;
-        Debug.Log("玩家行进路线右" + lineName + " 高度:" + height);
-        var index = -1;
-        if(lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")
-        {
-            index = new System.Random().Next(3, 6);
-        }
-        else if(lineName == "StairsUp_Normal_Visual" && height == 1)
-        {
-            index = new System.Random().Next(6, 9);
-        }
-        else if (lineName == "StairsUp_Normal_Visual" && height == -1)
-        {
-            index = new System.Random().Next(9, 12);
-        }
-        else if (lineName == "ClimbUp_Doted_Visual" && height == 1)
-        {
-            index = 21;
-        }
-        else if (lineName == "ClimbUp_Doted_Visual" && height == -1)
-        {
-            index = 22;
-        }
-        if (index != -1)
-        {
-            Instance.PlaySFX(index);
-        }
-    }
+    
 
     public void ClickUnWalkable()
     {
@@ -289,6 +311,24 @@ public class AudioPlay : MonoBehaviour
     public void PlayJumpIn()
     {
         Instance.PlaySFX(28);
+    }
+
+    public void PlayEnemyAlert(Enemy enemy)
+    {
+        var index = -1;
+        if (enemy is EnemyStatic || enemy is EnemyDistracted)
+        {
+            index = new System.Random().Next(72, 77);
+        }
+        
+        else if (enemy is EnemyPatrol || enemy is EnemySentinel)
+        {
+            index = new System.Random().Next(55, 58);
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
     }
 
     public void PlayFound()
@@ -390,6 +430,7 @@ public class AudioPlay : MonoBehaviour
 
     public void Speep(EnemyDistracted enemy)
     {
+        if (!enemy) return;
         if(enemy.breath == 1)
         {
             EnemySleepIn();
@@ -410,6 +451,40 @@ public class AudioPlay : MonoBehaviour
     public void EnemySleepOut()
     {
         var index = new System.Random().Next(80, 83);
-        Instance.PlaySFX(89);
+        Instance.PlaySFX(index);
     }
+
+    public void HideInTree()
+    {
+        Instance.PlaySFX(38);
+    }
+
+    public void WalkOutTree()
+    {
+        Instance.PlaySFX(39);
+    }
+
+    public void ThroughWireNet()
+    {
+        Instance.PlaySFX(32);
+    }
+
+    public void ThroughCuttedWireNet()
+    {
+        Instance.PlaySFX(33);
+    }
+
+    public void PlayPrincersCut()
+    {
+        int[] sounds1 = { 34, 36 };
+        int[] sound2 = { 35, 37 };
+        int[][] sounds = { sounds1, sound2};
+
+        var index = new System.Random().Next(0, 2);
+        var s = sounds[index];
+
+        Instance.PlaySFX(s[0]);
+        Instance.PlaySFX(s[1]);
+    }
+
 }

@@ -252,6 +252,8 @@ public class Character : MonoBehaviour
     public virtual void Reached()
     {
         coord = new Coord(transform.position);
+        transform.position = new Vector3(coord.x,transform.position.y,coord.z);
+        m_animator.transform.localPosition = Vector3.zero;
         ResetDirection();
     }
 

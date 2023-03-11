@@ -62,7 +62,6 @@ public class Player : Character
         boardManager.PickItem(currentTile.name,this);
         m_animator.SetBool("moving", false);
         m_animator.SetInteger("bottle",-1);
-        m_animator.SetInteger("jump", -1);
         ShowReached();
         idleTime = Random.Range(3,5);
 

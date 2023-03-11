@@ -231,7 +231,7 @@ public class AudioManager : MonoBehaviour
     // 从缓存池中获取音频实例
     public WXInnerAudioContext CreateAudio()
     {
-        if (this.isDestroyed)
+        if (isDestroyed)
         {
             return null;
         }
@@ -247,7 +247,7 @@ public class AudioManager : MonoBehaviour
     }
 
     // 销毁或回收实例
-    public void RemoveAudio(WXInnerAudioContext audio, bool needDestroy = true)
+    public void RemoveAudio(WXInnerAudioContext audio, bool needDestroy = true, bool forceDestroy = false)
     {
         audio.OffCanplay();
         if (audioPlayArray.Contains(audio))
@@ -256,7 +256,7 @@ public class AudioManager : MonoBehaviour
         }
         if (needDestroy)
         {
-            if (WXInnerAudioContext.Dict.ContainsValue(audio))
+            if (WXInnerAudioContext.Dict.ContainsValue(audio) || forceDestroy)
             {
                 audio.Destroy();
                 createdAudioCount -= 1;
@@ -270,9 +270,9 @@ public class AudioManager : MonoBehaviour
             }
         }
 
-        Debug.Log("___________________");
-        Debug.Log("已创建InnerAudio:" + createdAudioCount + " 对象池:" + audioPool.Count + " 正在播放:" + audioPlayArray.Count);
-        Debug.Log("___________________");
+        //Debug.Log("___________________");
+        //Debug.Log("已创建InnerAudio:" + createdAudioCount + " 对象池:" + audioPool.Count + " 正在播放:" + audioPlayArray.Count);
+        //Debug.Log("___________________");
     }
 
     // 创建InnerAudioContext实例
@@ -281,7 +281,15 @@ public class AudioManager : MonoBehaviour
     {
         if (createdAudioCount > 32)
         {
-            Debug.LogError("最多只支持同时使用32个InnerAudio");
+            //Debug.LogError("最多只支持同时使用32个InnerAudio");
+            for(var index = 0; index < audioPlayArray.Count; index++)
+            {
+                WXInnerAudioContext playingAudio = audioPlayArray[index];
+                if(!playingAudio.isPlaying)
+                {
+                    RemoveAudio(playingAudio, true, true);
+                }
+            }
         }
 
         var audio = WX.CreateInnerAudioContext(new InnerAudioContextParam() { needDownload = true });
@@ -319,7 +327,7 @@ public class AudioManager : MonoBehaviour
         // 播放成功
         audio.OnPlay(() =>
         {
-            Debug.Log(audio.instanceId + "audio OnPlay");
+            //Debug.Log(audio.instanceId + "audio OnPlay");
         });
 
         if (!needDestroy)

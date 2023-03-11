@@ -295,8 +295,8 @@ public class EnemySentinel : Enemy
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
+                ShowTraceTarget(targetTile, foundPlayerTile == null);
                 foundPlayerTile = targetTile;
-                ShowTraceTarget(targetTile);
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);

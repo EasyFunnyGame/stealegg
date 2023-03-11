@@ -479,7 +479,7 @@ namespace WeChatWASM
                 return;
             }
 
-            Debug.Log(_src + " 音频播放了，这里就不真的播放了。");
+            //Debug.Log(_src + " 音频播放了，这里就不真的播放了。");
             ht["paused"] = false;
             _HandleCallBack("onPlay");
 

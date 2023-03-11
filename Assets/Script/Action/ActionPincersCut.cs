@@ -12,6 +12,8 @@ public class ActionPincersCut : ActionBase
     public ActionPincersCut(Player player, PincersItem item) : base(player, ActionType.PincersCut)
     {
         pincers = item;
+        player.m_animator.SetTrigger("cut");
+        AudioPlay.Instance.PlayPrincersCut();
     }
 
     public Player player

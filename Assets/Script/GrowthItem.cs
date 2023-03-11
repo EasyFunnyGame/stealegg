@@ -10,7 +10,10 @@ public class GrowthItem : Item
         //if (other.gameObject.GetComponent<Character>())
         upper = true;
         velocity = Vector3.zero;
-
+        if (other?.transform.parent?.name == "Player")
+        {
+            AudioPlay.Instance.HideInTree();
+        }
     }
 
     override protected void OnTriggerExit(Collider other)
@@ -18,7 +21,10 @@ public class GrowthItem : Item
         //if (other.gameObject.GetComponent<Character>())
         upper = false;
         velocity = Vector3.zero;
-
+        if (other?.transform.parent?.name == "Player")
+        {
+            AudioPlay.Instance.WalkOutTree();
+        }
     }
 }
     
