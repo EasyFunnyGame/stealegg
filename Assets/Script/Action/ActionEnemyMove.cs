@@ -14,6 +14,27 @@ public class ActionEnemyMove : ActionBase
 
         var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
         height = targetNode.transform.position.y - enemy.transform.position.y;
+
+        var currentNodeName = enemy.currentTile.name;
+        var targetNodeName = tile.name;
+        var linkLine = enemy.boardManager.FindLine(currentNodeName, targetNodeName);
+        if (linkLine != null)
+        {
+            Transform lineType = null;
+            for (var index = 0; index < linkLine.transform.childCount; index++)
+            {
+                if (linkLine.transform.GetChild(index).gameObject.activeSelf)
+                {
+                    lineType = linkLine.transform.GetChild(index);
+                    break;
+                }
+            }
+            if (lineType != null)
+            {
+                enemy.walkingLineType = lineType.name;
+                enemy.up = height > 0 ? 1 : height < 0 ? -1 : 0;
+            }
+        }
     }
 
     public Enemy enemy

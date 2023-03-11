@@ -90,6 +90,7 @@ public class Item : MonoBehaviour
                 Game.Instance.energy += 5;
                 PlayerPrefs.SetInt("Energy", Game.Instance.energy);
                 delete = true;
+                AudioPlay.Instance.PlayStarGain();
                 break;
 
             case ItemType.LureBottle:

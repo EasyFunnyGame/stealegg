@@ -99,11 +99,12 @@ public class Game : MonoBehaviour
 
         Save();
 
-        AudioPlay.Instance.PlayBackGroundMusic();
+        
     }
 
     public void PlayLevel(string sceneName)
     {
+        AudioPlay.Instance.PlayBackGroundMusic();
         //if(!sceneName.StartsWith("3"))
         {
             SceneManager.LoadScene(sceneName);

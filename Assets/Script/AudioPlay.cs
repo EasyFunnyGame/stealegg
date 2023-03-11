@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioPlay : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayMusic()
     {
-        if(Game.Instance.mainCanvas.gameObject.activeSelf)
+        if(SceneManager.GetActiveScene().name== "Main")
         {
             PlayMain();
         }
@@ -83,7 +84,7 @@ public class AudioPlay : MonoBehaviour
         AudioManager.audioBGM.OnCanplay(() =>
         {
             AudioManager.audioBGM.Play();
-            Debug.Log("播放场景内背景音乐:" + inGameAudioSrc);
+            //Debug.Log("播放场景内背景音乐:" + inGameAudioSrc);
         });
         // 自动播放停止
         AudioManager.audioBGM.OnEnded(() =>
@@ -155,6 +156,54 @@ public class AudioPlay : MonoBehaviour
         else if (lineName == "ClimbUp_Doted_Visual" && height == -1)
         {
             index = 22;
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+    }
+
+    public void EnemyFootLeft(Enemy enemy)
+    {
+        if (!enemy) return;
+        var lineName = enemy.walkingLineType;
+        var height = enemy.up;
+        var index = -1;
+        if (lineName == "StairsUp_Normal_Visual" && height == 1)
+        {
+            index = 54;
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == -1)
+        {
+            index = 53;
+        }
+        else
+        {
+            index = new System.Random().Next(44, 53);
+        }
+        if (index != -1)
+        {
+            Instance.PlaySFX(index);
+        }
+    }
+
+    public void EnemyFootRight(Enemy enemy)
+    {
+        if (!enemy) return;
+        var lineName = enemy.walkingLineType;
+        var height = enemy.up;
+        var index = -1;
+        if (lineName == "StairsUp_Normal_Visual" && height == 1)
+        {
+            index = 54;
+        }
+        else if (lineName == "StairsUp_Normal_Visual" && height == -1)
+        {
+            index = 53;
+        }
+        else
+        {
+            index = new System.Random().Next(44, 53);
         }
         if (index != -1)
         {
@@ -250,5 +299,10 @@ public class AudioPlay : MonoBehaviour
     public void PlayHeard()
     {
         Instance.PlaySFX(31);
+    }
+
+    public void PlayStarGain()
+    {
+        Instance.PlaySFX(87);
     }
 }

@@ -32,54 +32,32 @@ public class AnimationEvent : MonoBehaviour
         owner?.PlayerReached();
     }
 
-    public void PlayerFootRight()
+    public void FootRight()
     {
         if (!owner) return;
         if(owner is Player)
         {
             AudioPlay.Instance.PlayerFootRight();
         }
-        else if(owner is EnemyStatic)
+        else
         {
-
+            AudioPlay.Instance.EnemyFootRight(owner as Enemy);
         }
-        else if (owner is EnemyDistracted)
-        {
-
-        }
-        else if (owner is EnemyPatrol)
-        {
-
-        }
-        else if (owner is EnemySentinel)
-        {
-
-        }
+        
     }
 
-    public void PlayerFootLeft()
+    public void FootLeft()
     {
         if (!owner) return;
         if (owner is Player)
         {
             AudioPlay.Instance.PlayerFootLeft();
         }
-        else if (owner is EnemyStatic)
+        else
         {
-
+            AudioPlay.Instance.EnemyFootLeft(owner as Enemy);
         }
-        else if (owner is EnemyDistracted)
-        {
 
-        }
-        else if (owner is EnemyPatrol)
-        {
-
-        }
-        else if (owner is EnemySentinel)
-        {
-
-        }
     }
 
     public void PlayerWalkingExit()

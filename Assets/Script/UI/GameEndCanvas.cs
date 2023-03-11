@@ -47,7 +47,8 @@ public class GameEndCanvas : BaseCanvas
         }
         
         var nextLevelName = string.Format("{0}-{1}", playingChapter, playingIndex);
-        SceneManager.LoadScene(nextLevelName);
+        Game.Instance.PlayLevel(nextLevelName);
+
     }
 
     private void onClickReplayThisLevelHandler()

@@ -54,6 +54,9 @@ public class Enemy : Character
 
     public bool waiting = false;
 
+    public string walkingLineType;
+
+    public int up = 0;
 
     public override void Start()
     {
