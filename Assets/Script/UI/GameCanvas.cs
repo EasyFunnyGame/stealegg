@@ -365,6 +365,7 @@ public class GameCanvas : BaseCanvas
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
         btn_bottle_cancel.gameObject.SetActive(false);
+        playerPosition.gameObject.SetActive(false);
     }
 
     protected override void OnHide()
