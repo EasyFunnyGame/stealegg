@@ -212,7 +212,11 @@ namespace FreeDraw
             {
                 // Check if the X wraps around the image, so we don't draw pixels on the other side of the image
                 if (x >= (int)drawable_sprite.rect.width || x < 0)
+                {
+                    Debug.LogWarning("画画出界了");
                     continue;
+                }
+                    
 
                 for (int y = center_y - pen_thickness; y <= center_y + pen_thickness; y++)
                 {
