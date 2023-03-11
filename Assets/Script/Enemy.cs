@@ -61,6 +61,7 @@ public class Enemy : Character
     public override void Start()
     {
         base.Start();
+        lookAroundTime = Random.Range(5, 10);
         tr_body = transform;
         Reached();
         OnReachedOriginal();
@@ -401,13 +402,17 @@ public class Enemy : Character
         }
         m_animator.SetFloat("idle_type", idleType);
 
-        if(targetIdleType == 0.5f)
+        if(targetIdleType != 0f )
         {
             if (lookAroundTime > 0)
             {
                 lookAroundTime -= Time.deltaTime;
                 if (lookAroundTime <= 0)
                 {
+
+                    lookAroundTime = Random.Range(5,10);
+                    var lookAroundType = Random.Range(0, 2);
+                    m_animator.SetFloat("look_around_type", lookAroundType);
                     m_animator.SetTrigger("look_around");
                 }
             }
