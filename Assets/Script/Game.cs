@@ -71,7 +71,7 @@ public class Game : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this);
 
-        energy = PlayerPrefs.GetInt("Energy", -1);
+        energy = PlayerPrefs.GetInt(UserDataKey.Energy, -1);
         if (energy == -1)
             energy = 10;
 

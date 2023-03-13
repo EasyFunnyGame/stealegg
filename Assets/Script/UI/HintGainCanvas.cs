@@ -7,16 +7,24 @@ public class HintGainCanvas : BaseCanvas
 
     public Button btn_cancel;
 
+    public Button btn_clz;
+
     // Start is called before the first frame update
     void Start()
     {
         btn_sure.onClick.AddListener(onWatchVideoHandler);
         btn_cancel.onClick.AddListener(onCloseCanvasHandler);
+        btn_clz.onClick.AddListener(onHideCanvasHandler);
+    }
+
+    void onHideCanvasHandler()
+    {
+        Game.Instance.hintGainCanvas.Hide();
     }
 
     void onCloseCanvasHandler()
     {
-        Game.Instance.hintGainCanvas.Hide();
+        
         AudioPlay.Instance.PlayClick();
     }
 
