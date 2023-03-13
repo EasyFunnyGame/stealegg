@@ -60,7 +60,10 @@ public class Player : Character
     {
         base.Reached();
         boardManager.PickItem(currentTile.name,this);
-        m_animator.SetBool("moving", false);
+        if(Game.Instance.result == GameResult.NONE)
+        {
+            m_animator.SetBool("moving", false);
+        }
         m_animator.SetInteger("bottle",-1);
         ShowReached();
         idleTime = Random.Range(3,5);

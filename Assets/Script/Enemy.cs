@@ -273,6 +273,10 @@ public class Enemy : Character
         {
             return false;
         }
+        if(Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
+        {
+            return false;
+        }
         var player = Game.Instance.player;
         if (Game.Instance.result == GameResult.FAIL) return false;
         if (sleeping) return false;
@@ -473,6 +477,10 @@ public class Enemy : Character
 
     public bool CatchPlayerOn(string tileName)
     {
+        if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
+        {
+            return false;
+        }
         var player = Game.Instance.player;
         if (player == null || player.currentTile == null) return false;
 
@@ -489,6 +497,10 @@ public class Enemy : Character
 
     public bool CatchPlayer()
     {
+        if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
+        {
+            return false;
+        }
         var player = Game.Instance.player;
         if (player == null || player.currentTile == null) return false;
         var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);

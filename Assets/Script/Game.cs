@@ -171,6 +171,7 @@ public class Game : MonoBehaviour
                 teaching = false;
                 clearTeaching = 0;
             }
+            gameCanvas.onClickStartPlayingGameHandler();
         }
         camera.upper = false;
     }
@@ -200,6 +201,10 @@ public class Game : MonoBehaviour
         if (playing)
         {
             GamePlayingUpdate();
+            if (result == GameResult.WIN)
+            {
+                player.transform.Translate(new Vector3(0, 0, 0.02f));
+            }
         }
 
         if(delayShowEndTimer > 0)
@@ -216,7 +221,6 @@ public class Game : MonoBehaviour
     {
         result = GameResult.FAIL;
         delayShowEndTimer = 2;
-        playing = false;
         player.m_animator.SetInteger("result",-1);
         AudioPlay.Instance.PlayBeCaught();
     }
@@ -225,7 +229,6 @@ public class Game : MonoBehaviour
     {
         result = GameResult.WIN;
         delayShowEndTimer = 2;
-        playing = false;
         player.m_animator.SetInteger("result",1);
     }
     

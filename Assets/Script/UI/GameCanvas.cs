@@ -133,7 +133,7 @@ public class GameCanvas : BaseCanvas
         }
     }
 
-    void onClickStartPlayingGameHandler()
+    public void onClickStartPlayingGameHandler()
     {
         home.gameObject.SetActive(false);
         playing.gameObject.SetActive(true);

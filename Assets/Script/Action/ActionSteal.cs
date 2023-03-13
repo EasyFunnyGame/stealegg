@@ -52,7 +52,7 @@ public class ActionSteal : ActionBase
                     }
                 }
             }
-            
+            graffItem.gameObject.SetActive(false);
             return true;
         }
         return false;
