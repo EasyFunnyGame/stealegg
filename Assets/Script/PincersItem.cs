@@ -8,13 +8,14 @@ public class PincersItem : Item
 
     public MeshRenderer wireNetMesh;
 
-    private void Awake()
+    override protected void Awake()
     {
-        HideDebugSphere();
+        base.Awake();
         if (linkline!=null)
         {
             linkline.through = false;
         }
+        wireNetMesh.transform.parent = null;
     }
 
     public void Cut()

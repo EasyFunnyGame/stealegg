@@ -63,7 +63,7 @@ public class Item : MonoBehaviour
 
     public ItemIconOnUI icon;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         var x = int.Parse(transform.position.x.ToString());
         var z = int.Parse(transform.position.z.ToString());

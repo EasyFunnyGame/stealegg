@@ -61,7 +61,7 @@ public class Enemy : Character
     public override void Start()
     {
         base.Start();
-        lookAroundTime = Random.Range(5, 10);
+        lookAroundTime = 9;
         tr_body = transform;
         Reached();
         OnReachedOriginal();
@@ -414,8 +414,8 @@ public class Enemy : Character
                 if (lookAroundTime <= 0)
                 {
 
-                    lookAroundTime = Random.Range(5,10);
-                    var lookAroundType = Random.Range(0, 2);
+                    lookAroundTime = 9;
+                    var lookAroundType = foundPlayerTile != null || hearSoundTile != null ? 1 : 0;
                     m_animator.SetFloat("look_around_type", lookAroundType);
                     m_animator.SetTrigger("look_around");
                 }
