@@ -44,7 +44,7 @@ public class ChapterCanvas : BaseCanvas
 
     protected override void OnShow()
     {
-        var level = PlayerPrefs.GetInt("Level");
+        var level = PlayerPrefs.GetInt(UserDataKey.Level);
         chapter = (level - level % 12) / 12;
         ShowChapter(chapter);
     }
@@ -57,7 +57,7 @@ public class ChapterCanvas : BaseCanvas
     void ShowChapter(int chapter)
     {
         locate.gameObject.SetActive(false);
-        var level = PlayerPrefs.GetInt("Level");
+        var level = PlayerPrefs.GetInt(UserDataKey.Level);
         //level = 5;
         var start = chapter * 12;
         levelItems.ForEach((LevelItem levelItem) => {

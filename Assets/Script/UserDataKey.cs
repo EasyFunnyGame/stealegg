@@ -5,4 +5,5 @@ using UnityEngine;
 public static class UserDataKey
 {
     public static string Energy = "Energy";
+    public static string Level = "Level";
 }

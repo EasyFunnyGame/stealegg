@@ -78,7 +78,7 @@ public class LevelItem : MonoBehaviour
             return;
         }
         var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
-        var level = PlayerPrefs.GetInt("Level");
+        var level = PlayerPrefs.GetInt(UserDataKey.Level);
         if (level == level + 1)
         {
             Game.Instance.msgCanvas.PopMessage("观看视频可直接试玩此关!");

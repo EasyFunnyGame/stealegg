@@ -634,7 +634,7 @@ public class Game : MonoBehaviour
     {
         if(stealed)
         {
-            var level = PlayerPrefs.GetInt("Level");
+            var level = 13;// PlayerPrefs.GetInt(UserDataKey.Level);
             if (playingLevel >= level)
             {
                 level = playingLevel;
