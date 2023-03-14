@@ -69,10 +69,12 @@ public class LevelItem : MonoBehaviour
 
     void onClickChapterLevelHandler()
     {
+        Debug.Log("点击1");
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         if( energy < 5 )
         {
             Game.Instance.energyGainCanvas.Show();
+            Debug.Log("点击2");
             return;
         }
         var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
@@ -80,13 +82,16 @@ public class LevelItem : MonoBehaviour
         if (level == level + 1)
         {
             Game.Instance.msgCanvas.PopMessage("观看视频可直接试玩此关!");
+            Debug.Log("点击3");
             return;
         }
         if(level > level + 1)
         {
             Game.Instance.msgCanvas.PopMessage("请先通过前一关!");
+            Debug.Log("点击4");
             return;
         }
+        Debug.Log("点击5");
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 5);
 
         Game.Instance.StartGame(sceneName);
