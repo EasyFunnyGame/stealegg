@@ -489,11 +489,14 @@ public class AudioManager : MonoBehaviour
     // 停止所有在播放的音乐
     public void stopAllAudio()
     {
-        audioPlayArray.ForEach(audio =>
+        if(audioPlayArray!=null && audioPlayArray.Count > 0)
         {
-            audio.OffCanplay();
-            audio.Stop();
-        });
+            audioPlayArray.ForEach(audio =>
+            {
+                audio.OffCanplay();
+                audio.Stop();
+            });
+        }
     }
 
     // 播放短音频

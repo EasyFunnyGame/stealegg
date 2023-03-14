@@ -461,6 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 2088232885017753737}
+  item: {fileID: 0}
 --- !u!1 &4557086806540541696
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,6 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 2088232885017753737}
+  item: {fileID: 0}
 --- !u!1 &6983690951974486597
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,18 +817,18 @@ MonoBehaviour:
   headPoint: {fileID: 7865484325890252411}
   enemyMove: {fileID: 3352430559203129792}
   route: {fileID: 3420992984054824707}
-  routeLine: {fileID: 4776711183272520490}
   routeArrow: {fileID: 3420992982953370257}
-  routeNode1Name: 
-  routeNode2Name: 
-  routeNode3Name: 
-  routeNode4Name: 
+  routeNodeNames: []
   redNodes: []
+  redLines: []
   sleeping: 0
   patroling: 0
   waiting: 0
+  walkingLineType: 
+  up: 0
   turnOnReached: 0
   targetTileName: 
+  patrolDistance: 2
   edgeCoords: []
   patrolTile: {fileID: 0}
 --- !u!1 &9103667222968600252

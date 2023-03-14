@@ -531,6 +531,7 @@ public class BoardManager : MonoBehaviour
             //Debug.Log(prefapUrl);
             var enemyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefapUrl);
             var enemyInstance = Instantiate(enemyPrefab);
+            //PrefabUtility.ApplyPrefabInstance(enemyInstance,InteractionMode.UserAction);
             var eulerY = enemyTransform.transform.eulerAngles.y;
             while(eulerY < 0)
             {

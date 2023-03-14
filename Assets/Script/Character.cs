@@ -86,8 +86,10 @@ public class Character : MonoBehaviour
         var z = int.Parse(transform.position.z.ToString());
 
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
-
+        coord = new Coord(tile.name, transform.position.y);
         currentTile = tile;
+
+        ResetDirection();
 
         originalDirection = direction;
         originalCoord = coord.Clone();
