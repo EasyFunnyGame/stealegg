@@ -406,7 +406,7 @@ public class Enemy : Character
         }
         m_animator.SetFloat("idle_type", idleType);
 
-        if(targetIdleType != 0f )
+        if(targetIdleType != 0f || this is EnemyPatrol)
         {
             if (lookAroundTime > 0)
             {
