@@ -29,8 +29,6 @@ public class Game : MonoBehaviour
 
     public Dictionary<string, int> scores = new Dictionary<string, int>();
 
-    public int energy;
-
     public int playingLevel;
 
     public string currentLevelName;
@@ -71,9 +69,10 @@ public class Game : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this);
 
-        energy = PlayerPrefs.GetInt(UserDataKey.Energy, -1);
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy, -1);
         if (energy == -1)
             energy = 10;
+        PlayerPrefs.GetInt(UserDataKey.Energy, energy);
 
         mainCanvas.Show();
         msgCanvas.Show();
@@ -91,7 +90,10 @@ public class Game : MonoBehaviour
     {
         PlayLevel(sceneName);
 
-        energy--;
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+        energy = Mathf.Max(energy, 0);
+        energy --;
+        PlayerPrefs.SetInt(UserDataKey.Energy, energy);
 
         chapterCanvas.Hide();
 
@@ -526,7 +528,7 @@ public class Game : MonoBehaviour
 
     public void Save()
     {
-        PlayerPrefs.SetInt("Energy", energy);
+        
     }
 
     bool enemyActionRunning = false;

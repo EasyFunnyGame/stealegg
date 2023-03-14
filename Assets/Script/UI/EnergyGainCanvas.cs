@@ -43,12 +43,14 @@ public class EnergyGainCanvas : BaseCanvas
 
     void onClickWatchVedioHandler()
     {
-        var gain = 5;
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+        energy = Mathf.Max(energy, 0);
+        energy += 5;
+        PlayerPrefs.SetInt(UserDataKey.Energy,energy);
 
-        Game.Instance.energy += gain;
         btn_watch.enabled = false;
         Game.Instance.energyGainCanvas.Hide();
-        Game.Instance.msgCanvas.PopMessage("获得" + gain + "点体力");
+        Game.Instance.msgCanvas.PopMessage("获得" + 5 + "点体力");
         Game.Instance.gameCanvas.RefreshEnergy();
         AudioPlay.Instance.PlayClick();
     }

@@ -268,14 +268,14 @@ public class ActionEnemyMove : ActionBase
         {
             float step = character.move_speed * Time.deltaTime;
 
-            if(tracingTarget)
-            {
+            //if(tracingTarget)
+            //{
                 character.transform.position = Vector3.SmoothDamp(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), ref velocity, 0.12f);
-            }
-            else
-            {
-                character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);
-            }
+            //}
+            //else
+            //{
+            //    character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);
+            //}
             
             var myPosition = character.tr_body.position;
             var targetPosition = character.db_moves[0].position;

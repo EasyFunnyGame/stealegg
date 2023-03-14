@@ -383,7 +383,9 @@ public class GameCanvas : BaseCanvas
 
     public void RefreshEnergy()
     {
-        img_energy.texture = Resources.Load<Texture>("UI/Sprite/Num/" + Game.Instance.energy);
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+        
+        img_energy.texture = Resources.Load<Texture>("UI/Sprite/Num/" + energy);
     }
 
     public void DisableWhistle()
