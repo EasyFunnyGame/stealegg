@@ -38,6 +38,14 @@ public struct Coord
         this.name = string.Format("{0}_{1}",x,z);
     }
 
+    public Coord(int x, int z , float height)
+    {
+        this.x = Mathf.RoundToInt(x);
+        this.z = Mathf.RoundToInt(z);
+        this.height = height;
+        this.name = string.Format("{0}_{1}", x, z);
+    }
+
     public bool Equals(Coord coord)
     {
         return x == coord.x && z == coord.z && Mathf.Abs(height - coord.height)<0.5f;

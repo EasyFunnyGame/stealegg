@@ -65,15 +65,12 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
+        var x = int.Parse(transform.position.x.ToString());
+        var z = int.Parse(transform.position.z.ToString());
+        coord = new Coord(x,z,transform.position.y);
         HideDebugSphere();
         upper = false ;
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
 
     public bool Picked(Player player)
     {
