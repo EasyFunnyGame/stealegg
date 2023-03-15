@@ -34,14 +34,15 @@ public class Player : Character
                 idleTime -= Time.deltaTime;
                 if (idleTime < 0)
                 {
-                    var randomIdleMotion = Random.Range(0, 2);
-                    m_animator.SetFloat("look_around", randomIdleMotion);
+                    var player_idle_type = m_animator.GetFloat("idle_type");
+                    m_animator.SetFloat("look_around", player_idle_type == 1 ? 0 : 1);
                     m_animator.SetTrigger("idle_too_long");
                     idleTime = Random.Range(3, 5);
                 }
             }
         }
     }
+
     // Start is called before the first frame update
     public override void Start()
     {
