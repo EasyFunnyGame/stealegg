@@ -378,6 +378,10 @@ public class Enemy : Character
         else
         {
             UpdateRouteRedLine();
+            if(this is EnemyPatrol)
+            {
+                routeArrow.gameObject.SetActive(true);
+            }
         }
         UpdateAnimatorParams();
     }
