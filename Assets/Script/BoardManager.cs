@@ -80,6 +80,7 @@ public class BoardManager : MonoBehaviour
                 Debug.Log(string.Format("未挂载脚本Item{0}", itemTr.name));
                 continue;
             }
+            item.Init();
             allItems.Add(item.coord.name, item);
             switch (itemTr.name)
             {

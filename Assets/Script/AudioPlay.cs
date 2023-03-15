@@ -277,15 +277,6 @@ public class AudioPlay : MonoBehaviour
         Instance.PlaySFX(index);
     }
 
-    public void PlayPickSfx()
-    {
-        var player = Game.Instance.player;
-        if(player.pickedBottle)
-        {
-            PlayerPickBottle();
-        }
-    }
-
     public void PlayerPickBottle()
     {
         var index = new System.Random().Next(23, 25);

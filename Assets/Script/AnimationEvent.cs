@@ -80,7 +80,7 @@ public class AnimationEvent : MonoBehaviour
 
     public void Pick()
     {
-        AudioPlay.Instance.PlayPickSfx();
+        owner?.Pick();
     }
 
     public void BlowWhitsle()

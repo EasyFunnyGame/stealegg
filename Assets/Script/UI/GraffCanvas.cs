@@ -161,7 +161,10 @@ public class GraffCanvas : BaseCanvas
 
     void onCloseGraffCanvasHandler()
     {
-        Game.Instance.graffCanvas.Hide(); Game.Instance.gameCanvas.Show();
+        Game.Instance.graffCanvas.Hide(); 
+        Game.Instance.gameCanvas.Show();
+        Game.Instance.gameCanvas.playing.gameObject.SetActive(true);
+        Game.Instance.gameCanvas.home.gameObject.SetActive(false);
         AudioPlay.Instance.PlayClick();
     }
     protected override void OnShow()

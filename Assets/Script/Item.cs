@@ -72,10 +72,17 @@ public class Item : MonoBehaviour
         upper = false ;
     }
 
+    public void Init()
+    {
+        var x = int.Parse(transform.position.x.ToString());
+        var z = int.Parse(transform.position.z.ToString());
+        coord = new Coord(x, z, transform.position.y);
+        HideDebugSphere();
+        upper = false;
+    }
+
     public bool Picked(Player player)
     {
-        player.pickedBottle = false;
-
         Debug.Log(string.Format("拾取道具:{0}",gameObject.name));
         var delete = false;
         switch(itemType)
@@ -89,20 +96,17 @@ public class Item : MonoBehaviour
                 energy = Mathf.Max(energy, 0);
                 energy+=5;
                 PlayerPrefs.SetInt(UserDataKey.Energy, energy);
-
-           
                 delete = true;
                 AudioPlay.Instance.PlayStarGain();
                 break;
 
             case ItemType.LureBottle:
                 picked = true;
-                gameObject.SetActive(false);
-                icon.gameObject.SetActive(false);
+                // gameObject.SetActive(false);
+                // icon.gameObject.SetActive(false);
                 player.m_animator.SetTrigger("pick");
                 player.bottleCount++;
-                delete = true;
-                player.pickedBottle = true;
+                //delete = true;
                 break;
 
             case ItemType.Pincers:
@@ -165,9 +169,9 @@ public class Item : MonoBehaviour
     {
         if (!iconPosition)
         {
-            return transform.position;
+            return transform.position + new Vector3(0, 0.25f, 0);
         }
-        return iconPosition.position;
+        return iconPosition.position + new Vector3(0, 0.25f, 0);
     }
 
 }

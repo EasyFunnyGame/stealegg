@@ -25,8 +25,6 @@ public class Player : Character
 
     public string walkingLineType;
     public int up = 0;
-    public bool pickedBottle = false;
-
     private void Update()
     {
         if(currentAction==null)
@@ -172,6 +170,7 @@ public class Player : Character
         bottlePlay.gameObject.SetActive(true);
         bottlePlay.transform.position = position;
         bottlePlay.transform.parent = null;
+        bottlePlay.transform.rotation = Quaternion.identity;
     }
     public void PlayeWhitsleEffect(Vector3 position)
     {
@@ -199,6 +198,23 @@ public class Player : Character
         Game.Instance.gameCanvas.Hide();
         Game.Instance.camera.gameObject.SetActive(false);
         Game.Instance.graffCanvas.Show();
+    }
+
+    public override void Pick()
+    {
+        base.Pick();
+        var items = boardManager.allItems;
+        if(items.ContainsKey(coord.name))
+        {
+            var item = items[coord.name];
+            if(item?.itemType == ItemType.LureBottle)
+            {
+                AudioPlay.Instance.PlayerPickBottle();
+                item.gameObject?.SetActive(false);
+                item.icon?.gameObject.SetActive(false);
+                boardManager.allItems.Remove(coord.name);
+            }
+        }
     }
 
 }

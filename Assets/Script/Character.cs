@@ -340,5 +340,10 @@ public class Character : MonoBehaviour
 
     }
 
+    public virtual void Pick()
+    {
+
+    }
+
     #endregion
 }

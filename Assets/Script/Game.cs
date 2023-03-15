@@ -91,8 +91,6 @@ public class Game : MonoBehaviour
         PlayLevel(sceneName);
 
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        energy = Mathf.Max(energy, 0);
-        energy --;
         PlayerPrefs.SetInt(UserDataKey.Energy, energy);
 
         chapterCanvas.Hide();
@@ -307,7 +305,7 @@ public class Game : MonoBehaviour
             player.m_animator.SetFloat("idle_type", player_idle_type);
         }
         
-        if (player.currentAction == null && !enemyActionRunning)
+        if (result == GameResult.NONE && player.currentAction == null && !enemyActionRunning)
         {
             ShowGuide();
             ListenClick();
@@ -330,6 +328,7 @@ public class Game : MonoBehaviour
     void ListenBottleTargetSelect()
     {
         if (pausing) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
@@ -640,7 +639,7 @@ public class Game : MonoBehaviour
             if (playingLevel >= level)
             {
                 level = playingLevel;
-                PlayerPrefs.SetInt("Level", playingLevel + 1);
+                PlayerPrefs.SetInt(UserDataKey.Level, playingLevel + 1);
             }
             WinGame();
             Save();

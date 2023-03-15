@@ -8,9 +8,9 @@ public class GameCanvas : BaseCanvas
 {
     public int level;
 
-    public RawImage img_level;
+    public Text txt_level;
 
-    public RawImage img_energy;
+    public Text txt_energy;
 
     public Button btn_add;
 
@@ -270,7 +270,7 @@ public class GameCanvas : BaseCanvas
         for (var index = 0; index < icon_enemies.Count; index++)
         {
             var icon = icon_enemies[index];
-            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.enemy.headPoint.position, out screenPoint);
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.enemy.getHeadPointPosition(), out screenPoint);
             icon.rectTransform.anchoredPosition = screenPoint;
         }
 
@@ -368,7 +368,7 @@ public class GameCanvas : BaseCanvas
     protected override void OnShow()
     {
         RefreshEnergy();
-        img_level.texture = Resources.Load<Texture>("UI/Sprite/Num/" + level.ToString());
+        txt_level.text =level.ToString();
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
@@ -385,7 +385,7 @@ public class GameCanvas : BaseCanvas
     {
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         
-        img_energy.texture = Resources.Load<Texture>("UI/Sprite/Num/" + energy);
+        txt_energy.text = energy.ToString();
     }
 
     public void DisableWhistle()

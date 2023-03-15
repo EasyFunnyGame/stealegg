@@ -68,6 +68,11 @@ public class Enemy : Character
         DisapearTraceTarget(false);
     }
 
+    public Vector3 getHeadPointPosition()
+    {
+        return this.headPoint.position + new Vector3(0,0.25f,0);
+    }
+
     public virtual void CheckAction()
     {
         if (currentAction != null) return;
@@ -352,6 +357,7 @@ public class Enemy : Character
                 turnOnReached = true;
                 patroling = false;
                 routeArrow.gameObject.SetActive(true);
+                lookAroundTime = 9;
                 return true;
             }
         }
@@ -778,7 +784,7 @@ public class Enemy : Character
         targetTileName = "";
         turnOnReached = false;
         targetIdleType = 1;
-        m_animator.SetTrigger("not_found");
+        //m_animator.SetTrigger("not_found");
 
     }
 

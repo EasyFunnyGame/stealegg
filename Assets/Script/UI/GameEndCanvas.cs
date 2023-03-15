@@ -33,6 +33,7 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickPlayNextLevelHandler()
     {
+        Game.Instance.playing = false;
         Game.Instance.endCanvas.Hide();
         var playingLevel = Game.Instance.playingLevel+1;
         
@@ -55,6 +56,7 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickReplayThisLevelHandler()
     {
+        Game.Instance.playing = false;
         Game.Instance.endCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         AudioPlay.Instance.PlayClick();
