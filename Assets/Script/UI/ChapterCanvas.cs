@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ChapterCanvas : BaseCanvas
+public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
 {
     public Image bg;
 
@@ -28,6 +29,21 @@ public class ChapterCanvas : BaseCanvas
         btn_right.onClick.AddListener(onClickNxtChapterHandler);
         btn_clz.onClick.AddListener(onClickCloseChapterHandler);
     }
+
+    int downX;
+
+    int upX;
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("Down");
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("Up");
+    }
+
 
 
     // Start is called before the first frame update
@@ -61,8 +77,8 @@ public class ChapterCanvas : BaseCanvas
         //level = 5;
         var start = chapter * 12;
         levelItems.ForEach((LevelItem levelItem) => {
-            levelItem.chapter = chapter;
-            levelItem.index = start;
+          
+            levelItem.SetData(chapter, start);
             if(levelItem.level > level)
             {
                 if(levelItem.level == level + 1)
