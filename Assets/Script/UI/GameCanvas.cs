@@ -158,6 +158,7 @@ public class GameCanvas : BaseCanvas
             return;
         }
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+        PlayerPrefs.Save();
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         Game.Instance.playing = false;

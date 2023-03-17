@@ -98,7 +98,7 @@ public class LevelItem : MonoBehaviour
             return;
         }
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
-
+        PlayerPrefs.Save();
         Game.Instance.StartGame(sceneName);
     }
 

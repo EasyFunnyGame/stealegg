@@ -7,6 +7,10 @@ public class AudioPlay : MonoBehaviour
 
     public AudioManager manager;
 
+    public static float bgmVolume = 1;
+
+    public static float sfxVolume = 1;
+
     private void Awake()
     {
         Instance = this;

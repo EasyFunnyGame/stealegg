@@ -93,20 +93,17 @@ public class Item : MonoBehaviour
                 icon.gameObject.SetActive(false);
 
                 var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-                energy = Mathf.Max(energy, 0);
-                energy+=5;
+                energy += 5;
                 PlayerPrefs.SetInt(UserDataKey.Energy, energy);
+                PlayerPrefs.Save();
                 delete = true;
                 AudioPlay.Instance.PlayStarGain();
                 break;
 
             case ItemType.LureBottle:
                 picked = true;
-                // gameObject.SetActive(false);
-                // icon.gameObject.SetActive(false);
                 player.m_animator.SetTrigger("pick");
                 player.bottleCount++;
-                //delete = true;
                 break;
 
             case ItemType.Pincers:

@@ -36,7 +36,7 @@ public class MainCanvas : BaseCanvas
 
     void ShowSettingCanvas()
     {
-        Game.Instance.settingCanvas.gameObject.SetActive(true);
+        Game.Instance.settingCanvas.Show();
         AudioPlay.Instance.PlayClick();
     }
 

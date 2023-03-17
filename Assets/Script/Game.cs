@@ -69,8 +69,8 @@ public class Game : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this);
 
-        var energy = PlayerPrefs.GetInt(UserDataKey.Energy, -1);
-        if (energy == -1)
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy, -999);
+        if (energy == -999)
             energy = 10;
         PlayerPrefs.GetInt(UserDataKey.Energy, energy);
 
@@ -92,7 +92,7 @@ public class Game : MonoBehaviour
 
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         PlayerPrefs.SetInt(UserDataKey.Energy, energy);
-
+        PlayerPrefs.Save();
         chapterCanvas.Hide();
 
         result = GameResult.NONE;
@@ -640,6 +640,7 @@ public class Game : MonoBehaviour
             {
                 level = playingLevel;
                 PlayerPrefs.SetInt(UserDataKey.Level, playingLevel + 1);
+                PlayerPrefs.Save();
             }
             WinGame();
             Save();

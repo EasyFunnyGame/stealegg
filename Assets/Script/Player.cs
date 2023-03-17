@@ -215,6 +215,12 @@ public class Player : Character
                 item.icon?.gameObject.SetActive(false);
                 boardManager.allItems.Remove(coord.name);
             }
+            if(item?.itemType == ItemType.Graff)
+            {
+                item.picked = true;
+                item.gameObject.SetActive(false);
+                item.icon.gameObject.SetActive(false);
+            }
         }
     }
 

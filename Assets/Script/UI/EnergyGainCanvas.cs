@@ -45,12 +45,12 @@ public class EnergyGainCanvas : BaseCanvas
     {
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         energy = Mathf.Max(energy, 0);
-        energy += 5;
+        energy += 10;
         PlayerPrefs.SetInt(UserDataKey.Energy,energy);
-
+        PlayerPrefs.Save();
         btn_watch.enabled = false;
         Game.Instance.energyGainCanvas.Hide();
-        Game.Instance.msgCanvas.PopMessage("获得" + 5 + "点体力");
+        Game.Instance.msgCanvas.PopMessage("获得" + 10 + "点体力");
         Game.Instance.gameCanvas.RefreshEnergy();
         AudioPlay.Instance.PlayClick();
     }
