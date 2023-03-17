@@ -74,8 +74,12 @@ public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
     {
         locate.gameObject.SetActive(false);
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
+        if(level>35)
+        {
+            level = 35;
+        }
         //level = 5;
-        var start = chapter * 12;
+        var start = 0;
         levelItems.ForEach((LevelItem levelItem) => {
           
             levelItem.SetData(chapter, start);

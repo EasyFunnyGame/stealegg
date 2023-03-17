@@ -39,7 +39,7 @@ public class LevelItem : MonoBehaviour
 
     public void SetData(int chapter , int idx)
     {
-        chapter = chapter;
+        this.chapter = chapter;
         index = idx;
         txt_level.text = (level+1).ToString();
     }
@@ -95,7 +95,6 @@ public class LevelItem : MonoBehaviour
         if(level > level + 1)
         {
             Game.Instance.msgCanvas.PopMessage("请先通过前一关!");
-            Debug.Log("点击4");
             return;
         }
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
