@@ -500,6 +500,7 @@ public class Enemy : Character
             Game.Instance.FailGame();
             m_animator.SetBool("catch", true);
             AudioPlay.Instance.PlayCatch(this);
+            ShowCatch();
             return true;
         }
         return false;
@@ -519,6 +520,7 @@ public class Enemy : Character
             Game.Instance.FailGame();
             m_animator.SetBool("catch", true);
             AudioPlay.Instance.PlayCatch(this);
+            ShowCatch();
             return true;
         }
         return false;
@@ -561,7 +563,6 @@ public class Enemy : Character
         ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
         ShowFound();
-        
         return true;
     }
 
@@ -741,6 +742,16 @@ public class Enemy : Character
         icons.cw.gameObject.SetActive(true);
     }
 
+    public virtual void ShowCatch()
+    {
+        icons.shuijiao.gameObject.SetActive(false);
+        icons.tanhao.gameObject.SetActive(false);
+        icons.fanhui.gameObject.SetActive(false);
+        icons.wenhao.gameObject.SetActive(false);
+        icons.ccw.gameObject.SetActive(false);
+        icons.cw.gameObject.SetActive(false);
+    }
+
     public virtual void HideSentinelTurn()
     {
         icons.shuijiao.gameObject.SetActive(false);
@@ -754,10 +765,21 @@ public class Enemy : Character
 
     public virtual void ShowTraceTarget(GridTile tile, bool playSound, int soundType)
     {
+        var node = boardManager.FindNode(tile.name);
+
+        var enemyMoves = GameObject.FindObjectsOfType<EnemyMove>();
+        for(var i = 0; i < enemyMoves.Length; i++)
+        {
+            var move = enemyMoves[i];
+            if (move.gameObject.activeSelf && move.transform.parent == null && move.transform.position.Equals(node.transform.position))
+            {
+                return;
+            }
+        }
+
         enemyMove.transform.parent = null;
         enemyMove.gameObject.SetActive(true);
         enemyMove.Play("Movement_Animation");
-        var node = boardManager.FindNode(tile.name);
         enemyMove.transform.transform.position = node.transform.position;
         if (soundType == 1 && playSound)
         {
