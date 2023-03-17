@@ -80,7 +80,7 @@ public class LevelItem : MonoBehaviour
     void onClickChapterLevelHandler()
     {
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        if( energy < 5 )
+        if( energy < 1 )
         {
             Game.Instance.energyGainCanvas.Show();
             return;
