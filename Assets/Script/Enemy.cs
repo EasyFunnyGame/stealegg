@@ -644,7 +644,7 @@ public class Enemy : Character
         ShowTraceTarget(targetTile, hearSoundTile == null,1);
 
         hearSoundTile = targetTile;
-        
+        idleType = 0.5f;
         ShowFound();
         return true;
     }

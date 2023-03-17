@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 public class SettingCanvas : BaseCanvas
 {
@@ -20,21 +17,19 @@ public class SettingCanvas : BaseCanvas
 
     void onChangeBgmVolumeHandler(float volume)
     {
-        Debug.Log("音乐大小" + volume);
         PlayerPrefs.SetFloat(UserDataKey.MusicVolume, volume);
         PlayerPrefs.Save();
         AudioPlay.bgmVolume = PlayerPrefs.GetFloat(UserDataKey.MusicVolume, 1f);
-        
+        AudioPlay.MusicVolume();
     }
 
     void onChangeSfxVolumeHandler(float volume)
     {
-        Debug.Log("音效大小" + volume);
         PlayerPrefs.SetFloat(UserDataKey.SfxVolume, volume);
         PlayerPrefs.Save();
         AudioPlay.sfxVolume = PlayerPrefs.GetFloat(UserDataKey.SfxVolume, 1f);
+        AudioPlay.SoundVolume();
     }
-
 
     protected override void OnShow()
     {
@@ -46,5 +41,6 @@ public class SettingCanvas : BaseCanvas
 
     protected override void OnHide()
     {
+
     }
 }

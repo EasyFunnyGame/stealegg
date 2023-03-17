@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 public enum GameResult
@@ -63,7 +61,6 @@ public class Game : MonoBehaviour
 
     public Transform guideArrow;
 
-
     private void Awake()
     {
         Instance = this;
@@ -98,8 +95,6 @@ public class Game : MonoBehaviour
         result = GameResult.NONE;
 
         Save();
-
-        
     }
 
     public void PlayLevel(string sceneName)
@@ -201,7 +196,7 @@ public class Game : MonoBehaviour
         if (playing)
         {
             GamePlayingUpdate();
-            if (result == GameResult.WIN)
+            if (result == GameResult.WIN && !endCanvas.gameObject.activeSelf)
             {
                 player.transform.Translate(new Vector3(0, 0, 0.02f));
             }
@@ -309,21 +304,18 @@ public class Game : MonoBehaviour
         {
             ShowGuide();
             ListenClick();
-        }
-        if(enemyActionRunning)
-        {
-            gameCanvas.DisableBottle();
-            gameCanvas.DisableWhistle();
+            toolCheckDelay -= Time.deltaTime;
         }
         else
         {
-            if (!player.moving)
-            {
-                player.CheckBottle();
-                player.CheckWhitsle();
-            }
+            toolCheckDelay = 0.25f;
+            gameCanvas.DisableBottle();
+            //gameCanvas.DisableWhistle();
         }
+        player.CheckWhitsle();
     }
+
+    float toolCheckDelay = 0.5f;
     
     void ListenBottleTargetSelect()
     {
@@ -356,7 +348,6 @@ public class Game : MonoBehaviour
                     player.currentAction = Utils.CreatePlayerAction(ActionType.ThrowBottle, tile); // 
                     boardManager.HideAllSuqreContour();
                     bottleSelectingTarget = false;
-                    player.CheckBottle();
                     gameCanvas.btn_bottle_cancel.gameObject.SetActive(false);
                 }
                 camera.upper = false;
@@ -463,6 +454,17 @@ public class Game : MonoBehaviour
 
     void ListenClick()
     {
+        if(toolCheckDelay<=0)
+        {
+            player.CheckBottle();
+            //player.CheckWhitsle();
+        }
+        else
+        {
+            //gameCanvas.DisableWhistle();
+            gameCanvas.DisableBottle();
+        }
+
         if (pausing) return;
         if (Input.GetMouseButtonDown(0))
         {

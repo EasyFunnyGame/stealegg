@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
+public class ChapterCanvas : BaseCanvas
 {
     public Image bg;
 
@@ -21,29 +21,36 @@ public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
 
     public int chapter;
 
+
     private void Awake()
     {
         UiUtils.Adaptive(bg, GetComponent<RectTransform>());
-
         btn_left.onClick.AddListener(onClickPreChapterHandler);
         btn_right.onClick.AddListener(onClickNxtChapterHandler);
         btn_clz.onClick.AddListener(onClickCloseChapterHandler);
     }
 
-    int downX;
+    float downX;
 
-    int upX;
+    float upX;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void BeginDrag()
     {
-        Debug.Log("Down");
+        downX = Input.mousePosition.x;
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void EndDrag()
     {
-        Debug.Log("Up");
+        upX = Input.mousePosition.x;
+        if (upX - downX < 0)
+        {
+            onClickNxtChapterHandler();
+        }
+        else
+        {
+            onClickPreChapterHandler();
+        }
     }
-
 
 
     // Start is called before the first frame update
@@ -62,6 +69,8 @@ public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
     {
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
         chapter = (level - level % 12) / 12;
+        chapter = Mathf.Max(chapter, 0);
+        chapter = Mathf.Min(chapter, 2);
         ShowChapter(chapter);
     }
 
@@ -134,7 +143,7 @@ public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
 
     void onClickNxtChapterHandler()
     {
-        if (chapter + 1 > 3) return;
+        if (chapter + 1 > 2) return;
         ShowChapter(++chapter);
     }
 
@@ -144,4 +153,5 @@ public class ChapterCanvas : BaseCanvas, IPointerDownHandler, IPointerUpHandler
         Game.Instance.mainCanvas.Show();
     }
 
+    
 }

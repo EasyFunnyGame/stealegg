@@ -175,7 +175,7 @@ public class AudioManager : MonoBehaviour
     };
 
     // 正在播放的音频对象列表
-    private static List<WXInnerAudioContext> audioPlayArray = new List<WXInnerAudioContext>();
+    public static List<WXInnerAudioContext> audioPlayArray = new List<WXInnerAudioContext>();
 
     // 背景音乐
     public static WXInnerAudioContext audioBGM = null;

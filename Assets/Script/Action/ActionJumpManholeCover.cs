@@ -1,19 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ActionJumpManholeCover : ActionBase
 {
-    private float actionDuration = 1;
+    private float jumpInDelay = 1;
+    private float jumpOutDelay = 2;
     private ManholeCoverItem manholecover;
     public ActionJumpManholeCover(Player player, ManholeCoverItem item) : base(player, ActionType.ManHoleCover)
     {
+        jumpInDelay = 0.9f;
         manholecover = item;
-        player.m_animator.SetBool("jumping",true);
         var manholeCover = player.boardManager.allItems[player.currentTile.name];
         if(manholeCover && manholeCover.itemType == ItemType.ManHoleCover)
         {
             (manholeCover as ManholeCoverItem).JumpIn();
+            player.m_animator.SetBool("jumping", true);
         }
     }
     public Player player
@@ -25,29 +25,15 @@ public class ActionJumpManholeCover : ActionBase
     }
     public override bool CheckComplete()
     {
-        if (actionDuration < 0)
+        if (jumpInDelay <= 0 && jumpOutDelay<= 0)
         {
             var boardManager = Game.Instance.boardManager;
-            //var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
-            //foreach (var kvp in nodes)
+            //var tile = player.gridManager.GetTileByName(manholecover.coord.name);
+            //if(tile)
             //{
-            //    for (var index = 0; index < boardManager.enemies.Count; index++)
-            //    {
-            //        var enemy = boardManager.enemies[index];
-            //        if (enemy.coord.name == kvp.Key)
-            //        {
-            //            enemy.LureWhistle(player.currentTile.name);
-            //        }
-            //    }
+            //    player.currentTile = tile;
+            //    player.transform.position = tile.transform.position;
             //}
-            manholecover.JumpOut();
-            player.m_animator.SetBool("jumping", false);
-            var tile = player.gridManager.GetTileByName(manholecover.coord.name);
-            if(tile)
-            {
-                player.currentTile = tile;
-                player.transform.position = tile.transform.position;
-            }
             if (Game.teaching && Game.Instance.showingStep != null)
             {
                 if (Game.Instance.showingStep.actionType == ActionType.ManHoleCover && Game.Instance.showingStep.tileName == manholecover.coord.name)
@@ -63,8 +49,33 @@ public class ActionJumpManholeCover : ActionBase
 
     public override void Run()
     {
-        actionDuration -= Time.deltaTime;
+        if(jumpInDelay>0)
+        {
+            jumpInDelay -= Time.deltaTime;
+            if (jumpInDelay < 0)
+            {
+                jumpOutDelay = 1.1f;
+                manholecover.JumpOut();
+                player.m_animator.SetBool("jumping", false);
+                var boardManager = Game.Instance.boardManager;
+                var tile = player.gridManager.GetTileByName(manholecover.coord.name);
+                if (tile)
+                {
+                    player.currentTile = tile;
+                    player.transform.position = tile.transform.position;
+                }
+            }
+        }
+
+        if(jumpOutDelay>0)
+        {
+            jumpOutDelay -= Time.deltaTime;
+        }
+        
+        
         base.Run();
     }
+
+
 
 }

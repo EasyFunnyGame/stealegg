@@ -83,12 +83,17 @@ public class GameCanvas : BaseCanvas
     private void Awake()
     {
         btn_add.onClick.AddListener(onClickShowEnergyGainCanvasHandler);
+
         btn_bottle.onClick.AddListener(onClickUseBottleHandler);
+
         btn_bottle_cancel.onClick.AddListener(CancelBottleThrow);
+
         btn_whistle.onClick.AddListener(onClickUseWhistleHandler);
 
         btn_home.onClick.AddListener(onClickBackToHomeHandler);
+
         btn_reStart.onClick.AddListener(onClickReStartLevelHandler);
+
         btn_pause.onClick.AddListener(onClickPasueGameHandler);
 
         btn_start.onClick.AddListener(onClickStartPlayingGameHandler);
@@ -219,6 +224,16 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseWhistleHandler()
     {
+        if (Game.Instance.player.moving) return;
+        if (Game.Instance.player.body_looking) return;
+        if (Game.Instance.player.currentAction != null) return;
+        for(int i = 0; i < Game.Instance.boardManager.enemies.Count; i++)
+        {
+            if (Game.Instance.boardManager.enemies[i].currentAction!=null)
+            {
+                return;
+            }
+        }
         if (buttonClickCd > 0) return;
         buttonClickCd = 1.5f;
         var teachingStep = Game.Instance.showingStep;
@@ -247,7 +262,6 @@ public class GameCanvas : BaseCanvas
         {
             buttonClickCd -= Time.deltaTime;
         }
-
 
         if (Game.Instance.player != null)
         {
@@ -296,6 +310,19 @@ public class GameCanvas : BaseCanvas
         }
 
         // 水井盖图标显示，能用的才显示出来
+        // 敌人移动中不显示
+        // 主角进行中不显示
+        var playerActing = Game.Instance.player.currentAction != null;
+        var enemyActing = false;
+        for(var index = 0; index < Game.Instance.boardManager.enemies.Count; index++)
+        {
+            if (Game.Instance.boardManager.enemies[index].currentAction != null)
+            {
+                enemyActing = true;
+                break;
+            }
+        }
+
         var showManHoleCoverIcon = false;
         var playerTileName = Game.Instance.player?.currentTile?.name;
         if(!string.IsNullOrEmpty(playerTileName))
@@ -306,7 +333,7 @@ public class GameCanvas : BaseCanvas
                 var item = items[playerTileName];
                 if(item?.itemType == ItemType.ManHoleCover)
                 {
-                    showManHoleCoverIcon = true;
+                    showManHoleCoverIcon = !enemyActing && !playerActing;
                 }
             }
         }
@@ -347,7 +374,6 @@ public class GameCanvas : BaseCanvas
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
-
     }
 
     void LateUpdate()

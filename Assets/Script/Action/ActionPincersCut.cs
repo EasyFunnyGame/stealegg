@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class ActionPincersCut : ActionBase
 {
-
     private float actionDuration = 1;
 
     private PincersItem pincers;
 
+    bool cutted = false;
+    public Quaternion targetRotation;
     public ActionPincersCut(Player player, PincersItem item) : base(player, ActionType.PincersCut)
     {
         pincers = item;
-        player.m_animator.SetTrigger("cut");
-        AudioPlay.Instance.PlayPrincersCut();
+        cutted = false;
+        targetRotation = Quaternion.LookRotation(item.wireNetMesh.transform.position - item.transform.position);
     }
 
     public Player player
@@ -29,24 +30,7 @@ public class ActionPincersCut : ActionBase
     {
         if (actionDuration < 0)
         {
-            var boardManager = Game.Instance.boardManager;
-            var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
-            foreach (var kvp in nodes)
-            {
-                for (var index = 0; index < boardManager.enemies.Count; index++)
-                {
-                    var enemy = boardManager.enemies[index];
-                    if (enemy.coord.name == kvp.Key)
-                    {
-                        enemy.LureWhistle(player.currentTile.name);
-                    }
-                }
-            }
-            pincers.Cut();
-            player.PlayeWhitsleEffect(player.transform.position);
-            pincers.picked = true;
-            pincers.gameObject.SetActive(false);
-            pincers.icon.gameObject.SetActive(false);
+           
             return true;
         }
         return false;
@@ -54,7 +38,47 @@ public class ActionPincersCut : ActionBase
 
     public override void Run()
     {
+
+        if (!player.transform.rotation.Equals(targetRotation))
+        {
+            var playerRotation = player.transform.rotation;
+            player.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 5);
+            if (player.transform.rotation.Equals(targetRotation))
+            {
+                if(!cutted)
+                {
+                    cutted = true;
+                    Cut();
+                }
+            }
+            return;
+        }
+
         actionDuration -= Time.deltaTime;
         base.Run();
+    }
+
+    void Cut()
+    {
+        player.m_animator.SetTrigger("cut");
+        AudioPlay.Instance.PlayPrincersCut();
+        var boardManager = Game.Instance.boardManager;
+        var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
+        foreach (var kvp in nodes)
+        {
+            for (var index = 0; index < boardManager.enemies.Count; index++)
+            {
+                var enemy = boardManager.enemies[index];
+                if (enemy.coord.name == kvp.Key)
+                {
+                    enemy.LureWhistle(player.currentTile.name);
+                }
+            }
+        }
+        pincers.Cut();
+        player.PlayeWhitsleEffect(player.transform.position);
+        pincers.picked = true;
+        pincers.gameObject.SetActive(false);
+        pincers.icon.gameObject.SetActive(false);
     }
 }

@@ -99,12 +99,8 @@ public class Player : Character
 
     public void CheckWhitsle()
     {
-        if( moving || body_looking )
-        {
-            Game.Instance.gameCanvas.DisableWhistle();
-            return;
-        }
-        if( Game.Instance.playingLevel == 1 )
+        Game.Instance.gameCanvas.DisableWhistle();
+        if (Game.Instance.playingLevel == 1)
         {
             Game.Instance.gameCanvas.DisableWhistle();
             return;
@@ -134,7 +130,6 @@ public class Player : Character
     {
         if (bottleCount > 0)
         {
-
             Game.Instance.gameCanvas.EnableBottle();
         }
         else

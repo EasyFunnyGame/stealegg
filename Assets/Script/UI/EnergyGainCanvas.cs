@@ -21,13 +21,11 @@ public class EnergyGainCanvas : BaseCanvas
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     protected override void OnShow()
@@ -38,7 +36,6 @@ public class EnergyGainCanvas : BaseCanvas
 
     protected override void OnHide()
     {
-
     }
 
     void onClickWatchVedioHandler()

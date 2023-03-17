@@ -27,6 +27,16 @@ public class AudioPlay : MonoBehaviour
         }
     }
 
+    public static void MusicVolume()
+    {
+        AudioManager.audioBGM.volume = bgmVolume;
+    }
+
+    public static void SoundVolume()
+    {
+        AudioManager.audioPlayArray.ForEach((context) => { context.volume = sfxVolume; });
+    }
+
     public void PlayMusic()
     {
         if(SceneManager.GetActiveScene().name== "Main")

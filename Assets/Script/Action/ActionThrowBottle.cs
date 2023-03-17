@@ -18,14 +18,10 @@ public class ActionThrowBottle : ActionBase
 
     public Vector3 _targetPositon;
 
-
     public Quaternion targetRotation;
 
-    int rotateFrame = 0;
     public ActionThrowBottle(Player player, string targetTile) : base(player, ActionType.ThrowBottle)
     {
-        rotateFrame = 0;
-
         var boardNode = player.boardManager.FindNode(targetTile);
         _targetPositon = boardNode.transform.position;
         targetTileName = targetTile;
@@ -66,22 +62,35 @@ public class ActionThrowBottle : ActionBase
         wayPoints.Add(_targetPositon);
         segmentIndex = 0;
         linePointList = BezierUtils.GetBeizerPointList(50, wayPoints);
+        once = false;
     }
 
+    private bool once = false;
+    private float delayTime = 1;
     public override bool CheckComplete()
     {
         if(linePointList==null)return false;
         if (linePointList.Length <=0) return false;
         if (segmentIndex > linePointList.Length - 2)
         {
-            bottle.parent = bottleParent;
-            bottle.localPosition = bottleStartPosition;
-            bottle.localRotation = bottleStartRotation;
-            bottle.gameObject.SetActive(false);
-            player.PlayBottleEffect(_targetPositon);
-            Game.Instance.BottleThorwed(targetTileName);
-            AudioPlay.Instance.PlayerBottleGrounded();
-            return true;
+            if(!once)
+            {
+                once = true;
+                delayTime = 0;
+                bottle.parent = bottleParent;
+                bottle.localPosition = bottleStartPosition;
+                bottle.localRotation = bottleStartRotation;
+                bottle.gameObject.SetActive(false);
+                player.PlayBottleEffect(_targetPositon);
+                AudioPlay.Instance.PlayerBottleGrounded();
+            }
+            delayTime += Time.deltaTime;
+            if (once && delayTime >= 0.75f)
+            {
+                Game.Instance.BottleThorwed(targetTileName);
+                return true;
+            }
+           
         }
         return false;
     }

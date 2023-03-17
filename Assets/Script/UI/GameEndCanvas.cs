@@ -67,17 +67,26 @@ public class GameEndCanvas : BaseCanvas
         AudioPlay.Instance.PlayClick();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        
+        Vector3 screenPoint = new Vector3(0,0,0);
+
+        UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
+        //Debug.Log("位置:" + screenPoint.x + "  " + screenPoint.y);
+        if (Game.Instance.result == GameResult.WIN)
+        {
+            if (screenPoint.y > 750 / 2)
+            {
+                Game.Instance.player.m_animator.SetBool("moving", false);
+            }
+            else
+            {
+                Game.Instance.player.transform.Translate(new Vector3(0, 0, 0.02f));
+            }
+        }
     }
+
     protected override void OnShow()
     {
         if(Game.Instance.result == GameResult.WIN)
@@ -98,5 +107,6 @@ public class GameEndCanvas : BaseCanvas
 
     protected override void OnHide()
     {
+
     }
 }
