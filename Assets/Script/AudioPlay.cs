@@ -34,7 +34,7 @@ public class AudioPlay : MonoBehaviour
 
     public static void SoundVolume()
     {
-        AudioManager.audioPlayArray.ForEach((context) => { context.volume = sfxVolume; });
+        AudioManager.audioPlayArray.ForEach((context) => { if(context != AudioManager.audioBGM) context.volume = sfxVolume; });
     }
 
     public void PlayMusic()
