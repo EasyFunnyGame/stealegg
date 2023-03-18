@@ -124,7 +124,11 @@ public class Enemy : Character
             currentAction = new ActionEnemyMove(this, originalTile);
             return;
         }
-        ReturnOriginal(true);
+
+        if(Game.Instance.result != GameResult.NONE)
+        {
+            ReturnOriginal(true);
+        }
     }
 
 
@@ -513,10 +517,11 @@ public class Enemy : Character
         var targetDirection = Utils.DirectionTo(currentTile.name, tileName, direction);
         if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
         {
-            Game.Instance.FailGame();
+            Game.Instance.FailGame(this);
             m_animator.SetBool("catch", true);
             AudioPlay.Instance.PlayCatch(this);
             ShowCatch();
+            foundPlayerTile = hearSoundTile = null;
             return true;
         }
         return false;
@@ -533,10 +538,11 @@ public class Enemy : Character
         var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);
         if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
         {
-            Game.Instance.FailGame();
+            Game.Instance.FailGame(this);
             m_animator.SetBool("catch", true);
             AudioPlay.Instance.PlayCatch(this);
             ShowCatch();
+            foundPlayerTile = hearSoundTile = null;
             return true;
         }
         return false;

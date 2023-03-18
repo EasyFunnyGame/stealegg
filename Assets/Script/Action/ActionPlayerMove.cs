@@ -94,6 +94,7 @@ public class ActionPlayerMove : ActionBase
             var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
             if (tdist < 0.001f)
             {
+                character.body_looking = false;
                 character.Reached();
                 if(walkingExit)
                 {
@@ -104,6 +105,7 @@ public class ActionPlayerMove : ActionBase
             return false;
             
         }
+        character.body_looking = false;
         character.Reached();
         return true;
     }
@@ -130,10 +132,9 @@ public class ActionPlayerMove : ActionBase
             if (angle <= 1)
             {
                 character.ResetDirection();
-                character.body_looking = false;
                 character.StartMove();
+                character.body_looking = false;
             }
-
             return;
         }
 

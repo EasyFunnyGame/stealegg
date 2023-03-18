@@ -15,6 +15,11 @@ public class GameEndCanvas : BaseCanvas
 
     public Image img_title;
 
+    public RawImage winTxture;
+
+    public RawImage failTexture;
+
+
     private void Awake()
     {
         btn_home.onClick.AddListener(onClickReturnToHomeHandler);
@@ -33,6 +38,17 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickPlayNextLevelHandler()
     {
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+        if(energy <= 0)
+        {
+            Game.Instance.energyGainCanvas.Show();
+            return;
+        }
+
+        PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+        PlayerPrefs.Save();
+
+
         Game.Instance.playing = false;
         Game.Instance.endCanvas.Hide();
         var playingLevel = Game.Instance.playingLevel+1;
@@ -56,6 +72,16 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickReplayThisLevelHandler()
     {
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+        if (energy <= 0)
+        {
+            Game.Instance.energyGainCanvas.Show();
+            return;
+        }
+
+        PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+        PlayerPrefs.Save();
+
         Game.Instance.playing = false;
         Game.Instance.endCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
@@ -95,6 +121,9 @@ public class GameEndCanvas : BaseCanvas
             btn_nxtLevel.gameObject.SetActive(true);
             btn_replay.gameObject.SetActive(false);
             AudioPlay.Instance.PlayWin();
+
+            winTxture.gameObject.SetActive(true);
+            failTexture.gameObject.SetActive(false);
         }
         else if(Game.Instance.result == GameResult.FAIL)
         {
@@ -102,6 +131,9 @@ public class GameEndCanvas : BaseCanvas
             btn_nxtLevel.gameObject.SetActive(false);
             btn_replay.gameObject.SetActive(true);
             AudioPlay.Instance.PlayFail();
+
+            winTxture.gameObject.SetActive(false);
+            failTexture.gameObject.SetActive(true);
         }
     }
 

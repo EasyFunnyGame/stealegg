@@ -27,6 +27,8 @@ public class GameCamera : MonoBehaviour
 
 	public Camera m_camera;
 
+	public bool forceUpdate = false;
+
 	public GameObject[] _targets = new GameObject[0];
 	private DebugProjection _debugProjection;
 
@@ -190,7 +192,7 @@ public class GameCamera : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		if (Game.Instance.result != GameResult.NONE) return;
+		if (Game.Instance.result != GameResult.NONE && !forceUpdate) return;
 		if (upper && _targets.Length > 0)
 		{
 			var targetPositionAndRotation = TargetPositionAndRotation(_targets);

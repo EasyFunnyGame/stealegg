@@ -118,7 +118,7 @@ public class ActionThrowBottle : ActionBase
             player.tr_body.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 10);
             if (player.tr_body.transform.rotation.Equals(targetRotation))
             {
-                player.m_animator.SetTrigger("pick");
+                Throw();
             }
             return;
         }

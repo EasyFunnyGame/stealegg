@@ -225,7 +225,7 @@ public class GameCanvas : BaseCanvas
     private void onClickUseWhistleHandler()
     {
         if (Game.Instance.player.moving) return;
-        if (Game.Instance.player.body_looking) return;
+        //if (Game.Instance.player.body_looking) return;
         if (Game.Instance.player.currentAction != null) return;
         for(int i = 0; i < Game.Instance.boardManager.enemies.Count; i++)
         {

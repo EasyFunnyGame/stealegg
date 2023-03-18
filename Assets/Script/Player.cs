@@ -25,6 +25,13 @@ public class Player : Character
 
     public string walkingLineType;
     public int up = 0;
+
+    public Camera failCamera;
+
+    private void Awake()
+    {
+        failCamera.gameObject.SetActive(false);
+    }
     private void Update()
     {
         if(currentAction==null)
@@ -187,7 +194,6 @@ public class Player : Character
     {
         base.PlayerReached();
         playerMovePlay.gameObject.SetActive(false);
-        
     }
 
     public void PlayStealEffect(Vector3 position)

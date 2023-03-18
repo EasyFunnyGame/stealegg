@@ -214,12 +214,40 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void FailGame()
+    public void FailGame(Enemy enemy)
     {
         result = GameResult.FAIL;
         delayShowEndTimer = 2;
         player.m_animator.SetInteger("result",-1);
         AudioPlay.Instance.PlayBeCaught();
+        player.failCamera.gameObject.SetActive(true);
+
+        var playerHead = player.transform.position + new Vector3(0, 1f, 0);
+
+        var playerPos = new Vector3(player.transform.position.x,0, player.transform.position.z);
+        var enemyPos  = new Vector3(enemy.transform.position.x, 0, enemy.transform.position.z);
+
+        var direction = playerPos - enemyPos;
+        var normalized = direction.normalized;
+
+        player.failCamera.transform.position = playerHead + normalized;
+
+
+        var playerForwardNormalized = player.tr_body.transform.forward.normalized;
+
+
+        var angle = Mathf.Abs(Vector3.Angle(enemy.tr_body.forward, player.tr_body.forward));
+        angle %= 360;
+        if (angle > 1 && angle < 180)
+        {
+            player.failCamera.transform.position += (playerForwardNormalized/2);
+        }
+        else
+        {
+            player.failCamera.transform.position += (player.tr_body.transform.right.normalized/2);
+        }
+        
+        player.failCamera.transform.LookAt(enemy.transform.position) ;
     }
 
     public void WinGame()
