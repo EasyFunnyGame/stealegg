@@ -497,7 +497,6 @@ public class Game : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
             {
                 var node = hitInfo.transform.parent.parent;
-                var nodePosition = node.transform.position;
 
                 var tile = player.gridManager.GetTileByName(node.name);
 

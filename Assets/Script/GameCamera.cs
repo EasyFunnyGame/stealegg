@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
@@ -34,6 +33,10 @@ public class GameCamera : MonoBehaviour
 
 	enum DebugProjection { DISABLE, IDENTITY, ROTATED }
 	enum ProjectionEdgeHits { TOP_BOTTOM, LEFT_RIGHT }
+
+	public float max_height;
+
+	public float min_heieght;
 
 	public void SetTargets(GameObject[] targets)
 	{
