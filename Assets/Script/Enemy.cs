@@ -125,7 +125,7 @@ public class Enemy : Character
             return;
         }
 
-        if(Game.Instance.result != GameResult.NONE)
+        if(Game.Instance.result == GameResult.NONE)
         {
             ReturnOriginal(true);
         }

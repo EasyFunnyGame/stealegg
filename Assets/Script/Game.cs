@@ -88,14 +88,8 @@ public class Game : MonoBehaviour
     public void StartGame(string sceneName)
     {
         PlayLevel(sceneName);
-
-        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        PlayerPrefs.SetInt(UserDataKey.Energy, energy);
-        PlayerPrefs.Save();
         chapterCanvas.Hide();
-
         result = GameResult.NONE;
-
         Save();
     }
 
