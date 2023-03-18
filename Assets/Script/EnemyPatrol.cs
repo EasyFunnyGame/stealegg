@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyPatrol : Enemy
@@ -10,13 +9,16 @@ public class EnemyPatrol : Enemy
 
     public GridTile patrolTile;
 
+    private Transform routeLine;
+
     public override void Start()
     {
         base.Start();
         InitEdgeTiles();
+        routeLine = route.transform.Find("Route");
+        
     }
 
-    // todo 这里要手动填进去
     void InitEdgeTiles()
     {
         edgeCoords.Add(coord.Clone());
@@ -84,8 +86,55 @@ public class EnemyPatrol : Enemy
         }
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if ( routeLine != null)
+        {
+            routeLine.gameObject.SetActive(patroling);
+            if (redNodes.Count > 0)
+            {
+                var endPosition = transform.localPosition + transform.forward * 2;
+                var x = Mathf.CeilToInt(endPosition.x);
+                var z = Mathf.CeilToInt(endPosition.z);
+                var length = 0f;
+                //Debug.Log("最终点" + x + " " + z);
+                var endNode = boardManager.FindNode(string.Format("{0}_{1}", x, z));
+                if(endNode)
+                {
+                    length = 80;
+                    routeLine.transform.localScale = new Vector3(1.2f, 1, 80);
+                }
+                else
+                {
+                    
+                    var finalNode = redNodes[redNodes.Count - 1];
+                    var distance = Vector3.Distance(transform.position, finalNode.transform.localPosition);
+                    length = distance * 40;
+                    
+                }
+                routeLine.transform.localScale = new Vector3(1.2f, 1, length);
+                routeArrow.transform.position = transform.localPosition + transform.forward * length / 40;
+            }
+            routeLine.transform.position = new Vector3(transform.position.x, 0.012f, transform.position.z);
+        }
+        routeArrow.gameObject.SetActive(!body_looking);
+    }
+
+    public override void StartMove()
+    {
+        base.StartMove();
+        if (redNodes.Count > 0)
+        {
+            var firstNode = redNodes[0];
+            Destroy(firstNode);
+            redNodes.RemoveAt(0);
+        }
+    }
+
     public override void UpdateRouteMark()
     {
+        
         for (var index = 0; index < redNodes.Count; index++)
         {
             DestroyImmediate(redNodes[index].gameObject);
@@ -138,7 +187,7 @@ public class EnemyPatrol : Enemy
             if (linkLine == null)
                 break;
 
-            if (distance > 0)
+            if (distance > 0 && !patroling)
             {
                 RedLineByName(linkLine);
             }
@@ -155,10 +204,11 @@ public class EnemyPatrol : Enemy
             distance--;
         }
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        routeArrow.position = endNode.transform.position;
+        routeArrow.position = endNode.transform.position + new Vector3(0, 0.02f, 0);
         routeArrow.rotation = transform.rotation;
         routeArrow.Rotate(new Vector3(0, 0, 180));
         routeArrow.parent = null;
+        
     }
 
     public bool needTurn()
@@ -281,7 +331,6 @@ public class EnemyPatrol : Enemy
     {
         base.Reached();
         UpdateNextPatrolPoint();
-
     }
 
     public override void OnReachedOriginal()
@@ -298,54 +347,6 @@ public class EnemyPatrol : Enemy
         UpdateNextPatrolPoint();
         UpdateRouteMark();
     }
-
-    //protected override void UpdateRouteRedLine()
-    //{
-    //    if(patroling == false)
-    //    {
-    //        base.UpdateRouteRedLine();
-    //    }
-    //    else
-    //    {
-    //        var node1 = boardManager.FindNode(routeNode1Name);
-    //        var node2 = boardManager.FindNode(routeNode2Name);
-    //        if (node1 == null && node2 == null  )
-    //        {
-    //            route.SetActive(false);
-    //        }
-    //        else
-    //        {
-    //            route.SetActive(true);
-    //            BoardNode endNode = null;
-    //            if(node1 != null)
-    //            {
-    //                endNode = node1;
-    //            }
-    //            if (node2 != null)
-    //            {
-    //                endNode = node2;
-    //            }
-                
-    //            var distance = Vector3.Distance(transform.position, endNode.transform.position);
-    //            routeLine.localScale = new Vector3(1.1f, 1, distance * 40);
-    //            routeArrow.localPosition = new Vector3(0, 0, distance);
-
-    //            for (var index = 0; index < redNodes.Count; index++)
-    //            {
-    //                if (redNodes[index].name == currentTile.name)
-    //                {
-    //                    distance = Vector3.Distance(transform.position, redNodes[index].transform.position);
-    //                    if (distance > 0.1f)
-    //                    {
-    //                        redNodes[index].gameObject.SetActive(false);
-    //                    }
-    //                }
-    //            }
-    //            //Debug.Log("线路终点:" + endNode.name + " 距离:" + distance);
-    //        }
-    //    }
-    //}
-
 
     public override void CheckAction()
     {

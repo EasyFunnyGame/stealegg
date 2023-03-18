@@ -105,6 +105,17 @@ public class Player : Character
             Game.Instance.gameCanvas.DisableWhistle();
             return;
         }
+
+        var items = Game.Instance.boardManager.allItems;
+        if(items.ContainsKey(coord.name))
+        {
+            var item = items[coord.name];
+            if(item.itemType == ItemType.Growth)
+            {
+                return;
+            }
+        }
+
         var nodes = boardManager.FindNodesAround(currentTile.name, 2);
         var stop = false;
         foreach (var kvp in nodes)
@@ -128,14 +139,21 @@ public class Player : Character
 
     public void CheckBottle()
     {
-        if (bottleCount > 0)
+        Game.Instance.gameCanvas.DisableBottle();
+        for(int i = 0; i < boardManager.enemies.Count; i++)
         {
-            Game.Instance.gameCanvas.EnableBottle();
+            var enemy = boardManager.enemies[i];
+            if(enemy.currentAction!=null)
+            {
+                return;
+            }
         }
-        else
+
+        if (bottleCount <= 0)
         {
-            Game.Instance.gameCanvas.DisableBottle();
+            return;
         }
+        Game.Instance.gameCanvas.EnableBottle();
     }
 
     public void ShowReached()
@@ -209,6 +227,7 @@ public class Player : Character
                 item.gameObject?.SetActive(false);
                 item.icon?.gameObject.SetActive(false);
                 boardManager.allItems.Remove(coord.name);
+                bottleCount++;
             }
             if(item?.itemType == ItemType.Graff)
             {
@@ -216,6 +235,7 @@ public class Player : Character
                 item.gameObject.SetActive(false);
                 item.icon.gameObject.SetActive(false);
             }
+
         }
     }
 

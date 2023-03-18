@@ -150,6 +150,7 @@ public class BoardManager : MonoBehaviour
             {
                 nodes.Add(boardNode.coord.name, boardNode);
                 boardNode.contour.gameObject.SetActive(false);
+                boardNode.contour.transform.localPosition = new Vector3(0, 0.012f, 0);
             }
         }
     }

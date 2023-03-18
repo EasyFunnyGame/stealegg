@@ -13,7 +13,7 @@ public class ActionEnemyMove : ActionBase
         velocity = new Vector3();
         enemy.FindPathRealTime(tile);
         nextStepTilePosition = enemy.db_moves[0].position;
-        enemy.StartMove();
+        //enemy.StartMove();
 
         var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
         height = targetNode.transform.position.y - enemy.transform.position.y;

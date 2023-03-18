@@ -156,6 +156,8 @@ public class Enemy : Character
         var copy = Instantiate(line);
         copy.name = line.name;
         copy.transform.position = line.transform.position;
+        var scale = line.transform.localScale;
+        copy.transform.localScale = new Vector3(scale.x * 1.2f, scale.y, scale.z);
         copy.transform.Translate(new Vector3(0, 0.001f, 0));
         copy.transform.rotation = line.transform.rotation;
         var renderer = copy.transform.GetChild(0).GetComponent<MeshRenderer>();
@@ -172,6 +174,7 @@ public class Enemy : Character
             var nodeTr = node.targetIcon;
             var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
             copyNode.name = nodeName;
+            copyNode.transform.localScale = new Vector3(1.05f, 1, 1.05f);
             copyNode.transform.position = nodeTr.transform.position;
             copyNode.transform.Translate(new Vector3(0, 0.001f, 0));
             copyNode.transform.rotation = nodeTr.transform.rotation;
@@ -257,10 +260,16 @@ public class Enemy : Character
             {
                 RedLineByName(linkLine);
             }
-
-            if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
+            if(linkLine.transform.childCount < 1)
             {
                 break;
+            }
+            if (linkLine.transform.childCount > 0  )
+            {
+                if(!linkLine.transform.GetChild(0).name.Contains("Visual"))
+                {
+                    break;
+                }
             }
             distance--;
         }

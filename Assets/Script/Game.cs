@@ -309,10 +309,18 @@ public class Game : MonoBehaviour
         else
         {
             toolCheckDelay = 0.25f;
-            gameCanvas.DisableBottle();
-            //gameCanvas.DisableWhistle();
         }
-        player.CheckWhitsle();
+        if (toolCheckDelay>0)
+        {
+            gameCanvas.DisableWhistle();
+            gameCanvas.DisableBottle();
+            toolCheckDelay-=Time.deltaTime;
+        }
+        else
+        {
+            player.CheckWhitsle();
+            player.CheckBottle();
+        }
     }
 
     float toolCheckDelay = 0.5f;
@@ -454,17 +462,6 @@ public class Game : MonoBehaviour
 
     void ListenClick()
     {
-        if(toolCheckDelay<=0)
-        {
-            player.CheckBottle();
-            //player.CheckWhitsle();
-        }
-        else
-        {
-            //gameCanvas.DisableWhistle();
-            gameCanvas.DisableBottle();
-        }
-
         if (pausing) return;
         if (Input.GetMouseButtonDown(0))
         {

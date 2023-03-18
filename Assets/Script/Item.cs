@@ -103,7 +103,7 @@ public class Item : MonoBehaviour
             case ItemType.LureBottle:
                 picked = true;
                 player.m_animator.SetTrigger("pick");
-                player.bottleCount++;
+                
                 break;
 
             case ItemType.Pincers:

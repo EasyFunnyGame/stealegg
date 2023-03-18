@@ -109,11 +109,12 @@ public class ActionThrowBottle : ActionBase
             return;
         }
 
+        if (segmentIndex >= 0 && segmentIndex < linePointList.Length - 1) 
+        {
+            bottle.transform.position = Vector3.Lerp(linePointList[segmentIndex], linePointList[segmentIndex + 1], 1);
 
-        bottle.transform.position = Vector3.Lerp(linePointList[segmentIndex], linePointList[segmentIndex + 1], 1);
-
-        segmentIndex++;
-
+            segmentIndex++;
+        }
         base.Run();
     }
 }
