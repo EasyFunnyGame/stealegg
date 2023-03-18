@@ -62,6 +62,8 @@ public class Game : MonoBehaviour
 
     public Transform guideArrow;
 
+    public int gainEergy = 0;
+
     private void Awake()
     {
         Instance = this;
@@ -91,6 +93,7 @@ public class Game : MonoBehaviour
         chapterCanvas.Hide();
         result = GameResult.NONE;
         Save();
+        gainEergy = 0;
     }
 
     public void PlayLevel(string sceneName)
@@ -249,6 +252,14 @@ public class Game : MonoBehaviour
         result = GameResult.WIN;
         delayShowEndTimer = 2;
         player.m_animator.SetInteger("result",1);
+
+        if(gainEergy >0 )
+        {
+            var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+            energy += gainEergy;
+            PlayerPrefs.SetInt(UserDataKey.Energy,energy);
+            PlayerPrefs.Save();
+        }
     }
     
 

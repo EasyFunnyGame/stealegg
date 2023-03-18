@@ -92,10 +92,11 @@ public class Item : MonoBehaviour
                 gameObject.SetActive(false);
                 icon.gameObject.SetActive(false);
 
-                var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-                energy += 5;
-                PlayerPrefs.SetInt(UserDataKey.Energy, energy);
-                PlayerPrefs.Save();
+                Game.Instance.gainEergy = 5;
+                //var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+                //energy += 5;
+                //PlayerPrefs.SetInt(UserDataKey.Energy, energy);
+                //PlayerPrefs.Save();
                 delete = true;
                 AudioPlay.Instance.PlayStarGain();
                 break;

@@ -758,97 +758,95 @@ public class GameCanvas : BaseCanvas
 
     public void BeginDrag()
     {
-        if(Input.touchCount==1)
+        if (Input.touchCount > 1)
         {
-            beginPosition = Input.mousePosition;
+            Debug.Log("BeginDrag 多点触控" + Input.touchCount);
+            return;
         }
-        else
-        {
-
-        }
+        beginPosition = Input.mousePosition;
     }
 
     public void EndDrag()
     {
-        if (Input.touchCount == 1)
+        if(Input.touchCount>1)
         {
-            endPosition = Input.mousePosition;
-            var direction = endPosition - beginPosition;
-            var sceneDirection = Game.Instance.camera.transform.InverseTransformPoint(direction).normalized;
-            var player = Game.Instance.player;
+            Debug.Log("EndDrag 多点触控" + Input.touchCount);
+            return;
+        }
+        endPosition = Input.mousePosition;
+        var direction = endPosition - beginPosition;
+        var sceneDirection = Game.Instance.camera.transform.InverseTransformPoint(direction).normalized;
+        var player = Game.Instance.player;
 
-            if (Game.Instance.pausing) return;
-            if (player.currentAction != null)
-            {
-                return;
-            }
+        if (Game.Instance.pausing) return;
+        if (player.currentAction != null)
+        {
+            return;
+        }
           
-            var targetOffsetX = 0;
-            var targetOffsetZ = 0;
+        var targetOffsetX = 0;
+        var targetOffsetZ = 0;
 
-            if (Mathf.Abs(sceneDirection.x) > Mathf.Abs(sceneDirection.y))
+        if (Mathf.Abs(sceneDirection.x) > Mathf.Abs(sceneDirection.y))
+        {
+            if (sceneDirection.x > 0)
             {
-                if (sceneDirection.x > 0)
-                {
-                    targetOffsetZ = -1;
-                }
-                else
-                {
-                    targetOffsetZ = 1;
-                }
+                targetOffsetZ = -1;
             }
             else
             {
-                if (sceneDirection.z > 0)
-                {
-                    targetOffsetX = -1;
-                }
-                else
-                {
-                    targetOffsetX = 1;
-                }
-            }
-
-            var targetCoordX = player.coord.x + targetOffsetX;
-            var targetCoordZ = player.coord.z + targetOffsetZ;
-
-            var targetTileName = string.Format("{0}_{1}", targetCoordX, targetCoordZ);
-
-            var targetTile = player.gridManager.GetTileByName(targetTileName);
-            if (targetTileName == null)
-            {
-                AudioPlay.Instance.ClickUnWalkable();
-                return;
-            }
-
-            for (var i = 0; i < player.boardManager.enemies.Count; i++)
-            {
-                var enemy = player.boardManager.enemies[i];
-                if (enemy.currentAction != null)
-                {
-                    return;
-                }
-                if (enemy.coord.name == targetTileName)
-                {
-                    AudioPlay.Instance.ClickUnWalkable();
-                    return;
-                }
-            }
-            var linkLine = player.boardManager.FindLine(player.currentTile.name, targetTileName);
-            if (linkLine == null || linkLine.through == false)
-            {
-                AudioPlay.Instance.ClickUnWalkable();
-                return;
-            }
-            if (player.moving || player.currentTile != targetTile)
-            {
-                player.currentAction = Utils.CreatePlayerAction(ActionType.PlayerMove, targetTile);
-                //Debug.Log("主角行为====移动");
+                targetOffsetZ = 1;
             }
         }
         else
         {
+            if (sceneDirection.z > 0)
+            {
+                targetOffsetX = -1;
+            }
+            else
+            {
+                targetOffsetX = 1;
+            }
+        }
 
+        var targetCoordX = player.coord.x + targetOffsetX;
+        var targetCoordZ = player.coord.z + targetOffsetZ;
+
+        var targetTileName = string.Format("{0}_{1}", targetCoordX, targetCoordZ);
+
+        var targetTile = player.gridManager.GetTileByName(targetTileName);
+        if (targetTileName == null)
+        {
+            AudioPlay.Instance.ClickUnWalkable();
+            return;
+        }
+
+        for (var i = 0; i < player.boardManager.enemies.Count; i++)
+        {
+            var enemy = player.boardManager.enemies[i];
+            if (enemy.currentAction != null)
+            {
+                return;
+            }
+            if (enemy.coord.name == targetTileName)
+            {
+                AudioPlay.Instance.ClickUnWalkable();
+                return;
+            }
+        }
+        var linkLine = player.boardManager.FindLine(player.currentTile.name, targetTileName);
+        if (linkLine == null || linkLine.through == false)
+        {
+            AudioPlay.Instance.ClickUnWalkable();
+            return;
+        }
+        if (player.moving || player.currentTile != targetTile)
+        {
+            player.currentAction = Utils.CreatePlayerAction(ActionType.PlayerMove, targetTile);
+            //Debug.Log("主角行为====移动");
         }
     }
+
+
 }

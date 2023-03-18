@@ -227,7 +227,11 @@ public class Enemy : Character
 
         routeNodeNames.Clear();
 
-        if (sleeping) return;
+        if (sleeping)
+        {
+            RedNodeByName(coord.name);
+            return;
+        }
 
         var xOffset = 0;
 

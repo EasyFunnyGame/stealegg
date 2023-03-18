@@ -8,6 +8,8 @@
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
+        targetIdleType = 0;
+        idleType = 0;
         sleeping = true;
         UpdateRouteMark();
     }
