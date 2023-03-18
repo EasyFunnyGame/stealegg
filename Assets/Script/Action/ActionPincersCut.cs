@@ -39,11 +39,11 @@ public class ActionPincersCut : ActionBase
     public override void Run()
     {
 
-        if (!player.transform.rotation.Equals(targetRotation))
+        if (!player.tr_body.transform.rotation.Equals(targetRotation))
         {
-            var playerRotation = player.transform.rotation;
-            player.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 5);
-            if (player.transform.rotation.Equals(targetRotation))
+            var playerRotation = player.tr_body.transform.rotation;
+            player.tr_body.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 5);
+            if (player.tr_body.transform.rotation.Equals(targetRotation))
             {
                 if(!cutted)
                 {
