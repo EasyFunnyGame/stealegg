@@ -72,8 +72,6 @@ public class GraffCanvas : BaseCanvas
              });
 
         btn_complete.onClick.AddListener(onCloseGraffCanvasHandler);
-
-        
     }
 
     public void HideDefaultImage()
@@ -177,7 +175,8 @@ public class GraffCanvas : BaseCanvas
 
     protected override void OnHide()
     {
-        if(Game.Instance.camera!=null)
+        Game.Instance.playing = true;
+        if (Game.Instance.camera!=null)
             Game.Instance.camera?.gameObject.SetActive(true);
         //if (Game.Instance.draw_able != null)
         //    Game.Instance.draw_able?.gameObject.SetActive(false);
@@ -212,6 +211,24 @@ public class GraffCanvas : BaseCanvas
                     }
                 }
             }
+
+
+            var items = player.boardManager.allItems;
+            foreach (var kvp in items)
+            {
+                var endItem = kvp.Value;
+                if (endItem.itemType == ItemType.End)
+                {
+                    var notActive = endItem.transform.Find("Exit_not_active");
+                    var active = endItem.transform.Find("Exit_active");
+                    notActive.gameObject.SetActive(false);
+                    active.gameObject.SetActive(true);
+                    break;
+                }
+            }
+
         }
+
+       
     }
 }

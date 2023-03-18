@@ -24,6 +24,7 @@ public class Game : MonoBehaviour
     public ChapterCanvas chapterCanvas;
     public GraffCanvas graffCanvas;
     public CameraSettingCanvas cameraSettingCanvas;
+    public TranslateCanvas translateCanvas;
 
     public Dictionary<string, int> scores = new Dictionary<string, int>();
 
@@ -81,6 +82,7 @@ public class Game : MonoBehaviour
         chapterCanvas.Hide();
         graffCanvas.Hide();
         cameraSettingCanvas.Hide();
+        translateCanvas.Hide();
     }
 
     public void StartGame(string sceneName)

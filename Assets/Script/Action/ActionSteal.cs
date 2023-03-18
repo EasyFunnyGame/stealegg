@@ -37,8 +37,9 @@ public class ActionSteal : ActionBase
 
             if(Game.Instance.draw_able)
             {
-                Game.Instance.graffCanvas.Show();
-                Game.Instance.gameCanvas.Hide();
+                Game.Instance.translateCanvas.Show();
+                Game.Instance.translateCanvas.SetAfterTranslate("steal");
+                Game.Instance.playing = false;
             }
             else
             {

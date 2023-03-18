@@ -103,6 +103,10 @@ public class BoardManager : MonoBehaviour
                     //graff = item;
                     break;
                 case ItemName.Item_End:
+                    var notActive = item.transform.Find("Exit_not_active");
+                    var active = item.transform.Find("Exit_active");
+                    notActive.gameObject.SetActive(true);
+                    active.gameObject.SetActive(false);
                     //end = item;
                     break;
                 default:
