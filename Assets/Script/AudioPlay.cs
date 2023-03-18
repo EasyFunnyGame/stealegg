@@ -65,7 +65,7 @@ public class AudioPlay : MonoBehaviour
         AudioManager.audioBGM.OnCanplay(() =>
         {
             AudioManager.audioBGM.Play();
-            Debug.Log("播放主界面背景音乐:" + audioSrc);
+            //Debug.Log("播放主界面背景音乐:" + audioSrc);
         });
         // 自动播放停止
         AudioManager.audioBGM.OnEnded(() =>
@@ -146,7 +146,7 @@ public class AudioPlay : MonoBehaviour
     public void PlaySFX(int index)
     {
         var src = AudioManager.sfxList[index];
-        Debug.Log("sound url:       " + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
+        //Debug.Log("sound url:       " + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
         var audioPlayRightNow = manager.CreateAudio();
         if (audioPlayRightNow == null)
         {

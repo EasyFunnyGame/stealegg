@@ -142,6 +142,10 @@ public class EnemyPatrol : Enemy
                 var length = 0f;
                 //Debug.Log("最终点" + x + " " + z);
                 var endNode = boardManager.FindNode(string.Format("{0}_{1}", x, z));
+                if (endPosition.x < 0 || endPosition.z < 0)
+                {
+                    endNode = null;
+                }
                 if(endNode)
                 {
                     length = 80;

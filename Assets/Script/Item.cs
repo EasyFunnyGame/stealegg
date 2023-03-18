@@ -83,7 +83,7 @@ public class Item : MonoBehaviour
 
     public bool Picked(Player player)
     {
-        Debug.Log(string.Format("拾取道具:{0}",gameObject.name));
+        //Debug.Log(string.Format("拾取道具:{0}",gameObject.name));
         var delete = false;
         switch(itemType)
         {
