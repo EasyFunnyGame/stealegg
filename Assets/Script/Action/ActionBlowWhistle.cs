@@ -8,6 +8,20 @@ public class ActionBlowWhistle : ActionBase
     public ActionBlowWhistle(Player player) : base(player, ActionType.BlowWhistle)
     {
         player.PlayWhitsle();
+        var boardManager = Game.Instance.boardManager;
+        var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
+        var targetTile = player.currentTile;
+        foreach (var kvp in nodes)
+        {
+            for (var index = 0; index < boardManager.enemies.Count; index++)
+            {
+                var enemy = boardManager.enemies[index];
+                if (enemy.coord.name == kvp.Key)
+                {
+                    enemy.ShowTraceTarget(targetTile, enemy.hearSoundTile == null, 1);
+                }
+            }
+        }
     }
 
     private Player player

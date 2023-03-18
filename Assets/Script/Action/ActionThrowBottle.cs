@@ -82,6 +82,20 @@ public class ActionThrowBottle : ActionBase
                 bottle.localRotation = bottleStartRotation;
                 bottle.gameObject.SetActive(false);
                 player.PlayBottleEffect(_targetPositon);
+                var targetArray = targetTileName.Split('_');
+                var x = int.Parse(targetArray[0]);
+                var z = int.Parse(targetArray[1]);
+                var targetTile = player.gridManager.GetTileByName(targetTileName);
+                foreach (var enemy in player.boardManager.enemies)
+                {
+                    var coord = enemy.coord;
+                    var distanceFromX = Mathf.Abs(x - coord.x);
+                    var distanceFromZ = Mathf.Abs(z - coord.z);
+                    if (distanceFromX <= 2 && distanceFromZ <= 2)
+                    {
+                        enemy.ShowTraceTarget(targetTile, enemy.hearSoundTile == null, 1);
+                    }
+                }
                 AudioPlay.Instance.PlayerBottleGrounded();
             }
             delayTime += Time.deltaTime;
@@ -97,14 +111,14 @@ public class ActionThrowBottle : ActionBase
     
     public override void Run()
     {
-        
-        if(!player.transform.rotation.Equals(targetRotation))
+
+        if (!player.tr_body.transform.rotation.Equals(targetRotation))
         {
-            var playerRotation = player.transform.rotation;
-            player.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 10);
-            if (player.transform.rotation.Equals(targetRotation))
+            var playerRotation = player.tr_body.transform.rotation;
+            player.tr_body.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 10);
+            if (player.tr_body.transform.rotation.Equals(targetRotation))
             {
-                Throw();
+                player.m_animator.SetTrigger("pick");
             }
             return;
         }

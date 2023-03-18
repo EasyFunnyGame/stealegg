@@ -6,8 +6,6 @@ public class ActionEnemyMove : ActionBase
     private Vector3 nextStepTilePosition;
     float height = 0f;
 
-    bool tracingTarget = false;
-
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         velocity = new Vector3();
@@ -42,12 +40,10 @@ public class ActionEnemyMove : ActionBase
         if(enemy.hearSoundTile != null || enemy.foundPlayerTile !=null)
         {
             enemy.m_animator.SetFloat("move_type", 1);
-            tracingTarget = true;
         }
         else
         {
             enemy.m_animator.SetFloat("move_type", 0);
-            tracingTarget = false;
         }
     }
 

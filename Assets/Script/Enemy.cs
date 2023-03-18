@@ -587,7 +587,7 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-        ShowTraceTarget(targetTile, hearSoundTile == null,1);
+        // ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
         ShowFound();
         return true;
@@ -628,7 +628,7 @@ public class Enemy : Character
         }
 
         currentAction = new ActionTurnDirection(this, targetDirection);
-        ShowTraceTarget(targetTile, hearSoundTile== null,1);
+        //ShowTraceTarget(targetTile, hearSoundTile== null,1);
         hearSoundTile = targetTile;
         
         ShowFound();
@@ -670,7 +670,6 @@ public class Enemy : Character
 
         currentAction = new ActionTurnDirection(this, targetDirection);
         ShowTraceTarget(targetTile, hearSoundTile == null,1);
-
         hearSoundTile = targetTile;
         idleType = 0.5f;
         ShowFound();

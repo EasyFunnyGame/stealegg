@@ -74,6 +74,7 @@ public class ActionPlayerMove : ActionBase
                 }
             }
         }
+        player.body_looking = true;
     }
 
     public Player player

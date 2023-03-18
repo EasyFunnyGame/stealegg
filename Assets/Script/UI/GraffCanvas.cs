@@ -147,17 +147,6 @@ public class GraffCanvas : BaseCanvas
         AudioPlay.Instance.PlayClick();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void onCloseGraffCanvasHandler()
     {
@@ -197,14 +186,15 @@ public class GraffCanvas : BaseCanvas
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera?.gameObject.SetActive(false);
 
-
-        if(Game.Instance.player)
+        var player = Game.Instance.player;
+        if (player != null)
         {
+            player.PlayStealEffect(player.transform.position);
+
             var playerTileName = Game.Instance.player.currentTile.name;
             var item = Game.Instance.boardManager.allItems[playerTileName];
             if(item.itemType == ItemType.Graff)
             {
-                var player = Game.Instance.player;
                 var boardManager = Game.Instance.boardManager;
 
                 var targetArray = playerTileName.Split('_');

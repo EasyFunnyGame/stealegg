@@ -2,13 +2,21 @@
 
 public class ActionSteal : ActionBase
 {
-    private float actionDuration = 2;
+    private float actionDuration = 1;
     private Item graffItem;
+
+    public Quaternion targetRotation;
+
     public ActionSteal(Player player, Item item) : base(player, ActionType.Steal)
     {
         graffItem = item;
-        player.m_animator.SetTrigger("pick");
-        player.PlayStealEffect(player.transform.position);
+        
+        targetRotation = player.transform.rotation;
+        var draw = GameObject.Find("Draw");
+        if(draw)
+        {
+            targetRotation = draw.transform.rotation;
+        }
     }
 
     private Player player
@@ -34,6 +42,8 @@ public class ActionSteal : ActionBase
             }
             else
             {
+                player.PlayStealEffect(player.transform.position);
+
                 var boardManager = Game.Instance.boardManager;
                 var playerTileName = player.currentTile.name;
 
@@ -60,6 +70,17 @@ public class ActionSteal : ActionBase
 
     public override void Run()
     {
+        if (!player.tr_body.transform.rotation.Equals(targetRotation))
+        {
+            var playerRotation = player.tr_body.transform.rotation;
+            player.tr_body.transform.rotation = Quaternion.RotateTowards(playerRotation, targetRotation, 10);
+            if (player.tr_body.transform.rotation.Equals(targetRotation))
+            {
+                player.m_animator.SetTrigger("pick");
+            }
+            return;
+        }
+
         actionDuration -= Time.deltaTime;
         base.Run();
     }
