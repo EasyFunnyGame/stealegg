@@ -105,6 +105,13 @@ public class Enemy : Character
             return;
         }
 
+        if (growthTile != null)
+        {
+            hearSoundTile = growthTile;
+            growthTile = null;
+            return;
+        }
+
         if (hearSoundTile != null)
         {
             originalTile = null;
@@ -533,6 +540,17 @@ public class Enemy : Character
             return true;
         }
         return false;
+    }
+
+    protected GridTile growthTile = null;
+    public virtual void LureGrowth(string tileName)
+    {
+        var targetTile = gridManager.GetTileByName(tileName);
+        if (targetTile == null) return ;
+        ShowTraceTarget(targetTile, hearSoundTile == null, 1);
+        growthTile = targetTile;
+        ShowFound();
+        turnOnReached = false;
     }
 
     public virtual bool LureWhistle(string tileName)

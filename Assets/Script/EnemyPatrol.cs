@@ -13,10 +13,9 @@ public class EnemyPatrol : Enemy
 
     public override void Start()
     {
+        routeLine = route.transform.Find("Route");
         base.Start();
         InitEdgeTiles();
-        routeLine = route.transform.Find("Route");
-        
     }
 
     void InitEdgeTiles()
@@ -45,7 +44,6 @@ public class EnemyPatrol : Enemy
 
         var coordX = coord.x;
         var coordZ = coord.z;
-
 
         var findEdge = false;
 
@@ -84,6 +82,50 @@ public class EnemyPatrol : Enemy
             coordX = coordX + xOffset;
             coordZ = coordZ + zOffset;
         }
+
+        
+        if(direction == Direction.Up)
+        {
+            zOffset = 1;
+        }
+        else if(direction == Direction.Down)
+        {
+            zOffset = -1;
+        }
+        else if (direction == Direction.Left)
+        {
+            xOffset = -1;
+        }
+        else if (direction == Direction.Right)
+        {
+            xOffset = 1;
+        }
+        for(var index = 0; index < edgeCoords.Count; index++)
+        {
+            var edge = edgeCoords[index];
+            
+            var xOff = edge.x - coord.x;
+            if (xOff!=0)
+            {
+                var xOffModel = Mathf.Abs(xOff) / xOff;
+                if (xOffModel == xOffset )
+                {
+                    originalCoord = edge;
+                }
+            }
+            else
+            {
+                var zOff = edge.z - coord.z;
+                if(zOff!=0)
+                {
+                    var zOffModel = Mathf.Abs(zOff) / zOff;
+                    if ( zOffModel == zOffset)
+                    {
+                        originalCoord = edge;
+                    }
+                }
+            }
+        }
     }
 
     protected override void Update()
@@ -107,11 +149,9 @@ public class EnemyPatrol : Enemy
                 }
                 else
                 {
-                    
                     var finalNode = redNodes[redNodes.Count - 1];
                     var distance = Vector3.Distance(transform.position, finalNode.transform.localPosition);
                     length = distance * 40;
-                    
                 }
                 routeLine.transform.localScale = new Vector3(1.2f, 1, length);
                 routeArrow.transform.position = transform.localPosition + transform.forward * length / 40;
@@ -377,6 +417,13 @@ public class EnemyPatrol : Enemy
         {
             originalTile = null;
             currentAction = new ActionEnemyMove(this, foundPlayerTile);
+            return;
+        }
+
+        if (growthTile != null)
+        {
+            hearSoundTile = growthTile;
+            growthTile = null;
             return;
         }
 

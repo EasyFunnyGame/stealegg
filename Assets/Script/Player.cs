@@ -84,7 +84,26 @@ public class Player : Character
     {
         base.StartMove();
         m_animator.SetBool("moving", true);
-        //Debug.Log(string.Format("{0}开始行走{1}", gameObject.name, tar_tile_s.name));
+        var items = boardManager.allItems;
+        if (items.ContainsKey(currentTile.name))
+        {
+            var item = items[currentTile.name];
+            if (item.itemType == ItemType.Growth)
+            {
+                for( var i = 0; i < boardManager.enemies.Count; i++ )
+                {
+                    var enemy = boardManager.enemies[i];
+                    var targetForward = transform.position - enemy.transform.position;
+                    var enemyForward = enemy.transform.forward;
+                    if (Mathf.Abs(enemyForward.x- targetForward.x)<0.01f &&
+                        Mathf.Abs(enemyForward.y - targetForward.y) < 0.01f&&
+                        Mathf.Abs(enemyForward.z - targetForward.z) < 0.01f)
+                    {
+                        enemy.LureGrowth(nextTile.name);
+                    }
+                }
+            }
+        }
     }
 
     public override void FootL()
@@ -168,6 +187,7 @@ public class Player : Character
     {
         base.PlayerReached();
         playerMovePlay.gameObject.SetActive(false);
+        
     }
 
     public void PlayStealEffect(Vector3 position)

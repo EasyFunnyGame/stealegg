@@ -186,18 +186,22 @@ public class Character : MonoBehaviour
         if (nxtTileX - tileX == 1 && nxtTileZ == tileZ)
         {
             targetDirection = Direction.Right;
+            db_moves[1].position = transform.position + new Vector3(1, 0, 0);
         }
         else if (nxtTileX - tileX == -1 && nxtTileZ == tileZ)
         {
             targetDirection = Direction.Left;
+            db_moves[1].position = transform.position + new Vector3(-1, 0, 0);
         }
         else if (nxtTileX == tileX && nxtTileZ - tileZ == 1)
         {
             targetDirection = Direction.Up;
+            db_moves[1].position = transform.position + new Vector3(0, 0, 1);
         }
         else if (nxtTileX == tileX && nxtTileZ - tileZ == -1)
         {
             targetDirection = Direction.Down;
+            db_moves[1].position = transform.position + new Vector3(0,0,-1);
         }
         if(targetDirection == direction)
         {

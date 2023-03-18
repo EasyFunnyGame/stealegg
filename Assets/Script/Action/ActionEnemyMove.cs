@@ -152,8 +152,7 @@ public class ActionEnemyMove : ActionBase
                             var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
                             if (playerTile != null)
                             {
-                                character.FindPathRealTime(playerTile);
-                                character.UpdateTargetDirection(character.nextTile);
+                                character.UpdateTargetDirection(playerTile);
                             }
                             if(character.direction == character.targetDirection)
                             {

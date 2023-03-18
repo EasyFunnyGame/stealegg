@@ -26,11 +26,7 @@ public class ActionPlayerMove : ActionBase
         }
 
         player.m_animator.SetFloat("move_type", 0);
-        //if(linkLine.through==false)
-        //{
-        //    player.Clear();
-        //    return;
-        //}
+        
         Transform lineType = null;
         for(var index = 0; index < linkLine.transform.childCount; index++)
         {
@@ -56,8 +52,8 @@ public class ActionPlayerMove : ActionBase
                     break;
 
                 case "Hor_Doted_Visual":
-                    player.m_animator.SetFloat("move_type", 0.5f);
-                    crounching = true;
+                    //player.m_animator.SetFloat("move_type", 0.5f);
+                    //crounching = true;
                     break;
 
                 case "StairsUp_Normal_Visual":
