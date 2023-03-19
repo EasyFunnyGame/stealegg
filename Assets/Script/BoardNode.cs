@@ -56,11 +56,31 @@ public class BoardNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (contour.gameObject.activeSelf)
         {
             counturScale = Mathf.Abs(Mathf.Sin(Time.time * 2))*0.05f;
             contour.transform.localScale = new Vector3(0.15f + counturScale, 0.15f + counturScale, 0.15f + counturScale);
+        }
+
+        if (characters.Count > 1)
+        {
+            var count = characters.Count;
+            for(var index = 0; index < characters.Count; index++)
+            {
+                var enemy = characters[index];
+                if (positions.ContainsKey(enemy.Uid))
+                {
+                    var position = positions[enemy.Uid];
+                    var child = enemy.transform.GetChild(0);
+                    child.position = Vector3.MoveTowards(child.position, position, 2 * Time.deltaTime);
+                }
+            }
+        }
+        else if(characters.Count == 1)
+        {
+            var enemy = characters[0];
+            var child = enemy.transform.GetChild(0);
+            child.localPosition = Vector3.MoveTowards(child.localPosition, Vector3.zero, 2 * Time.deltaTime);
         }
     }
 
@@ -73,7 +93,8 @@ public class BoardNode : MonoBehaviour
             {
                 characters.Add(enemy);
             }
-            Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
+            RrefreshEnemyPosition();
+            //Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
         }
     }
 
@@ -88,9 +109,71 @@ public class BoardNode : MonoBehaviour
             {
                 characters.RemoveAt(index);
             }
-
-            Debug.Log("位置:"+ gameObject.name + " 敌人数量:" + characters.Count);
+            RrefreshEnemyPosition();
+            //Debug.Log("位置:"+ gameObject.name + " 敌人数量:" + characters.Count);
         }
-        
+    }
+
+    Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
+
+    void RrefreshEnemyPosition()
+    {
+        positions.Clear();
+        var position = transform.position;
+        Enemy enemy = null;
+        if (characters.Count == 2)
+        {
+            enemy = (characters[0] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position + transform.right * 0.25f);
+            }
+            enemy = (characters[1] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position - transform.right * 0.25f);
+            }
+        }
+        else if (characters.Count == 3)
+        {
+            enemy = (characters[0] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
+            }
+            enemy = (characters[1] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
+            }
+            enemy = (characters[2] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position - transform.forward * 0.25f);
+            }
+        }
+        else if (characters.Count > 3)
+        {
+            enemy = (characters[0] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
+            }
+            enemy = (characters[1] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
+            }
+            enemy = (characters[2] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position + transform.right * 0.25f - transform.forward * 0.25f);
+            }
+            enemy = (characters[3] as Enemy);
+            if (enemy != null)
+            {
+                positions.Add(enemy.Uid, position - transform.right * 0.25f - transform.forward * 0.25f);
+            }
+        }
     }
 }

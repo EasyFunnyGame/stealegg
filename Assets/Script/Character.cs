@@ -14,6 +14,8 @@ public class Character : MonoBehaviour
     public Transform tr_body;
     public string lastTileName;
     public GridTile _currentTile;
+
+    public int Uid = 0;
     public GridTile currentTile
     {
         set
@@ -76,6 +78,7 @@ public class Character : MonoBehaviour
                 gridManager = gridManagerCopy.GetComponent<GridManager>();
             }
             Enemy.count++;
+            Uid = Enemy.count;
         }
         else
         {
@@ -232,7 +235,7 @@ public class Character : MonoBehaviour
 
     public virtual void ResetDirection()
     {
-        var rotateY = transform.localRotation.eulerAngles.y;
+        var rotateY = transform.GetChild(0).rotation.eulerAngles.y;
 
         while(rotateY >= 360)
         {
@@ -259,7 +262,7 @@ public class Character : MonoBehaviour
     {
         coord = new Coord(transform.position);
         transform.position = new Vector3(coord.x,transform.position.y,coord.z);
-        m_animator.transform.localPosition = Vector3.zero;
+        //m_animator.transform.localPosition = Vector3.zero;
         ResetDirection();
     }
 

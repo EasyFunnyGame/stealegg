@@ -58,7 +58,7 @@ public class ActionEnemyMove : ActionBase
 
     public override bool CheckComplete()
     {
-        var myPosition = character.tr_body.position;
+        var myPosition = character.transform.position;
         var targetPosition = nextStepTilePosition;
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist < 0.001f)
@@ -237,18 +237,18 @@ public class ActionEnemyMove : ActionBase
         if (character.body_looking)
         {
             var dirPos = character.db_moves[1].position;
-            Vector3 tar_dir = new Vector3(dirPos.x, character.tr_body.position.y, dirPos.z)  - character.tr_body.position;
+            Vector3 tar_dir = new Vector3(dirPos.x, character.tr_body.GetChild(0).position.y, dirPos.z)  - character.tr_body.position;
 
-            Vector3 new_dir = Vector3.RotateTowards(character.tr_body.forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
+            Vector3 new_dir = Vector3.RotateTowards(character.tr_body.GetChild(0).forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
 
             new_dir.y = 0;
-            character.tr_body.transform.rotation = Quaternion.LookRotation(new_dir);
+            character.tr_body.GetChild(0).transform.rotation = Quaternion.LookRotation(new_dir);
 
-            var angle = Vector3.Angle(tar_dir, character.tr_body.forward);
+            var angle = Vector3.Angle(tar_dir, character.tr_body.GetChild(0).forward);
             
             if (angle <= 1 )
             {
-                character.transform.forward = tar_dir;
+                //character.transform.forward = tar_dir;
                 character.ResetDirection();
                 character.body_looking = false;
 
@@ -273,7 +273,7 @@ public class ActionEnemyMove : ActionBase
             //    character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);
             //}
             
-            var myPosition = character.tr_body.position;
+            var myPosition = character.transform.position;
             var targetPosition = character.db_moves[0].position;
             var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
             if (tdist < 0.001f)
