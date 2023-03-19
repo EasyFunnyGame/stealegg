@@ -382,6 +382,8 @@ public class Enemy : Character
                 patroling = false;
                 routeArrow.gameObject.SetActive(true);
                 lookAroundTime = 9;
+
+                UpdateRouteMark();
                 return true;
             }
         }

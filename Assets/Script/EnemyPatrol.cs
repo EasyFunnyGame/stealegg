@@ -169,20 +169,16 @@ public class EnemyPatrol : Enemy
                 }
                 routeLine.transform.localScale = new Vector3(1.2f, 1, length);
                 routeArrow.transform.position = transform.localPosition + transform.forward * length / 40;
-                
             }
-            if(patroling )
+            if(!patroling )
             {
-                routeLine.transform.position = new Vector3(transform.position.x, 0.012f, transform.position.z);
-            }
-            else
-            {
-                if(redNodes.Count>0)
+                if (redNodes.Count > 0)
                 {
                     var lastNode = redNodes[redNodes.Count - 1];
-                    routeLine.transform.position = new Vector3(lastNode.transform.position.x, 0.012f, lastNode.transform.position.z);
+                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.012f, lastNode.transform.position.z);
                 }
             }
+            routeLine.transform.position = new Vector3(transform.position.x, 0.012f, transform.position.z);
         }
         routeArrow.gameObject.SetActive(!body_looking);
     }
