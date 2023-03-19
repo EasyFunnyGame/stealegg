@@ -552,7 +552,7 @@ public class Enemy : Character
         return false;
     }
 
-    protected GridTile growthTile = null;
+    public GridTile growthTile = null;
     public virtual void LureGrowth(string tileName)
     {
         var targetTile = gridManager.GetTileByName(tileName);

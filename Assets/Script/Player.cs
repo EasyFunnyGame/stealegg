@@ -21,9 +21,8 @@ public class Player : Character
 
     public bool hidding = false;
 
-    public bool founded = false;
-
     public string walkingLineType;
+
     public int up = 0;
 
     public Camera failCamera;
@@ -41,12 +40,48 @@ public class Player : Character
                 idleTime -= Time.deltaTime;
                 if (idleTime < 0)
                 {
-                    var player_idle_type = m_animator.GetFloat("idle_type");
-                    m_animator.SetFloat("look_around", player_idle_type == 1 ? 0 : 1);
+                    var idle_type = m_animator.GetFloat("idle_type");
+                    m_animator.SetFloat("look_around", idle_type == 1 ? 0 : 1);
                     m_animator.SetTrigger("idle_too_long");
                     idleTime = Random.Range(3, 5);
                 }
             }
+        }
+
+        var founded = false;
+        for(var index = 0; index < boardManager.enemies.Count;index++)
+        {
+            var enemy = boardManager.enemies[index];
+
+            if( enemy.hearSoundTile!=null || enemy.foundPlayerTile!=null || enemy.growthTile!=null)
+            {
+                founded = true;
+            }
+            if(founded)
+            {
+                break;
+            }
+        }
+
+        // 更新主角站立狀態
+        var player_idle_type = m_animator.GetFloat("idle_type");
+        if (founded)
+        {
+            player_idle_type += .1f;
+            if (player_idle_type >= 1)
+            {
+                player_idle_type = 1;
+            }
+            m_animator.SetFloat("idle_type", player_idle_type);
+        }
+        else
+        {
+            player_idle_type -= .1f;
+            if (player_idle_type <= 0)
+            {
+                player_idle_type = 0;
+            }
+            m_animator.SetFloat("idle_type", player_idle_type);
         }
     }
 
@@ -75,12 +110,29 @@ public class Player : Character
         idleTime = Random.Range(3,5);
 
         hidding = false;
+        var anyEnemyLookingAt = false;
         foreach (var kvp in boardManager.allItems)
         {
             var item = kvp.Value;
             if (item.itemType == ItemType.Growth && coord.name == item.coord.name)
             {
-                hidding = !founded && true;
+                for (var index = 0; index < boardManager.enemies.Count;  index++)
+                {
+                    var enemy = boardManager.enemies[index];
+                    if(CanReachInSteps(enemy.currentTile.name, 1))
+                    {
+                        var direction = Utils.DirectionTo(enemy.currentTile.name, kvp.Key, enemy.direction);
+                        if (direction == enemy.direction)
+                        {
+                            anyEnemyLookingAt = true;
+                            break;
+                        }
+                    }
+                }
+                if (!anyEnemyLookingAt)
+                {
+                    hidding = true;
+                }
                 break;
             }
         }

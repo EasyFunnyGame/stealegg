@@ -122,6 +122,16 @@ public class EnemyPatrol : Enemy
                     if ( zOffModel == zOffset)
                     {
                         originalCoord = edge;
+                        for (var a = 0; a < edgeCoords.Count; a++)
+                        {
+                            var another = edgeCoords[a];
+                            if (!another.Equals(edge))
+                            {
+                                originalDirection = Utils.DirectionToMultyGrid( edge.name, another.name, direction);
+                                break;
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -134,13 +144,13 @@ public class EnemyPatrol : Enemy
         if ( routeLine != null)
         {
             routeLine.gameObject.SetActive(patroling);
-            if (redNodes.Count > 0)
+            if ( redNodes.Count > 0)
             {
                 var endPosition = transform.localPosition + transform.forward * 2;
                 var x = Mathf.CeilToInt(endPosition.x);
                 var z = Mathf.CeilToInt(endPosition.z);
                 var length = 0f;
-                //Debug.Log("最终点" + x + " " + z);
+                // Debug.Log("最终点" + x + " " + z);
                 var endNode = boardManager.FindNode(string.Format("{0}_{1}", x, z));
                 if (endPosition.x < 0 || endPosition.z < 0)
                 {
@@ -159,8 +169,20 @@ public class EnemyPatrol : Enemy
                 }
                 routeLine.transform.localScale = new Vector3(1.2f, 1, length);
                 routeArrow.transform.position = transform.localPosition + transform.forward * length / 40;
+                
             }
-            routeLine.transform.position = new Vector3(transform.position.x, 0.012f, transform.position.z);
+            if(patroling )
+            {
+                routeLine.transform.position = new Vector3(transform.position.x, 0.012f, transform.position.z);
+            }
+            else
+            {
+                if(redNodes.Count>0)
+                {
+                    var lastNode = redNodes[redNodes.Count - 1];
+                    routeLine.transform.position = new Vector3(lastNode.transform.position.x, 0.012f, lastNode.transform.position.z);
+                }
+            }
         }
         routeArrow.gameObject.SetActive(!body_looking);
     }
@@ -168,17 +190,16 @@ public class EnemyPatrol : Enemy
     public override void StartMove()
     {
         base.StartMove();
-        if (redNodes.Count > 0)
-        {
-            var firstNode = redNodes[0];
-            Destroy(firstNode);
-            redNodes.RemoveAt(0);
-        }
+        //if (redNodes.Count > 0)
+        //{
+        //    var firstNode = redNodes[0];
+        //    Destroy(firstNode);
+        //    redNodes.RemoveAt(0);
+        //}
     }
 
     public override void UpdateRouteMark()
     {
-        
         for (var index = 0; index < redNodes.Count; index++)
         {
             DestroyImmediate(redNodes[index].gameObject);
@@ -192,6 +213,7 @@ public class EnemyPatrol : Enemy
         redLines.Clear();
 
         routeNodeNames.Clear();
+
         if (sleeping) return;
 
         var xOffset = 0;
@@ -396,6 +418,14 @@ public class EnemyPatrol : Enemy
     {
         if (currentAction != null) return;
 
+
+        if (growthTile != null)
+        {
+            foundPlayerTile = growthTile;
+            growthTile = null;
+            return;
+        }
+
         if (foundPlayerTile == null)
         {
             TryFoundPlayer();
@@ -424,12 +454,6 @@ public class EnemyPatrol : Enemy
             return;
         }
 
-        if (growthTile != null)
-        {
-            hearSoundTile = growthTile;
-            growthTile = null;
-            return;
-        }
 
         if (hearSoundTile != null)
         {

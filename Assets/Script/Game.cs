@@ -268,8 +268,6 @@ public class Game : MonoBehaviour
         enemyActionRunning = false;
         if (player == null) return;
 
-        var beFound = false;
-
         if (player.currentAction != null)
         {
             if (player.currentAction.CheckComplete())
@@ -293,10 +291,6 @@ public class Game : MonoBehaviour
             for(var i = 0; i < boardManager.enemies.Count; i++)
             {
                 var enemy = boardManager.enemies[i];
-                if(!beFound && (enemy.foundPlayerTile != null || enemy.hearSoundTile != null))
-                {
-                    beFound = true;
-                }
                 if(enemy.currentAction!=null)
                 {
                     var complete = enemy.currentAction.CheckComplete();
@@ -313,27 +307,6 @@ public class Game : MonoBehaviour
             }
         }
 
-        // 更新主角站立狀態
-        var player_idle_type = player.m_animator.GetFloat("idle_type");
-        player.founded = beFound;
-        if(beFound)
-        {
-            player_idle_type += .1f;
-            if(player_idle_type>=1)
-            {
-                player_idle_type = 1;
-            }
-            player.m_animator.SetFloat("idle_type", player_idle_type);
-        }
-        else
-        {
-            player_idle_type -= .1f;
-            if (player_idle_type <= 0)
-            {
-                player_idle_type = 0;
-            }
-            player.m_animator.SetFloat("idle_type", player_idle_type);
-        }
         
         if (result == GameResult.NONE && player.currentAction == null && !enemyActionRunning)
         {
