@@ -16,6 +16,8 @@ public class BoardNode : MonoBehaviour
     [SerializeField]
     public Coord coord;
 
+    public List<Character>characters = new List<Character>();
+
     public void initWithTransform(Transform node )
     {
         var baseSquare = node.GetChild(0);
@@ -32,6 +34,7 @@ public class BoardNode : MonoBehaviour
     {
         
     }
+
     float counturScale = 1;
     // Update is called once per frame
     void Update()
@@ -42,6 +45,15 @@ public class BoardNode : MonoBehaviour
             counturScale = Mathf.Abs(Mathf.Sin(Time.time * 2))*0.05f;
             contour.transform.localScale = new Vector3(0.15f + counturScale, 0.15f + counturScale, 0.15f + counturScale);
         }
-        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Enter Board Node:" + other.gameObject.name);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Exit Board Node:" + other.gameObject.name);
     }
 }
