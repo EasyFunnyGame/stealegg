@@ -3,11 +3,11 @@
 public class ActionSteal : ActionBase
 {
     private float actionDuration = 1;
-    private Item graffItem;
+    private GraffItem graffItem;
 
     public Quaternion targetRotation;
 
-    public ActionSteal(Player player, Item item) : base(player, ActionType.Steal)
+    public ActionSteal(Player player, GraffItem item) : base(player, ActionType.Steal)
     {
         graffItem = item;
         
@@ -78,6 +78,7 @@ public class ActionSteal : ActionBase
             if (player.tr_body.transform.rotation.Equals(targetRotation))
             {
                 player.m_animator.SetTrigger("pick");
+                
             }
             return;
         }

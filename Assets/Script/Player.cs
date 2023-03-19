@@ -312,6 +312,7 @@ public class Player : Character
                 item.picked = true;
                 item.gameObject.SetActive(false);
                 item.icon.gameObject.SetActive(false);
+                (item as GraffItem)?.sceneGameObject?.SetActive(false);
             }
 
         }

@@ -156,7 +156,7 @@ public static class Utils
             case ActionType.PlayerMove:
                 return new ActionPlayerMove(player, tile);
             case ActionType.Steal:
-                return new ActionSteal(player, player.boardManager.allItems[player.currentTile.name]);
+                return new ActionSteal(player, player.boardManager.allItems[player.currentTile.name] as GraffItem);
             case ActionType.ThrowBottle:
                 return new ActionThrowBottle(player, tile.name);
             case ActionType.BlowWhistle:

@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4250411267267071149}
   - component: {fileID: 8633908350583343082}
-  - component: {fileID: 3322221251516163918}
+  - component: {fileID: 5472030283631833775}
   m_Layer: 0
   m_Name: Item_Graff
   m_TagString: Untagged
@@ -77,7 +77,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3322221251516163918
+--- !u!114 &5472030283631833775
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7344982118165975154}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4084cff50d0a634c90f6501c1ea1d3f, type: 3}
+  m_Script: {fileID: 11500000, guid: 76d236c04e183824a8a217c00ce06186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 5
@@ -100,7 +100,11 @@ MonoBehaviour:
   lowerPosition: {x: 0, y: 0, z: 0}
   iconPosition: {fileID: 3192952314846525137}
   debug_sphere: {fileID: 7890518038048578332}
-  MoveSmoothTime: 0.1
+  picked: 0
+  icon: {fileID: 0}
+  MoveSmoothTime: 0.2
+  velocity: {x: 0, y: 0, z: 0}
+  sceneGameObject: {fileID: 0}
 --- !u!1 &7890518038048578332
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2720688365847421160
 Transform:
   m_ObjectHideFlags: 0
