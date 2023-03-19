@@ -11,6 +11,9 @@ public class BoardNode : MonoBehaviour
     public Transform contour;
 
     [SerializeField]
+    public SphereCollider sphereCollider;
+
+    [SerializeField]
     public float height;
 
     [SerializeField]
@@ -23,9 +26,23 @@ public class BoardNode : MonoBehaviour
         var baseSquare = node.GetChild(0);
         targetIcon = baseSquare.transform.Find("TargetIcon");
         contour = baseSquare.transform.Find("contour");
+       
+
         height = float.Parse(targetIcon.transform.position.y.ToString("#0.0"));
 
         coord = new Coord(transform.position);
+    }
+
+    private void Awake()
+    {
+        var baseSquare = transform.GetChild(0);
+        sphereCollider = baseSquare.transform.Find("Square_Sphere").GetComponent<SphereCollider>();
+        var trigger = sphereCollider.GetComponent<BoardNodeTrigger>();
+        if (trigger == null)
+        {
+            trigger = sphereCollider.gameObject.AddComponent<BoardNodeTrigger>();
+        }
+        trigger.node = this;
     }
 
 
@@ -47,13 +64,33 @@ public class BoardNode : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Enter Board Node:" + other.gameObject.name);
+        var enemy = other.transform.parent?.GetComponent<Enemy>();
+        if(enemy != null)
+        {
+            if(characters.IndexOf(enemy)==-1)
+            {
+                characters.Add(enemy);
+            }
+            Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
+        }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
-        Debug.Log("Exit Board Node:" + other.gameObject.name);
+        var enemy = other.transform.parent?.GetComponent<Enemy>();
+        if(enemy != null)
+        {
+            
+            var index = characters.IndexOf(enemy);
+            if (index != -1)
+            {
+                characters.RemoveAt(index);
+            }
+
+            Debug.Log("位置:"+ gameObject.name + " 敌人数量:" + characters.Count);
+        }
+        
     }
 }
