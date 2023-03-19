@@ -615,6 +615,8 @@ public class Game : MonoBehaviour
         player.bottle.gameObject.SetActive(false);
         bottleSelectingTarget = false;
         camera.upper = false;
+        //
+        camera.SetTargets(new List<GameObject>().ToArray());
     }
 
     public void BottleThorwed(string targetTile)

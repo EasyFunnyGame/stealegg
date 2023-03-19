@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GraffCanvas : BaseCanvas
 {
     public Button btn_clz;
-
     public Button btn_changeColor;
-
     public Image img_nowColor;
     public Button btn_black;
     public Button btn_gray;
@@ -24,14 +20,10 @@ public class GraffCanvas : BaseCanvas
     public Button btn_eraser;
     public Button btn_thickness;
     public RectTransform rect_thickNessPlate;
-
     public Button btn_thick;
     public Button btn_normal;
     public Button btn_slime;
-
     public Button btn_complete;
-
-
     private void Awake()
     {
         Game.Instance.camera.gameObject.SetActive(false);
