@@ -51,13 +51,10 @@ public class GraffCanvas : BaseCanvas
         btn_green.onClick.AddListener(() => { ChangeColorHandler("green"); AudioPlay.Instance.PlayClick(); });
 
 
-        btn_thick.onClick.AddListener(() => { ChangThicknessHandler(10); AudioPlay.Instance.PlayClick(); });
-        btn_normal.onClick.AddListener(() => { ChangThicknessHandler(5); AudioPlay.Instance.PlayClick(); });
-        btn_slime.onClick.AddListener(() => { ChangThicknessHandler(2); AudioPlay.Instance.PlayClick(); });
+        btn_thick.onClick.AddListener(() => { ChangThicknessHandler(15); AudioPlay.Instance.PlayClick(); });
+        btn_normal.onClick.AddListener(() => { ChangThicknessHandler(10); AudioPlay.Instance.PlayClick(); });
+        btn_slime.onClick.AddListener(() => { ChangThicknessHandler(5); AudioPlay.Instance.PlayClick(); });
 
-        //ChangeColorHandler("transparent");
-        //ChangThicknessHandler(50);
-        //AudioPlay.Instance.PlayClick();
         btn_eraser.onClick.AddListener(() => {
             var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
             drawable.ResetCanvas();
@@ -140,15 +137,16 @@ public class GraffCanvas : BaseCanvas
 
     void onCloseGraffCanvasHandler()
     {
+        if(img_default.gameObject.activeSelf)
+        {
+            Game.Instance.msgCanvas.PopMessage("请完成涂鸦");
+            return;
+        }
         Game.Instance.translateCanvas.Show();
         Game.Instance.translateCanvas.SetAfterTranslate("main");
-        //Game.Instance.playing = false;
-        //Game.Instance.graffCanvas.Hide(); 
-        //Game.Instance.gameCanvas.Show();
-        Game.Instance.gameCanvas.playing.gameObject.SetActive(true);
-        Game.Instance.gameCanvas.home.gameObject.SetActive(false);
         AudioPlay.Instance.PlayClick();
     }
+
     protected override void OnShow()
     {
         img_default.gameObject.SetActive(true); 
