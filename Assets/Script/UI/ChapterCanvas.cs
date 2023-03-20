@@ -19,6 +19,8 @@ public class ChapterCanvas : BaseCanvas
 
     public Button btn_clz;
 
+    public Image img_line;
+
     public int chapter;
 
 
@@ -81,6 +83,8 @@ public class ChapterCanvas : BaseCanvas
 
     void ShowChapter(int chapter)
     {
+        var sprite  = Resources.Load<Sprite>("UI/Sprite/luxian"+(chapter+1));
+        img_line.sprite = sprite;
         locate.gameObject.SetActive(false);
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
         if(level>35)
