@@ -9,6 +9,8 @@ public class LevelItem : MonoBehaviour
 
     public RawImage img_center_unlocked;
 
+    public RawImage bg;
+
     public int chapter;
 
     public int index;
@@ -42,6 +44,7 @@ public class LevelItem : MonoBehaviour
         this.chapter = chapter;
         index = idx;
         txt_level.text = (level+1).ToString();
+        bg.texture = Resources.Load<Texture>("UI/Sprite/guanka-" + (chapter + 1));
     }
 
     public int level

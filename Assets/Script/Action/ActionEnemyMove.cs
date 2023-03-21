@@ -248,7 +248,8 @@ public class ActionEnemyMove : ActionBase
             
             if (angle <= 1 )
             {
-                //character.transform.forward = tar_dir;
+                character.tr_body.GetChild(0).forward = tar_dir;
+                // character.tr_body.forward = tar_dir;
                 character.ResetDirection();
                 character.body_looking = false;
 

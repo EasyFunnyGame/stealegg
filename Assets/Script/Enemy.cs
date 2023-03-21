@@ -58,6 +58,10 @@ public class Enemy : Character
 
     public int up = 0;
 
+    public static float RED_HEIGHT =  0.016f;
+
+    public static float RED_SCALE = 1.3f;
+
     public override void Start()
     {
         base.Start();
@@ -168,8 +172,8 @@ public class Enemy : Character
         copy.name = line.name;
         copy.transform.position = line.transform.position;
         var scale = line.transform.localScale;
-        copy.transform.localScale = new Vector3(scale.x * 1.2f, scale.y, scale.z);
-        copy.transform.Translate(new Vector3(0, 0.001f, 0));
+        copy.transform.localScale = new Vector3(RED_SCALE, scale.y, scale.z);
+        copy.transform.position = new Vector3(line.transform.position.x, RED_HEIGHT, line.transform.position.z);
         copy.transform.rotation = line.transform.rotation;
         var renderer = copy.transform.GetChild(0).GetComponent<MeshRenderer>();
         renderer.material = Resources.Load<Material>("Material/RouteRed");
@@ -185,9 +189,9 @@ public class Enemy : Character
             var nodeTr = node.targetIcon;
             var copyNode = Instantiate(nodeTr.GetComponent<MeshRenderer>());
             copyNode.name = nodeName;
-            copyNode.transform.localScale = new Vector3(1.05f, 1, 1.05f);
+            copyNode.transform.localScale = new Vector3(RED_SCALE, 1, RED_SCALE);
             copyNode.transform.position = nodeTr.transform.position;
-            copyNode.transform.Translate(new Vector3(0, 0.001f, 0));
+            copyNode.transform.position = new Vector3(node.transform.position.x, RED_HEIGHT, node.transform.position.z);
             copyNode.transform.rotation = nodeTr.transform.rotation;
             copyNode.material = Resources.Load<Material>("Material/RouteRed");
             redNodes.Add(copyNode);
@@ -393,6 +397,10 @@ public class Enemy : Character
     public override void StartMove()
     {
         m_animator.SetBool("moving", true);
+        if(redNodes?.Count>0)
+        {
+            redNodes[0].transform.position = redNodes[redNodes.Count - 1].transform.position;
+        }
     }
 
     protected virtual void Update()

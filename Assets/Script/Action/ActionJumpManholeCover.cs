@@ -2,12 +2,12 @@
 
 public class ActionJumpManholeCover : ActionBase
 {
-    private float jumpInDelay = 1;
-    private float jumpOutDelay = 2;
+    private float jumpInDelay = 0f;
+    private float jumpOutDelay = 0f;
     private ManholeCoverItem manholecover;
     public ActionJumpManholeCover(Player player, ManholeCoverItem item) : base(player, ActionType.ManHoleCover)
     {
-        jumpInDelay = 0.9f;
+        jumpInDelay = 0.8f;
         manholecover = item;
         var manholeCover = player.boardManager.allItems[player.currentTile.name];
         if(manholeCover && manholeCover.itemType == ItemType.ManHoleCover)
@@ -54,7 +54,7 @@ public class ActionJumpManholeCover : ActionBase
             jumpInDelay -= Time.deltaTime;
             if (jumpInDelay < 0)
             {
-                jumpOutDelay = 1.1f;
+                jumpOutDelay = 2f;
                 manholecover.JumpOut();
                 player.m_animator.SetBool("jumping", false);
                 var boardManager = Game.Instance.boardManager;

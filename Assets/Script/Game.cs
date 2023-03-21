@@ -312,27 +312,12 @@ public class Game : MonoBehaviour
         {
             ShowGuide();
             ListenClick();
-            toolCheckDelay -= Time.deltaTime;
         }
-        else
-        {
-            toolCheckDelay = 0.25f;
-        }
-        if (toolCheckDelay>0)
-        {
-            gameCanvas.DisableWhistle();
-            gameCanvas.DisableBottle();
-            toolCheckDelay-=Time.deltaTime;
-        }
-        else
-        {
-            player.CheckWhitsle();
-            player.CheckBottle();
-        }
+
+        player.CheckWhitsle();
+        player.CheckBottle();
     }
 
-    float toolCheckDelay = 0.5f;
-    
     void ListenBottleTargetSelect()
     {
         if (pausing) return;

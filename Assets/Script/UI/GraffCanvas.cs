@@ -24,6 +24,9 @@ public class GraffCanvas : BaseCanvas
     public Button btn_normal;
     public Button btn_slime;
     public Button btn_complete;
+    public int min=5;
+    public int middle=10;
+    public int thick=15;
     private void Awake()
     {
         Game.Instance.camera.gameObject.SetActive(false);
@@ -51,17 +54,22 @@ public class GraffCanvas : BaseCanvas
         btn_green.onClick.AddListener(() => { ChangeColorHandler("green"); AudioPlay.Instance.PlayClick(); });
 
 
-        btn_thick.onClick.AddListener(() => { ChangThicknessHandler(15); AudioPlay.Instance.PlayClick(); });
-        btn_normal.onClick.AddListener(() => { ChangThicknessHandler(10); AudioPlay.Instance.PlayClick(); });
-        btn_slime.onClick.AddListener(() => { ChangThicknessHandler(5); AudioPlay.Instance.PlayClick(); });
+        btn_thick.onClick.AddListener(() => { ChangThicknessHandler(thick); AudioPlay.Instance.PlayClick(); });
+        btn_normal.onClick.AddListener(() => { ChangThicknessHandler(middle); AudioPlay.Instance.PlayClick(); });
+        btn_slime.onClick.AddListener(() => { ChangThicknessHandler(min); AudioPlay.Instance.PlayClick(); });
 
+
+       
         btn_eraser.onClick.AddListener(() => {
             var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+            var graffBoxCollider = drawable.boxCollider;
             drawable.ResetCanvas();
-             });
-
+        });
+        
         btn_complete.onClick.AddListener(onCloseGraffCanvasHandler);
+
     }
+
 
     public void HideDefaultImage()
     {
@@ -69,11 +77,35 @@ public class GraffCanvas : BaseCanvas
         
     }
 
+
     void ChangThicknessHandler(float thickness)
     {
         var setting = GameObject.Find("DrawingSettings").GetComponent<FreeDraw.DrawingSettings>();
         setting.SetMarkerWidth(thickness);
         rect_thickNessPlate.gameObject.SetActive(false);
+
+        var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+        var graffBoxCollider = drawable.boxCollider;
+        graffBoxCollider.enabled = true;
+
+        btn_thick.transform.GetChild(0).gameObject.SetActive(false);
+        btn_normal.transform.GetChild(0).gameObject.SetActive(false);
+        btn_slime.transform.GetChild(0).gameObject.SetActive(false);
+
+
+        if (thickness == min)
+        {
+            btn_slime.transform.GetChild(0).gameObject.SetActive(true);
+            
+        }
+        else if (thickness == middle)
+        {
+            btn_normal.transform.GetChild(0).gameObject.SetActive(true);
+        }
+        else if(thickness == thick)
+        {
+            btn_thick.transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 
     void ChangeColorHandler(string color)
@@ -118,6 +150,10 @@ public class GraffCanvas : BaseCanvas
         }
         
         rect_colorPlate.gameObject.SetActive(false);
+
+        var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+        var graffBoxCollider = drawable.boxCollider;
+        graffBoxCollider.enabled = true;
     }
 
     void ShowLineThicknessHandler()
@@ -125,6 +161,10 @@ public class GraffCanvas : BaseCanvas
         rect_colorPlate.gameObject.SetActive(false);
         rect_thickNessPlate.gameObject.SetActive(!rect_thickNessPlate.gameObject.activeSelf);
         AudioPlay.Instance.PlayClick();
+
+        var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+        var graffBoxCollider = drawable.boxCollider;
+        graffBoxCollider.enabled = false;
     }
 
     void ShowColorPlateHandler()
@@ -132,6 +172,10 @@ public class GraffCanvas : BaseCanvas
         rect_thickNessPlate.gameObject.SetActive(false);
         rect_colorPlate.gameObject.SetActive(!rect_colorPlate.gameObject.activeSelf);
         AudioPlay.Instance.PlayClick();
+
+        var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
+        var graffBoxCollider = drawable.boxCollider;
+        graffBoxCollider.enabled = false;
     }
 
 
@@ -160,7 +204,7 @@ public class GraffCanvas : BaseCanvas
             Game.Instance.draw_setting.gameObject.SetActive(true);
             var setting = GameObject.Find("DrawingSettings").GetComponent<FreeDraw.DrawingSettings>();
             setting.SetMarkerColour(new Color(0, 0, 0, 1));
-            setting.SetMarkerWidth(2);
+            ChangThicknessHandler(middle);
         }
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera.gameObject.SetActive(true);

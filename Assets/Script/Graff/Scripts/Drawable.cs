@@ -18,10 +18,12 @@ namespace FreeDraw
 
         public Transform localPos;
 
+        public BoxCollider boxCollider;
+
         // PEN COLOUR
         public static Color Pen_Colour = Color.red;     // Change these to change the default drawing settings
         // PEN WIDTH (actually, it's a radius, in pixels)
-        public static int Pen_Width = 3;
+        public static int Pen_Width = 5;
 
 
         public delegate void Brush_Function(Vector3 world_position);
@@ -153,7 +155,7 @@ namespace FreeDraw
                 Vector2 mouse_world_position = cam.ScreenToWorldPoint(Input.mousePosition);// Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
                 Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                Debug.DrawRay(ray.origin, ray.direction,Color.green);
+                //Debug.DrawRay(ray.origin, ray.direction,Color.green);
                 RaycastHit rayCastHit;
                 var hitted = Physics.Raycast(ray, out rayCastHit,100);
                 // Debug.Log("���߼����" + hitted + "   ��������:" + rayCastHit.point);
@@ -218,10 +220,9 @@ namespace FreeDraw
                 // Check if the X wraps around the image, so we don't draw pixels on the other side of the image
                 if (x >= (int)drawable_sprite.rect.width || x < 0)
                 {
-                    Debug.LogWarning("画画出界了");
+                    //Debug.LogWarning("画画出界了");
                     continue;
                 }
-                    
 
                 for (int y = center_y - pen_thickness; y <= center_y + pen_thickness; y++)
                 {
@@ -315,6 +316,7 @@ namespace FreeDraw
             // Should we reset our canvas image when we hit play in the editor?
             if (Reset_Canvas_On_Play)
                 ResetCanvas();
+
         }
     }
 }

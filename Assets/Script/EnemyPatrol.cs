@@ -146,7 +146,7 @@ public class EnemyPatrol : Enemy
             routeLine.gameObject.SetActive(patroling);
             if ( redNodes.Count > 0)
             {
-                var endPosition = transform.localPosition + transform.forward * 2;
+                var endPosition = transform.localPosition + transform.GetChild(0).forward * 2;
                 var x = Mathf.CeilToInt(endPosition.x);
                 var z = Mathf.CeilToInt(endPosition.z);
                 var length = 0f;
@@ -167,18 +167,25 @@ public class EnemyPatrol : Enemy
                     var distance = Vector3.Distance(transform.position, finalNode.transform.localPosition);
                     length = distance * 40;
                 }
-                routeLine.transform.localScale = new Vector3(1.2f, 1, length);
-                routeArrow.transform.position = transform.localPosition + transform.forward * length / 40;
+                routeLine.transform.localScale = new Vector3(RED_SCALE, 1, length);
+                routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
+                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * length / 40;
+                routeArrow.transform.position = new Vector3(routeArrow.transform.position.x,RED_HEIGHT, routeArrow.transform.position.z);
+                routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
+                routeArrow.transform.Rotate(new Vector3(0, 0, 180));
             }
             if(!patroling )
             {
                 if (redNodes.Count > 0)
                 {
                     var lastNode = redNodes[redNodes.Count - 1];
-                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.012f, lastNode.transform.position.z);
+                    routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
+                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, RED_HEIGHT, lastNode.transform.position.z);
+                    routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
+                    routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 }
             }
-            routeLine.transform.position = new Vector3(transform.position.x, 0.012f, transform.position.z);
+            routeLine.transform.position = new Vector3(transform.position.x, Enemy.RED_HEIGHT, transform.position.z);
         }
         routeArrow.gameObject.SetActive(!body_looking);
     }
