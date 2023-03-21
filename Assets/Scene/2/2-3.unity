@@ -26376,6 +26376,81 @@ MonoBehaviour:
     tile_s: {fileID: 1691298266}
     num: 0
   db_path_lowest: []
+--- !u!1001 &1419845161
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2314443227251396910}
+    m_Modifications:
+    - target: {fileID: 5486005737835665566, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_Name
+      value: ThroughWireNet
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b0666515afac2e9438e606c9143cc843, type: 3}
+--- !u!4 &1419845162 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5486005737835665567, guid: b0666515afac2e9438e606c9143cc843,
+    type: 3}
+  m_PrefabInstance: {fileID: 1419845161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1426713206
 GameObject:
   m_ObjectHideFlags: 0
@@ -39437,6 +39512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 781796856}
   contour: {fileID: 195799363}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -39506,6 +39582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1035249922}
   contour: {fileID: 841423549}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 4
@@ -39544,6 +39621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1379842335}
   contour: {fileID: 118971290}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 4
@@ -39672,6 +39750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 552479986}
   contour: {fileID: 625978216}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
@@ -39693,6 +39772,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1514887372}
   contour: {fileID: 189907202}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -39748,6 +39828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 195298391}
   contour: {fileID: 1440636292}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 5
@@ -39842,6 +39923,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 2072730491}
   contour: {fileID: 1927609550}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -39880,6 +39962,7 @@ Transform:
   - {fileID: 7201985627077182876}
   - {fileID: 8699802979493914059}
   - {fileID: 1249900589980729783}
+  - {fileID: 1419845162}
   m_Father: {fileID: 3437022660605191103}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41032,6 +41115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 291823906}
   contour: {fileID: 755684165}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -41226,6 +41310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1171524783}
   contour: {fileID: 2039878370}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
@@ -41263,6 +41348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 2146231237}
   contour: {fileID: 507632383}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -41284,6 +41370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 434258623}
   contour: {fileID: 1888354156}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -41335,6 +41422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 785313502}
   contour: {fileID: 826830451}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -41506,6 +41594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 3678115962461958141}
   contour: {fileID: 4076520383640342371}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 0
