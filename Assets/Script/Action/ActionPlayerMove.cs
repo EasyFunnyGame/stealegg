@@ -10,8 +10,16 @@ public class ActionPlayerMove : ActionBase
 
     bool walkingExit = false;
 
+
+    Vector3 startPosition;
+
+    Vector3 endPosition;
+
     public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
+        endPosition = tile.transform.position;
+        startPosition = player.transform.position;
+
         walkingExit = false;
         velocity = new Vector3();
         player.FindPathRealTime(tile);
@@ -74,6 +82,17 @@ public class ActionPlayerMove : ActionBase
                 }
             }
         }
+
+        RaycastHit[] results = Physics.RaycastAll(startPosition, endPosition, 1);
+        for(int i = 0; i < results.Length; i++)
+        {
+            RaycastHit result = results[i];
+            if(result.collider)
+            {
+                Debug.Log("射中" + result.collider.gameObject.name);
+            }
+        }
+
         player.body_looking = true;
     }
 
@@ -87,7 +106,8 @@ public class ActionPlayerMove : ActionBase
 
     public override bool CheckComplete()
     {
-        if(character.selected_tile_s != null && character.selected_tile_s.db_path_lowest.Count==1)
+        Debug.DrawLine(startPosition, endPosition, Color.red);
+        if (character.selected_tile_s != null && character.selected_tile_s.db_path_lowest.Count==1)
         {
             var myPosition = character.tr_body.position;
             var targetPosition = character.db_moves[0].position;
