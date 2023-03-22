@@ -92,7 +92,7 @@ public class GameEndCanvas : BaseCanvas
     {
         AudioPlay.Instance.PlayClick();
     }
-
+    float playerRunTime = 4.0f;
     // Update is called once per frame
     void Update()
     {
@@ -102,9 +102,11 @@ public class GameEndCanvas : BaseCanvas
         //Debug.Log("位置:" + screenPoint.x + "  " + screenPoint.y);
         if (Game.Instance.result == GameResult.WIN)
         {
-            if (screenPoint.y > 750 / 2)
+            playerRunTime -= Time.deltaTime;
+            if (screenPoint.y > 750 / 2 || playerRunTime<=0)
             {
                 Game.Instance.player.m_animator.SetBool("moving", false);
+                Game.Instance.player.gameObject.SetActive(false);
             }
             else
             {
@@ -113,6 +115,7 @@ public class GameEndCanvas : BaseCanvas
         }
     }
 
+    
     protected override void OnShow()
     {
         if(Game.Instance.result == GameResult.WIN)
@@ -124,6 +127,7 @@ public class GameEndCanvas : BaseCanvas
 
             winTxture.gameObject.SetActive(true);
             failTexture.gameObject.SetActive(false);
+            playerRunTime = 4.0f;
         }
         else if(Game.Instance.result == GameResult.FAIL)
         {

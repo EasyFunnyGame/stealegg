@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7237343825278067507}
   - component: {fileID: 6731988626520729883}
-  - component: {fileID: 6251896833976081227}
+  - component: {fileID: 8845240021014675033}
   m_Layer: 0
   m_Name: item_Growth
   m_TagString: Untagged
@@ -143,8 +143,8 @@ MonoBehaviour:
   icon: {fileID: 0}
   MoveSmoothTime: 0.2
   velocity: {x: 0, y: 0, z: 0}
---- !u!135 &6251896833976081227
-SphereCollider:
+--- !u!65 &8845240021014675033
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -154,8 +154,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.66, y: 1.2, z: 0.66}
+  m_Center: {x: 0, y: 0.6, z: 0}
 --- !u!1 &8007851456343591799
 GameObject:
   m_ObjectHideFlags: 0
