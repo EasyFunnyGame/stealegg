@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44555634, g: 0.49523455, b: 0.5741307, a: 1}
+  m_IndirectSpecularColor: {r: 0.4455561, g: 0.49523395, b: 0.5741305, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -20370,6 +20370,7 @@ Transform:
   m_Children:
   - {fileID: 957004563}
   - {fileID: 415089074}
+  - {fileID: 2060959010}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41022,6 +41023,81 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059294305}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &2060959009
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1038629672}
+    m_Modifications:
+    - target: {fileID: 3074096081237013706, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_Name
+      value: Draw
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.976
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.526
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 103ccb60ae2d608459e8e3a2955b48ab, type: 3}
+--- !u!4 &2060959010 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3074096081237013709, guid: 103ccb60ae2d608459e8e3a2955b48ab,
+    type: 3}
+  m_PrefabInstance: {fileID: 2060959009}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2061225724
 GameObject:
   m_ObjectHideFlags: 0
@@ -42520,6 +42596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1236128068}
   contour: {fileID: 658267013}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 0
@@ -43045,6 +43122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 894408331}
   contour: {fileID: 1176139351}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 4
@@ -43160,6 +43238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 887530554}
   contour: {fileID: 1244159665}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 4
@@ -43291,6 +43370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 2056052518}
   contour: {fileID: 43595717}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -43468,6 +43548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 439641449}
   contour: {fileID: 1278304652}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
@@ -43552,6 +43633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 43678867}
   contour: {fileID: 157445849}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -43588,6 +43670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1375354267}
   contour: {fileID: 732851886}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 0
@@ -43609,6 +43692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 769362651}
   contour: {fileID: 51344434}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -43630,6 +43714,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 890843130}
   contour: {fileID: 1416365133}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
@@ -43651,6 +43736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 909170440}
   contour: {fileID: 553740189}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
@@ -43719,6 +43805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1403794585}
   contour: {fileID: 136075988}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 5
@@ -43772,6 +43859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 688127018}
   contour: {fileID: 158920754}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 4
@@ -43793,6 +43881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1096250207}
   contour: {fileID: 855890162}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 4
@@ -43944,6 +44033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1939417782}
   contour: {fileID: 1496416503}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -44027,6 +44117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 643019895}
   contour: {fileID: 838626603}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
@@ -44048,6 +44139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 239410351}
   contour: {fileID: 1910936274}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -44069,6 +44161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 2106365031}
   contour: {fileID: 755936006}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 2
@@ -45094,6 +45187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1499282953}
   contour: {fileID: 906094110}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -45115,6 +45209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 103620976}
   contour: {fileID: 1265508257}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 1
@@ -45243,6 +45338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetIcon: {fileID: 1858461520}
   contour: {fileID: 192481553}
+  sphereCollider: {fileID: 0}
   height: 0
   coord:
     x: 3
