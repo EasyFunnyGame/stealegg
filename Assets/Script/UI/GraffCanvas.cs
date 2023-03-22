@@ -212,7 +212,13 @@ public class GraffCanvas : BaseCanvas
 
     protected override void OnHide()
     {
-        
+        var drawAbleGameObject = GameObject.Find("Drawable");
+        if(drawAbleGameObject)
+        {
+            var drawable = drawAbleGameObject.GetComponent<FreeDraw.Drawable>();
+            var graffBoxCollider = drawable.boxCollider;
+            graffBoxCollider.enabled = false;
+        }
 
         if (Game.Instance.camera!=null)
             Game.Instance.camera?.gameObject.SetActive(true);

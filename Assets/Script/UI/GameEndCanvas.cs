@@ -135,9 +135,6 @@ public class GameEndCanvas : BaseCanvas
             winTxture.gameObject.SetActive(false);
             failTexture.gameObject.SetActive(true);
         }
-
-        var drawable = GameObject.Find("Drawable").GetComponent<FreeDraw.Drawable>();
-        drawable.GetComponent<BoxCollider>().enabled = false;
     }
 
     protected override void OnHide()

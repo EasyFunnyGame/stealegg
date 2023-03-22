@@ -218,14 +218,14 @@ public class Player : Character
     public void CheckBottle()
     {
         Game.Instance.gameCanvas.DisableBottle();
-        for(int i = 0; i < boardManager.enemies.Count; i++)
-        {
-            var enemy = boardManager.enemies[i];
-            if(enemy.currentAction!=null)
-            {
-                return;
-            }
-        }
+        //for(int i = 0; i < boardManager.enemies.Count; i++)
+        //{
+        //    var enemy = boardManager.enemies[i];
+        //    if(enemy.currentAction!=null)
+        //    {
+        //        return;
+        //    }
+        //}
 
         if (bottleCount <= 0)
         {
