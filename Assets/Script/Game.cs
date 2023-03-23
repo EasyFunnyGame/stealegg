@@ -135,7 +135,6 @@ public class Game : MonoBehaviour
             if (draw_camera && draw_able)
             {
                 draw_able.cam = draw_camera;
-                draw_able.ResetCanvas();
             }
         }
        
@@ -458,6 +457,7 @@ public class Game : MonoBehaviour
 
     void ListenClick()
     {
+        return;
         if (pausing) return;
         if (Input.GetMouseButtonDown(0))
         {
@@ -688,7 +688,62 @@ public class Game : MonoBehaviour
 
     public void ClickGameBoard()
     {
+        if (player == null) return;
+        if (!playing) return;
+        if (bottleSelectingTarget)
+        {
+            Ray ray1 = camera.m_camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo1;
+
+            if (Physics.Raycast(ray1, out hitInfo1, 100, LayerMask.GetMask("Square")))
+            {
+                var node1 = hitInfo1.transform.parent.parent;
+                if (bottleSelectable.IndexOf(node1.name) == -1)
+                {
+                    return;
+                }
+                GridTile tile1 = player.gridManager.GetTileByName(node1.name);
+                for (var i = 0; i < boardManager.enemies.Count; i++)
+                {
+                    var enemy = boardManager.enemies[i];
+                    if (enemy.coord.name == tile1.name)
+                    {
+                        return;
+                    }
+                }
+
+                if (player.moving || player.currentTile != tile1)
+                {
+                    player.currentAction = Utils.CreatePlayerAction(ActionType.ThrowBottle, tile1); // 
+                    boardManager.HideAllSuqreContour();
+                    bottleSelectingTarget = false;
+                    gameCanvas.btn_bottle_cancel.gameObject.SetActive(false);
+                }
+                camera.upper = false;
+            }
+            return;
+        }
+        if (graffCanvas.gameObject.activeSelf) return;
         if (pausing) return;
+        if (player.justSteal) return;
+        if (result != GameResult.NONE) return;
+        if (player.currentAction != null) return;
+        enemyActionRunning = false;
+        for (var i = 0; i < boardManager.enemies.Count; i++)
+        {
+            var enemy = boardManager.enemies[i];
+            if (enemy.currentAction != null)
+            {
+                enemyActionRunning = true;
+                break;
+            }
+        }
+
+        if (enemyActionRunning)
+        {
+            return;
+        }
+
         var position = Input.mousePosition;
         //FindPathTest("3_2","3_4");
         //return;
