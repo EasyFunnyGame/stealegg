@@ -87,4 +87,10 @@ public class AnimationEvent : MonoBehaviour
     {
         AudioPlay.Instance.PlayerBlowWhitsle();
     }
+
+    public void Lure()
+    {
+        owner?.Lure();
+
+    }
 }

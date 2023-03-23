@@ -27,6 +27,7 @@ public class GraffCanvas : BaseCanvas
     public int min=5;
     public int middle=10;
     public int thick=15;
+    public Image drawPad;
     private void Awake()
     {
         Game.Instance.camera.gameObject.SetActive(false);
@@ -202,6 +203,11 @@ public class GraffCanvas : BaseCanvas
         if (Game.Instance.draw_setting != null)
         {
             Game.Instance.draw_setting.gameObject.SetActive(true);
+            var drawGameObject = GameObject.Find("Drawable");
+            if(drawGameObject)
+            {
+                drawable = drawGameObject.GetComponent<FreeDraw.Drawable>();
+            }
             var setting = GameObject.Find("DrawingSettings").GetComponent<FreeDraw.DrawingSettings>();
             setting.SetMarkerColour(new Color(0, 0, 0, 1));
             ChangThicknessHandler(middle);
@@ -209,6 +215,8 @@ public class GraffCanvas : BaseCanvas
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera.gameObject.SetActive(true);
     }
+
+    FreeDraw.Drawable drawable;
 
     protected override void OnHide()
     {
@@ -228,5 +236,30 @@ public class GraffCanvas : BaseCanvas
             Game.Instance.draw_setting?.gameObject.SetActive(false);
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera?.gameObject.SetActive(false);
+    }
+
+    public void Draw()
+    {
+        var point = Input.mousePosition;
+        if(drawable)
+        {
+            drawable.Draw(point);
+        }
+    }
+
+    public void BeginDraw()
+    {
+        if (drawable)
+        {
+            drawable.BeginDraw();
+        }
+    }
+
+    public void EndDraw()
+    {
+        if (drawable)
+        {
+            drawable.EndDraw();
+        }
     }
 }

@@ -33,6 +33,7 @@ public class GameEndCanvas : BaseCanvas
         SceneManager.LoadScene("Main");
         Game.Instance.endCanvas.Hide();
         AudioPlay.Instance.PlayClick();
+        Game.Instance.playing = false;
         //throw new NotImplementedException();
     }
 
@@ -92,33 +93,14 @@ public class GameEndCanvas : BaseCanvas
     {
         AudioPlay.Instance.PlayClick();
     }
-    float playerRunTime = 4.0f;
-    // Update is called once per frame
-    void Update()
-    {
-        Vector3 screenPoint = new Vector3(0,0,0);
-
-        UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
-        //Debug.Log("位置:" + screenPoint.x + "  " + screenPoint.y);
-        if (Game.Instance.result == GameResult.WIN)
-        {
-            playerRunTime -= Time.deltaTime;
-            if (screenPoint.y > 750 / 2 || playerRunTime<=0)
-            {
-                Game.Instance.player.m_animator.SetBool("moving", false);
-                Game.Instance.player.gameObject.SetActive(false);
-            }
-            else
-            {
-                Game.Instance.player.transform.Translate(new Vector3(0, 0, 0.02f));
-            }
-        }
-    }
 
     
     protected override void OnShow()
     {
-        if(Game.Instance.result == GameResult.WIN)
+        Game.Instance.player.m_animator.SetBool("moving", false);
+        Game.Instance.player.gameObject.SetActive(false);
+
+        if (Game.Instance.result == GameResult.WIN)
         {
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0049");
             btn_nxtLevel.gameObject.SetActive(true);
@@ -127,10 +109,11 @@ public class GameEndCanvas : BaseCanvas
 
             winTxture.gameObject.SetActive(true);
             failTexture.gameObject.SetActive(false);
-            playerRunTime = 4.0f;
         }
         else if(Game.Instance.result == GameResult.FAIL)
         {
+            var draw_able = GameObject.FindObjectOfType<FreeDraw.Drawable>();
+            draw_able?.gameObject.SetActive(false);
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0048");
             btn_nxtLevel.gameObject.SetActive(false);
             btn_replay.gameObject.SetActive(true);

@@ -135,6 +135,7 @@ public class Game : MonoBehaviour
             if (draw_camera && draw_able)
             {
                 draw_able.cam = draw_camera;
+                draw_able.ResetCanvas();
             }
         }
        
@@ -267,6 +268,8 @@ public class Game : MonoBehaviour
     {
         enemyActionRunning = false;
         if (player == null) return;
+
+        if (player.justSteal) return;
 
         if (player.currentAction != null)
         {

@@ -106,7 +106,7 @@ public class ActionPlayerMove : ActionBase
 
     public override bool CheckComplete()
     {
-        Debug.DrawLine(startPosition, endPosition, Color.red);
+        //Debug.DrawLine(startPosition, endPosition, Color.red);
         if (character.selected_tile_s != null && character.selected_tile_s.db_path_lowest.Count==1)
         {
             var myPosition = character.tr_body.position;

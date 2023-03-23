@@ -317,5 +317,60 @@ public class Player : Character
 
         }
     }
+    public bool justSteal = false;
+    private bool triggerSteal = false;
+    public override void Lure()
+    {
+        if (justSteal && !triggerSteal)
+        {
+            LureSteal();
+            triggerSteal = true;
+            justSteal = false;
+        }
+    }
+
+    //void LureBottle()
+    //{
+
+    //}
+
+    void LureSteal()
+    {
+        var playerTileName = Game.Instance.player.currentTile.name;
+        var item = Game.Instance.boardManager.allItems[playerTileName];
+        if (item.itemType == ItemType.Graff)
+        {
+            var boardManager = Game.Instance.boardManager;
+
+            var targetArray = playerTileName.Split('_');
+            var x = int.Parse(targetArray[0]);
+            var z = int.Parse(targetArray[1]);
+
+            foreach (var enemy in boardManager.enemies)
+            {
+                var coord = enemy.coord;
+                var distanceFromX = Mathf.Abs(x - coord.x);
+                var distanceFromZ = Mathf.Abs(z - coord.z);
+                if (distanceFromX <= 2 && distanceFromZ <= 2)
+                {
+                    enemy.LureSteal(playerTileName);
+                }
+            }
+        }
+
+        var items = this.boardManager.allItems;
+        foreach (var kvp in items)
+        {
+            var endItem = kvp.Value;
+            if (endItem.itemType == ItemType.End)
+            {
+                var notActive = endItem.transform.Find("Exit_not_active");
+                var active = endItem.transform.Find("Exit_active");
+                notActive.gameObject.SetActive(false);
+                active.gameObject.SetActive(true);
+                break;
+            }
+        }
+    }
 
 }

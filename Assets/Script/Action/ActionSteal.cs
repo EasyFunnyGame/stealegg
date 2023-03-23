@@ -7,6 +7,17 @@ public class ActionSteal : ActionBase
 
     public Quaternion targetRotation;
 
+    public bool completed = false;
+
+    public void ActionComplete()
+    {
+        completed = true;
+        
+      
+
+        
+    }
+
     public ActionSteal(Player player, GraffItem item) : base(player, ActionType.Steal)
     {
         graffItem = item;
@@ -29,7 +40,7 @@ public class ActionSteal : ActionBase
 
     public override bool CheckComplete()
     {
-        if (actionDuration < 0)
+        if (!completed && actionDuration < 0)
         {
             graffItem.picked = true;
             graffItem.gameObject.SetActive(false);
@@ -43,30 +54,12 @@ public class ActionSteal : ActionBase
             }
             else
             {
-                player.PlayStealEffect(player.transform.position);
-
-                var boardManager = Game.Instance.boardManager;
-                var playerTileName = player.currentTile.name;
-
-                var targetArray = playerTileName.Split('_');
-                var x = int.Parse(targetArray[0]);
-                var z = int.Parse(targetArray[1]);
-
-                foreach (var enemy in boardManager.enemies)
-                {
-                    var coord = enemy.coord;
-                    var distanceFromX = Mathf.Abs(x - coord.x);
-                    var distanceFromZ = Mathf.Abs(z - coord.z);
-                    if (distanceFromX <= 2 && distanceFromZ <= 2)
-                    {
-                        enemy.LureSteal(playerTileName);
-                    }
-                }
+                
             }
             graffItem.gameObject.SetActive(false);
-            return true;
         }
-        return false;
+        
+        return completed;
     }
 
     public override void Run()

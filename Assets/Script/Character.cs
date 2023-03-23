@@ -350,6 +350,12 @@ public class Character : MonoBehaviour
     public virtual void Pick()
     {
 
+
+    }
+
+    public virtual void Lure()
+    {
+
     }
 
     #endregion

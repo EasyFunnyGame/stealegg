@@ -82,6 +82,13 @@ public class TranslateCanvas : BaseCanvas
             Game.Instance.gameCanvas.Show();
             Game.Instance.gameCanvas.home.gameObject.SetActive(false);
             Game.Instance.gameCanvas.playing.gameObject.SetActive(true);
+
+            Player player = Game.Instance.player;
+            var stealAction = player.currentAction;
+            if(stealAction.actionType == ActionType.Steal)
+            {
+                (stealAction as ActionSteal).ActionComplete();
+            }
         }
     }
 
@@ -102,42 +109,7 @@ public class TranslateCanvas : BaseCanvas
             {
                 player.PlayStealEffect(player.transform.position);
 
-                var playerTileName = Game.Instance.player.currentTile.name;
-                var item = Game.Instance.boardManager.allItems[playerTileName];
-                if (item.itemType == ItemType.Graff)
-                {
-                    var boardManager = Game.Instance.boardManager;
-
-                    var targetArray = playerTileName.Split('_');
-                    var x = int.Parse(targetArray[0]);
-                    var z = int.Parse(targetArray[1]);
-
-                    foreach (var enemy in boardManager.enemies)
-                    {
-                        var coord = enemy.coord;
-                        var distanceFromX = Mathf.Abs(x - coord.x);
-                        var distanceFromZ = Mathf.Abs(z - coord.z);
-                        if (distanceFromX <= 2 && distanceFromZ <= 2)
-                        {
-                            enemy.LureSteal(playerTileName);
-                        }
-                    }
-                }
-
-                var items = player.boardManager.allItems;
-                foreach (var kvp in items)
-                {
-                    var endItem = kvp.Value;
-                    if (endItem.itemType == ItemType.End)
-                    {
-                        var notActive = endItem.transform.Find("Exit_not_active");
-                        var active = endItem.transform.Find("Exit_active");
-                        notActive.gameObject.SetActive(false);
-                        active.gameObject.SetActive(true);
-                        break;
-                    }
-                }
-
+                player.justSteal = true;
             }
         }
         Hide();
