@@ -299,14 +299,14 @@ public class AudioManager : MonoBehaviour
         // 自动播放停止
         audio.OnEnded(() =>
         {
-            Debug.Log(audio.instanceId + " OnEnded");
+            //Debug.Log(audio.instanceId + " OnEnded");
             RemoveAudio(audio, needDestroy);
         });
 
         // 加载出错
         audio.OnError(() =>
         {
-            Debug.Log(audio.instanceId + "audio OnError");
+            //Debug.Log(audio.instanceId + "audio OnError");
             audio.Stop();
             RemoveAudio(audio, needDestroy);
         });
@@ -314,14 +314,14 @@ public class AudioManager : MonoBehaviour
         // 手动停止
         audio.OnStop(() =>
         {
-            Debug.Log(audio.instanceId + "audio OnStop");
+            //Debug.Log(audio.instanceId + "audio OnStop");
             RemoveAudio(audio, needDestroy);
         });
 
         // 暂停
         audio.OnPause(() =>
         {
-            Debug.Log(audio.instanceId + "audio OnPause");
+            //Debug.Log(audio.instanceId + "audio OnPause");
         });
 
         // 播放成功
