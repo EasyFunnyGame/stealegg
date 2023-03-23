@@ -196,7 +196,7 @@ public class Game : MonoBehaviour
         if (playing)
         {
             GamePlayingUpdate();
-            if (result == GameResult.WIN && !endCanvas.gameObject.activeSelf)
+            if (result == GameResult.WIN && !endCanvas.gameObject.activeSelf && player.gameObject && player.gameObject.activeSelf)
             {
                 player.transform.Translate(new Vector3(0, 0, 0.02f));
             }

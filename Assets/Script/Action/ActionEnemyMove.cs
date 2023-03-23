@@ -37,14 +37,6 @@ public class ActionEnemyMove : ActionBase
             }
         }
 
-        if(enemy.hearSoundTile != null || enemy.foundPlayerTile !=null)
-        {
-            //enemy.m_animator.SetFloat("move_type", 1);
-        }
-        else
-        {
-            //enemy.m_animator.SetFloat("move_type", 0);
-        }
         enemy.m_animator.SetBool("moving",true);
     }
 

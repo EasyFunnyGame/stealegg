@@ -32,7 +32,7 @@ public class ActionPlayerMove : ActionBase
             player.Clear();
             return;
         }
-
+        crounching = false;
         player.m_animator.SetFloat("move_type", 0);
         
         Transform lineType = null;
@@ -47,26 +47,21 @@ public class ActionPlayerMove : ActionBase
 
         var targetNode = player.boardManager.FindNode(tile.name);
         height = targetNode.transform.position.y - player.transform.position.y;
-
+        
         if (lineType != null)
         {
             player.walkingLineType = lineType.name;
             player.up = height > 0 ?  1 :  height < 0 ? -1 : 0;
             // Debug.Log("连线类型：" + lineType.name);
-            switch (lineType.name)
+
+            if(linkLine.playerMoveType == 0.5f)
             {
-                case "Hor_Normal_Visual":
-                    player.m_animator.SetFloat("move_type", 0);
-                    break;
-
-                case "Hor_Doted_Visual":
-                    //player.m_animator.SetFloat("move_type", 0.5f);
-                    //crounching = true;
-                    break;
-
-                case "StairsUp_Normal_Visual":
-                    
-                    break;
+                player.m_animator.SetFloat("move_type", 0.5f);
+                crounching = true;
+            }
+            else
+            {
+                player.m_animator.SetFloat("move_type", 0);
             }
         }
 
@@ -81,6 +76,10 @@ public class ActionPlayerMove : ActionBase
                     walkingExit = true;
                 }
             }
+        }
+        else
+        {
+
         }
 
         RaycastHit[] results = Physics.RaycastAll(startPosition, endPosition, 1);

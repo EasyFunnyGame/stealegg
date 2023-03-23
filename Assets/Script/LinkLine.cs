@@ -10,6 +10,8 @@ public class LinkLine : MonoBehaviour
 
     public bool through = true;
 
+    public float playerMoveType = -1;
+
     // Start is called before the first frame update
     void Start()
     {
