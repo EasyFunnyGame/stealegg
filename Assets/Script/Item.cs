@@ -93,17 +93,11 @@ public class Item : MonoBehaviour
                 icon.gameObject.SetActive(false);
 
                 Game.Instance.gainEergy = 5;
-                //var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-                //energy += 5;
-                //PlayerPrefs.SetInt(UserDataKey.Energy, energy);
-                //PlayerPrefs.Save();
                 delete = true;
                 AudioPlay.Instance.PlayStarGain();
                 break;
 
             case ItemType.LureBottle:
-                picked = true;
-                player.m_animator.SetTrigger("pick");
                 
                 break;
 
@@ -154,6 +148,12 @@ public class Item : MonoBehaviour
         //if (other.gameObject.GetComponent<Character>())
             upper = true;
         velocity = Vector3.zero;
+
+        if(itemType==ItemType.LureBottle)
+        {
+            Game.Instance.player.m_animator.SetTrigger("pick");
+            picked = true;
+        }
     }
 
     protected virtual void OnTriggerExit(Collider other)

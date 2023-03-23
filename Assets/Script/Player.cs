@@ -296,15 +296,20 @@ public class Player : Character
     {
         base.Pick();
         var items = boardManager.allItems;
-        if(items.ContainsKey(coord.name))
+
+        var x = Mathf.RoundToInt(transform.position.x);
+        var z = Mathf.RoundToInt(transform.position.z);
+        var pos_name = string.Format("{0}_{1}", x, z);
+
+        if(items.ContainsKey(pos_name))
         {
-            var item = items[coord.name];
+            var item = items[pos_name];
             if(item?.itemType == ItemType.LureBottle)
             {
                 AudioPlay.Instance.PlayerPickBottle();
                 item.gameObject?.SetActive(false);
                 item.icon?.gameObject.SetActive(false);
-                boardManager.allItems.Remove(coord.name);
+                boardManager.allItems.Remove(pos_name);
                 bottleCount++;
             }
             if(item?.itemType == ItemType.Graff)
