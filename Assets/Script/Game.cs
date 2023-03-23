@@ -314,7 +314,7 @@ public class Game : MonoBehaviour
         if (result == GameResult.NONE && player.currentAction == null && !enemyActionRunning)
         {
             ShowGuide();
-            ListenClick();
+            // ListenClick();
         }
 
         player.CheckWhitsle();
@@ -684,5 +684,50 @@ public class Game : MonoBehaviour
         //player.UpdateMoves(player.nextTile);
         player.path = toTile.db_path_lowest;
         player.UpdateTargetDirection(player.nextTile);
+    }
+
+    public void ClickGameBoard()
+    {
+        if (pausing) return;
+        var position = Input.mousePosition;
+        //FindPathTest("3_2","3_4");
+        //return;
+        Ray ray = camera.m_camera.ScreenPointToRay(position);
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
+        {
+            var node = hitInfo.transform.parent.parent;
+
+            var tile = player.gridManager.GetTileByName(node.name);
+
+            for (var i = 0; i < boardManager.enemies.Count; i++)
+            {
+                var enemy = boardManager.enemies[i];
+                if (enemy.coord.name == node.name)
+                {
+                    AudioPlay.Instance.ClickUnWalkable();
+                    return;
+                }
+            }
+
+            var linkLine = player.boardManager.FindLine(player.currentTile.name, tile.name);
+            if (linkLine == null || linkLine.through == false)
+            {
+                if (linkLine == null)
+                {
+                    Debug.Log("路径点连接GameObject名字出错");
+                }
+                AudioPlay.Instance.ClickUnWalkable();
+                return;
+            }
+
+
+            if (player.moving || player.currentTile != tile)
+            {
+                player.currentAction = Utils.CreatePlayerAction(ActionType.PlayerMove, tile);
+                //Debug.Log("主角行为====移动");
+            }
+        }
     }
 }

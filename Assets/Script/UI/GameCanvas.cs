@@ -849,4 +849,9 @@ public class GameCanvas : BaseCanvas
     }
 
 
+    public void ClickGameBoard()
+    {
+        Game.Instance.ClickGameBoard();
+    }
+
 }
