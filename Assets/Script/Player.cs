@@ -203,9 +203,14 @@ public class Player : Character
                 var enemy = boardManager.enemies[index];
                 if (enemy.coord.Equals(kvp.Value.coord))
                 {
-                    Game.Instance.gameCanvas.EnableWhistle();
-                    stop = true;
-                    break;
+                    var dis = Vector3.Distance(transform.position, enemy.transform.position);
+                    if(dis * dis <=  2)
+                    {
+                        Game.Instance.gameCanvas.EnableWhistle();
+                        stop = true;
+                        break;
+                    }
+                    
                 }
             }
             if (stop)
