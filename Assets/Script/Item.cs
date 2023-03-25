@@ -143,10 +143,16 @@ public class Item : MonoBehaviour
         }
     }
 
+    private Character character;
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())
-            upper = true;
+
+        character = other.transform.parent.GetComponent<Character>();
+        Debug.Log("触碰到Item的人物:" + character.name);
+
+        upper = true;
         velocity = Vector3.zero;
 
         if(itemType==ItemType.LureBottle)
@@ -159,7 +165,7 @@ public class Item : MonoBehaviour
     protected virtual void OnTriggerExit(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())
-            upper = false;
+        upper = false;
         velocity = Vector3.zero;
     }
     

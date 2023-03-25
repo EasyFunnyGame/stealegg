@@ -359,7 +359,7 @@ public class Enemy : Character
             {
                 var linkLineName = linkLine.transform.GetChild(0).name;
                 var canReach = linkLineName.Contains("Visual");
-                if (hearSoundTile == null && linkLine && canReach && player.currentTile.name == next1NodeName && !player.hidding)
+                if ( linkLine && canReach && player.currentTile.name == next1NodeName && !player.hidding)// hearSoundTile == null &&
                 {
                     foundPlayer = true;
                     foundPlayerNode = next1NodeName;
@@ -531,6 +531,10 @@ public class Enemy : Character
 
     public bool CatchPlayerOn(string tileName)
     {
+        if(sleeping)
+        {
+            return false;
+        }
         if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
         {
             return false;
@@ -553,6 +557,10 @@ public class Enemy : Character
 
     public bool CatchPlayer()
     {
+        if (sleeping)
+        {
+            return false;
+        }
         if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
         {
             return false;
@@ -585,15 +593,10 @@ public class Enemy : Character
 
     public virtual bool LureWhistle(string tileName)
     {
-        if (sleeping)
-        {
-            sleeping = false;
-            return false;
-        }
         var player = Game.Instance.player;
-        
+        var playerNeighbor = player.CanReachInSteps(currentTile.name);
         var playerTileName = CheckNeighborGrid();
-        var targetTile = gridManager.GetTileByName(playerTileName);
+        var targetTile = gridManager.GetTileByName(tileName);
 
 
         if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
@@ -604,6 +607,7 @@ public class Enemy : Character
         targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
+        sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
         if ( (hearSoundTile && (hearSoundTile.name == tileName || turnOnReached )) || foundPlayerTile)
@@ -612,7 +616,6 @@ public class Enemy : Character
             return false;
         }
 
-        var playerNeighbor = player.CanReachInSteps(currentTile.name);
         if (playerNeighbor && player.currentTile.name == tileName)
         {
             // turnOnReached = true;
@@ -624,8 +627,11 @@ public class Enemy : Character
             FindPathRealTime(targetTile);
             UpdateTargetDirection(nextTile);
         }
-
-        currentAction = new ActionTurnDirection(this, targetDirection);
+        //if(direction != targetDirection)
+        {
+            currentAction = new ActionTurnDirection(this, targetDirection);
+        }
+        
         // ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
         ShowFound();
@@ -634,16 +640,10 @@ public class Enemy : Character
 
     public virtual bool LureBottle(string tileName)
     {
-        if(sleeping)
-        {
-            sleeping = false;
-            return false;
-        }
-
         var player = Game.Instance.player;
+        var playerNeighbor = player.CanReachInSteps(currentTile.name);
         var playerTileName = CheckNeighborGrid();
-        var targetTile = gridManager.GetTileByName(playerTileName);
-
+        var targetTile = gridManager.GetTileByName(tileName);
 
         if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
         {
@@ -653,7 +653,7 @@ public class Enemy : Character
          targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
-
+        sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
         if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
@@ -662,7 +662,6 @@ public class Enemy : Character
             return false;
         }
 
-        var playerNeighbor = player.CanReachInSteps(currentTile.name);
         if (playerNeighbor && player.currentTile.name == tileName)
         {
             turnOnReached = true;
@@ -674,8 +673,10 @@ public class Enemy : Character
             FindPathRealTime(targetTile);
             UpdateTargetDirection(nextTile);
         }
-
-        currentAction = new ActionTurnDirection(this, targetDirection);
+        //if (direction != targetDirection)
+        {
+            currentAction = new ActionTurnDirection(this, targetDirection);
+        }
         //ShowTraceTarget(targetTile, hearSoundTile== null,1);
         hearSoundTile = targetTile;
         
@@ -685,20 +686,20 @@ public class Enemy : Character
 
     public virtual bool LureSteal(string tileName)
     {
-        if (sleeping)
-        {
-            sleeping = false;
-            return false;
-        }
+        var player = Game.Instance.player;
+        var playerNeighbor = player.CanReachInSteps(currentTile.name);
         var playerTileName = CheckNeighborGrid();
+        var targetTile = gridManager.GetTileByName(tileName);
+       
         if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
         {
             return true;
         }
 
-        var targetTile = gridManager.GetTileByName(tileName);
+        
         if (targetTile == null) return false;
 
+        sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
         if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
@@ -707,8 +708,6 @@ public class Enemy : Character
             return false;
         }
 
-        var player = Game.Instance.player;
-        var playerNeighbor = player.CanReachInSteps(currentTile.name);
         if (playerNeighbor && player.currentTile.name == tileName)
         {
             turnOnReached = true;
@@ -721,7 +720,10 @@ public class Enemy : Character
             UpdateTargetDirection(nextTile);
         }
 
-        currentAction = new ActionTurnDirection(this, targetDirection);
+        //if (direction != targetDirection)
+        {
+            currentAction = new ActionTurnDirection(this, targetDirection);
+        }
         ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
         idleType = 0.5f;
