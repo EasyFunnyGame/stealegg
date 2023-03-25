@@ -313,7 +313,6 @@ public class Enemy : Character
 
     public virtual bool TryFoundPlayer()
     {
-        if (sleeping) return false;
         if (!Game.Instance.player || !Game.Instance.player.currentTile)
         {
             return false;
@@ -444,7 +443,7 @@ public class Enemy : Character
     {
         if (targetIdleType < idleType)
         {
-            idleType -= 0.025f;
+            idleType -= 0.1f;
             if (targetIdleType >= idleType)
             {
                 idleType = targetIdleType;
@@ -453,7 +452,7 @@ public class Enemy : Character
 
         if (targetIdleType > idleType)
         {
-            idleType += 0.025f;
+            idleType += 0.1f;
             if (targetIdleType <= idleType)
             {
                 idleType = targetIdleType;
@@ -586,6 +585,11 @@ public class Enemy : Character
 
     public virtual bool LureWhistle(string tileName)
     {
+        if (sleeping)
+        {
+            sleeping = false;
+            return false;
+        }
         var player = Game.Instance.player;
         
         var playerTileName = CheckNeighborGrid();
@@ -611,7 +615,7 @@ public class Enemy : Character
         var playerNeighbor = player.CanReachInSteps(currentTile.name);
         if (playerNeighbor && player.currentTile.name == tileName)
         {
-            turnOnReached = true;
+            // turnOnReached = true;
             UpdateTargetDirection(player.currentTile);
         }
         else
@@ -630,6 +634,12 @@ public class Enemy : Character
 
     public virtual bool LureBottle(string tileName)
     {
+        if(sleeping)
+        {
+            sleeping = false;
+            return false;
+        }
+
         var player = Game.Instance.player;
         var playerTileName = CheckNeighborGrid();
         var targetTile = gridManager.GetTileByName(playerTileName);
@@ -675,6 +685,11 @@ public class Enemy : Character
 
     public virtual bool LureSteal(string tileName)
     {
+        if (sleeping)
+        {
+            sleeping = false;
+            return false;
+        }
         var playerTileName = CheckNeighborGrid();
         if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
         {

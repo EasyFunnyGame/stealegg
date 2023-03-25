@@ -180,7 +180,6 @@ public class Player : Character
         Game.Instance.gameCanvas.DisableWhistle();
         if (Game.Instance.playingLevel == 1)
         {
-            Game.Instance.gameCanvas.DisableWhistle();
             return;
         }
 
@@ -225,15 +224,10 @@ public class Player : Character
     public void CheckBottle()
     {
         Game.Instance.gameCanvas.DisableBottle();
-        //for(int i = 0; i < boardManager.enemies.Count; i++)
-        //{
-        //    var enemy = boardManager.enemies[i];
-        //    if(enemy.currentAction!=null)
-        //    {
-        //        return;
-        //    }
-        //}
-
+        if (Game.Instance.playingLevel == 0)
+        {
+            return;
+        }
         if (bottleCount <= 0)
         {
             return;
