@@ -398,6 +398,20 @@ public class Game : MonoBehaviour
                     guideArrow.gameObject.SetActive(true);
                     //guideArrow.transform.GetChild(0).GetComponent<Animator>().Play("Guide");
                     guideArrow.transform.position = node.transform.position;
+
+                    var allItems = boardManager.allItems;
+                    if(allItems.ContainsKey(node.gameObject.name))
+                    {
+                        var nodeItem = allItems[node.gameObject.name];
+                        if(nodeItem != null)
+                        {
+                            if(nodeItem.itemType == ItemType.Growth)
+                            {
+                                guideArrow.transform.Translate(new Vector3(0, 1.0f, 0));
+                            }
+
+                        }
+                    }
                 }
             }
             else if (currentStep.actionType == ActionType.BlowWhistle)
@@ -455,51 +469,51 @@ public class Game : MonoBehaviour
 
     void ListenClick()
     {
-        return;
-        if (pausing) return;
-        if (Input.GetMouseButtonDown(0))
-        {
-            //FindPathTest("3_2","3_4");
-            //return;
-            Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hitInfo;
+        //return;
+        //if (pausing) return;
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    //FindPathTest("3_2","3_4");
+        //    //return;
+        //    Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
+        //    RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
-            {
-                var node = hitInfo.transform.parent.parent;
+        //    if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
+        //    {
+        //        var node = hitInfo.transform.parent.parent;
 
-                var tile = player.gridManager.GetTileByName(node.name);
+        //        var tile = player.gridManager.GetTileByName(node.name);
 
-                for ( var i = 0; i < boardManager.enemies.Count;  i++ )
-                {
-                    var enemy = boardManager.enemies[i];
-                    if(enemy.coord.name == node.name)
-                    {
-                        AudioPlay.Instance.ClickUnWalkable();
-                        return;
-                    }
-                }
+        //        for ( var i = 0; i < boardManager.enemies.Count;  i++ )
+        //        {
+        //            var enemy = boardManager.enemies[i];
+        //            if(enemy.coord.name == node.name)
+        //            {
+        //                AudioPlay.Instance.ClickUnWalkable();
+        //                return;
+        //            }
+        //        }
 
-                var linkLine = player.boardManager.FindLine(player.currentTile.name, tile.name);
-                if(linkLine == null || linkLine.through== false)
-                {
-                    if(linkLine==null)
-                    {
-                        Debug.Log("路径点连接GameObject名字出错");
-                    }
-                    AudioPlay.Instance.ClickUnWalkable();
-                    return;
-                }
+        //        var linkLine = player.boardManager.FindLine(player.currentTile.name, tile.name);
+        //        if(linkLine == null || linkLine.through== false)
+        //        {
+        //            if(linkLine==null)
+        //            {
+        //                Debug.Log("路径点连接GameObject名字出错");
+        //            }
+        //            AudioPlay.Instance.ClickUnWalkable();
+        //            return;
+        //        }
 
 
-                if (player.moving || player.currentTile != tile)
-                {
-                    player.currentAction = Utils.CreatePlayerAction( ActionType.PlayerMove, tile);
-                    //Debug.Log("主角行为====移动");
-                }
+        //        if (player.moving || player.currentTile != tile)
+        //        {
+        //            player.currentAction = Utils.CreatePlayerAction( ActionType.PlayerMove, tile);
+        //            //Debug.Log("主角行为====移动");
+        //        }
 
-            }
-        }
+        //    }
+        //}
     }
 
     public void BlowWhistle()
@@ -750,14 +764,23 @@ public class Game : MonoBehaviour
 
         if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
         {
-            var node = hitInfo.transform.parent.parent;
 
-            var tile = player.gridManager.GetTileByName(node.name);
+            var nodeName = "";
+            var item = hitInfo.transform.GetComponent<Item>();
+            if(item!=null)
+            {
+                nodeName = item.coord.name;
+            }
+            else
+            {
+                nodeName = hitInfo.transform.parent.parent.name;
+            }
+            var tile = player.gridManager.GetTileByName(nodeName);
 
             for (var i = 0; i < boardManager.enemies.Count; i++)
             {
                 var enemy = boardManager.enemies[i];
-                if (enemy.coord.name == node.name)
+                if (enemy.coord.name == nodeName)
                 {
                     AudioPlay.Instance.ClickUnWalkable();
                     return;
@@ -774,7 +797,6 @@ public class Game : MonoBehaviour
                 AudioPlay.Instance.ClickUnWalkable();
                 return;
             }
-
 
             if (player.moving || player.currentTile != tile)
             {

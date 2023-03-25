@@ -10,8 +10,9 @@ public class ManholeCoverItem : Item
 
     public int InOrOut = 0;
 
-    private void Awake()
+    override protected void Awake()
     {
+        base.Awake();
         m_animator.speed = 0;
     }
 

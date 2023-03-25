@@ -193,47 +193,47 @@ namespace FreeDraw
 
         // This is where the magic happens.
         // Detects when user is left clicking, which then call the appropriate function
-        void Update()
-        {
-            return;
-            // Is the user holding down the left mouse button?
-            bool mouse_held_down = Input.GetMouseButton(0);
-            if (mouse_held_down && !no_drawing_on_current_drag)
-            {
-                // Convert mouse coordinates to world coordinates
-                Vector2 mouse_world_position = cam.ScreenToWorldPoint(Input.mousePosition);// Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //void Update()
+        //{
+        //    return;
+        //    // Is the user holding down the left mouse button?
+        //    bool mouse_held_down = Input.GetMouseButton(0);
+        //    if (mouse_held_down && !no_drawing_on_current_drag)
+        //    {
+        //        // Convert mouse coordinates to world coordinates
+        //        Vector2 mouse_world_position = cam.ScreenToWorldPoint(Input.mousePosition);// Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-                //Debug.DrawRay(ray.origin, ray.direction,Color.green);
-                RaycastHit rayCastHit;
-                var hitted = Physics.Raycast(ray, out rayCastHit,100);
-                // Debug.Log("���߼����" + hitted + "   ��������:" + rayCastHit.point);
-                if (hitted)
-                {
-                    worldPos.position = rayCastHit.point;
-                    current_brush(rayCastHit.point);
-                }
-                else
-                {
-                    // We're not over our destination texture
-                    //previous_drag_position = Vector2.zero;
-                    //if (!mouse_was_previously_held_down)
-                    //{
-                    //    // This is a new drag where the user is left clicking off the canvas
-                    //    // Ensure no drawing happens until a new drag is started
-                    //    no_drawing_on_current_drag = true;
-                    //}
-                }
+        //        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        //        //Debug.DrawRay(ray.origin, ray.direction,Color.green);
+        //        RaycastHit rayCastHit;
+        //        var hitted = Physics.Raycast(ray, out rayCastHit,100);
+        //        // Debug.Log("���߼����" + hitted + "   ��������:" + rayCastHit.point);
+        //        if (hitted)
+        //        {
+        //            worldPos.position = rayCastHit.point;
+        //            current_brush(rayCastHit.point);
+        //        }
+        //        else
+        //        {
+        //            // We're not over our destination texture
+        //            //previous_drag_position = Vector2.zero;
+        //            //if (!mouse_was_previously_held_down)
+        //            //{
+        //            //    // This is a new drag where the user is left clicking off the canvas
+        //            //    // Ensure no drawing happens until a new drag is started
+        //            //    no_drawing_on_current_drag = true;
+        //            //}
+        //        }
 
-            }
-            // Mouse is released
-            else if (!mouse_held_down)
-            {
-                previous_drag_position = Vector2.zero;
-                no_drawing_on_current_drag = false;
-            }
-            mouse_was_previously_held_down = mouse_held_down;
-        }
+        //    }
+        //    // Mouse is released
+        //    else if (!mouse_held_down)
+        //    {
+        //        previous_drag_position = Vector2.zero;
+        //        no_drawing_on_current_drag = false;
+        //    }
+        //    mouse_was_previously_held_down = mouse_held_down;
+        //}
 
 
 
