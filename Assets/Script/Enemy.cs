@@ -230,13 +230,15 @@ public class Enemy : Character
     {
         for (var index = 0; index < redNodes.Count; index++)
         {
-            DestroyImmediate(redNodes[index].gameObject);
+            redNodes[index].gameObject.gameObject.SetActive(false);
+            Destroy(redNodes[index].gameObject);
         }
         redNodes.Clear();
 
         for (var index = 0; index < redLines.Count; index++)
         {
-            DestroyImmediate(redLines[index].gameObject);
+            redLines[index].gameObject.gameObject.SetActive(false);
+            Destroy(redLines[index].gameObject);
         }
         redLines.Clear();
 
@@ -761,6 +763,11 @@ public class Enemy : Character
 
     public virtual void ShowNotFound()
     {
+        if(Game.Instance.result!=GameResult.NONE)
+        {
+            ShowCatch();
+            return;
+        }
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);

@@ -180,9 +180,10 @@ public class Player : Character
         Game.Instance.gameCanvas.DisableWhistle();
         if (Game.Instance.playingLevel == 1)
         {
+            Game.Instance.gameCanvas.whitsleGroup.alpha = 0;
             return;
         }
-
+        Game.Instance.gameCanvas.whitsleGroup.alpha = 1;
         var items = Game.Instance.boardManager.allItems;
         if(items.ContainsKey(coord.name))
         {
@@ -226,8 +227,10 @@ public class Player : Character
         Game.Instance.gameCanvas.DisableBottle();
         if (Game.Instance.playingLevel == 0)
         {
+            Game.Instance.gameCanvas.bottleGroup.alpha = 0;
             return;
         }
+        Game.Instance.gameCanvas.bottleGroup.alpha = 1;
         if (bottleCount <= 0)
         {
             return;

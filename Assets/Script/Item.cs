@@ -150,7 +150,7 @@ public class Item : MonoBehaviour
         //if (other.gameObject.GetComponent<Character>())
 
         character = other.transform.parent.GetComponent<Character>();
-        Debug.Log("触碰到Item的人物:" + character.name);
+        //Debug.Log("触碰到Item的人物:" + character.name);
 
         upper = true;
         velocity = Vector3.zero;

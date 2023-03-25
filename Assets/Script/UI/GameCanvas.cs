@@ -54,6 +54,10 @@ public class GameCanvas : BaseCanvas
 
     public IconsAboveEnemy icon_enemy_template;
 
+    public CanvasGroup whitsleGroup;
+
+    public CanvasGroup bottleGroup;
+
     public List<ItemIconOnUI> icon_bottles = new List<ItemIconOnUI>();
 
     public List<ItemIconOnUI> icon_pincers =  new List<ItemIconOnUI>();
