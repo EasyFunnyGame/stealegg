@@ -125,7 +125,7 @@ public class EnemyPatrol : Enemy
                         for (var a = 0; a < edgeCoords.Count; a++)
                         {
                             var another = edgeCoords[a];
-                            if (!another.Equals(edge))
+                            if (!another.EqualsIgnoreY(edge))
                             {
                                 originalDirection = Utils.DirectionToMultyGrid( edge.name, another.name, direction);
                                 break;

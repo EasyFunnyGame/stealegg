@@ -1,6 +1,13 @@
 ﻿public class EnemyDistracted : Enemy
 {
     public int breath = 1;
+
+    public override void Start()
+    {
+        this.sleeping = true;
+        base.Start();
+    }
+
     public override void OnReachedOriginal()
     {
         base.OnReachedOriginal();

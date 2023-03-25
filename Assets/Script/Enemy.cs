@@ -202,12 +202,25 @@ public class Enemy : Character
 
         UpdateRouteMark();
 
-        if (CatchPlayer()) return;
-
-        var foundPlayer = TryFoundPlayer();
-        if (foundPlayer)
+        if (foundPlayerTile == null)
         {
-            currentAction = new ActionFoundPlayer(this);
+            TryFoundPlayer();
+            if (foundPlayerTile != null)
+            {
+                if (hearSoundTile == null)
+                {
+                    currentAction = new ActionFoundPlayer(this);
+                }
+                else
+                {
+                    currentAction = new ActionTurnDirection(this, targetDirection);
+                }
+                return;
+            }
+        }
+        else
+        {
+            CatchPlayer();
         }
         m_animator.SetBool("moving", false);
         //Debug.Log("敌人到达路径点:"+ currentTile.name);
@@ -300,6 +313,7 @@ public class Enemy : Character
 
     public virtual bool TryFoundPlayer()
     {
+        if (sleeping) return false;
         if (!Game.Instance.player || !Game.Instance.player.currentTile)
         {
             return false;
@@ -384,7 +398,6 @@ public class Enemy : Character
                 patroling = false;
                 routeArrow.gameObject.SetActive(true);
                 lookAroundTime = 9;
-
                 UpdateRouteMark();
                 return true;
             }
@@ -573,13 +586,18 @@ public class Enemy : Character
 
     public virtual bool LureWhistle(string tileName)
     {
+        var player = Game.Instance.player;
+        
         var playerTileName = CheckNeighborGrid();
-        if(!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
+        var targetTile = gridManager.GetTileByName(playerTileName);
+
+
+        if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
         {
             return true;
         }
 
-        var targetTile = gridManager.GetTileByName(tileName);
+        targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
         patroling = false;
@@ -590,7 +608,6 @@ public class Enemy : Character
             return false;
         }
 
-        var player = Game.Instance.player;
         var playerNeighbor = player.CanReachInSteps(currentTile.name);
         if (playerNeighbor && player.currentTile.name == tileName)
         {
@@ -613,13 +630,17 @@ public class Enemy : Character
 
     public virtual bool LureBottle(string tileName)
     {
+        var player = Game.Instance.player;
         var playerTileName = CheckNeighborGrid();
+        var targetTile = gridManager.GetTileByName(playerTileName);
+
+
         if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
         {
             return true;
         }
 
-        var targetTile = gridManager.GetTileByName(tileName);
+         targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return false;
 
 
@@ -631,7 +652,6 @@ public class Enemy : Character
             return false;
         }
 
-        var player = Game.Instance.player;
         var playerNeighbor = player.CanReachInSteps(currentTile.name);
         if (playerNeighbor && player.currentTile.name == tileName)
         {

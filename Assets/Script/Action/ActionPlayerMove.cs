@@ -82,16 +82,6 @@ public class ActionPlayerMove : ActionBase
 
         }
 
-        RaycastHit[] results = Physics.RaycastAll(startPosition, endPosition, 1);
-        for(int i = 0; i < results.Length; i++)
-        {
-            RaycastHit result = results[i];
-            if(result.collider)
-            {
-                Debug.Log("射中" + result.collider.gameObject.name);
-            }
-        }
-
         player.body_looking = true;
     }
 
