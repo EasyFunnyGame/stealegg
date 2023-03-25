@@ -97,11 +97,21 @@ public class GameEndCanvas : BaseCanvas
     
     protected override void OnShow()
     {
-        Game.Instance.player.m_animator.SetBool("moving", false);
-        Game.Instance.player.gameObject.SetActive(false);
+        
+
+        var drawGameObject = GameObject.Find("Draw");
+        if(drawGameObject != null)
+        {
+            //Debug.Log("找到 Draw");
+            var renderCamera = drawGameObject.transform.Find("render_camera");
+            renderCamera.gameObject.SetActive(Game.Instance.result == GameResult.WIN);
+        }
 
         if (Game.Instance.result == GameResult.WIN)
         {
+            Game.Instance.player.m_animator.SetBool("moving", false);
+            Game.Instance.player.gameObject.SetActive(false);
+
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0049");
             btn_nxtLevel.gameObject.SetActive(true);
             btn_replay.gameObject.SetActive(false);

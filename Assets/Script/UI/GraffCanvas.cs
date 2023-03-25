@@ -207,6 +207,8 @@ public class GraffCanvas : BaseCanvas
             if(drawGameObject)
             {
                 drawable = drawGameObject.GetComponent<FreeDraw.Drawable>();
+                var renderCamera = drawGameObject.transform.parent.Find("render_camera");
+                renderCamera.gameObject.SetActive(false);
             }
             var setting = GameObject.Find("DrawingSettings").GetComponent<FreeDraw.DrawingSettings>();
             setting.SetMarkerColour(new Color(0, 0, 0, 1));
