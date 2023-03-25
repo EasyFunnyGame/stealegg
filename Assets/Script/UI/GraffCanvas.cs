@@ -35,7 +35,7 @@ public class GraffCanvas : BaseCanvas
         rect_colorPlate.gameObject.SetActive(false);
         rect_thickNessPlate.gameObject.SetActive(false);
 
-        btn_clz.onClick.AddListener(onCloseGraffCanvasHandler);;
+        btn_clz.onClick.AddListener(onCloseGraffCanvasHandler);
         img_nowColor.sprite = Resources.Load<Sprite>(string.Format("UI/Sprite/color_{0}","black"));
 
 
