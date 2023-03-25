@@ -196,14 +196,16 @@ public class Player : Character
 
         var nodes = boardManager.FindNodesAround(currentTile.name, 2);
         var stop = false;
+        var positionIgnoreY = new Vector3(transform.position.x, 0, transform.position.z);
         foreach (var kvp in nodes)
         {
             for (var index = 0; index < boardManager.enemies.Count; index++)
             {
                 var enemy = boardManager.enemies[index];
-                if (enemy.coord.Equals(kvp.Value.coord))
+                if (enemy.coord.EqualsIgnoreY(kvp.Value.coord))
                 {
-                    var dis = Vector3.Distance(transform.position, enemy.transform.position);
+                    var enemyPositionIgnoreY = new Vector3(enemy.transform.position.x,0,enemy.transform.position.z);
+                    var dis = Vector3.Distance(positionIgnoreY, enemyPositionIgnoreY);
                     if(dis * dis <=  2)
                     {
                         Game.Instance.gameCanvas.EnableWhistle();

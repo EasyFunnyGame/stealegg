@@ -51,6 +51,11 @@ public struct Coord
         return x == coord.x && z == coord.z && Mathf.Abs(height - coord.height)<0.5f;
     }
 
+    public bool EqualsIgnoreY(Coord coord)
+    {
+        return x == coord.x && z == coord.z;
+    }
+
     public Coord Clone()
     {
         return new Coord(new Vector3(x, height, z));
