@@ -187,7 +187,7 @@ public class GameCanvas : BaseCanvas
     private void onClickUseBottleHandler()
     {
         if (buttonClickCd > 0) return;
-        buttonClickCd = 1.5f;
+        buttonClickCd = 1.0f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
@@ -235,7 +235,7 @@ public class GameCanvas : BaseCanvas
             }
         }
         if (buttonClickCd > 0) return;
-        buttonClickCd = 1.5f;
+        buttonClickCd = 1.0f;
         var teachingStep = Game.Instance.showingStep;
         if ( Game.teaching && teachingStep !=null  )
         {
@@ -253,7 +253,7 @@ public class GameCanvas : BaseCanvas
         Game.Instance.UseBottle();
     }
 
-    float buttonClickCd = 1.5f;
+    float buttonClickCd = 1.0f;
 
     // Update is called once per frame
     void Update()
@@ -455,7 +455,7 @@ public class GameCanvas : BaseCanvas
     public void OnClickPricersHandler()
     {
         if (buttonClickCd > 0) return;
-        buttonClickCd = 1.5f;
+        buttonClickCd = 1.0f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
@@ -487,7 +487,7 @@ public class GameCanvas : BaseCanvas
     void OnClickManholeCoverIconHandler(ItemIconOnUI itemIcon)
     {
         if (buttonClickCd > 0) return;
-        buttonClickCd = 1.5f;
+        buttonClickCd = 1.0f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {
@@ -534,7 +534,7 @@ public class GameCanvas : BaseCanvas
     void OnClickGrowthHandler(GrowthItem item)
     {
         if (buttonClickCd > 0) return;
-        buttonClickCd = 1.5f;
+        buttonClickCd = 1.0f;
         var teachingStep = Game.Instance.showingStep;
         if (Game.teaching && teachingStep != null)
         {

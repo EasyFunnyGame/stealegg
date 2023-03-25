@@ -160,6 +160,7 @@ public class EnemyPatrol : Enemy
                 {
                     length = 80;
                     routeLine.transform.localScale = new Vector3(1.2f, 1, 80);
+                    routeLine.transform.position = new Vector3(transform.position.x, 0.016f + endNode.transform.position.y, transform.position.z);
                 }
                 else
                 {
@@ -170,9 +171,10 @@ public class EnemyPatrol : Enemy
                 routeLine.transform.localScale = new Vector3(RED_SCALE, 1, length);
                 routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
                 routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * length / 40;
-                routeArrow.transform.position = new Vector3(routeArrow.transform.position.x,RED_HEIGHT, routeArrow.transform.position.z);
+                //routeArrow.transform.position = new Vector3(routeArrow.transform.position.x,0.006f+ endNode.transform.localPosition.y, routeArrow.transform.position.z);
                 routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                 routeArrow.transform.Rotate(new Vector3(0, 0, 180));
+                
             }
             if(!patroling )
             {
@@ -180,12 +182,11 @@ public class EnemyPatrol : Enemy
                 {
                     var lastNode = redNodes[redNodes.Count - 1];
                     routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
-                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, RED_HEIGHT, lastNode.transform.position.z);
+                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.006f+ lastNode.transform.position.y, lastNode.transform.position.z);
                     routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                     routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 }
             }
-            routeLine.transform.position = new Vector3(transform.position.x, Enemy.RED_HEIGHT, transform.position.z);
         }
         routeArrow.gameObject.SetActive(!body_looking);
     }
@@ -273,7 +274,7 @@ public class EnemyPatrol : Enemy
             distance--;
         }
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        routeArrow.position = endNode.transform.position + new Vector3(0, 0.02f, 0);
+        routeArrow.position = endNode.transform.position + new Vector3(0, 0.006f+ endNode.transform.position.y, 0);
         routeArrow.rotation = transform.rotation;
         routeArrow.Rotate(new Vector3(0, 0, 180));
         routeArrow.parent = null;

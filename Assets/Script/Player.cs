@@ -275,6 +275,7 @@ public class Player : Character
         whitslePlay.gameObject.SetActive(true);
         whitslePlay.transform.position = position;
         whitslePlay.transform.parent = null;
+        whitslePlay.transform.rotation = Quaternion.identity;
     }
 
     public void PlayWhitsle()

@@ -58,9 +58,7 @@ public class Enemy : Character
 
     public int up = 0;
 
-    public static float RED_HEIGHT =  0.016f;
-
-    public static float RED_SCALE = 1.3f;
+    public static float RED_SCALE = 1.5f;
 
     public override void Start()
     {
@@ -173,7 +171,7 @@ public class Enemy : Character
         copy.transform.position = line.transform.position;
         var scale = line.transform.localScale;
         copy.transform.localScale = new Vector3(RED_SCALE, scale.y, scale.z);
-        copy.transform.position = new Vector3(line.transform.position.x, RED_HEIGHT, line.transform.position.z);
+        copy.transform.position = new Vector3(line.transform.position.x, 0.006f+line.transform.position.y, line.transform.position.z);
         copy.transform.rotation = line.transform.rotation;
         var renderer = copy.transform.GetChild(0).GetComponent<MeshRenderer>();
         renderer.material = Resources.Load<Material>("Material/RouteRed");
@@ -191,7 +189,7 @@ public class Enemy : Character
             copyNode.name = nodeName;
             copyNode.transform.localScale = new Vector3(RED_SCALE, 1, RED_SCALE);
             copyNode.transform.position = nodeTr.transform.position;
-            copyNode.transform.position = new Vector3(node.transform.position.x, RED_HEIGHT, node.transform.position.z);
+            copyNode.transform.position = new Vector3(node.transform.position.x, 0.012f + node.transform.position.y, node.transform.position.z);
             copyNode.transform.rotation = nodeTr.transform.rotation;
             copyNode.material = Resources.Load<Material>("Material/RouteRed");
             redNodes.Add(copyNode);
