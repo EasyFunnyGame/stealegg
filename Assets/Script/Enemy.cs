@@ -79,7 +79,7 @@ public class Enemy : Character
     {
         if (currentAction != null) return;
 
-        if (foundPlayerTile == null && hearSoundTile == null)
+        if (foundPlayerTile == null )
         {
             TryFoundPlayer();
             if(foundPlayerTile != null)
@@ -99,6 +99,20 @@ public class Enemy : Character
         {
             if (CatchPlayer()) return;
         }
+
+        //var player = Game.Instance.player;
+        //var playerTileName = player.currentTile.name;
+        //var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
+        //var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
+        //if(playerCanReachInOneStep && dir == direction)
+        //{
+        //     var catched =CatchPlayer();
+        //    if(catched)
+        //    {
+        //        return;
+        //    }
+        //}
+        
 
         if (foundPlayerTile != null)
         {
@@ -489,19 +503,9 @@ public class Enemy : Character
 
     public bool turnOnReached = false;
 
+    //public int turnDirectionOnReach = 0;// 0 不转向; 1 从自身寻路到主角的下一个格子， 2 从主角寻路到自身的下一个格子；
+
     public string targetTileName = "";
-
-    public bool HearSound(string tileName)
-    {
-        if (turnOnReached) return false;
-        return Goto(tileName);
-    }
-
-    public bool SawPlayer(string tileName)
-    {
-        turnOnReached = true;
-        return Goto(tileName);
-    }
 
     public string CheckNeighborGrid()
     {
@@ -736,7 +740,7 @@ public class Enemy : Character
     public void OnTurnEnd()
     {
         body_looking = false;
-        if (foundPlayerTile == null && hearSoundTile == null)
+        if (foundPlayerTile == null)
         {
             TryFoundPlayer();
             if (foundPlayerTile != null)
