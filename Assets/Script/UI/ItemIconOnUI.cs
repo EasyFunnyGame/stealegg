@@ -22,9 +22,9 @@ public class ItemIconOnUI : IconOnUI
     {
         if(teaching)
         {
-            updateTime += (Time.deltaTime * 2);
-            iconScale = 1 + 0.2f * Mathf.Sin(updateTime);
-            icon.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
+            updateTime += (Time.deltaTime * 2.5f);
+            iconScale = 1 + 0.25f * Mathf.Sin(updateTime);
+            transform.localScale = new Vector3(iconScale, iconScale, iconScale);
         }
     }
     float iconScale = 1f;

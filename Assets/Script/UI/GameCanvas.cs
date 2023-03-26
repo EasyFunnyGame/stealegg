@@ -68,10 +68,6 @@ public class GameCanvas : BaseCanvas
 
     public List<IconsAboveEnemy> icon_enemies = new List<IconsAboveEnemy>();
 
-    public Animator whitsleGuide;
-
-    public Animator bottleGuide;
-
     public Image distance_up;
     public Text txt_up;
     public Image distance_down;
@@ -84,6 +80,11 @@ public class GameCanvas : BaseCanvas
     public Image playerPosition;
 
     Vector3 screenPoint = new Vector3();
+
+    float iconScale = 1f;
+
+    float updateTime = 0;
+
     private void Awake()
     {
         btn_add.onClick.AddListener(onClickShowEnergyGainCanvasHandler);
@@ -377,6 +378,20 @@ public class GameCanvas : BaseCanvas
                 UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
+        }
+
+        if(guidingWhitsle)
+        {
+            updateTime += (Time.deltaTime * 2.5f);
+            iconScale = 1 + 0.1f * Mathf.Sin(updateTime);
+            btn_whistle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
+        }
+
+        if(guidingBottle)
+        {
+            updateTime += (Time.deltaTime * 2.5f);
+            iconScale = 1 + 0.1f * Mathf.Sin(updateTime);
+            btn_bottle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
         }
     }
 
@@ -682,22 +697,39 @@ public class GameCanvas : BaseCanvas
         icon_growth.Clear();
     }
 
+    bool guidingWhitsle = false;
+
+    bool guidingBottle = false;
+
     public void ShowBottleGuide()
     {
-        bottleGuide.gameObject.SetActive(true);
-        //bottleGuide.Play("UI_Bottle_Guide");
+        guidingBottle = true;
+        guidingWhitsle = false;
+        updateTime = 0;
+        iconScale = 1;
+        btn_whistle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
+        btn_bottle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
     }
 
     public void HideWhitsleAndBottleGuides()
     {
-        bottleGuide.gameObject.SetActive(false);
-        whitsleGuide.gameObject.SetActive(false);
+        guidingBottle = false;
+        guidingWhitsle = false;
+
+        updateTime = 0;
+        iconScale = 1;
+        btn_whistle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
+        btn_bottle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
     }
 
     public void ShowWhitsleGuide()
     {
-        whitsleGuide.gameObject.SetActive(true);
-        //whitsleGuide.Play("UI_Whitsle_Guide");
+        guidingBottle = false;
+        guidingWhitsle = true;
+        updateTime = 0;
+        iconScale = 1;
+        btn_whistle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
+        btn_bottle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
     }
 
     public void ShowStealGuide()
