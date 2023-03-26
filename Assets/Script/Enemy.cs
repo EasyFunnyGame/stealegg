@@ -17,6 +17,13 @@ public static class EnemyName
     public const string Enemy_Static = "Enemy_Static"; 
 }
 
+public enum ReachTurnTo
+{
+    None = 0,
+    PlayerToEnemy = 1,
+    EnemyToPlayer = 2,
+}
+
 public class Enemy : Character
 {
     [SerializeField]
@@ -60,6 +67,8 @@ public class Enemy : Character
 
     public static float RED_SCALE = 1.5f;
 
+    public ReachTurnTo turnOnReachDirection = ReachTurnTo.None;
+
     public override void Start()
     {
         base.Start();
@@ -78,6 +87,22 @@ public class Enemy : Character
     public virtual void CheckAction()
     {
         if (currentAction != null) return;
+
+        if(hearSoundTile != null )
+        {
+            var player = Game.Instance.player;
+            var playerTileName = player.currentTile.name;
+            var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
+            var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
+            if (playerCanReachInOneStep && dir == direction)
+            {
+                var catched = CatchPlayer();
+                if (catched)
+                {
+                    return;
+                }
+            }
+        }
 
         if (foundPlayerTile == null )
         {
@@ -100,19 +125,6 @@ public class Enemy : Character
             if (CatchPlayer()) return;
         }
 
-        //var player = Game.Instance.player;
-        //var playerTileName = player.currentTile.name;
-        //var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
-        //var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
-        //if(playerCanReachInOneStep && dir == direction)
-        //{
-        //     var catched =CatchPlayer();
-        //    if(catched)
-        //    {
-        //        return;
-        //    }
-        //}
-        
 
         if (foundPlayerTile != null)
         {
@@ -366,19 +378,20 @@ public class Enemy : Character
         
         var foundPlayerNode = "";
 
+        var canReach = false;
+
         LinkLine linkLine;
-        // 情况1
+        // 第一点
         if (foundPlayer == false)
         {
             linkLine = boardManager.FindLine(currentTile.name, next1NodeName);
             if (linkLine)
             {
-                var linkLineName = linkLine.transform.GetChild(0).name;
-                var canReach = linkLineName.Contains("Visual");
-                if ( linkLine && canReach && player.currentTile.name == next1NodeName && !player.hidding)// hearSoundTile == null &&
+                if ( linkLine && player.currentTile.name == next1NodeName && !player.hidding)// hearSoundTile == null &&
                 {
                     foundPlayer = true;
                     foundPlayerNode = next1NodeName;
+                    canReach = CanReachInSteps(next1NodeName, 1);
                 }
             }
             else
@@ -386,16 +399,17 @@ public class Enemy : Character
                 return false;
             }
         }
-        
-        // 情况2
+
+        // 第二点
         foundNodeX += xOffset;
         foundNodeZ += zOffset;
         var next2NodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
         linkLine = boardManager.FindLine(next1NodeName, next2NodeName);
-        if (linkLine && Game.Instance.player.currentTile.name == next2NodeName && !player.hidding)
+        if (linkLine && player.currentTile.name == next2NodeName && !player.hidding)
         {
             foundPlayer = true;
             foundPlayerNode = next2NodeName;
+            canReach = CanReachInSteps(next2NodeName, 2);
         }
 
         if (foundPlayer)
@@ -409,7 +423,15 @@ public class Enemy : Character
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
-                turnOnReached = true;
+                if(canReach)
+                {
+                    turnOnReachDirection = ReachTurnTo.PlayerToEnemy; 
+                }
+                else
+                {
+                    turnOnReachDirection = ReachTurnTo.EnemyToPlayer;
+                }
+
                 patroling = false;
                 routeArrow.gameObject.SetActive(true);
                 lookAroundTime = 9;
@@ -419,6 +441,8 @@ public class Enemy : Character
         }
         return false;
     }
+
+
 
     public override void StartMove()
     {
@@ -501,11 +525,6 @@ public class Enemy : Character
 
     // =======================================================================================
 
-    public bool turnOnReached = false;
-
-    //public int turnDirectionOnReach = 0;// 0 不转向; 1 从自身寻路到主角的下一个格子， 2 从主角寻路到自身的下一个格子；
-
-    public string targetTileName = "";
 
     public string CheckNeighborGrid()
     {
@@ -594,7 +613,7 @@ public class Enemy : Character
         ShowTraceTarget(targetTile, hearSoundTile == null, 1);
         growthTile = targetTile;
         ShowFound();
-        turnOnReached = false;
+       
     }
 
     public virtual bool LureWhistle(string tileName)
@@ -616,7 +635,7 @@ public class Enemy : Character
         sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
-        if ( (hearSoundTile && (hearSoundTile.name == tileName || turnOnReached )) || foundPlayerTile)
+        if ( (hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
         {
             currentAction = new ActionEnemyMove(this, foundPlayerTile??hearSoundTile);
             return false;
@@ -662,7 +681,7 @@ public class Enemy : Character
         sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
-        if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
+        if ((hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
         {
             currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
             return false;
@@ -670,7 +689,6 @@ public class Enemy : Character
 
         if (playerNeighbor && player.currentTile.name == tileName)
         {
-            turnOnReached = true;
             UpdateTargetDirection(player.currentTile);
         }
         else
@@ -708,7 +726,7 @@ public class Enemy : Character
         sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
-        if ((hearSoundTile && (hearSoundTile.name == tileName || turnOnReached)) || foundPlayerTile)
+        if ((hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
         {
             currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
             return false;
@@ -716,7 +734,6 @@ public class Enemy : Character
 
         if (playerNeighbor && player.currentTile.name == tileName)
         {
-            turnOnReached = true;
             UpdateTargetDirection(player.currentTile);
         }
         else
@@ -899,8 +916,6 @@ public class Enemy : Character
         ShowNotFound();
         foundPlayerTile = null;
         hearSoundTile = null;
-        targetTileName = "";
-        turnOnReached = false;
         targetIdleType = 1;
         //m_animator.SetTrigger("not_found");
 

@@ -422,12 +422,29 @@ public class EnemyPatrol : Enemy
     {
         if (currentAction != null) return;
 
+       
 
         if (growthTile != null)
         {
             foundPlayerTile = growthTile;
             growthTile = null;
             return;
+        }
+
+        if (hearSoundTile != null)
+        {
+            var player = Game.Instance.player;
+            var playerTileName = player.currentTile.name;
+            var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
+            var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
+            if (playerCanReachInOneStep && dir == direction)
+            {
+                var catched = CatchPlayer();
+                if (catched)
+                {
+                    return;
+                }
+            }
         }
 
         if (foundPlayerTile == null )

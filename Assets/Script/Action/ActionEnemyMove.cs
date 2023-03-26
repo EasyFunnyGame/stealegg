@@ -62,11 +62,12 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.foundPlayerTile.name)
                     {
-                        if ( enemy.turnOnReached && enemy.hearSoundTile == null)
+                        var player = Game.Instance.player;
+
+                        var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+
+                        if (enemy.turnOnReachDirection==ReachTurnTo.PlayerToEnemy)
                         {
-                            // Debug.LogWarning("todo 能够看见主角,直接抓捕");
-                            
-                            var player = Game.Instance.player;
                             player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
                             var path = player.path;
                             var nextTileName = "";
@@ -99,14 +100,12 @@ public class ActionEnemyMove : ActionBase
                                 }
                             }
                         }
-                        else
+                        else if(enemy.turnOnReachDirection == ReachTurnTo.EnemyToPlayer)
                         {
-                            var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
                             if (playerTile != null)
                             {
                                 character.FindPathRealTime(playerTile);
                                 character.UpdateTargetDirection(character.nextTile);
-                                //character.ResetMoves();
                                 if (character.direction == character.targetDirection)
                                 {
                                     character.Reached();
@@ -136,29 +135,12 @@ public class ActionEnemyMove : ActionBase
                 {
                     if (character.currentTile.name == enemy.hearSoundTile.name)
                     {
-                        if (enemy.turnOnReached)// 主角吹口哨的时候能看见主角，到达响声点之后要转向   todo 这个转向 要从玩家寻路到敌人的方向相反
+                        enemy.Reached();
+                        if (!enemy.TryFoundPlayer())
                         {
-                            var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-                            if (playerTile != null)
-                            {
-                                character.UpdateTargetDirection(playerTile);
-                            }
-                            if(character.direction == character.targetDirection)
-                            {
-                                character.Reached();
-                                enemy.LostTarget();
-                                return true;
-                            }
+                            enemy.LostTarget();
                         }
-                        else
-                        {
-                            enemy.Reached();
-                            if(!enemy.TryFoundPlayer())
-                            {
-                                enemy.LostTarget();
-                            }
-                            return true;
-                        }
+                        return true;
                     }
                     else
                     {

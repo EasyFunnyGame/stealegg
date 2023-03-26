@@ -120,6 +120,22 @@ public class EnemySentinel : Enemy
     {
         if (currentAction != null) return;
 
+        if (hearSoundTile != null)
+        {
+            var player = Game.Instance.player;
+            var playerTileName = player.currentTile.name;
+            var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
+            var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
+            if (playerCanReachInOneStep && dir == direction)
+            {
+                var catched = CatchPlayer();
+                if (catched)
+                {
+                    return;
+                }
+            }
+        }
+
         if (foundPlayerTile == null)
         {
             TryFoundPlayer();
@@ -247,15 +263,18 @@ public class EnemySentinel : Enemy
         {
             xOffset = -1;
         }
-       
+
+        var canReach = false;
         var foundPlayer = false;
         var foundPlayerNode = "";
 
         var distance = hearSoundTile == null ? 10 : 2;
         var foundNodeX = coord.x;
         var foundNodeZ = coord.z;
+        var step = 0;
         while (foundPlayer==false && distance > 0)
         {
+            step++;
             var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
             foundNodeX = foundNodeX + xOffset;
             foundNodeZ = foundNodeZ + zOffset;
@@ -271,6 +290,7 @@ public class EnemySentinel : Enemy
             {
                 foundPlayer = true;
                 foundPlayerNode = nextNodeName;
+                canReach = CanReachInSteps(nextNodeName, step);
                 break;
             }
             for (var i = 0; i < boardManager.enemies.Count; i++)
@@ -300,7 +320,14 @@ public class EnemySentinel : Enemy
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
-                turnOnReached = true;
+                if (canReach)
+                {
+                    turnOnReachDirection = ReachTurnTo.PlayerToEnemy; 
+                }
+                else
+                {
+                    turnOnReachDirection = ReachTurnTo.EnemyToPlayer;
+                }
                 patroling = false;
                 watching = false;
                 return true;

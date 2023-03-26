@@ -2,8 +2,6 @@
 
 public class EnemyStatic : Enemy
 {
-
-
     public override void Reached()
     {
         base.Reached();

@@ -29,8 +29,9 @@
 
     public override bool LureWhistle(string tileName)
     {
+        var result = base.LureWhistle(tileName);
         UpdateRouteMark();
-        return base.LureWhistle(tileName);
+        return result;
     }
 
     public override bool LureSteal(string tileName)
