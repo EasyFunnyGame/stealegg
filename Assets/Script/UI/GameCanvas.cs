@@ -382,14 +382,14 @@ public class GameCanvas : BaseCanvas
 
         if(guidingWhitsle)
         {
-            updateTime += (Time.deltaTime * 2.5f);
+            updateTime += (Time.deltaTime * 5);
             iconScale = 1 + 0.1f * Mathf.Sin(updateTime);
             btn_whistle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
         }
 
         if(guidingBottle)
         {
-            updateTime += (Time.deltaTime * 2.5f);
+            updateTime += (Time.deltaTime * 5);
             iconScale = 1 + 0.1f * Mathf.Sin(updateTime);
             btn_bottle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
         }

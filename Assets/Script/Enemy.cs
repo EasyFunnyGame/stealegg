@@ -79,7 +79,7 @@ public class Enemy : Character
     {
         if (currentAction != null) return;
 
-        if (foundPlayerTile == null)
+        if (foundPlayerTile == null || hearSoundTile == null)
         {
             TryFoundPlayer();
             if(foundPlayerTile != null)
