@@ -307,7 +307,7 @@ public class Enemy : Character
         }
 
         BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        routeArrow.position = endNode.transform.position+new Vector3(0,0.02f,0);
+        routeArrow.position = endNode.transform.position+new Vector3(0,0.025f,0);
         routeArrow.rotation = transform.GetChild(0).rotation;
         routeArrow.Rotate(new Vector3(0, 0, 180));
         routeArrow.parent = null;
