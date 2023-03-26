@@ -430,7 +430,7 @@ public class EnemyPatrol : Enemy
             return;
         }
 
-        if (foundPlayerTile == null || hearSoundTile == null)
+        if (foundPlayerTile == null && hearSoundTile == null)
         {
             TryFoundPlayer();
             if (foundPlayerTile != null)

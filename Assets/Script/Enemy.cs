@@ -79,7 +79,7 @@ public class Enemy : Character
     {
         if (currentAction != null) return;
 
-        if (foundPlayerTile == null || hearSoundTile == null)
+        if (foundPlayerTile == null && hearSoundTile == null)
         {
             TryFoundPlayer();
             if(foundPlayerTile != null)
@@ -736,7 +736,7 @@ public class Enemy : Character
     public void OnTurnEnd()
     {
         body_looking = false;
-        if (foundPlayerTile == null)
+        if (foundPlayerTile == null && hearSoundTile == null)
         {
             TryFoundPlayer();
             if (foundPlayerTile != null)
