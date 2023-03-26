@@ -528,6 +528,11 @@ public class Game : MonoBehaviour
                     selectable = false;
                     continue;
                 }
+                if(Mathf.Abs(enemy.coord.x - nodeGo.coord.x) > 2 || Mathf.Abs(enemy.coord.z - nodeGo.coord.z) > 2)
+                {
+                    selectable = false;
+                    continue;
+                }
             }
 
             if(player.currentTile.name == nodeName)

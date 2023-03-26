@@ -121,10 +121,6 @@ public class ActionEnemyMove : ActionBase
                         }
                     }
                     character.Reached();
-                    if (enemy.TryFoundPlayer())
-                    {
-                        enemy.currentAction = new ActionFoundPlayer(enemy);
-                    }
                     return true;
                 }
             }

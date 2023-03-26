@@ -109,9 +109,9 @@ public class Enemy : Character
             TryFoundPlayer();
             if(foundPlayerTile != null)
             {
-                if(hearSoundTile==null)
+                if(hearSoundTile != null)
                 {
-                    currentAction = new ActionFoundPlayer(this);
+                    currentAction = new ActionEnemyMove(this,foundPlayerTile);
                 }
                 else
                 {
@@ -233,14 +233,6 @@ public class Enemy : Character
             TryFoundPlayer();
             if (foundPlayerTile != null)
             {
-                if (hearSoundTile == null)
-                {
-                    currentAction = new ActionFoundPlayer(this);
-                }
-                else
-                {
-                    currentAction = new ActionTurnDirection(this, targetDirection);
-                }
                 return;
             }
         }
@@ -414,7 +406,6 @@ public class Enemy : Character
 
         if (foundPlayer)
         {
-            hearSoundTile = null;
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
@@ -762,15 +753,6 @@ public class Enemy : Character
             TryFoundPlayer();
             if (foundPlayerTile != null)
             {
-                if (hearSoundTile == null)
-                {
-                    currentAction = new ActionFoundPlayer(this);
-                }
-                else
-                {
-                    currentAction = new ActionTurnDirection(this, targetDirection);
-                    //currentAction = new ActionEnemyMove(this, hearSoundTile);
-                }
                 return;
             }
         }

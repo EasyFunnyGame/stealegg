@@ -452,9 +452,9 @@ public class EnemyPatrol : Enemy
             TryFoundPlayer();
             if (foundPlayerTile != null)
             {
-                if (hearSoundTile == null)
+                if (hearSoundTile != null)
                 {
-                    currentAction = new ActionFoundPlayer(this);
+                    currentAction = new ActionEnemyMove(this, foundPlayerTile);
                 }
                 else
                 {
