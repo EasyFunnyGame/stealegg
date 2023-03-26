@@ -88,7 +88,7 @@ public class Enemy : Character
     {
         if (currentAction != null) return;
 
-        if(hearSoundTile != null )
+        if (hearSoundTile != null)
         {
             var player = Game.Instance.player;
             var playerTileName = player.currentTile.name;
@@ -112,10 +112,6 @@ public class Enemy : Character
                 if(hearSoundTile != null)
                 {
                     currentAction = new ActionEnemyMove(this,foundPlayerTile);
-                }
-                else
-                {
-                    currentAction = new ActionTurnDirection(this, targetDirection);
                 }
                 return;
             }
@@ -790,6 +786,7 @@ public class Enemy : Character
         icons.cw.gameObject.SetActive(false);
         targetIdleType = 0.5f;
         routeArrow.gameObject.SetActive(true);
+        m_animator.SetBool("moving",false);
     }
 
     public virtual void ShowBackToOriginal()

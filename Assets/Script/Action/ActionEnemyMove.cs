@@ -226,7 +226,7 @@ public class ActionEnemyMove : ActionBase
                 //var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
                 //if (tdist < 0.01f)
                 //{
-                enemy.Reached();
+                //enemy.Reached();
                 //enemy.OnTurnEnd();
                 //}
             }

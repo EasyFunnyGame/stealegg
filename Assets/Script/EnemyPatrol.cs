@@ -456,10 +456,6 @@ public class EnemyPatrol : Enemy
                 {
                     currentAction = new ActionEnemyMove(this, foundPlayerTile);
                 }
-                else
-                {
-                    currentAction = new ActionTurnDirection(this, targetDirection);
-                }
                 return;
             }
         }

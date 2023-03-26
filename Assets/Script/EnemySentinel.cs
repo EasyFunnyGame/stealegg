@@ -145,10 +145,6 @@ public class EnemySentinel : Enemy
                 {
                     currentAction = new ActionEnemyMove(this, foundPlayerTile);
                 }
-                else
-                {
-                    currentAction = new ActionTurnDirection(this, targetDirection);
-                }
                 return;
             }
         }
