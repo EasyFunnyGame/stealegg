@@ -521,23 +521,41 @@ public class Game : MonoBehaviour
             var node = nodeGo.GetComponent<BoardNode>();
             
             var selectable = true;
-            foreach(var enemy in boardManager.enemies)
+
+            if (player.currentTile.name == nodeName)
+            {
+                selectable = false;
+            }
+            if(!selectable)
+            {
+                continue;
+            }
+            foreach (var enemy in boardManager.enemies)
             {
                 if (enemy.coord.name == nodeName)
                 {
                     selectable = false;
-                    continue;
+                    break;
                 }
-                else if (Mathf.Abs(enemy.coord.x - nodeGo.coord.x) <= 2 || Mathf.Abs(enemy.coord.z - nodeGo.coord.z) <= 2)
+            }
+            if (!selectable)
+            {
+                continue;
+            }
+            var influenceAnyEnemy = false;
+            foreach (var enemy in boardManager.enemies)
+            {
+                if (Mathf.Abs(enemy.coord.x - nodeGo.coord.x) <= 2 && Mathf.Abs(enemy.coord.z - nodeGo.coord.z) <= 2)
                 {
-                    continue;
+                    influenceAnyEnemy = true;
+                    break;
                 }
+            }
+            if(!influenceAnyEnemy)
+            {
+                continue;
             }
 
-            if(player.currentTile.name == nodeName)
-            {
-                selectable = false;
-            }
             node.contour.gameObject.SetActive(selectable);
             node.contour.transform.localPosition = new Vector3(0,0.017f,0);
             if(selectable)
