@@ -150,6 +150,7 @@ public class EnemySentinel : Enemy
         }
         else
         {
+            TryFoundPlayer();
             if (CatchPlayer()) return;
         }
 

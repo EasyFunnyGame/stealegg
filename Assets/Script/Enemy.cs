@@ -118,6 +118,7 @@ public class Enemy : Character
         }
         else
         {
+            TryFoundPlayer();
             if (CatchPlayer()) return;
         }
 
@@ -184,6 +185,7 @@ public class Enemy : Character
         {
             OnReachedOriginal();
         }
+        enemyMove.gameObject.SetActive(false);
     }
 
     public void RedLineByName(LinkLine line)
@@ -234,6 +236,7 @@ public class Enemy : Character
         }
         else
         {
+            TryFoundPlayer();
             CatchPlayer();
         }
         m_animator.SetBool("moving", false);
@@ -636,7 +639,14 @@ public class Enemy : Character
         else
         {
             // 判断寻路的方向  
-            FindPathRealTime(targetTile);
+            var success = FindPathRealTime(targetTile);
+            if (!success)
+            {
+                hearSoundTile = foundPlayerTile = null;
+                ShowNotFound();
+                ReturnOriginal(true);
+                return false;
+            }
             UpdateTargetDirection(nextTile);
         }
         //if(direction != targetDirection)
@@ -681,7 +691,14 @@ public class Enemy : Character
         else
         {
             // 判断寻路的方向  
-            FindPathRealTime(targetTile);
+            var success = FindPathRealTime(targetTile);
+            if (!success)
+            {
+                hearSoundTile = foundPlayerTile = null;
+                ShowNotFound();
+                ReturnOriginal(true);
+                return false;
+            }
             UpdateTargetDirection(nextTile);
         }
         //if (direction != targetDirection)
@@ -726,7 +743,14 @@ public class Enemy : Character
         else
         {
             // 判断寻路的方向  
-            FindPathRealTime(targetTile);
+            var success = FindPathRealTime(targetTile);
+            if(!success)
+            {
+                hearSoundTile = foundPlayerTile = null;
+                ShowNotFound();
+                ReturnOriginal(true);
+                return false;
+            }
             UpdateTargetDirection(nextTile);
         }
 
@@ -754,6 +778,7 @@ public class Enemy : Character
         }
         else
         {
+            TryFoundPlayer();
             if (CatchPlayer()) return;
         }
         m_animator.SetBool("moving",false);
@@ -859,6 +884,7 @@ public class Enemy : Character
         for(var i = 0; i < enemyMoves.Length; i++)
         {
             var move = enemyMoves[i];
+            move.gameObject.SetActive(false);
             if (move.gameObject.activeSelf && move.transform.parent == null && move.transform.position.Equals(node.transform.position))
             {
                 return;

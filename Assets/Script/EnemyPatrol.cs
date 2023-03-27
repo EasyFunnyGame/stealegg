@@ -461,6 +461,7 @@ public class EnemyPatrol : Enemy
         }
         else
         {
+            TryFoundPlayer();
             if (CatchPlayer()) return;
         }
 

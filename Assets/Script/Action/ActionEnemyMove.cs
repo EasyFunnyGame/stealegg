@@ -6,38 +6,50 @@ public class ActionEnemyMove : ActionBase
     private Vector3 nextStepTilePosition;
     float height = 0f;
 
+    bool findPathSuccess = true;
+
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         velocity = new Vector3();
-        enemy.FindPathRealTime(tile);
-        nextStepTilePosition = enemy.db_moves[0].position;
-        //enemy.StartMove();
-
-        var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
-        height = targetNode.transform.position.y - enemy.transform.position.y;
-
-        var currentNodeName = enemy.currentTile.name;
-        var targetNodeName = tile.name;
-        var linkLine = enemy.boardManager.FindLine(currentNodeName, targetNodeName);
-        if (linkLine != null)
+        findPathSuccess = enemy.FindPathRealTime(tile);
+        if(!findPathSuccess)
         {
-            Transform lineType = null;
-            for (var index = 0; index < linkLine.transform.childCount; index++)
+            enemy.hearSoundTile = enemy.foundPlayerTile = null;
+            enemy.ShowNotFound();
+            enemy.ReturnOriginal(false);
+        }
+        else
+        {
+            nextStepTilePosition = enemy.db_moves[0].position;
+            //enemy.StartMove();
+
+            var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
+            height = targetNode.transform.position.y - enemy.transform.position.y;
+
+            var currentNodeName = enemy.currentTile.name;
+            var targetNodeName = tile.name;
+            var linkLine = enemy.boardManager.FindLine(currentNodeName, targetNodeName);
+            if (linkLine != null)
             {
-                if (linkLine.transform.GetChild(index).gameObject.activeSelf)
+                Transform lineType = null;
+                for (var index = 0; index < linkLine.transform.childCount; index++)
                 {
-                    lineType = linkLine.transform.GetChild(index);
-                    break;
+                    if (linkLine.transform.GetChild(index).gameObject.activeSelf)
+                    {
+                        lineType = linkLine.transform.GetChild(index);
+                        break;
+                    }
+                }
+                if (lineType != null)
+                {
+                    enemy.walkingLineType = lineType.name;
+                    enemy.up = height > 0 ? 1 : height < 0 ? -1 : 0;
                 }
             }
-            if (lineType != null)
-            {
-                enemy.walkingLineType = lineType.name;
-                enemy.up = height > 0 ? 1 : height < 0 ? -1 : 0;
-            }
-        }
 
-        enemy.m_animator.SetBool("moving",true);
+            enemy.m_animator.SetBool("moving", true);
+        }
+        
     }
 
     public Enemy enemy
@@ -50,6 +62,7 @@ public class ActionEnemyMove : ActionBase
 
     public override bool CheckComplete()
     {
+        if (!findPathSuccess) return true;
         var myPosition = character.transform.position;
         var targetPosition = nextStepTilePosition;
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));

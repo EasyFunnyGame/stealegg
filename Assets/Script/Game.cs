@@ -523,14 +523,13 @@ public class Game : MonoBehaviour
             var selectable = true;
             foreach(var enemy in boardManager.enemies)
             {
-                if(enemy.coord.name == nodeName)
+                if (enemy.coord.name == nodeName)
                 {
                     selectable = false;
                     continue;
                 }
-                if(Mathf.Abs(enemy.coord.x - nodeGo.coord.x) > 2 || Mathf.Abs(enemy.coord.z - nodeGo.coord.z) > 2)
+                else if (Mathf.Abs(enemy.coord.x - nodeGo.coord.x) <= 2 || Mathf.Abs(enemy.coord.z - nodeGo.coord.z) <= 2)
                 {
-                    selectable = false;
                     continue;
                 }
             }

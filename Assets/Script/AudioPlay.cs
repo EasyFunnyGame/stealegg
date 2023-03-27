@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using WeChatWASM;
 public class AudioPlay : MonoBehaviour
 {
     public static AudioPlay Instance;
@@ -143,14 +143,14 @@ public class AudioPlay : MonoBehaviour
         });
     }
 
-    public void PlaySFX(int index)
+    public WXInnerAudioContext PlaySFX(int index)
     {
         var src = AudioManager.sfxList[index];
         //Debug.Log("sound url:       " + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
         var audioPlayRightNow = manager.CreateAudio();
         if (audioPlayRightNow == null)
         {
-            return;
+            return null;
         }
         // 如果要设置的src和原音频对象一致，可以直接播放
         if (audioPlayRightNow.src == src)
@@ -163,6 +163,7 @@ public class AudioPlay : MonoBehaviour
             audioPlayRightNow.src = src;
             audioPlayRightNow.Play();
         }
+        return audioPlayRightNow;
     }
 
     public void PlayerFootLeft()
@@ -433,6 +434,7 @@ public class AudioPlay : MonoBehaviour
         Instance.PlaySFX(89);
     }
 
+    private WXInnerAudioContext sleepSound ;
     public void Speep(EnemyDistracted enemy)
     {
         if (!enemy) return;
@@ -450,13 +452,18 @@ public class AudioPlay : MonoBehaviour
     public void EnemySleepIn()
     {
         var index = new System.Random().Next(77, 80);
-        Instance.PlaySFX(index);
+        sleepSound =  Instance.PlaySFX(index);
     }
 
     public void EnemySleepOut()
     {
         var index = new System.Random().Next(80, 83);
-        Instance.PlaySFX(index);
+        sleepSound = Instance.PlaySFX(index);
+    }
+
+    public void StopSleepSound()
+    {
+        sleepSound?.Stop();
     }
 
     public void HideInTree()

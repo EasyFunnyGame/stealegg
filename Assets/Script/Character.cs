@@ -138,38 +138,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void UpdateMoves(GridTile ttile)
-    {
-        num_tile = 0;
-
-        tar_tile_s = ttile;
-
-        //0 - body_move, 1 - body_look, 2 - head_look, 3 - eyes_look, target tile marker
-        db_moves[0].parent = null;
-        db_moves[1].parent = null;
-        db_moves[4].parent = null;
-
-        //move_speed = 1;
-
-        var tpos = new Vector3(0, 0, 0);
-        tpos = tar_tile_s.transform.position;
-        db_moves[4].position = tpos; //Tar Tile Marker//
-        db_moves[4].gameObject.SetActive(true); //Tar Tile Marker//
-
-        tpos = new Vector3(0, 0, 0);
-       
-        tpos = tar_tile_s.db_path_lowest[num_tile].transform.position;
-
-        tpos.y = transform.position.y;
-
-        db_moves[0].position = tpos;
-
-        db_moves[1].position = tpos;
-
-        nextTile = tar_tile_s.db_path_lowest[num_tile];
-
-        //UpdateTargetDirection(nextTile);
-    }
+    
 
     public void UpdateTargetDirection(GridTile targetTile)
     {
@@ -220,17 +189,54 @@ public class Character : MonoBehaviour
     {
         var tile = gridManager.GetTileByName(tileName);
         if (!tile) return false;
-        FindPathRealTime(tile);
-        return true;
+        return FindPathRealTime(tile); ;
     }
 
-    public void FindPathRealTime(GridTile t)
+    public bool FindPathRealTime(GridTile t)
     {
         selected_tile_s = t;
         gridManager.find_paths_realtime(this, t);
+        if (t.db_path_lowest.Count <= 0)
+        {
+            return false;
+        }
         UpdateMoves(t);
         path = t.db_path_lowest;
         UpdateTargetDirection(nextTile);
+        return true;
+    }
+
+    public void UpdateMoves(GridTile ttile)
+    {
+        num_tile = 0;
+
+        tar_tile_s = ttile;
+
+        //0 - body_move, 1 - body_look, 2 - head_look, 3 - eyes_look, target tile marker
+        db_moves[0].parent = null;
+        db_moves[1].parent = null;
+        db_moves[4].parent = null;
+
+        //move_speed = 1;
+
+        var tpos = new Vector3(0, 0, 0);
+        tpos = tar_tile_s.transform.position;
+        db_moves[4].position = tpos; //Tar Tile Marker//
+        db_moves[4].gameObject.SetActive(true); //Tar Tile Marker//
+
+        tpos = new Vector3(0, 0, 0);
+
+        tpos = tar_tile_s.db_path_lowest[num_tile].transform.position;
+
+        tpos.y = transform.position.y;
+
+        db_moves[0].position = tpos;
+
+        db_moves[1].position = tpos;
+
+        nextTile = tar_tile_s.db_path_lowest[num_tile];
+
+        //UpdateTargetDirection(nextTile);
     }
 
     public virtual void ResetDirection()
