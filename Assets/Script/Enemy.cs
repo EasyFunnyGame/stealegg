@@ -226,6 +226,13 @@ public class Enemy : Character
 
         UpdateRouteMark();
 
+        if(hearSoundTile != null)
+        {
+            var catchPlayer = CatchPlayer();
+            if (catchPlayer)
+                return;
+        }
+
         if (foundPlayerTile == null)
         {
             TryFoundPlayer();
@@ -590,6 +597,7 @@ public class Enemy : Character
             AudioPlay.Instance.PlayCatch(this);
             ShowCatch();
             foundPlayerTile = hearSoundTile = null;
+            m_animator.SetBool("moving", false);
             return true;
         }
         return false;
@@ -771,6 +779,7 @@ public class Enemy : Character
     public void OnTurnEnd()
     {
         body_looking = false;
+
         if (foundPlayerTile == null)
         {
             TryFoundPlayer();
