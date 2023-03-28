@@ -146,7 +146,7 @@ public class Enemy : Character
             return;
         }
 
-        if (originalTile != null)
+        if (originalTile != null )
         {
             currentAction = new ActionEnemyMove(this, originalTile);
             return;
@@ -181,10 +181,6 @@ public class Enemy : Character
         else if(direction != targetDirection)
         {
             currentAction = new ActionTurnDirection(this, this.originalDirection);
-            ShowBackToOriginal();
-        }
-        else
-        {
             OnReachedOriginal();
         }
         enemyMove.gameObject.SetActive(false);
@@ -410,6 +406,18 @@ public class Enemy : Character
             foundPlayer = true;
             foundPlayerNode = next2NodeName;
             canReach = CanReachInSteps(next2NodeName, 2);
+            if(!canReach)
+            {
+                var playerFindPathSuccess = player.CanReachInSteps(currentTile.name,2);
+                if (playerFindPathSuccess)
+                {
+                    var canReachLastNode = CanReachInSteps(next1NodeName, 1);
+                    if(canReachLastNode)
+                    {
+                        foundPlayerNode = next1NodeName;
+                    }
+                }
+            }
         }
 
         if (foundPlayer)

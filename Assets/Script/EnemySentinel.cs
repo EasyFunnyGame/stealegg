@@ -174,7 +174,7 @@ public class EnemySentinel : Enemy
             return;
         }
 
-        if (originalTile != null)
+        if (originalTile != null )
         {
             currentAction = new ActionEnemyMove(this, originalTile);
             return;

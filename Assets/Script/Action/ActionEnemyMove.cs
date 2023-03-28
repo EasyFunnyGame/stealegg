@@ -11,8 +11,9 @@ public class ActionEnemyMove : ActionBase
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         velocity = new Vector3();
+        var player = Game.Instance.player;
         findPathSuccess = enemy.FindPathRealTime(tile);
-        if(!findPathSuccess)
+        if (!findPathSuccess)
         {
             enemy.hearSoundTile = enemy.foundPlayerTile = null;
             enemy.ShowNotFound();
@@ -62,7 +63,21 @@ public class ActionEnemyMove : ActionBase
 
     public override bool CheckComplete()
     {
-        if (!findPathSuccess) return true;
+        if (!findPathSuccess)
+        {
+            character.UpdateTargetDirection(character.nextTile);
+            if (character.direction == character.targetDirection)
+            {
+                character.Reached();
+                if (!enemy.CatchPlayer() && !enemy.TryFoundPlayer())
+                {
+                    
+                }
+                return true;
+            }
+            return false;
+        }
+       
         var myPosition = character.transform.position;
         var targetPosition = nextStepTilePosition;
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));

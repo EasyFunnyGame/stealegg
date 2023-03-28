@@ -490,7 +490,7 @@ public class EnemyPatrol : Enemy
             currentAction = new ActionEnemyMove(this, originalTile);
             return;
         }
-        if(patrolTile!=null)
+        if (patrolTile!=null)
         {
             currentAction = new ActionEnemyMove(this, patrolTile);
         }
