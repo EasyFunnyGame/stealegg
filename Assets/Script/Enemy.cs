@@ -69,6 +69,8 @@ public class Enemy : Character
 
     public ReachTurnTo turnOnReachDirection = ReachTurnTo.None;
 
+    public string tracingTileName;
+
     public override void Start()
     {
         base.Start();
@@ -415,8 +417,8 @@ public class Enemy : Character
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
-                ShowTraceTarget(targetTile , foundPlayerTile== null,2);
                 foundPlayerTile = targetTile;
+                ShowTraceTarget(targetTile , foundPlayerTile== null,2);
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
@@ -480,7 +482,7 @@ public class Enemy : Character
     {
         if (targetIdleType < idleType)
         {
-            idleType -= 0.1f;
+            idleType -= (0.1f * Time.deltaTime * 60);
             if (targetIdleType >= idleType)
             {
                 idleType = targetIdleType;
@@ -489,7 +491,7 @@ public class Enemy : Character
 
         if (targetIdleType > idleType)
         {
-            idleType += 0.1f;
+            idleType += (0.1f * Time.deltaTime * 60);
             if (targetIdleType <= idleType)
             {
                 idleType = targetIdleType;
@@ -890,23 +892,37 @@ public class Enemy : Character
 
     public virtual void ShowTraceTarget(GridTile tile, bool playSound, int soundType)
     {
+        tracingTileName = tile.name;
+
         var node = boardManager.FindNode(tile.name);
 
-        var enemyMoves = GameObject.FindObjectsOfType<EnemyMove>();
-        for(var i = 0; i < enemyMoves.Length; i++)
+        var enemies = boardManager.enemies;
+
+        var targetingTiles = new List<string>();
+
+        for (int i = 0; i < enemies.Count; i++)
         {
-            var move = enemyMoves[i];
-            move.gameObject.SetActive(false);
-            if (move.gameObject.activeSelf && move.transform.parent == null && move.transform.position.Equals(node.transform.position))
+            var enemy = enemies[i];
+            var targetingTileName = enemy.tracingTileName;
+            if (!string.IsNullOrEmpty(targetingTileName) && targetingTileName == tile.name)
             {
-                return;
+                var enemyMove = enemy.enemyMove;
+                var index = targetingTiles.IndexOf(targetingTileName);
+                if(index == -1)
+                {
+                    enemyMove.transform.parent = null;
+                    enemyMove.gameObject.SetActive(true);
+                    enemyMove.Play("Movement_Animation");
+                    enemyMove.transform.transform.position = node.transform.position;
+                    targetingTiles.Add(targetingTileName);
+                }
+                else
+                {
+                    enemyMove.gameObject.SetActive(false);
+                }
             }
         }
 
-        enemyMove.transform.parent = null;
-        enemyMove.gameObject.SetActive(true);
-        enemyMove.Play("Movement_Animation");
-        enemyMove.transform.transform.position = node.transform.position;
         if (soundType == 1 && playSound)
         {
             AudioPlay.Instance.PlayHeard();
@@ -915,6 +931,7 @@ public class Enemy : Character
         {
             AudioPlay.Instance.PlayFound();
         }
+        m_animator.SetTrigger("stop_looking");
     }
 
     public virtual void DisapearTraceTarget(bool play = true)
@@ -925,7 +942,7 @@ public class Enemy : Character
         {
             AudioPlay.Instance.PlayNotFound(this);
         }
-        
+        tracingTileName = "";
     }
 
     public virtual void LostTarget()

@@ -122,7 +122,10 @@ public class ActionEnemyMove : ActionBase
                                 if (character.direction == character.targetDirection)
                                 {
                                     character.Reached();
-                                    enemy.LostTarget();
+                                    if (!enemy.CatchPlayer() && !enemy.TryFoundPlayer())
+                                    {
+                                        enemy.LostTarget();
+                                    }
                                     return true;
                                 }
                                 else
