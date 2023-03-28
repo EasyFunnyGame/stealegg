@@ -804,6 +804,7 @@ public class GameCanvas : BaseCanvas
 
     public void EndDrag()
     {
+        if (Game.Instance.result != GameResult.NONE) return;
         if(Input.touchCount>1)
         {
             Debug.Log("EndDrag 多点触控" + Input.touchCount);
