@@ -143,15 +143,17 @@ public class AudioPlay : MonoBehaviour
         });
     }
 
-    public WXInnerAudioContext PlaySFX(int index)
+    public WXInnerAudioContext PlaySFX(int index, float volumeScale = 1)
     {
         var src = AudioManager.sfxList[index];
         //Debug.Log("sound url:       " + src.Replace("https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/",""));
         var audioPlayRightNow = manager.CreateAudio();
+        
         if (audioPlayRightNow == null)
         {
             return null;
         }
+        audioPlayRightNow.volume *= volumeScale;
         // 如果要设置的src和原音频对象一致，可以直接播放
         if (audioPlayRightNow.src == src)
         {
@@ -452,13 +454,13 @@ public class AudioPlay : MonoBehaviour
     public void EnemySleepIn()
     {
         var index = new System.Random().Next(77, 80);
-        sleepSound =  Instance.PlaySFX(index);
+        sleepSound =  Instance.PlaySFX(index,0.6f);
     }
 
     public void EnemySleepOut()
     {
         var index = new System.Random().Next(80, 83);
-        sleepSound = Instance.PlaySFX(index);
+        sleepSound = Instance.PlaySFX(index, 0.6f);
     }
 
     public void StopSleepSound()

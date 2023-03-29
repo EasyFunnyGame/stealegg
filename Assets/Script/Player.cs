@@ -258,6 +258,7 @@ public class Player : Character
         bottlePlay.gameObject.SetActive(true);
         bottlePlay.transform.position = position;
         bottlePlay.transform.parent = null;
+        AudioPlay.Instance.PlayHeard();
     }
 
     public void PlayBottleEffect(Vector3 position)
@@ -267,6 +268,7 @@ public class Player : Character
         bottlePlay.transform.position = position;
         bottlePlay.transform.parent = null;
         bottlePlay.transform.rotation = Quaternion.identity;
+        AudioPlay.Instance.PlayHeard();
     }
     public void PlayeWhitsleEffect(Vector3 position)
     {

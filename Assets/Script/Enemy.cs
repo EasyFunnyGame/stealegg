@@ -220,8 +220,9 @@ public class Enemy : Character
 
     public override void Reached()
     {
+        
         base.Reached();
-
+        lookAroundTime = 9;
         UpdateRouteMark();
 
         if(hearSoundTile != null)
@@ -388,6 +389,7 @@ public class Enemy : Character
                     foundPlayer = true;
                     foundPlayerNode = next1NodeName;
                     canReach = CanReachInSteps(next1NodeName, 1);
+                    
                 }
             }
             else
@@ -430,13 +432,13 @@ public class Enemy : Character
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
-                if(canReach)
+                if (canReach)
                 {
-                    turnOnReachDirection = ReachTurnTo.PlayerToEnemy; 
+                    turnOnReachDirection = ReachTurnTo.EnemyToPlayer;
                 }
                 else
                 {
-                    turnOnReachDirection = ReachTurnTo.EnemyToPlayer;
+                    turnOnReachDirection = ReachTurnTo.PlayerToEnemy;
                 }
 
                 patroling = false;
@@ -567,10 +569,10 @@ public class Enemy : Character
         {
             return false;
         }
-        if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
-        {
-            return false;
-        }
+        //if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
+        //{
+        //    return false;
+        //}
         var player = Game.Instance.player;
         if (player == null || player.currentTile == null) return false;
 
@@ -593,10 +595,10 @@ public class Enemy : Character
         {
             return false;
         }
-        if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
-        {
-            return false;
-        }
+        //if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
+        //{
+        //    return false;
+        //}
         var player = Game.Instance.player;
         if (player == null || player.currentTile == null) return false;
         var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);
@@ -834,6 +836,7 @@ public class Enemy : Character
         targetIdleType = 0.5f;
         routeArrow.gameObject.SetActive(true);
         m_animator.SetBool("moving",false);
+        AudioPlay.Instance.PlayEnemyAlert(this);
     }
 
     public virtual void ShowBackToOriginal()
@@ -930,15 +933,10 @@ public class Enemy : Character
                 }
             }
         }
-
-        if (soundType == 1 && playSound)
-        {
-            AudioPlay.Instance.PlayHeard();
-        }
-        if(soundType == 2 && playSound)
-        {
-            AudioPlay.Instance.PlayFound();
-        }
+        //if(soundType == 2 && playSound)
+        //{
+        //    AudioPlay.Instance.PlayFound();
+        //}
         m_animator.SetTrigger("stop_looking");
     }
 
