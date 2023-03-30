@@ -37422,7 +37422,7 @@ PrefabInstance:
     - target: {fileID: 4250411267267071149, guid: 432059e5332d3674eb4a1e289e0b3cf3,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4250411267267071149, guid: 432059e5332d3674eb4a1e289e0b3cf3,
         type: 3}
@@ -41335,6 +41335,7 @@ MonoBehaviour:
   node2: 1_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &590662733599957253
 Transform:
   m_ObjectHideFlags: 0
@@ -41391,7 +41392,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617629055104559428}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4, y: -0.01, z: -2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3633908869599104859}
@@ -41399,8 +41400,8 @@ Transform:
   - {fileID: 1920690929}
   - {fileID: 784390410}
   - {fileID: 1930548909}
-  m_Father: {fileID: 5466928764762863031}
-  m_RootOrder: 3
+  m_Father: {fileID: 6310683088638355074}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &768376451599398800
 Transform:
@@ -41741,6 +41742,7 @@ MonoBehaviour:
   node2: 2_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &1646055452178345211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41816,6 +41818,7 @@ MonoBehaviour:
   node2: 3_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &1787830616446346462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41832,6 +41835,7 @@ MonoBehaviour:
   node2: 2_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!23 &1925006960144634483
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -41919,6 +41923,7 @@ MonoBehaviour:
   node2: 5_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &2092379135139361226
 Transform:
   m_ObjectHideFlags: 0
@@ -42112,6 +42117,7 @@ MonoBehaviour:
   node2: 2_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &2471854453810600717
 Transform:
   m_ObjectHideFlags: 0
@@ -42160,6 +42166,7 @@ MonoBehaviour:
   node2: 4_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!33 &2577342849007559002
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -42471,6 +42478,7 @@ MonoBehaviour:
   node2: 4_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &3773340264300726286
 Transform:
   m_ObjectHideFlags: 0
@@ -42607,6 +42615,7 @@ MonoBehaviour:
   node2: 2_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &4337310170124511021
 GameObject:
   m_ObjectHideFlags: 0
@@ -42640,6 +42649,7 @@ MonoBehaviour:
   node2: 3_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &4538016468131722824
 Transform:
   m_ObjectHideFlags: 0
@@ -42995,6 +43005,7 @@ MonoBehaviour:
   node2: 4_1
   through: 1
   playerMoveType: 0.5
+  traversability: 4
 --- !u!4 &5466928764762863031
 Transform:
   m_ObjectHideFlags: 0
@@ -43009,7 +43020,6 @@ Transform:
   - {fileID: 7151573613161179352}
   - {fileID: 590662733599957253}
   - {fileID: 1403728706260713810}
-  - {fileID: 617629055104559429}
   - {fileID: 1514823159}
   m_Father: {fileID: 4932042488018487078}
   m_RootOrder: 0
@@ -43111,6 +43121,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &5793329786705052391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43235,6 +43246,7 @@ MonoBehaviour:
   node2: 1_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &5943439258139617348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43251,6 +43263,7 @@ MonoBehaviour:
   node2: 2_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &5955548043848490656 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5955548042386024815, guid: 584f7ebb022deaf47909508bd2ec85be,
@@ -43303,6 +43316,7 @@ MonoBehaviour:
   node2: 3_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &6211724868887355090
 GameObject:
   m_ObjectHideFlags: 0
@@ -43350,6 +43364,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1560357313}
+  - {fileID: 617629055104559429}
   m_Father: {fileID: 1403728706260713810}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -43887,6 +43902,7 @@ MonoBehaviour:
   node2: 4_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &7478910832445365014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43951,6 +43967,7 @@ MonoBehaviour:
   node2: 1_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &7766870781798313273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43967,6 +43984,7 @@ MonoBehaviour:
   node2: 4_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &7785517528779741162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44309,6 +44327,7 @@ MonoBehaviour:
   node2: 3_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &8647162393906252550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44357,6 +44376,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!33 &8811769029693869722
 MeshFilter:
   m_ObjectHideFlags: 0
