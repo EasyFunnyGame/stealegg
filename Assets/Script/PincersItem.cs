@@ -21,6 +21,7 @@ public class PincersItem : Item
     public void Cut()
     {
         linkline.through = true;
+        linkline.traversability = TraversabilityOptions.Fenced;
 
         var dotLinePrefab = Resources.Load("Prefab/Hor_Doted_Visual");
         var copy = Instantiate(dotLinePrefab, linkline.transform);
