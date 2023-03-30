@@ -530,6 +530,7 @@ public class Enemy : Character
     public virtual void OnReachedOriginal()
     {
         routeArrow.gameObject.SetActive(false);
+        lureByBottle = lureByWhistle = lureBySteal = false;
     }
 
     // =======================================================================================
@@ -626,6 +627,8 @@ public class Enemy : Character
        
     }
 
+    public bool lureByWhistle = false;
+
     public virtual bool LureWhistle(string tileName)
     {
         AudioPlay.Instance.StopSleepSound();
@@ -677,10 +680,12 @@ public class Enemy : Character
         
         // ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
+        lureByWhistle = true;
         ShowFound();
         return true;
     }
 
+    public bool lureByBottle = false;
     public virtual bool LureBottle(string tileName)
     {
         AudioPlay.Instance.StopSleepSound();
@@ -729,11 +734,11 @@ public class Enemy : Character
         }
         //ShowTraceTarget(targetTile, hearSoundTile== null,1);
         hearSoundTile = targetTile;
-        
+        lureByBottle = true;
         ShowFound();
         return true;
     }
-
+    public bool lureBySteal = false;
     public virtual bool LureSteal(string tileName)
     {
         AudioPlay.Instance.StopSleepSound();
@@ -783,6 +788,7 @@ public class Enemy : Character
         }
         ShowTraceTarget(targetTile, hearSoundTile == null,1);
         hearSoundTile = targetTile;
+        lureBySteal = true;
         idleType = 0.5f;
         ShowFound();
         return true;
@@ -957,7 +963,7 @@ public class Enemy : Character
         foundPlayerTile = null;
         hearSoundTile = null;
         targetIdleType = 1;
-        //m_animator.SetTrigger("not_found");
+        lureByBottle = lureByWhistle = lureBySteal = false;
 
     }
 

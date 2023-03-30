@@ -652,14 +652,14 @@ public class Game : MonoBehaviour
         }
     }
 
-    private void FindPathTest(string from , string to )
-    {
-        var fromTile = player.gridManager.GetTileByName(from);
-        var toTile = player.gridManager.GetTileByName (to);
-        player.gridManager.find_paths_realtime(player, toTile, fromTile);
-        player.path = toTile.db_path_lowest;
-        player.UpdateTargetDirection(player.nextTile);
-    }
+    //private void FindPathTest(string from , string to )
+    //{
+    //    var fromTile = player.gridManager.GetTileByName(from);
+    //    var toTile = player.gridManager.GetTileByName (to);
+    //    player.gridManager.find_paths_realtime(player, toTile, fromTile);
+    //    player.path = toTile.db_path_lowest;
+    //    player.UpdateTargetDirection(player.nextTile);
+    //}
 
     public void ClickGameBoard()
     {

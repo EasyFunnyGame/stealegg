@@ -94,14 +94,14 @@ public class ActionEnemyMove : ActionBase
 
                         var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
 
-                        if (enemy.turnOnReachDirection==ReachTurnTo.PlayerToEnemy)
+                        if (enemy.turnOnReachDirection == ReachTurnTo.PlayerToEnemy)
                         {
                             player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
                             var path = player.path;
                             var nextTileName = "";
                             if (path.Count >= 2)
                             {
-                                nextTileName = path[path.Count - 2].name;
+                                nextTileName = path[path.Count - 2];
                             }
                             else
                             {

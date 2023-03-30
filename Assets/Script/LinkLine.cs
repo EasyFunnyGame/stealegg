@@ -2,6 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TraversabilityOptions
+{
+    None,
+    Everyone,
+    Player,
+    Enemies,
+    Fenced
+}
+
 public class LinkLine : MonoBehaviour
 {
     public string node1;
@@ -11,6 +20,8 @@ public class LinkLine : MonoBehaviour
     public bool through = true;
 
     public float playerMoveType = -1;
+
+    public TraversabilityOptions traversability;
 
     // Start is called before the first frame update
     void Start()

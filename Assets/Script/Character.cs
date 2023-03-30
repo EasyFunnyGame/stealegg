@@ -50,7 +50,7 @@ public class Character : MonoBehaviour
 
     public Coord coord;
 
-    public List<GridTile> path = new List<GridTile>();
+    public List<string> path = new List<string>();
 
     public ActionBase currentAction = null;
 
@@ -185,30 +185,102 @@ public class Character : MonoBehaviour
         }
     }
 
-    public bool Goto(string tileName)
-    {
-        var tile = gridManager.GetTileByName(tileName);
-        if (!tile) return false;
-        return FindPathRealTime(tile); ;
-    }
 
-    public bool FindPathRealTime(GridTile t)
+    public bool FindPathRealTime(GridTile to, GridTile from = null)
     {
-        selected_tile_s = t;
-        gridManager.find_paths_realtime(this, t);
-        if (t.db_path_lowest.Count <= 0)
+        var xOffSet = 0;
+        var zOffset = 0;
+        if (direction == Direction.Up)
+        {
+            zOffset = 1;
+        }
+        else if (direction == Direction.Down)
+        {
+            zOffset = -1;
+        }
+        else if (direction == Direction.Left)
+        {
+            xOffSet = -1;
+        }
+        else if (direction == Direction.Right)
+        {
+            xOffSet = 1;
+        }
+        gridManager.find_paths_realtime(this, to);
+        if (to.db_path_lowest.Count <= 0)
         {
             return false;
         }
-        UpdateMoves(t);
-        path = t.db_path_lowest;
+        GridTile fromTile = null;
+        var frontalTileName = string.Format("{0}_{1}", coord.x + xOffSet, coord.z + zOffset);
+        if(frontalTileName != to.gameObject.name)
+        {
+            var boardNode = boardManager.FindNode(frontalTileName);
+            if(boardNode?.gameObject.activeSelf == true)
+            {
+                var frontalTile = gridManager.GetTileByName(frontalTileName);
+                if (frontalTile)
+                {
+                    for (var index = 0; index < currentTile.db_neighbors.Count; index++)
+                    {
+                        var neighbor = currentTile.db_neighbors[index];
+                        if (neighbor.tile_s?.name == frontalTileName && neighbor.blocked == false)
+                        {
+                            fromTile = neighbor.tile_s;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        selected_tile_s = to;
+        if (fromTile)
+        {
+            gridManager.find_paths_realtime(this, to);
+            var path1 = new List<string>();
+            for(var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
+            {
+                path1.Add(selected_tile_s.db_path_lowest[idx].name);
+            }
+
+            gridManager.find_paths_realtime(this, to, fromTile);
+            var path2 = new List<string>();
+            for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
+            {
+                path2.Add(selected_tile_s.db_path_lowest[idx].name);
+            }
+
+            if ((path2.Count + 1) > path1.Count)
+            {
+                gridManager.find_paths_realtime(this, to);
+            }
+            else
+            {
+                gridManager.find_paths_realtime(this, to, fromTile);
+                var pathLowest = new List<GridTile>();
+                pathLowest.Add(fromTile);
+                pathLowest.AddRange(selected_tile_s.db_path_lowest);
+                selected_tile_s.db_path_lowest = pathLowest;
+            }
+        }
+        else
+        {
+            gridManager.find_paths_realtime(this, to);
+        }
+        UpdateMoves(selected_tile_s);
+        path.Clear();
+        for (var index = 0; index < selected_tile_s.db_path_lowest.Count; index++)
+        {
+            path.Add(selected_tile_s.db_path_lowest[index].gameObject.name);
+        }
+
         UpdateTargetDirection(nextTile);
         return true;
     }
 
     public void UpdateMoves(GridTile ttile)
     {
-        num_tile = 0;
+        //num_tile = 0;
 
         tar_tile_s = ttile;
 
@@ -226,7 +298,7 @@ public class Character : MonoBehaviour
 
         tpos = new Vector3(0, 0, 0);
 
-        tpos = tar_tile_s.db_path_lowest[num_tile].transform.position;
+        tpos = tar_tile_s.db_path_lowest[0].transform.position;
 
         tpos.y = transform.position.y;
 
@@ -234,7 +306,7 @@ public class Character : MonoBehaviour
 
         db_moves[1].position = tpos;
 
-        nextTile = tar_tile_s.db_path_lowest[num_tile];
+        nextTile = tar_tile_s.db_path_lowest[0];
 
         //UpdateTargetDirection(nextTile);
     }
