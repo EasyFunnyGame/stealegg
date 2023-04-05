@@ -45,6 +45,26 @@ public class BoardManager : MonoBehaviour
 
     public List<WalkThroughStep> steps = new List<WalkThroughStep>();
 
+    public bool playerTurn = false;
+
+    public bool enemyTurn = false;
+
+    // 瓶子的追踪点
+    public Dictionary<string , Coord> bottleCoords;
+
+    // 口哨的追踪点
+    public Dictionary<string, Coord> whitsleCoords;
+
+    // 偷盗的追踪点
+    public Dictionary<string, Coord> stealCoords;
+
+    // 发现主角的追踪点
+    public Dictionary<string, Coord> playerCoords;
+
+    // 主角捡到瓶子的数量最多只能为1,如果有了瓶子不能继续再捡起来
+    public int bottleCount = 0;
+
+
     private void Awake()
     {
         playerGridManager.gameObject.SetActive(true);
@@ -55,6 +75,11 @@ public class BoardManager : MonoBehaviour
         ResetEnemies();
         ResetSquareNodes();
         Game.Instance.SceneLoaded(this, name);
+    }
+
+    public void Ready()
+    {
+        Debug.Log("准备好");
     }
 
 

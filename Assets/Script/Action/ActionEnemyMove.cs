@@ -3,7 +3,7 @@
 public class ActionEnemyMove : ActionBase
 {
     Vector3 velocity = new Vector3();
-    private Vector3 nextStepTilePosition;
+    private Vector3 targetPosition;
     float height = 0f;
 
     bool findPathSuccess = true;
@@ -21,8 +21,7 @@ public class ActionEnemyMove : ActionBase
         }
         else
         {
-            nextStepTilePosition = enemy.db_moves[0].position;
-            //enemy.StartMove();
+            targetPosition = enemy.db_moves[0].position;
 
             var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
             height = targetNode.transform.position.y - enemy.transform.position.y;
@@ -69,7 +68,7 @@ public class ActionEnemyMove : ActionBase
             if (character.direction == character.targetDirection)
             {
                 character.Reached();
-                if (!enemy.CatchPlayer() && !enemy.TryFoundPlayer())
+                if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
                 {
                     
                 }
@@ -79,135 +78,103 @@ public class ActionEnemyMove : ActionBase
         }
        
         var myPosition = character.transform.position;
-        var targetPosition = nextStepTilePosition;
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist < 0.001f)
         {
-            if(enemy.foundPlayerTile)
+            return OnReachPosition();
+        }
+        return false;
+    }
+
+
+
+    bool OnReachPosition()
+    {
+        if (enemy.foundPlayerTile)
+        {
+            character.UpdateTargetDirection(character.nextTile);
+            if (character.direction == character.targetDirection)
             {
-                character.UpdateTargetDirection(character.nextTile);
-                if (character.direction == character.targetDirection)
+                if (character.currentTile.name == enemy.foundPlayerTile.name)
                 {
-                    if (character.currentTile.name == enemy.foundPlayerTile.name)
+                    var player = Game.Instance.player;
+
+                    var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+
+                    if (enemy.turnOnReachDirection == ReachTurnTo.PlayerToEnemy)
                     {
-                        var player = Game.Instance.player;
-
-                        var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
-
-                        if (enemy.turnOnReachDirection == ReachTurnTo.PlayerToEnemy)
+                        player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
+                        var path = player.path;
+                        var nextTileName = "";
+                        if (path.Count >= 2)
                         {
-                            player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
-                            var path = player.path;
-                            var nextTileName = "";
-                            if (path.Count >= 2)
+                            nextTileName = path[path.Count - 2];
+                        }
+                        else
+                        {
+                            nextTileName = player.currentTile.name;
+                        }
+
+                        var lookToTile = character.gridManager.GetTileByName(nextTileName);
+                        if (lookToTile)
+                        {
+                            var targetDirection = Utils.DirectionTo(character.currentTile, lookToTile, character.direction);
+                            if (character.direction == targetDirection)
                             {
-                                nextTileName = path[path.Count - 2];
+                                character.Reached();
+                                if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
+                                {
+                                    enemy.LostTarget();
+                                }
+                                return true;
                             }
                             else
                             {
-                                nextTileName = player.currentTile.name;
-                            }
-
-                            var lookToTile = character.gridManager.GetTileByName(nextTileName);
-                            if (lookToTile)
-                            {
-                                var targetDirection = Utils.DirectionTo(character.currentTile, lookToTile, character.direction);
-                                if (character.direction == targetDirection)
-                                {
-                                    character.Reached();
-                                    if (!enemy.CatchPlayer() && !enemy.TryFoundPlayer())
-                                    {
-                                        enemy.LostTarget();
-                                    }
-                                    return true;
-                                }
-                                else
-                                {
-                                    Utils.SetDirection(character, targetDirection);
-                                    return false;
-                                }
+                                Utils.SetDirection(character, targetDirection);
+                                return false;
                             }
                         }
-                        else if(enemy.turnOnReachDirection == ReachTurnTo.EnemyToPlayer)
+                    }
+                    else if (enemy.turnOnReachDirection == ReachTurnTo.EnemyToPlayer)
+                    {
+                        if (playerTile != null)
                         {
-                            if (playerTile != null)
+                            character.FindPathRealTime(playerTile);
+                            character.UpdateTargetDirection(character.nextTile);
+                            if (character.direction == character.targetDirection)
                             {
-                                character.FindPathRealTime(playerTile);
-                                character.UpdateTargetDirection(character.nextTile);
-                                if (character.direction == character.targetDirection)
+                                character.Reached();
+                                if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
                                 {
-                                    character.Reached();
-                                    if (!enemy.CatchPlayer() && !enemy.TryFoundPlayer())
-                                    {
-                                        enemy.LostTarget();
-                                    }
-                                    return true;
+                                    enemy.LostTarget();
                                 }
-                                else
-                                {
-                                    Utils.SetDirection(character, character.targetDirection);
-                                    return false;
-                                }
+                                return true;
+                            }
+                            else
+                            {
+                                Utils.SetDirection(character, character.targetDirection);
+                                return false;
                             }
                         }
                     }
-                    character.Reached();
+                }
+                character.Reached();
+                return true;
+            }
+        }
+        else if (enemy.hearSoundTile)
+        {
+            character.UpdateTargetDirection(character.nextTile);
+            if (character.direction == character.targetDirection)
+            {
+                if (character.currentTile.name == enemy.hearSoundTile.name)
+                {
+                    enemy.Reached();
+                    if (!enemy.TryFoundPlayer())
+                    {
+                        enemy.LostTarget();
+                    }
                     return true;
-                }
-            }
-            else if(enemy.hearSoundTile)
-            {
-                character.UpdateTargetDirection(character.nextTile);
-                if (character.direction == character.targetDirection)
-                {
-                    if (character.currentTile.name == enemy.hearSoundTile.name)
-                    {
-                        enemy.Reached();
-                        if (!enemy.TryFoundPlayer())
-                        {
-                            enemy.LostTarget();
-                        }
-                        return true;
-                    }
-                    else
-                    {
-                        character.Reached();
-                        return true;
-                    }
-                }
-            }
-            else if(enemy.originalTile!=null)
-            {
-                if (character.currentTile.name == character.originalCoord.name)
-                {
-                    // 回到原点要转向
-                    if (character.direction != character.originalDirection)
-                    {
-                        // character.originalDirection = Direction.Up;// for test 
-                        Utils.SetDirection(character, character.originalDirection);
-                        return false;
-                    }
-                    else
-                    {
-                        enemy.originalTile = null;
-                        enemy.OnReachedOriginal();
-                        character.Reached();
-                        return true;
-                    }
-                }
-                character.UpdateTargetDirection(character.nextTile);
-                if (character.direction == character.targetDirection)
-                {
-                    character.Reached();
-                    return true;
-                }
-            }
-            else if(enemy.patroling)
-            {
-                var patrolEnemy = enemy as EnemyPatrol;
-                if (patrolEnemy.needTurn())
-                {
-                    Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
                 }
                 else
                 {
@@ -215,14 +182,67 @@ public class ActionEnemyMove : ActionBase
                     return true;
                 }
             }
-            else 
+        }
+        else if (enemy.originalTile != null)
+        {
+            if (character.currentTile.name == character.originalCoord.name)
+            {
+                // 回到原点要转向
+                if (character.direction != character.originalDirection)
+                {
+                    // character.originalDirection = Direction.Up;// for test 
+                    Utils.SetDirection(character, character.originalDirection);
+                    return false;
+                }
+                else
+                {
+                    enemy.originalTile = null;
+                    enemy.OnReachedOriginal();
+                    character.Reached();
+                    return true;
+                }
+            }
+            character.UpdateTargetDirection(character.nextTile);
+            if (character.direction == character.targetDirection)
             {
                 character.Reached();
                 return true;
             }
         }
-        return false;
+        else if (enemy.patroling)
+        {
+            var patrolEnemy = enemy as EnemyPatrol;
+            if (patrolEnemy.needTurn())
+            {
+                Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
+            }
+            else
+            {
+                character.Reached();
+                return true;
+            }
+        }
+        else
+        {
+            character.Reached();
+            return true;
+        }
+
+        return true;
     }
+
+
+    void OnTurnToDirection()
+    {
+
+    }
+
+    void OnActionEnd()
+    {
+
+    }
+
+
 
     public override void Run()
     {

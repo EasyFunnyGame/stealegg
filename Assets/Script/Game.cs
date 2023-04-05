@@ -133,7 +133,6 @@ public class Game : MonoBehaviour
         camera = GameObject.Find("GameCamera").GetComponent<GameCamera>();
         player = GameObject.Find("Player").GetComponent<Player>();
         player.m_animator.SetInteger("result", 0);
-        player.bottleCount = 0;
         delayShowEndTimer = 0;
         bottleSelectingTarget = false;
         gameCanvas.level = playingLevel+1;
@@ -159,6 +158,8 @@ public class Game : MonoBehaviour
             gameCanvas.onClickStartPlayingGameHandler();
         }
         camera.upper = false;
+
+        boardManager.Ready();
     }
 
 
@@ -258,7 +259,6 @@ public class Game : MonoBehaviour
     {
         enemyActionRunning = false;
         if (player == null) return;
-
         if (player.justSteal) return;
 
         if (player.currentAction != null)

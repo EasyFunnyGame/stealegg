@@ -393,6 +393,37 @@ public class Character : MonoBehaviour
         return false;
     }
 
+    public Coord front
+    {
+        get
+        {
+            var x = coord.x;
+            var z = coord.z;
+            var coordName = "";
+            if(direction == Direction.Up)
+            {
+                z += 1;
+            }
+            else if(direction == Direction.Down)
+            {
+                z-=1;
+            }
+            else if (direction == Direction.Left)
+            {
+                x -= 1;
+            }
+            else if (direction == Direction.Right)
+            {
+                x += 1;
+            }
+            coordName = string.Format("{0}_{1}", x, z);
+            if (!boardManager) return Coord.Illegal;
+            var node = boardManager.FindNode(coordName);
+            if (node == null) return Coord.Illegal;
+            return new Coord(x, z, node.transform.position.y);
+        }
+    }
+
 
     #region 动画事件回调
     public virtual void FootL()

@@ -28,7 +28,7 @@ public class ActionThrowBottle : ActionBase
 
         targetRotation = Quaternion.LookRotation(boardNode.transform.position - player.transform.position);
 
-        player.bottleCount--;
+        Game.Instance.boardManager.bottleCount = 0;
         AudioPlay.Instance.PlayerThrowBottle();
     }
 
@@ -95,7 +95,7 @@ public class ActionThrowBottle : ActionBase
                     {
                         if(enemy.foundPlayerTile==null)
                         {
-                            enemy.ShowTraceTarget(targetTile, enemy.hearSoundTile == null, 1);
+                            enemy.ShowTraceTarget(targetTile);
                         }
                     }
                 }

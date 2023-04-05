@@ -18,7 +18,7 @@ public class ActionBlowWhistle : ActionBase
                 var enemy = boardManager.enemies[index];
                 if (enemy.coord.name == kvp.Key)
                 {
-                    enemy.ShowTraceTarget(targetTile, enemy.hearSoundTile == null, 1);
+                    enemy.ShowTraceTarget(targetTile);
                 }
             }
         }

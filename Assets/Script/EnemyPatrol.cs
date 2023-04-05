@@ -439,7 +439,7 @@ public class EnemyPatrol : Enemy
             var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
             if (playerCanReachInOneStep && dir == direction)
             {
-                var catched = CatchPlayer();
+                var catched = TryCatch();
                 if (catched)
                 {
                     return;
@@ -462,7 +462,7 @@ public class EnemyPatrol : Enemy
         else
         {
             TryFoundPlayer();
-            if (CatchPlayer()) return;
+            if (TryCatch()) return;
         }
 
         if (foundPlayerTile != null)

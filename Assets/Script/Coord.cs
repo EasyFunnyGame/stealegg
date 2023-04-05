@@ -1,5 +1,4 @@
 ﻿using System;
-
 using UnityEngine;
 
 public enum Direction
@@ -60,27 +59,54 @@ public struct Coord
     {
         return new Coord(new Vector3(x, height, z));
     }
+    
+    public bool isLegal
+    {
+        get
+        {
+            return x != int.MinValue && z != int.MinValue;
+        }
+    }
 
-    //static Coord ParseByName(string name)
-    //{
-    //    var coordArr = name.Split('_');
-    //    if (coordArr.Length != 2)
-    //        throw new Exception(string.Format("Can Not Parse Coord By Name {0},0",name));
-    //    var x = -1;
+    public void Clear()
+    {
+        x = int.MinValue;
+        z = int.MinValue;
+    }
 
-    //    var z = -1;
+    public static bool WithIn(Coord from , Coord to, int range)
+    {
+        if (!from.isLegal || !to.isLegal) return false;
+        var distanceX = Math.Abs(from.x - to.x);
+        var distanceZ = Math.Abs(from.z - to.z);
+        return distanceX <= range && distanceZ <= range;
 
-    //    var succees = int.TryParse(coordArr[0],out x);
-    //    if(!succees)
-    //    {
-    //        throw new Exception(string.Format("Can Not Parse Coord By Name {0}, x", name));
-    //    }
-    //    succees = int.TryParse(coordArr[1], out z);
-    //    if (!succees)
-    //    {
-    //        throw new Exception(string.Format("Can Not Parse Coord By Name {0}, z", name));
-    //    }
+    }
 
-    //    return new Coord();
-    //}
+    public static int MinDistance(Coord from, Coord to)
+    {
+        if (!from.isLegal || !to.isLegal) return int.MinValue;
+        var distanceX = Math.Abs(from.x - to.x);
+        var distanceZ = Math.Abs(from.z - to.z);
+        var distance = Math.Min(distanceX, distanceZ);
+        return distance;
+    }
+
+    public static int MaxDistance(Coord from, Coord to)
+    {
+        if (!from.isLegal || !to.isLegal) return int.MinValue;
+        var distanceX = Math.Abs(from.x - to.x);
+        var distanceZ = Math.Abs(from.z - to.z);
+        var distance = Math.Max(distanceX, distanceZ);
+        return distance;
+    }
+
+    public static Coord TransformFromPosition(Vector3 position)
+    {
+        return new Coord(position);
+    }
+
+    
+    public static readonly Coord Illegal = new Coord(int.MinValue, int.MinValue, int.MinValue);
 }
+

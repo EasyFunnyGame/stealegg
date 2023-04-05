@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 public class Player : Character
 {
-    public int bottleCount;
-
     public Animator playerMovePlay;
 
     public Animator whitslePlay;
@@ -19,7 +17,7 @@ public class Player : Character
 
     public float idleTime = 5;
 
-    public bool hidding = false;
+    public bool isHidding = false;
 
     public string walkingLineType;
 
@@ -231,7 +229,7 @@ public class Player : Character
             return;
         }
         Game.Instance.gameCanvas.bottleGroup.alpha = 1;
-        if (bottleCount <= 0)
+        if (Game.Instance.boardManager.bottleCount <= 0)
         {
             return;
         }
@@ -313,11 +311,14 @@ public class Player : Character
             var item = items[pos_name];
             if(item?.itemType == ItemType.LureBottle)
             {
-                AudioPlay.Instance.PlayerPickBottle();
-                item.gameObject?.SetActive(false);
-                item.icon?.gameObject.SetActive(false);
-                boardManager.allItems.Remove(pos_name);
-                bottleCount++;
+                if(Game.Instance.boardManager.bottleCount==0)
+                {
+                    AudioPlay.Instance.PlayerPickBottle();
+                    item.gameObject?.SetActive(false);
+                    item.icon?.gameObject.SetActive(false);
+                    boardManager.allItems.Remove(pos_name);
+                    Game.Instance.boardManager.bottleCount = 1;
+                }
             }
             if(item?.itemType == ItemType.Graff)
             {

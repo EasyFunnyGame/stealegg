@@ -31,9 +31,13 @@ public class Enemy : Character
 
     public static int count;
 
-    public GridTile foundPlayerTile = null;
+    public Coord coordTracing;
 
-    public GridTile hearSoundTile = null;
+    // 玩家当前所在坐标
+    public Coord coodPlayer;
+
+    // 玩家上一个坐标
+    public Coord coodPlayerLastRound;
 
     public GridTile originalTile = null;
 
@@ -44,8 +48,6 @@ public class Enemy : Character
     public Animator enemyMove;
 
     public GameObject route;
-
-    //public Transform routeLine;
 
     public Transform routeArrow;
 
@@ -58,8 +60,6 @@ public class Enemy : Character
     public bool sleeping = false;
 
     public bool patroling = false;
-
-    public bool waiting = false;
 
     public string walkingLineType;
 
@@ -86,9 +86,21 @@ public class Enemy : Character
         return this.headPoint.position + new Vector3(0,0.25f,0);
     }
 
+    public void TracingPlayerRefresh()
+    {
+        if (!coordTracing.isLegal || !coodPlayer.isLegal)
+        {
+            return;
+        }
+        var coord = Game.Instance.player.coord;
+        
+
+    }
+
     public virtual void CheckAction()
     {
         if (currentAction != null) return;
+
 
         if (hearSoundTile != null)
         {
@@ -98,7 +110,7 @@ public class Enemy : Character
             var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
             if (playerCanReachInOneStep && dir == direction)
             {
-                var catched = CatchPlayer();
+                var catched = TryCatch();
                 if (catched)
                 {
                     return;
@@ -121,7 +133,7 @@ public class Enemy : Character
         else
         {
             TryFoundPlayer();
-            if (CatchPlayer()) return;
+            if (TryCatch()) return;
         }
 
 
@@ -227,7 +239,7 @@ public class Enemy : Character
 
         if(hearSoundTile != null)
         {
-            var catchPlayer = CatchPlayer();
+            var catchPlayer = TryCatch();
             if (catchPlayer)
                 return;
         }
@@ -243,7 +255,7 @@ public class Enemy : Character
         else
         {
             TryFoundPlayer();
-            CatchPlayer();
+            TryCatch();
         }
         m_animator.SetBool("moving", false);
         //Debug.Log("敌人到达路径点:"+ currentTile.name);
@@ -428,7 +440,7 @@ public class Enemy : Character
             if (targetTile != null)
             {
                 foundPlayerTile = targetTile;
-                ShowTraceTarget(targetTile , foundPlayerTile== null,2);
+                ShowTraceTarget(targetTile );
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
@@ -564,56 +576,30 @@ public class Enemy : Character
         return string.Empty;
     }
 
-    public bool CatchPlayerOn(string tileName)
-    {
-        if(sleeping)
-        {
-            return false;
-        }
-        //if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
-        //{
-        //    return false;
-        //}
-        var player = Game.Instance.player;
-        if (player == null || player.currentTile == null) return false;
 
-        var targetDirection = Utils.DirectionTo(currentTile.name, tileName, direction);
-        if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
+    public bool TryCatch()
+    {
+        if (sleeping) return false;
+        var player = Game.Instance.player;
+        if (player != null && !player.isHidding && player.coord.Equals(front))
         {
-            Game.Instance.FailGame(this);
-            m_animator.SetBool("catch", true);
-            AudioPlay.Instance.PlayCatch(this);
-            ShowCatch();
-            foundPlayerTile = hearSoundTile = null;
             return true;
         }
         return false;
-    }
 
-    public bool CatchPlayer()
-    {
-        if (sleeping)
-        {
-            return false;
-        }
-        //if (Game.Instance.result == GameResult.FAIL || Game.Instance.result == GameResult.WIN)
+
+        //var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);
+        //if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
         //{
-        //    return false;
+        //    Game.Instance.FailGame(this);
+        //    m_animator.SetBool("catch", true);
+        //    AudioPlay.Instance.PlayCatch(this);
+        //    ShowCatch();
+        //    foundPlayerTile = hearSoundTile = null;
+        //    m_animator.SetBool("moving", false);
+        //    return true;
         //}
-        var player = Game.Instance.player;
-        if (player == null || player.currentTile == null) return false;
-        var targetDirection = Utils.DirectionTo(currentTile.name, player.currentTile.name, direction);
-        if (targetDirection == direction && player.CanReachInSteps(currentTile.name) && !player.hidding)
-        {
-            Game.Instance.FailGame(this);
-            m_animator.SetBool("catch", true);
-            AudioPlay.Instance.PlayCatch(this);
-            ShowCatch();
-            foundPlayerTile = hearSoundTile = null;
-            m_animator.SetBool("moving", false);
-            return true;
-        }
-        return false;
+        //return false;
     }
 
     public GridTile growthTile = null;
@@ -621,7 +607,7 @@ public class Enemy : Character
     {
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return ;
-        ShowTraceTarget(targetTile, hearSoundTile == null, 1);
+        ShowTraceTarget(targetTile);
         growthTile = targetTile;
         ShowFound();
        
@@ -638,7 +624,7 @@ public class Enemy : Character
         var targetTile = gridManager.GetTileByName(tileName);
 
 
-        if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
+        if (!string.IsNullOrEmpty(playerTileName) && TryCatch())
         {
             return true;
         }
@@ -694,7 +680,7 @@ public class Enemy : Character
         var playerTileName = CheckNeighborGrid();
         var targetTile = gridManager.GetTileByName(tileName);
 
-        if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
+        if (!string.IsNullOrEmpty(playerTileName) && TryCatch())
         {
             return true;
         }
@@ -747,7 +733,7 @@ public class Enemy : Character
         var playerTileName = CheckNeighborGrid();
         var targetTile = gridManager.GetTileByName(tileName);
        
-        if (!string.IsNullOrEmpty(playerTileName) && CatchPlayerOn(playerTileName))
+        if (!string.IsNullOrEmpty(playerTileName) && TryCatch())
         {
             return true;
         }
@@ -786,7 +772,7 @@ public class Enemy : Character
         {
             currentAction = new ActionTurnDirection(this, targetDirection);
         }
-        ShowTraceTarget(targetTile, hearSoundTile == null,1);
+        ShowTraceTarget(targetTile);
         hearSoundTile = targetTile;
         lureBySteal = true;
         idleType = 0.5f;
@@ -809,7 +795,7 @@ public class Enemy : Character
         else
         {
             TryFoundPlayer();
-            if (CatchPlayer()) return;
+            if (TryCatch()) return;
         }
         m_animator.SetBool("moving",false);
         UpdateRouteMark();
@@ -907,7 +893,7 @@ public class Enemy : Character
     }
 
 
-    public virtual void ShowTraceTarget(GridTile tile, bool playSound, int soundType)
+    public virtual void ShowTraceTarget(GridTile tile)
     {
         tracingTileName = tile.name;
 
@@ -939,10 +925,6 @@ public class Enemy : Character
                 }
             }
         }
-        //if(soundType == 2 && playSound)
-        //{
-        //    AudioPlay.Instance.PlayFound();
-        //}
         m_animator.SetTrigger("stop_looking");
     }
 

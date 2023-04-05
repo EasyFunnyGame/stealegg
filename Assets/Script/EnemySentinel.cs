@@ -128,7 +128,7 @@ public class EnemySentinel : Enemy
             var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
             if (playerCanReachInOneStep && dir == direction)
             {
-                var catched = CatchPlayer();
+                var catched = TryCatch();
                 if (catched)
                 {
                     return;
@@ -151,7 +151,7 @@ public class EnemySentinel : Enemy
         else
         {
             TryFoundPlayer();
-            if (CatchPlayer()) return;
+            if (TryCatch()) return;
         }
 
         if (foundPlayerTile != null)
@@ -311,7 +311,7 @@ public class EnemySentinel : Enemy
             var targetTile = gridManager.GetTileByName(foundPlayerNode);
             if (targetTile != null)
             {
-                ShowTraceTarget(targetTile, foundPlayerTile == null,2);
+                ShowTraceTarget(targetTile);
                 foundPlayerTile = targetTile;
                 ShowFound();
                 originalTile = null;
