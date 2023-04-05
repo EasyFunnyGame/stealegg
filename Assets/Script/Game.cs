@@ -98,15 +98,7 @@ public class Game : MonoBehaviour
     public void PlayLevel(string sceneName)
     {
         AudioPlay.Instance.PlayBackGroundMusic();
-        //if(!sceneName.StartsWith("3"))
-        {
-            SceneManager.LoadScene(sceneName);
-        }
-        //else
-        //{
-        //    loadingSceneName = sceneName;
-        //    StartCoroutine("LoadsScene");
-        //}
+        SceneManager.LoadScene(sceneName);
         resLoaded = false;
     }
 
