@@ -176,4 +176,15 @@ public class BoardNode : MonoBehaviour
             }
         }
     }
+
+    public void Red()
+    {
+        var targetIconRenderer = targetIcon.GetComponent<MeshRenderer>();
+        targetIconRenderer.transform.localScale = new Vector3(RED_SCALE, 1, RED_SCALE);
+        targetIconRenderer.transform.position = node.transform.position;
+        targetIconRenderer.Translate(new Vector3(0,0.012f,0));
+        targetIconRenderer.material = Resources.Load<Material>("Material/RouteRed");
+        contour.gameObject.SetActive(false);
+        sphereCollider.gameObject.SetActive(false);
+    }
 }

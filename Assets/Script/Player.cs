@@ -51,10 +51,10 @@ public class Player : Character
         {
             var enemy = boardManager.enemies[index];
 
-            if( enemy.hearSoundTile!=null || enemy.foundPlayerTile!=null || enemy.growthTile!=null)
-            {
-                founded = true;
-            }
+            //if( enemy.hearSoundTile!=null || enemy.foundPlayerTile!=null || enemy.growthTile!=null)
+            //{
+            //    founded = true;
+            //}
             if(founded)
             {
                 break;
@@ -107,7 +107,7 @@ public class Player : Character
         ShowReached();
         idleTime = Random.Range(3,5);
 
-        hidding = false;
+        isHidding = false;
         var anyEnemyLookingAt = false;
         foreach (var kvp in boardManager.allItems)
         {
@@ -129,7 +129,7 @@ public class Player : Character
                 }
                 if (!anyEnemyLookingAt)
                 {
-                    hidding = true;
+                    isHidding = true;
                 }
                 break;
             }

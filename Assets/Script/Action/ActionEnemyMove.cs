@@ -15,7 +15,6 @@ public class ActionEnemyMove : ActionBase
         findPathSuccess = enemy.FindPathRealTime(tile);
         if (!findPathSuccess)
         {
-            enemy.hearSoundTile = enemy.foundPlayerTile = null;
             enemy.ShowNotFound();
             enemy.ReturnOriginal(false);
         }
@@ -68,10 +67,10 @@ public class ActionEnemyMove : ActionBase
             if (character.direction == character.targetDirection)
             {
                 character.Reached();
-                if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
-                {
+                //if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
+                //{
                     
-                }
+                //}
                 return true;
             }
             return false;
@@ -90,143 +89,143 @@ public class ActionEnemyMove : ActionBase
 
     bool OnReachPosition()
     {
-        if (enemy.foundPlayerTile)
-        {
-            character.UpdateTargetDirection(character.nextTile);
-            if (character.direction == character.targetDirection)
-            {
-                if (character.currentTile.name == enemy.foundPlayerTile.name)
-                {
-                    var player = Game.Instance.player;
+        //if (enemy.foundPlayerTile)
+        //{
+        //    character.UpdateTargetDirection(character.nextTile);
+        //    if (character.direction == character.targetDirection)
+        //    {
+        //        if (character.currentTile.name == enemy.foundPlayerTile.name)
+        //        {
+        //            var player = Game.Instance.player;
 
-                    var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
+        //            var playerTile = character.gridManager.GetTileByName(Game.Instance.player.currentTile.name);
 
-                    if (enemy.turnOnReachDirection == ReachTurnTo.PlayerToEnemy)
-                    {
-                        player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
-                        var path = player.path;
-                        var nextTileName = "";
-                        if (path.Count >= 2)
-                        {
-                            nextTileName = path[path.Count - 2];
-                        }
-                        else
-                        {
-                            nextTileName = player.currentTile.name;
-                        }
+        //            if (enemy.turnOnReachDirection == ReachTurnTo.PlayerToEnemy)
+        //            {
+        //                player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
+        //                var path = player.path;
+        //                var nextTileName = "";
+        //                if (path.Count >= 2)
+        //                {
+        //                    nextTileName = path[path.Count - 2];
+        //                }
+        //                else
+        //                {
+        //                    nextTileName = player.currentTile.name;
+        //                }
 
-                        var lookToTile = character.gridManager.GetTileByName(nextTileName);
-                        if (lookToTile)
-                        {
-                            var targetDirection = Utils.DirectionTo(character.currentTile, lookToTile, character.direction);
-                            if (character.direction == targetDirection)
-                            {
-                                character.Reached();
-                                if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
-                                {
-                                    enemy.LostTarget();
-                                }
-                                return true;
-                            }
-                            else
-                            {
-                                Utils.SetDirection(character, targetDirection);
-                                return false;
-                            }
-                        }
-                    }
-                    else if (enemy.turnOnReachDirection == ReachTurnTo.EnemyToPlayer)
-                    {
-                        if (playerTile != null)
-                        {
-                            character.FindPathRealTime(playerTile);
-                            character.UpdateTargetDirection(character.nextTile);
-                            if (character.direction == character.targetDirection)
-                            {
-                                character.Reached();
-                                if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
-                                {
-                                    enemy.LostTarget();
-                                }
-                                return true;
-                            }
-                            else
-                            {
-                                Utils.SetDirection(character, character.targetDirection);
-                                return false;
-                            }
-                        }
-                    }
-                }
-                character.Reached();
-                return true;
-            }
-        }
-        else if (enemy.hearSoundTile)
-        {
-            character.UpdateTargetDirection(character.nextTile);
-            if (character.direction == character.targetDirection)
-            {
-                if (character.currentTile.name == enemy.hearSoundTile.name)
-                {
-                    enemy.Reached();
-                    if (!enemy.TryFoundPlayer())
-                    {
-                        enemy.LostTarget();
-                    }
-                    return true;
-                }
-                else
-                {
-                    character.Reached();
-                    return true;
-                }
-            }
-        }
-        else if (enemy.originalTile != null)
-        {
-            if (character.currentTile.name == character.originalCoord.name)
-            {
-                // 回到原点要转向
-                if (character.direction != character.originalDirection)
-                {
-                    // character.originalDirection = Direction.Up;// for test 
-                    Utils.SetDirection(character, character.originalDirection);
-                    return false;
-                }
-                else
-                {
-                    enemy.originalTile = null;
-                    enemy.OnReachedOriginal();
-                    character.Reached();
-                    return true;
-                }
-            }
-            character.UpdateTargetDirection(character.nextTile);
-            if (character.direction == character.targetDirection)
-            {
-                character.Reached();
-                return true;
-            }
-        }
-        else if (enemy.patroling)
-        {
-            var patrolEnemy = enemy as EnemyPatrol;
-            if (patrolEnemy.needTurn())
-            {
-                Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
-            }
-            else
-            {
-                character.Reached();
-                return true;
-            }
-        }
-        else
-        {
-            character.Reached();
-            return true;
-        }
+        //                var lookToTile = character.gridManager.GetTileByName(nextTileName);
+        //                if (lookToTile)
+        //                {
+        //                    var targetDirection = Utils.DirectionTo(character.currentTile, lookToTile, character.direction);
+        //                    if (character.direction == targetDirection)
+        //                    {
+        //                        character.Reached();
+        //                        if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
+        //                        {
+        //                            enemy.LostTarget();
+        //                        }
+        //                        return true;
+        //                    }
+        //                    else
+        //                    {
+        //                        Utils.SetDirection(character, targetDirection);
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+        //            else if (enemy.turnOnReachDirection == ReachTurnTo.EnemyToPlayer)
+        //            {
+        //                if (playerTile != null)
+        //                {
+        //                    character.FindPathRealTime(playerTile);
+        //                    character.UpdateTargetDirection(character.nextTile);
+        //                    if (character.direction == character.targetDirection)
+        //                    {
+        //                        character.Reached();
+        //                        if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
+        //                        {
+        //                            enemy.LostTarget();
+        //                        }
+        //                        return true;
+        //                    }
+        //                    else
+        //                    {
+        //                        Utils.SetDirection(character, character.targetDirection);
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        character.Reached();
+        //        return true;
+        //    }
+        //}
+        //else if (enemy.hearSoundTile)
+        //{
+        //    character.UpdateTargetDirection(character.nextTile);
+        //    if (character.direction == character.targetDirection)
+        //    {
+        //        if (character.currentTile.name == enemy.hearSoundTile.name)
+        //        {
+        //            enemy.Reached();
+        //            if (!enemy.TryFoundPlayer())
+        //            {
+        //                enemy.LostTarget();
+        //            }
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            character.Reached();
+        //            return true;
+        //        }
+        //    }
+        //}
+        //else if (enemy.originalTile != null)
+        //{
+        //    if (character.currentTile.name == character.originalCoord.name)
+        //    {
+        //        // 回到原点要转向
+        //        if (character.direction != character.originalDirection)
+        //        {
+        //            // character.originalDirection = Direction.Up;// for test 
+        //            Utils.SetDirection(character, character.originalDirection);
+        //            return false;
+        //        }
+        //        else
+        //        {
+        //            enemy.originalTile = null;
+        //            enemy.OnReachedOriginal();
+        //            character.Reached();
+        //            return true;
+        //        }
+        //    }
+        //    character.UpdateTargetDirection(character.nextTile);
+        //    if (character.direction == character.targetDirection)
+        //    {
+        //        character.Reached();
+        //        return true;
+        //    }
+        //}
+        //else if (enemy.patroling)
+        //{
+        //    var patrolEnemy = enemy as EnemyPatrol;
+        //    if (patrolEnemy.needTurn())
+        //    {
+        //        Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
+        //    }
+        //    else
+        //    {
+        //        character.Reached();
+        //        return true;
+        //    }
+        //}
+        //else
+        //{
+        //    character.Reached();
+        //    return true;
+        //}
 
         return true;
     }

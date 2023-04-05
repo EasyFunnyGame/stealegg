@@ -410,10 +410,10 @@ public class EnemyPatrol : Enemy
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
-        if (hearSoundTile == null && foundPlayerTile == null)
-        {
-            patroling = true;
-        }
+        //if (hearSoundTile == null && foundPlayerTile == null)
+        //{
+        //    patroling = true;
+        //}
         UpdateNextPatrolPoint();
         UpdateRouteMark();
     }

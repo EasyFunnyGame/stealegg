@@ -68,7 +68,7 @@ public class EnemySentinel : Enemy
             xOffset = -1;
         }
 
-        var distance = hearSoundTile == null ? 20 : 2;
+        var distance =2;
         var foundNodeX = coord.x;
         var foundNodeZ = coord.z;
         while (distance >= 0)
@@ -120,21 +120,21 @@ public class EnemySentinel : Enemy
     {
         if (currentAction != null) return;
 
-        if (hearSoundTile != null)
-        {
-            var player = Game.Instance.player;
-            var playerTileName = player.currentTile.name;
-            var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
-            var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
-            if (playerCanReachInOneStep && dir == direction)
-            {
-                var catched = TryCatch();
-                if (catched)
-                {
-                    return;
-                }
-            }
-        }
+        //if (hearSoundTile != null)
+        //{
+        //    var player = Game.Instance.player;
+        //    var playerTileName = player.currentTile.name;
+        //    var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
+        //    var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
+        //    if (playerCanReachInOneStep && dir == direction)
+        //    {
+        //        var catched = TryCatch();
+        //        if (catched)
+        //        {
+        //            return;
+        //        }
+        //    }
+        //}
 
         if (foundPlayerTile == null)
         {
@@ -233,7 +233,7 @@ public class EnemySentinel : Enemy
         }
     }
 
-    public override bool TryFoundPlayer()
+    public override bool TryFound()
     {
         if (!Game.Instance.player || !Game.Instance.player.currentTile)
         {
