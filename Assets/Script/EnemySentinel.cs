@@ -26,94 +26,103 @@ public class EnemySentinel : Enemy
     // 逆时针
     const string CCW = "CCW";
 
+    public override void Start()
+    {
+        this.checkRange = 10;
+        this.sleeping = false;
+        this.patroling = false;
+        base.Start();
+    }
+
     public override void ResetDirection()
     {
         base.ResetDirection();
         UpdateRouteMark();
     }
-    public override void UpdateRouteMark()
-    {
 
-        for (var index = 0; index < redNodes.Count; index++)
-        {
-            DestroyImmediate(redNodes[index].gameObject);
-        }
-        redNodes.Clear();
-        for (var index = 0; index < redLines.Count; index++)
-        {
-            DestroyImmediate(redLines[index].gameObject);
-        }
-        redLines.Clear();
-        routeNodeNames.Clear();
-        if (sleeping) return;
+    //public override void UpdateRouteMark()
+    //{
 
-        var xOffset = 0;
+    //    for (var index = 0; index < redNodes.Count; index++)
+    //    {
+    //        DestroyImmediate(redNodes[index].gameObject);
+    //    }
+    //    redNodes.Clear();
+    //    for (var index = 0; index < redLines.Count; index++)
+    //    {
+    //        DestroyImmediate(redLines[index].gameObject);
+    //    }
+    //    redLines.Clear();
+    //    routeNodeNames.Clear();
+    //    if (sleeping) return;
 
-        var zOffset = 0;
+    //    var xOffset = 0;
 
-        if (direction == Direction.Up)
-        {
-            zOffset = 1;
-        }
-        else if (direction == Direction.Down)
-        {
-            zOffset = -1;
-        }
-        else if (direction == Direction.Right)
-        {
-            xOffset = 1;
-        }
-        else if (direction == Direction.Left)
-        {
-            xOffset = -1;
-        }
+    //    var zOffset = 0;
 
-        var distance =2;
-        var foundNodeX = coord.x;
-        var foundNodeZ = coord.z;
-        while (distance >= 0)
-        {
-            var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
-            foundNodeX = foundNodeX + xOffset;
-            foundNodeZ = foundNodeZ + zOffset;
-            var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
-            routeNodeNames.Add(currentNodeName);
-            RedNodeByName(currentNodeName);
+    //    if (direction == Direction.Up)
+    //    {
+    //        zOffset = 1;
+    //    }
+    //    else if (direction == Direction.Down)
+    //    {
+    //        zOffset = -1;
+    //    }
+    //    else if (direction == Direction.Right)
+    //    {
+    //        xOffset = 1;
+    //    }
+    //    else if (direction == Direction.Left)
+    //    {
+    //        xOffset = -1;
+    //    }
+
+    //    var distance =2;
+    //    var foundNodeX = coord.x;
+    //    var foundNodeZ = coord.z;
+    //    while (distance >= 0)
+    //    {
+    //        var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+    //        foundNodeX = foundNodeX + xOffset;
+    //        foundNodeZ = foundNodeZ + zOffset;
+    //        var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+    //        routeNodeNames.Add(currentNodeName);
+    //        RedNodeByName(currentNodeName);
             
-            var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
-            if (linkLine == null)
-                break;
+    //        var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
+    //        if (linkLine == null)
+    //            break;
 
-            if (distance > 0)
-            {
-                RedLineByName(linkLine);
-            }
-            if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
-            {
-                break;
-            }
-            for (var i = 0; i < boardManager.enemies.Count; i++)
-            {
-                var enemy = boardManager.enemies[i];
-                var enemyPosition = enemy.transform.position;
-                var enemyCoordX = Mathf.RoundToInt(enemyPosition.x);
-                var enemyCoordZ = Mathf.RoundToInt(enemyPosition.z);
-                var enemyCoordName = string.Format("{0}_{1}", enemyCoordX, enemyCoordZ);
-                if (enemyCoordName == nextNodeName)
-                {
-                    distance = -1;
-                    break;
-                }
-            }
-            distance--;
-        }
+    //        if (distance > 0)
+    //        {
+    //            RedLineByName(linkLine);
+    //        }
+    //        if (linkLine.transform.childCount < 1 || (linkLine.transform.childCount > 0 && !linkLine.transform.GetChild(0).name.Contains("Visual")))
+    //        {
+    //            break;
+    //        }
+    //        for (var i = 0; i < boardManager.enemies.Count; i++)
+    //        {
+    //            var enemy = boardManager.enemies[i];
+    //            var enemyPosition = enemy.transform.position;
+    //            var enemyCoordX = Mathf.RoundToInt(enemyPosition.x);
+    //            var enemyCoordZ = Mathf.RoundToInt(enemyPosition.z);
+    //            var enemyCoordName = string.Format("{0}_{1}", enemyCoordX, enemyCoordZ);
+    //            if (enemyCoordName == nextNodeName)
+    //            {
+    //                distance = -1;
+    //                break;
+    //            }
+    //        }
+    //        distance--;
+    //    }
 
-        BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        routeArrow.position = endNode.transform.position;
-        routeArrow.rotation = transform.rotation;
-        routeArrow.Rotate(new Vector3(0, 0, 180));
-        routeArrow.parent = null;
-    }
+    //    BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
+    //    routeArrow.position = endNode.transform.position;
+    //    routeArrow.rotation = transform.rotation;
+    //    routeArrow.Rotate(new Vector3(0, 0, 180));
+    //    routeArrow.parent = null;
+    //}
 
 
     public override void CheckAction()
@@ -355,9 +364,9 @@ public class EnemySentinel : Enemy
         return result;
     }
 
-    public override void OnReachedOriginal()
+    public override void ReachedOriginal()
     {
-        base.OnReachedOriginal();
+        base.ReachedOriginal();
         HideSentinelTurn();
         watching = true;
         willTurn = false;

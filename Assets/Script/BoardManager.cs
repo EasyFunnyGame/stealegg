@@ -71,6 +71,7 @@ public class BoardManager : MonoBehaviour
 
     private void Awake()
     {
+        Enemy.count = 0;
         playerGridManager.gameObject.SetActive(true);
         enemyGridManager.gameObject.SetActive(true);
         name = gameObject.name;

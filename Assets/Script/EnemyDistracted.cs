@@ -6,7 +6,9 @@ public class EnemyDistracted : Enemy
 
     public override void Start()
     {
+        this.checkRange = 1;
         this.sleeping = true;
+        this.patroling = false;
         base.Start();
     }
 
@@ -38,9 +40,9 @@ public class EnemyDistracted : Enemy
         }
     }
 
-    public override void OnReachedOriginal()
+    public override void ReachedOriginal()
     {
-        base.OnReachedOriginal();
+        base.ReachedOriginal();
         icons.shuijiao.gameObject.SetActive(true);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
@@ -48,26 +50,25 @@ public class EnemyDistracted : Enemy
         targetIdleType = 0;
         idleType = 0;
         sleeping = true;
-        UpdateRouteMark();
         sleepSoundTime = 0;
     }
 
-    public override bool LureBottle(string tileName)
-    {
-        UpdateRouteMark();
-        return base.LureBottle(tileName);
-    }
+    //public override bool LureBottle(string tileName)
+    //{
+    //    UpdateRouteMark();
+    //    return base.LureBottle(tileName);
+    //}
 
-    public override bool LureWhistle(string tileName)
-    {
-        var result = base.LureWhistle(tileName);
-        UpdateRouteMark();
-        return result;
-    }
+    //public override bool LureWhistle(string tileName)
+    //{
+    //    var result = base.LureWhistle(tileName);
+    //    UpdateRouteMark();
+    //    return result;
+    //}
 
-    public override bool LureSteal(string tileName)
-    {
-        UpdateRouteMark();
-        return base.LureSteal(tileName);
-    }
+    //public override bool LureSteal(string tileName)
+    //{
+    //    UpdateRouteMark();
+    //    return base.LureSteal(tileName);
+    //}
 }

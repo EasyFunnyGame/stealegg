@@ -14,8 +14,8 @@ public class Character : MonoBehaviour
     public Transform tr_body;
     public string lastTileName;
     public GridTile _currentTile;
-
     public int Uid = 0;
+
     public GridTile currentTile
     {
         set
@@ -31,6 +31,7 @@ public class Character : MonoBehaviour
             return _currentTile;
         }
     }
+
     public GridTile tar_tile_s;
     public GridTile selected_tile_s;
     public GridTile nextTile;
@@ -50,11 +51,14 @@ public class Character : MonoBehaviour
 
     public Coord coord;
 
+    public Coord lastCoord;
+
     public List<string> path = new List<string>();
 
     public ActionBase currentAction = null;
 
-    //public string lastTileName;
+    // 行为链条
+    public List<ActionBase> actionChains = new List<ActionBase>();
 
     public virtual void Start()
     {
@@ -63,7 +67,7 @@ public class Character : MonoBehaviour
 
         var gridManagerGo = GameObject.Find("GridManager");
 
-        if(gameObject.name != "Player")
+        if (gameObject.name != "Player")
         {
             gridManagerGo = GameObject.Find("GridManager_Enemy");
             if (Enemy.count == 0)
@@ -79,23 +83,23 @@ public class Character : MonoBehaviour
             }
             Enemy.count++;
             Uid = Enemy.count;
+            gameObject.name += ("[" + Enemy.count.ToString() + "]");
         }
         else
         {
             gridManager = gridManagerGo.GetComponent<GridManager>();
         }
-            
+
         var x = int.Parse(transform.position.x.ToString());
         var z = int.Parse(transform.position.z.ToString());
 
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
         coord = new Coord(tile.name, transform.position.y);
         currentTile = tile;
-
         ResetDirection();
-
         originalDirection = direction;
         originalCoord = coord.Clone();
+        lastCoord = coord.Clone();
     }
 
     public void move_tile(GridTile ttile)
@@ -338,9 +342,9 @@ public class Character : MonoBehaviour
 
     public virtual void Reached()
     {
+        lastCoord = coord.Clone();
         coord = new Coord(transform.position);
         transform.position = new Vector3(coord.x,transform.position.y,coord.z);
-        //m_animator.transform.localPosition = Vector3.zero;
         ResetDirection();
     }
 

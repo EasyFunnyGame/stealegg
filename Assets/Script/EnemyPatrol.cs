@@ -14,8 +14,11 @@ public class EnemyPatrol : Enemy
     public override void Start()
     {
         routeLine = route.transform.Find("Route");
-        base.Start();
+        this.checkRange = 3;
+        this.sleeping = false;
+        this.patroling = true;
         InitEdgeTiles();
+        base.Start();
     }
 
     void InitEdgeTiles()
@@ -191,95 +194,94 @@ public class EnemyPatrol : Enemy
         routeArrow.gameObject.SetActive(!body_looking);
     }
 
-    public override void StartMove()
-    {
-        base.StartMove();
-        //if (redNodes.Count > 0)
-        //{
-        //    var firstNode = redNodes[0];
-        //    Destroy(firstNode);
-        //    redNodes.RemoveAt(0);
-        //}
-    }
+    //public override void StartMove()
+    //{
+    //    base.StartMove();
+    //    //if (redNodes.Count > 0)
+    //    //{
+    //    //    var firstNode = redNodes[0];
+    //    //    Destroy(firstNode);
+    //    //    redNodes.RemoveAt(0);
+    //    //}
+    //}
 
-    public override void UpdateRouteMark()
-    {
-        for (var index = 0; index < redNodes.Count; index++)
-        {
-            DestroyImmediate(redNodes[index].gameObject);
-        }
-        redNodes.Clear();
+    //public override void UpdateRouteMark()
+    //{
+    //    for (var index = 0; index < redNodes.Count; index++)
+    //    {
+    //        DestroyImmediate(redNodes[index].gameObject);
+    //    }
+    //    redNodes.Clear();
 
-        for (var index = 0; index < redLines.Count; index++)
-        {
-            DestroyImmediate(redLines[index].gameObject);
-        }
-        redLines.Clear();
+    //    for (var index = 0; index < redLines.Count; index++)
+    //    {
+    //        DestroyImmediate(redLines[index].gameObject);
+    //    }
+    //    redLines.Clear();
 
-        routeNodeNames.Clear();
+    //    routeNodeNames.Clear();
 
-        if (sleeping) return;
+    //    if (sleeping) return;
 
-        var xOffset = 0;
+    //    var xOffset = 0;
 
-        var zOffset = 0;
+    //    var zOffset = 0;
 
-        if (direction == Direction.Up)
-        {
-            zOffset = 1;
-        }
-        else if (direction == Direction.Down)
-        {
-            zOffset = -1;
-        }
-        else if (direction == Direction.Right)
-        {
-            xOffset = 1;
-        }
-        else if (direction == Direction.Left)
-        {
-            xOffset = -1;
-        }
+    //    if (direction == Direction.Up)
+    //    {
+    //        zOffset = 1;
+    //    }
+    //    else if (direction == Direction.Down)
+    //    {
+    //        zOffset = -1;
+    //    }
+    //    else if (direction == Direction.Right)
+    //    {
+    //        xOffset = 1;
+    //    }
+    //    else if (direction == Direction.Left)
+    //    {
+    //        xOffset = -1;
+    //    }
 
-        var distance = patrolDistance;
-        var foundNodeX = coord.x;
-        var foundNodeZ = coord.z;
-        while ( distance >= 0)
-        {
-            var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
-            foundNodeX = foundNodeX + xOffset;
-            foundNodeZ = foundNodeZ + zOffset;
-            var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
-            routeNodeNames.Add(currentNodeName);
-            RedNodeByName(currentNodeName);
+    //    var distance = patrolDistance;
+    //    var foundNodeX = coord.x;
+    //    var foundNodeZ = coord.z;
+    //    while ( distance >= 0)
+    //    {
+    //        var currentNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+    //        foundNodeX = foundNodeX + xOffset;
+    //        foundNodeZ = foundNodeZ + zOffset;
+    //        var nextNodeName = string.Format("{0}_{1}", foundNodeX, foundNodeZ);
+    //        routeNodeNames.Add(currentNodeName);
+    //        RedNodeByName(currentNodeName);
             
-            var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
-            if (linkLine == null)
-                break;
+    //        var linkLine = boardManager.FindLine(currentNodeName, nextNodeName);
+    //        if (linkLine == null)
+    //            break;
 
-            if (distance > 0 && !patroling)
-            {
-                RedLineByName(linkLine);
-            }
+    //        if (distance > 0 && !patroling)
+    //        {
+    //            RedLineByName(linkLine);
+    //        }
 
-            if (linkLine.transform.childCount<1)
-            {
-                break;
-            }
-            var lineType = linkLine.transform.GetChild(0);
-            if (lineType.name.Contains("Doted") || !lineType.name.Contains("Visual"))
-            {
-                break;
-            }
-            distance--;
-        }
-        BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
-        routeArrow.position = endNode.transform.position + new Vector3(0, 0.006f+ endNode.transform.position.y, 0);
-        routeArrow.rotation = transform.rotation;
-        routeArrow.Rotate(new Vector3(0, 0, 180));
-        routeArrow.parent = null;
-        
-    }
+    //        if (linkLine.transform.childCount<1)
+    //        {
+    //            break;
+    //        }
+    //        var lineType = linkLine.transform.GetChild(0);
+    //        if (lineType.name.Contains("Doted") || !lineType.name.Contains("Visual"))
+    //        {
+    //            break;
+    //        }
+    //        distance--;
+    //    }
+    //    BoardNode endNode = boardManager.FindNode(routeNodeNames[routeNodeNames.Count - 1]);
+    //    routeArrow.position = endNode.transform.position + new Vector3(0, 0.006f+ endNode.transform.position.y, 0);
+    //    routeArrow.rotation = transform.rotation;
+    //    routeArrow.Rotate(new Vector3(0, 0, 180));
+    //    routeArrow.parent = null;
+    //}
 
     public bool needTurn()
     {
@@ -403,9 +405,9 @@ public class EnemyPatrol : Enemy
         UpdateNextPatrolPoint();
     }
 
-    public override void OnReachedOriginal()
+    public override void ReachedOriginal()
     {
-        base.OnReachedOriginal();
+        base.ReachedOriginal();
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);

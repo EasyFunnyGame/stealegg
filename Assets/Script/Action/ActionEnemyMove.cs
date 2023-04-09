@@ -5,7 +5,6 @@ public class ActionEnemyMove : ActionBase
     Vector3 velocity = new Vector3();
     private Vector3 targetPosition;
     float height = 0f;
-
     bool findPathSuccess = true;
 
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)

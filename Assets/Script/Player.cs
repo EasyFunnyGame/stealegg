@@ -25,10 +25,11 @@ public class Player : Character
 
     public Camera failCamera;
 
-    private void Awake()
+    public void Awake()
     {
         failCamera.gameObject.SetActive(false);
     }
+
     private void Update()
     {
         if(currentAction==null)
