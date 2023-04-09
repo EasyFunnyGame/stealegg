@@ -129,6 +129,10 @@ public class Enemy : Character
         if(coordTracing.isLegal)
         {
             UpdateTracingPlayerTile();
+
+
+
+            return;
         }
 
         
@@ -305,45 +309,7 @@ public class Enemy : Character
 
         routeNodeNames.Clear();
 
-        // 
-        var xOffset = 0;
-
-        //
-        var zOffset = 0;
-
-        // 直接用角度计算
-        var bodyRotation = tr_body.GetChild(0).transform.rotation.eulerAngles.y;
-
-        while(bodyRotation < 0)
-        {
-            bodyRotation += 360;
-        }
-
-        while(bodyRotation > 360)
-        {
-            bodyRotation -= 360;
-        }
-
-        if (Mathf.Abs(90 - bodyRotation) < 5)
-        {
-            //Debug.Log("右" + Enemy.count);
-            xOffset = 1;
-        }
-        else if (Mathf.Abs(180 - bodyRotation) < 5)
-        {
-            //Debug.Log("下" + Enemy.count);
-            zOffset = -1;
-        }
-        else if (Mathf.Abs(270 - bodyRotation) < 5) 
-        {
-            //Debug.Log("左" + Enemy.count);
-            xOffset = -1;
-        }
-        else
-        {
-            //Debug.Log("上 " + Enemy.count);
-            zOffset = 1;
-        }
+        var coordDirection = GetDirection();
 
         var lastCoordName = "";
         var routeCoordName = "";
@@ -368,9 +334,9 @@ public class Enemy : Character
                 }
             }
 
-            coordX += xOffset;
+            coordX += coordDirection.x;
 
-            coordZ += zOffset;
+            coordZ += coordDirection.z;
 
             lastCoordName = routeCoordName;
         }

@@ -58,7 +58,7 @@ public class Character : MonoBehaviour
     public ActionBase currentAction = null;
 
     // 行为链条
-    public List<ActionBase> actionChains = new List<ActionBase>();
+    //public List<ActionBase> actionChains = new List<ActionBase>();
 
     public virtual void Start()
     {
@@ -426,6 +426,50 @@ public class Character : MonoBehaviour
             if (node == null) return Coord.Illegal;
             return new Coord(x, z, node.transform.position.y);
         }
+    }
+
+    public Coord GetDirection()
+    {
+        // 
+        var xOffset = 0;
+
+        //
+        var zOffset = 0;
+
+        // 直接用角度计算
+        var bodyRotation = tr_body.GetChild(0).transform.rotation.eulerAngles.y;
+
+        while (bodyRotation < 0)
+        {
+            bodyRotation += 360;
+        }
+
+        while (bodyRotation > 360)
+        {
+            bodyRotation -= 360;
+        }
+
+        if (Mathf.Abs(90 - bodyRotation) < 5)
+        {
+            //Debug.Log("右" + Enemy.count);
+            xOffset = 1;
+        }
+        else if (Mathf.Abs(180 - bodyRotation) < 5)
+        {
+            //Debug.Log("下" + Enemy.count);
+            zOffset = -1;
+        }
+        else if (Mathf.Abs(270 - bodyRotation) < 5)
+        {
+            //Debug.Log("左" + Enemy.count);
+            xOffset = -1;
+        }
+        else
+        {
+            //Debug.Log("上 " + Enemy.count);
+            zOffset = 1;
+        }
+        return new Coord(xOffset, zOffset, 0);
     }
 
 
