@@ -527,6 +527,11 @@ public class Enemy : Character
     public virtual bool LureWhistle(string tileName)
     {
         AudioPlay.Instance.StopSleepSound();
+
+
+
+
+
         var player = Game.Instance.player;
         var playerNeighbor = player.CanReachInSteps(currentTile.name);
         var playerTileName = CheckNeighborGrid();
