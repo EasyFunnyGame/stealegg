@@ -45,8 +45,10 @@ public class BoardManager : MonoBehaviour
 
     public List<WalkThroughStep> steps = new List<WalkThroughStep>();
 
+    // 主角回合
     public bool playerTurn = false;
 
+    // 敌人回合
     public bool enemyTurn = false;
 
     // 瓶子的追踪点
@@ -54,6 +56,9 @@ public class BoardManager : MonoBehaviour
 
     // 口哨的追踪点
     public Dictionary<string, Coord> whitsleCoords;
+
+    // 树林发现的点
+    public Dictionary<string, Coord> growthFoundCoords;
 
     // 偷盗的追踪点
     public Dictionary<string, Coord> stealCoords;
@@ -63,7 +68,6 @@ public class BoardManager : MonoBehaviour
 
     // 主角捡到瓶子的数量最多只能为1,如果有了瓶子不能继续再捡起来
     public int bottleCount = 0;
-
 
     private void Awake()
     {

@@ -422,63 +422,60 @@ public class EnemyPatrol : Enemy
     {
         if (currentAction != null) return;
 
-       
-
         if (growthTile != null)
         {
-            foundPlayerTile = growthTile;
             growthTile = null;
             return;
         }
 
-        if (hearSoundTile != null)
-        {
-            var player = Game.Instance.player;
-            var playerTileName = player.currentTile.name;
-            var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
-            var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
-            if (playerCanReachInOneStep && dir == direction)
-            {
-                var catched = TryCatch();
-                if (catched)
-                {
-                    return;
-                }
-            }
-        }
+        //if (hearSoundTile != null)
+        //{
+        //    var player = Game.Instance.player;
+        //    var playerTileName = player.currentTile.name;
+        //    var playerCanReachInOneStep = player.CanReachInSteps(currentTile.name);
+        //    var dir = Utils.DirectionTo(currentTile.name, playerTileName, direction);
+        //    if (playerCanReachInOneStep && dir == direction)
+        //    {
+        //        var catched = TryCatch();
+        //        if (catched)
+        //        {
+        //            return;
+        //        }
+        //    }
+        //}
 
-        if (foundPlayerTile == null )
-        {
-            TryFoundPlayer();
-            if (foundPlayerTile != null)
-            {
-                if (hearSoundTile != null)
-                {
-                    currentAction = new ActionEnemyMove(this, foundPlayerTile);
-                }
-                return;
-            }
-        }
-        else
-        {
-            TryFoundPlayer();
-            if (TryCatch()) return;
-        }
+        //if (foundPlayerTile == null )
+        //{
+        //    TryFoundPlayer();
+        //    if (foundPlayerTile != null)
+        //    {
+        //        if (hearSoundTile != null)
+        //        {
+        //            currentAction = new ActionEnemyMove(this, foundPlayerTile);
+        //        }
+        //        return;
+        //    }
+        //}
+        //else
+        //{
+        //    TryFoundPlayer();
+        //    if (TryCatch()) return;
+        //}
 
-        if (foundPlayerTile != null)
-        {
-            originalTile = null;
-            currentAction = new ActionEnemyMove(this, foundPlayerTile);
-            return;
-        }
+        //if (foundPlayerTile != null)
+        //{
+        //    originalTile = null;
+        //    currentAction = new ActionEnemyMove(this, foundPlayerTile);
+        //    return;
+        //}
 
 
-        if (hearSoundTile != null)
-        {
-            originalTile = null;
-            currentAction = new ActionEnemyMove(this, hearSoundTile);
-            return;
-        }
+        //if (hearSoundTile != null)
+        //{
+        //    originalTile = null;
+        //    currentAction = new ActionEnemyMove(this, hearSoundTile);
+        //    return;
+        //}
 
         if(!patroling && originalTile == null)
         {

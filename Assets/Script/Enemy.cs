@@ -28,8 +28,10 @@ public class Enemy : Character
     [SerializeField]
     public EnemyType enemyType;
 
+    // 敌人数量
     public static int count;
 
+    // 追踪的目标点
     public Coord coordTracing;
 
     // 玩家当前所在坐标
@@ -38,36 +40,52 @@ public class Enemy : Character
     // 玩家上一个坐标
     public Coord coodPlayerLastRound;
 
+    // 原点Tile
     public GridTile originalTile = null;
 
+    // 敌人头顶的icon
     public IconsAboveEnemy icons;
 
+    //
     public Transform headPoint;
 
+    //
     public Animator enemyMove;
 
+    //
     public GameObject route;
 
+    //
     public Transform routeArrow;
 
+    //
     public List<string> routeNodeNames;
 
+    //
     public List<BoardNode> redNodes = new List<BoardNode>();
 
+    //
     public List<LinkLine> redLines = new List<LinkLine>();
 
+    //
     public bool sleeping = false;
 
+    //
     public bool patroling = false;
 
+    //
     public string walkingLineType;
 
+    //
     public int up = 0;
 
+    //
     public static float RED_SCALE = 1.5f;
 
+    //
     public ReachTurnTo turnOnReachDirection = ReachTurnTo.None;
 
+    //
     public string tracingTileName;
 
     public override void Start()
@@ -733,11 +751,11 @@ public class Enemy : Character
         sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
-        if ((hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
-        {
-            currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
-            return false;
-        }
+        //if ((hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
+        //{
+        //    currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
+        //    return false;
+        //}
 
         if (playerNeighbor && player.currentTile.name == tileName)
         {
@@ -749,7 +767,6 @@ public class Enemy : Character
             var success = FindPathRealTime(targetTile);
             if (!success)
             {
-                hearSoundTile = foundPlayerTile = null;
                 ShowNotFound();
                 ReturnOriginal(true);
                 return false;
@@ -761,7 +778,6 @@ public class Enemy : Character
             currentAction = new ActionTurnDirection(this, targetDirection);
         }
         //ShowTraceTarget(targetTile, hearSoundTile== null,1);
-        hearSoundTile = targetTile;
         lureByBottle = true;
         ShowFound();
         return true;
@@ -786,11 +802,11 @@ public class Enemy : Character
         sleeping = false;
         patroling = false;
         // 原地吹哨、被敌人看见之后继续吹哨
-        if ((hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
-        {
-            currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
-            return false;
-        }
+        //if ((hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
+        //{
+        //    currentAction = new ActionEnemyMove(this, hearSoundTile ?? foundPlayerTile);
+        //    return false;
+        //}
 
         if (playerNeighbor && player.currentTile.name == tileName)
         {
@@ -802,7 +818,6 @@ public class Enemy : Character
             var success = FindPathRealTime(targetTile);
             if(!success)
             {
-                hearSoundTile = foundPlayerTile = null;
                 ShowNotFound();
                 ReturnOriginal(true);
                 return false;
@@ -815,7 +830,6 @@ public class Enemy : Character
             currentAction = new ActionTurnDirection(this, targetDirection);
         }
         ShowTraceTarget(targetTile);
-        hearSoundTile = targetTile;
         lureBySteal = true;
         idleType = 0.5f;
         ShowFound();
@@ -826,19 +840,19 @@ public class Enemy : Character
     {
         body_looking = false;
 
-        if (foundPlayerTile == null)
-        {
-            TryFound();
-            if (foundPlayerTile != null)
-            {
-                return;
-            }
-        }
-        else
-        {
-            TryFound();
-            if (TryCatch()) return;
-        }
+        //if (foundPlayerTile == null)
+        //{
+        //    TryFound();
+        //    if (foundPlayerTile != null)
+        //    {
+        //        return;
+        //    }
+        //}
+        //else
+        //{
+        //    TryFound();
+        //    if (TryCatch()) return;
+        //}
         m_animator.SetBool("moving",false);
         UpdateRouteMark();
     }
@@ -984,8 +998,6 @@ public class Enemy : Character
     public virtual void LostTarget()
     {
         ShowNotFound();
-        foundPlayerTile = null;
-        hearSoundTile = null;
         targetIdleType = 1;
         lureByBottle = lureByWhistle = lureBySteal = false;
 

@@ -136,37 +136,37 @@ public class EnemySentinel : Enemy
         //    }
         //}
 
-        if (foundPlayerTile == null)
-        {
-            TryFoundPlayer();
-            if (foundPlayerTile != null)
-            {
-                if (hearSoundTile != null)
-                {
-                    currentAction = new ActionEnemyMove(this, foundPlayerTile);
-                }
-                return;
-            }
-        }
-        else
-        {
-            TryFoundPlayer();
-            if (TryCatch()) return;
-        }
+        //if (foundPlayerTile == null)
+        //{
+        //    TryFoundPlayer();
+        //    if (foundPlayerTile != null)
+        //    {
+        //        if (hearSoundTile != null)
+        //        {
+        //            currentAction = new ActionEnemyMove(this, foundPlayerTile);
+        //        }
+        //        return;
+        //    }
+        //}
+        //else
+        //{
+        //    TryFoundPlayer();
+        //    if (TryCatch()) return;
+        //}
 
-        if (foundPlayerTile != null)
-        {
-            originalTile = null;
-            currentAction = new ActionEnemyMove(this, foundPlayerTile);
-            return;
-        }
+        //if (foundPlayerTile != null)
+        //{
+        //    originalTile = null;
+        //    currentAction = new ActionEnemyMove(this, foundPlayerTile);
+        //    return;
+        //}
 
-        if (hearSoundTile != null)
-        {
-            originalTile = null;
-            currentAction = new ActionEnemyMove(this, hearSoundTile);
-            return;
-        }
+        //if (hearSoundTile != null)
+        //{
+        //    originalTile = null;
+        //    currentAction = new ActionEnemyMove(this, hearSoundTile);
+        //    return;
+        //}
 
         if (!watching && originalTile == null)
         {
@@ -265,7 +265,7 @@ public class EnemySentinel : Enemy
         var foundPlayer = false;
         var foundPlayerNode = "";
 
-        var distance = hearSoundTile == null ? 10 : 2;
+        var distance = 10;
         var foundNodeX = coord.x;
         var foundNodeZ = coord.z;
         var step = 0;
@@ -283,13 +283,13 @@ public class EnemySentinel : Enemy
             {
                 break;
             }
-            if(player.currentTile.name == nextNodeName && !player.hidding)
-            {
-                foundPlayer = true;
-                foundPlayerNode = nextNodeName;
-                canReach = CanReachInSteps(nextNodeName, step);
-                break;
-            }
+            //if(player.currentTile.name == nextNodeName && !player.hidding)
+            //{
+            //    foundPlayer = true;
+            //    foundPlayerNode = nextNodeName;
+            //    canReach = CanReachInSteps(nextNodeName, step);
+            //    break;
+            //}
             for (var i = 0; i < boardManager.enemies.Count; i++)
             {
                 var enemy = boardManager.enemies[i];
@@ -312,7 +312,6 @@ public class EnemySentinel : Enemy
             if (targetTile != null)
             {
                 ShowTraceTarget(targetTile);
-                foundPlayerTile = targetTile;
                 ShowFound();
                 originalTile = null;
                 //Debug.Log("开始追踪:" + targetTile.name);
