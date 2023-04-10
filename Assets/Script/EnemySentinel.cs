@@ -356,13 +356,12 @@ public class EnemySentinel : Enemy
         return result;
     }
 
-    public override bool LureWhistle(string tileName)
-    {
-        var result = base.LureWhistle(tileName);
-        UpdateRouteMark();
-        watching = false;
-        return result;
-    }
+    //public override void LureWhistle(string tileName)
+    //{
+    //    base.LureWhistle(tileName);
+    //    UpdateRouteMark();
+    //    watching = false;
+    //}
 
     public override void ReachedOriginal()
     {

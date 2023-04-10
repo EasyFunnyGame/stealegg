@@ -196,7 +196,7 @@ public class Game : MonoBehaviour
         if(delayShowEndTimer > 0)
         {
             delayShowEndTimer -= Time.deltaTime;
-            if(delayShowEndTimer<0)
+            if (delayShowEndTimer < 0)
             {
                 EndGame();
             }
@@ -260,7 +260,6 @@ public class Game : MonoBehaviour
         enemyActionRunning = false;
         if (player == null) return;
         if (player.justSteal) return;
-
         if (player.currentAction != null)
         {
             if (player.currentAction.CheckComplete())
@@ -273,6 +272,11 @@ public class Game : MonoBehaviour
                     var enemy = boardManager.enemies[i];
                     enemy.CheckAction();
                 }
+
+                boardManager.coordWhitsle.Clear();
+                boardManager.coordBottle.Clear();
+                boardManager.coordSteal.Clear();
+                boardManager.coordCut.Clear();
             }
             else
             {

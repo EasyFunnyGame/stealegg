@@ -32,7 +32,19 @@ public class Enemy : Character
     public static int count;
 
     // 追踪的目标点
-    public Coord coordTracing;
+    public Coord _coordTracing = new Coord();
+
+    public Coord coordTracing
+    {
+        get
+        {
+            return _coordTracing;
+        }
+        set
+        {
+            _coordTracing = value;
+        }
+    }
 
     // 玩家当前所在坐标
     public Coord coodPlayer;
@@ -129,10 +141,21 @@ public class Enemy : Character
         if(coordTracing.isLegal)
         {
             UpdateTracingPlayerTile();
-
-
-
             return;
+        }
+
+        var coordWhitsle = boardManager.coordWhitsle;
+        if (coordWhitsle.isLegal )
+        {
+            if(Coord.Distance(coordWhitsle,coord) <= 1)
+            {
+                coordTracing = coordWhitsle.Clone();
+                if(Coord.inLine(coordWhitsle, coord))
+                {
+                    // 转向
+                    Debug.Log("转向同线点");
+                }
+            }
         }
 
         
@@ -346,6 +369,7 @@ public class Enemy : Character
     public override void StartMove()
     {
         m_animator.SetBool("moving", true);
+        // 起步后,隐藏脚下的点
         if(redNodes?.Count>0)
         {
             redNodes[0].transform.position = redNodes[redNodes.Count - 1].transform.position;
@@ -414,14 +438,12 @@ public class Enemy : Character
                 }
             }
         }
-        
     }
 
     public virtual void ReachedOriginal()
     {
         Debug.Log(gameObject.name + " 回到原点");
         routeArrow.gameObject.SetActive(false);
-        lureByBottle = lureByWhistle = lureBySteal = false;
     }
 
     // =======================================================================================
@@ -519,73 +541,60 @@ public class Enemy : Character
         ShowTraceTarget(targetTile);
         growthTile = targetTile;
         ShowFound();
-       
     }
 
-    public bool lureByWhistle = false;
 
-    public virtual bool LureWhistle(string tileName)
-    {
-        AudioPlay.Instance.StopSleepSound();
+    //public virtual void LureWhistle(string tileName)
+    //{
+    //    AudioPlay.Instance.StopSleepSound();
+    //    var player = Game.Instance.player;
+    //    var playerNeighbor = player.CanReachInSteps(currentTile.name);
+    //    var playerTileName = CheckNeighborGrid();
+    //    var targetTile = gridManager.GetTileByName(tileName);
 
+    //    targetTile = gridManager.GetTileByName(tileName);
+    //    if (targetTile == null) return false;
 
+    //    sleeping = false;
+    //    patroling = false;
+    //    // 原地吹哨、被敌人看见之后继续吹哨
+    //    //if ( (hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
+    //    //{
+    //    //    currentAction = new ActionEnemyMove(this, foundPlayerTile??hearSoundTile);
+    //    //    return false;
+    //    //}
 
+    //    if (playerNeighbor && player.currentTile.name == tileName)
+    //    {
+    //        // turnOnReached = true;
+    //        UpdateTargetDirection(player.currentTile);
+    //    }
+    //    else
+    //    {
+    //        // 判断寻路的方向  
+    //        var success = FindPathRealTime(targetTile);
+    //        if (!success)
+    //        {
+    //            //hearSoundTile = foundPlayerTile = null;
+    //            ShowNotFound();
+    //            ReturnOriginal(true);
+    //            return false;
+    //        }
+    //        UpdateTargetDirection(nextTile);
+    //    }
 
+    //    //if(direction != targetDirection)
+    //    {
+    //        currentAction = new ActionTurnDirection(this, targetDirection);
+    //    }
 
-        var player = Game.Instance.player;
-        var playerNeighbor = player.CanReachInSteps(currentTile.name);
-        var playerTileName = CheckNeighborGrid();
-        var targetTile = gridManager.GetTileByName(tileName);
+    //    // ShowTraceTarget(targetTile, hearSoundTile == null,1);
+    //    //hearSoundTile = targetTile;
+    //    lureByWhistle = true;
+    //    ShowFound();
+    //    return true;
+    //}
 
-
-        if (!string.IsNullOrEmpty(playerTileName) && TryCatch())
-        {
-            return true;
-        }
-
-        targetTile = gridManager.GetTileByName(tileName);
-        if (targetTile == null) return false;
-
-        sleeping = false;
-        patroling = false;
-        // 原地吹哨、被敌人看见之后继续吹哨
-        //if ( (hearSoundTile && hearSoundTile.name == tileName) || foundPlayerTile)
-        //{
-        //    currentAction = new ActionEnemyMove(this, foundPlayerTile??hearSoundTile);
-        //    return false;
-        //}
-
-        if (playerNeighbor && player.currentTile.name == tileName)
-        {
-            // turnOnReached = true;
-            UpdateTargetDirection(player.currentTile);
-        }
-        else
-        {
-            // 判断寻路的方向  
-            var success = FindPathRealTime(targetTile);
-            if (!success)
-            {
-                //hearSoundTile = foundPlayerTile = null;
-                ShowNotFound();
-                ReturnOriginal(true);
-                return false;
-            }
-            UpdateTargetDirection(nextTile);
-        }
-        //if(direction != targetDirection)
-        {
-            currentAction = new ActionTurnDirection(this, targetDirection);
-        }
-        
-        // ShowTraceTarget(targetTile, hearSoundTile == null,1);
-        //hearSoundTile = targetTile;
-        lureByWhistle = true;
-        ShowFound();
-        return true;
-    }
-
-    public bool lureByBottle = false;
     public virtual bool LureBottle(string tileName)
     {
         AudioPlay.Instance.StopSleepSound();
@@ -632,11 +641,9 @@ public class Enemy : Character
             currentAction = new ActionTurnDirection(this, targetDirection);
         }
         //ShowTraceTarget(targetTile, hearSoundTile== null,1);
-        lureByBottle = true;
         ShowFound();
         return true;
     }
-    public bool lureBySteal = false;
     public virtual bool LureSteal(string tileName)
     {
         AudioPlay.Instance.StopSleepSound();
@@ -684,7 +691,6 @@ public class Enemy : Character
             currentAction = new ActionTurnDirection(this, targetDirection);
         }
         ShowTraceTarget(targetTile);
-        lureBySteal = true;
         idleType = 0.5f;
         ShowFound();
         return true;
@@ -818,8 +824,6 @@ public class Enemy : Character
     {
         ShowNotFound();
         targetIdleType = 1;
-        lureByBottle = lureByWhistle = lureBySteal = false;
-
     }
 
     protected float idleType;

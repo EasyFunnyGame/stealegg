@@ -52,23 +52,4 @@ public class EnemyDistracted : Enemy
         sleeping = true;
         sleepSoundTime = 0;
     }
-
-    //public override bool LureBottle(string tileName)
-    //{
-    //    UpdateRouteMark();
-    //    return base.LureBottle(tileName);
-    //}
-
-    //public override bool LureWhistle(string tileName)
-    //{
-    //    var result = base.LureWhistle(tileName);
-    //    UpdateRouteMark();
-    //    return result;
-    //}
-
-    //public override bool LureSteal(string tileName)
-    //{
-    //    UpdateRouteMark();
-    //    return base.LureSteal(tileName);
-    //}
 }

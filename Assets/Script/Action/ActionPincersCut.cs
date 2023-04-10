@@ -71,7 +71,7 @@ public class ActionPincersCut : ActionBase
                 var enemy = boardManager.enemies[index];
                 if (enemy.coord.name == kvp.Key)
                 {
-                    enemy.LureWhistle(player.currentTile.name);
+                    //enemy.LureWhistle(player.currentTile.name);
                     enemy.ShowTraceTarget(player.currentTile);
                 }
             }

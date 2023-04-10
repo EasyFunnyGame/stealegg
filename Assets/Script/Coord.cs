@@ -10,7 +10,7 @@ public enum Direction
 }
 
 [Serializable]
-public struct Coord
+public class Coord
 {
     public int x;
 
@@ -19,6 +19,13 @@ public struct Coord
     public float height;
 
     public string name;
+
+    public Coord(){
+        x = int.MinValue;
+        z = int.MinValue;
+        height = int.MinValue;
+    }
+
 
     public Coord(string tileName, float tileHeight)
     {
@@ -92,7 +99,7 @@ public struct Coord
         return distance;
     }
 
-    public static int MaxDistance(Coord from, Coord to)
+    public static int Distance(Coord from, Coord to)
     {
         if (!from.isLegal || !to.isLegal) return int.MinValue;
         var distanceX = Math.Abs(from.x - to.x);
@@ -106,6 +113,11 @@ public struct Coord
         return new Coord(position);
     }
 
+
+    public static bool inLine(Coord source, Coord target)
+    {
+        return (source.x == target.x || source.z == target.z) && (Math.Abs(source.height - target.height) < 0.1f);
+    }
     
     public static readonly Coord Illegal = new Coord(int.MinValue, int.MinValue, int.MinValue);
 }
