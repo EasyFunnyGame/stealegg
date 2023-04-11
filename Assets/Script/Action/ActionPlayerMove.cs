@@ -140,9 +140,8 @@ public class ActionPlayerMove : ActionBase
             var angle = Vector3.Angle(tar_dir, character.tr_body.forward);
             if (angle <= 1)
             {
-                character.ResetDirection();
+                character.Turned();
                 character.StartMove();
-                character.body_looking = false;
             }
             return;
         }

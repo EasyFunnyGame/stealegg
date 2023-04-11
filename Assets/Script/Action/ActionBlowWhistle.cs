@@ -18,7 +18,7 @@ public class ActionBlowWhistle : ActionBase
                 var enemy = boardManager.enemies[index];
                 if (enemy.coord.name == kvp.Key)
                 {
-                    enemy.ShowTraceTarget(targetTile);
+                    enemy.ShowTraceTarget(player.coord.name);
                 }
             }
         }
@@ -36,7 +36,8 @@ public class ActionBlowWhistle : ActionBase
     {
         if (actionDuration < 0)
         {
-            Game.Instance.boardManager.coordWhitsle = player.coord.Clone();
+            Game.Instance.boardManager.coordLure = player.coord.Clone();
+            Game.Instance.boardManager.rangeLure = 1;
             return true;
         }
         return false;

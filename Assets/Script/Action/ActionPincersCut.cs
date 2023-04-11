@@ -72,7 +72,7 @@ public class ActionPincersCut : ActionBase
                 if (enemy.coord.name == kvp.Key)
                 {
                     //enemy.LureWhistle(player.currentTile.name);
-                    enemy.ShowTraceTarget(player.currentTile);
+                    enemy.ShowTraceTarget(player.coord.name);
                 }
             }
         }

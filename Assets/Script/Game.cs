@@ -273,10 +273,7 @@ public class Game : MonoBehaviour
                     enemy.CheckAction();
                 }
 
-                boardManager.coordWhitsle.Clear();
-                boardManager.coordBottle.Clear();
-                boardManager.coordSteal.Clear();
-                boardManager.coordCut.Clear();
+                boardManager.coordLure.Clear();
             }
             else
             {

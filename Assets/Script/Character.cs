@@ -39,7 +39,9 @@ public class Character : MonoBehaviour
     public int max_tiles = 7;
     public int num_tile;
     public BoardManager boardManager;
-    public Direction direction = Direction.Up;
+
+    public Direction _direction = Direction.Up;
+
     public bool rotation = false;
     public bool reachedTile = false;
 
@@ -56,6 +58,101 @@ public class Character : MonoBehaviour
     public List<string> path = new List<string>();
 
     public ActionBase currentAction = null;
+
+
+    public Direction direction
+    {
+        set { _direction = value; }
+        get
+        {
+            // 
+            var xOffset = 0;
+
+            //
+            var zOffset = 0;
+
+            // 直接用角度计算
+            var bodyRotation = tr_body.GetChild(0).transform.rotation.eulerAngles.y;
+
+            while (bodyRotation < 0)
+            {
+                bodyRotation += 360;
+            }
+
+            while (bodyRotation > 360)
+            {
+                bodyRotation -= 360;
+            }
+
+            if (Mathf.Abs(90 - bodyRotation) < 5)
+            {
+                Debug.Log("右" + Enemy.count);
+                _direction = Direction.Right;
+            }
+            else if (Mathf.Abs(180 - bodyRotation) < 5)
+            {
+                Debug.Log("下" + Enemy.count);
+                _direction = Direction.Down;
+            }
+            else if (Mathf.Abs(270 - bodyRotation) < 5)
+            {
+                Debug.Log("左" + Enemy.count);
+                _direction = Direction.Left;
+            }
+            else
+            {
+                Debug.Log("上 " + Enemy.count);
+                _direction = Direction.Up;
+            }
+            return _direction;
+        }
+    }
+
+
+    public Coord GetDirectionCoord()
+    {
+        // 
+        var xOffset = 0;
+
+        //
+        var zOffset = 0;
+
+        // 直接用角度计算
+        var bodyRotation = tr_body.GetChild(0).transform.rotation.eulerAngles.y;
+
+        while (bodyRotation < 0)
+        {
+            bodyRotation += 360;
+        }
+
+        while (bodyRotation > 360)
+        {
+            bodyRotation -= 360;
+        }
+
+        if (Mathf.Abs(90 - bodyRotation) < 5)
+        {
+            // Debug.Log("右" + Enemy.count);
+            xOffset = 1;
+        }
+        else if (Mathf.Abs(180 - bodyRotation) < 5)
+        {
+            // Debug.Log("下" + Enemy.count);
+            zOffset = -1;
+        }
+        else if (Mathf.Abs(270 - bodyRotation) < 5)
+        {
+            // Debug.Log("左" + Enemy.count);
+            xOffset = -1;
+        }
+        else
+        {
+            // Debug.Log("上 " + Enemy.count);
+            zOffset = 1;
+        }
+        return new Coord(xOffset, zOffset, 0);
+    }
+
 
     // 行为链条
     //public List<ActionBase> actionChains = new List<ActionBase>();
@@ -94,9 +191,12 @@ public class Character : MonoBehaviour
         var z = int.Parse(transform.position.z.ToString());
 
         var tile = gridManager.GetTileByName(string.Format("{0}_{1}", x, z));
+
         coord = new Coord(tile.name, transform.position.y);
+
         currentTile = tile;
-        ResetDirection();
+
+        targetDirection = direction;
         originalDirection = direction;
         originalCoord = coord.Clone();
         lastCoord = coord.Clone();
@@ -142,16 +242,9 @@ public class Character : MonoBehaviour
         }
     }
 
-    
-
-    public void UpdateTargetDirection(GridTile targetTile)
+    public Direction LookAt(string tileName)
     {
-        if (targetTile == null)
-        {
-            return;
-        }
-
-        var tileNameArr = targetTile.name.Split('_');
+        var tileNameArr = tileName.Split('_');
         var nxtTileX = int.Parse(tileNameArr[0]);
         var nxtTileZ = int.Parse(tileNameArr[1]);
 
@@ -179,7 +272,7 @@ public class Character : MonoBehaviour
             targetDirection = Direction.Down;
             db_moves[1].position = transform.position + new Vector3(0,0,-1);
         }
-        if(targetDirection == direction)
+        if(targetDirection == _direction)
         {
             body_looking = false;
         }
@@ -187,6 +280,7 @@ public class Character : MonoBehaviour
         {
             body_looking = true;
         }
+        return targetDirection;
     }
 
 
@@ -278,7 +372,7 @@ public class Character : MonoBehaviour
             path.Add(selected_tile_s.db_path_lowest[index].gameObject.name);
         }
 
-        UpdateTargetDirection(nextTile);
+        LookAt(nextTile.name);
         return true;
     }
 
@@ -315,29 +409,10 @@ public class Character : MonoBehaviour
         //UpdateTargetDirection(nextTile);
     }
 
-    public virtual void ResetDirection()
+    public virtual void Turned()
     {
-        var rotateY = transform.GetChild(0).rotation.eulerAngles.y;
-
-        while(rotateY >= 360)
-        {
-            rotateY -= 360;
-        }
-        while (rotateY <= -360)
-        {
-            rotateY += 360;
-        }
-        
-        rotateY = rotateY / 90;
-        rotateY = Mathf.RoundToInt(rotateY);
-        if (rotateY > 3)
-        {
-            rotateY -= 4;
-            //Debug.Log("计算方向出错");
-        }
-        direction = (Direction)System.Enum.Parse(typeof(Direction), rotateY.ToString(), true);
-        targetDirection = direction;
-        //Debug.Log(gameObject.name + "方向:" + direction);
+        body_looking = false;
+        m_animator.SetBool("moving", false);
     }
 
     public virtual void Reached()
@@ -345,7 +420,7 @@ public class Character : MonoBehaviour
         lastCoord = coord.Clone();
         coord = new Coord(transform.position);
         transform.position = new Vector3(coord.x,transform.position.y,coord.z);
-        ResetDirection();
+        //ResetDirection();
     }
 
     public virtual void StartMove()
@@ -426,50 +501,6 @@ public class Character : MonoBehaviour
             if (node == null) return Coord.Illegal;
             return new Coord(x, z, node.transform.position.y);
         }
-    }
-
-    public Coord GetDirection()
-    {
-        // 
-        var xOffset = 0;
-
-        //
-        var zOffset = 0;
-
-        // 直接用角度计算
-        var bodyRotation = tr_body.GetChild(0).transform.rotation.eulerAngles.y;
-
-        while (bodyRotation < 0)
-        {
-            bodyRotation += 360;
-        }
-
-        while (bodyRotation > 360)
-        {
-            bodyRotation -= 360;
-        }
-
-        if (Mathf.Abs(90 - bodyRotation) < 5)
-        {
-            //Debug.Log("右" + Enemy.count);
-            xOffset = 1;
-        }
-        else if (Mathf.Abs(180 - bodyRotation) < 5)
-        {
-            //Debug.Log("下" + Enemy.count);
-            zOffset = -1;
-        }
-        else if (Mathf.Abs(270 - bodyRotation) < 5)
-        {
-            //Debug.Log("左" + Enemy.count);
-            xOffset = -1;
-        }
-        else
-        {
-            //Debug.Log("上 " + Enemy.count);
-            zOffset = 1;
-        }
-        return new Coord(xOffset, zOffset, 0);
     }
 
 

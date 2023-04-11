@@ -47,7 +47,7 @@ public class Enemy : Character
     }
 
     // 玩家当前所在坐标
-    public Coord coodPlayer;
+    public Coord coodPlayer = new Coord();
 
     // 玩家上一个坐标
     public Coord coodPlayerLastRound;
@@ -120,14 +120,12 @@ public class Enemy : Character
     // 主角定位点更新
     public void UpdateTracingPlayerTile()
     {
-        if (!coordTracing.isLegal || !coodPlayer.isLegal)
-        {
-            return;
-        }
+        //if (!coordTracing.isLegal || !coodPlayer.isLegal)
+        //{
+        //    return;
+        //}
         var coord = Game.Instance.player.coord;
     }
-
-
 
     public virtual void CheckAction()
     {
@@ -135,27 +133,57 @@ public class Enemy : Character
 
         if(CheckPlayer())
         {
+            UpdateRouteMark();
+            Debug.Log("发现敌人,更新监测点");
             return;
         }
 
-        if(coordTracing.isLegal)
-        {
-            UpdateTracingPlayerTile();
-            return;
-        }
+        
 
-        var coordWhitsle = boardManager.coordWhitsle;
-        if (coordWhitsle.isLegal )
+        var coordLure = boardManager.coordLure;
+
+        var rangeLure = boardManager.rangeLure;
+
+        if (coordLure.isLegal )
         {
-            if(Coord.Distance(coordWhitsle,coord) <= 1)
+            if(Coord.Distance(coordLure, coord) <= rangeLure)
             {
-                coordTracing = coordWhitsle.Clone();
-                if(Coord.inLine(coordWhitsle, coord))
+                coordTracing = coordLure.Clone();
+                if(Coord.inLine(coordLure, coord))
                 {
-                    // 转向
-                    Debug.Log("转向同线点");
+                    currentAction = new ActionTurnDirection(this, coordLure.name);
                 }
             }
+            coordTracing = coordLure.Clone();
+            ShowTraceTarget(coordLure.name);
+            ShowFound();
+            return;
+        }
+
+
+        if ( coordTracing.isLegal )
+        {
+            if(coodPlayer.isLegal)
+            {
+
+            }    
+            UpdateTracingPlayerTile();
+
+            var tile = gridManager.GetTileByName(coordTracing.name);
+            if (tile == null)
+            {
+                // 如果不在起点就返回起点。
+                // 
+                return;
+            }
+            var success = FindPathRealTime(tile);
+            if( !success )
+            {
+                // 如果不在起点就返回起点。
+                // 
+                return;
+            }
+            currentAction = new ActionEnemyMove(this, nextTile);
         }
 
         
@@ -277,12 +305,7 @@ public class Enemy : Character
         redNodes.Add(copyNode);
     }
 
-    public void OnTurnEnd()
-    {
-        body_looking = false;
-        m_animator.SetBool("moving", false);
-        UpdateRouteMark();
-    }
+
 
     public virtual void ShowNotFound()
     {
@@ -300,12 +323,20 @@ public class Enemy : Character
         DisapearTraceTarget();
     }
 
+    public override void Turned()
+    {
+        base.Turned();
+        UpdateRouteMark();
+        Debug.Log("转向完毕更新检测点");
+    }
+
     public override void Reached()
     {
         base.Reached();
-        UpdateRouteMark();
         lookAroundTime = 9;
         m_animator.SetBool("moving", false);
+        UpdateRouteMark();
+        Debug.Log("到达更新监测点");
         Debug.Log(gameObject.name + " 到达点" + coord.name);
         if (originalCoord.Equals(coord))
         {
@@ -332,7 +363,7 @@ public class Enemy : Character
 
         routeNodeNames.Clear();
 
-        var coordDirection = GetDirection();
+        var coordDirection = GetDirectionCoord();
 
         var lastCoordName = "";
         var routeCoordName = "";
@@ -363,7 +394,7 @@ public class Enemy : Character
 
             lastCoordName = routeCoordName;
         }
-        CheckPlayer();
+        
     }
 
     public override void StartMove()
@@ -517,13 +548,13 @@ public class Enemy : Character
                 {
                     coordTracing = coordPlayer.Clone();
                     coodPlayer = coordPlayer.Clone();
-                    ShowTraceTarget(targetTile);
+                    ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;
                     patroling = false;
                     routeArrow.gameObject.SetActive(true);
                     lookAroundTime = 9;
-                    UpdateRouteMark();
+                    
                     return true;
                 }
                 break;
@@ -538,7 +569,7 @@ public class Enemy : Character
     {
         var targetTile = gridManager.GetTileByName(tileName);
         if (targetTile == null) return ;
-        ShowTraceTarget(targetTile);
+        ShowTraceTarget(tileName);
         growthTile = targetTile;
         ShowFound();
     }
@@ -622,7 +653,7 @@ public class Enemy : Character
 
         if (playerNeighbor && player.currentTile.name == tileName)
         {
-            UpdateTargetDirection(player.currentTile);
+            LookAt(player.currentTile.name);
         }
         else
         {
@@ -634,7 +665,7 @@ public class Enemy : Character
                 ReturnOriginal(true);
                 return false;
             }
-            UpdateTargetDirection(nextTile);
+            LookAt(nextTile.name);
         }
         //if (direction != targetDirection)
         {
@@ -671,7 +702,7 @@ public class Enemy : Character
 
         if (playerNeighbor && player.currentTile.name == tileName)
         {
-            UpdateTargetDirection(player.currentTile);
+            LookAt(player.currentTile.name);
         }
         else
         {
@@ -683,14 +714,14 @@ public class Enemy : Character
                 ReturnOriginal(true);
                 return false;
             }
-            UpdateTargetDirection(nextTile);
+            LookAt(nextTile.name);
         }
 
         //if (direction != targetDirection)
         {
             currentAction = new ActionTurnDirection(this, targetDirection);
         }
-        ShowTraceTarget(targetTile);
+        ShowTraceTarget(tileName);
         idleType = 0.5f;
         ShowFound();
         return true;
@@ -774,11 +805,11 @@ public class Enemy : Character
     }
 
 
-    public virtual void ShowTraceTarget(GridTile tile)
+    public virtual void ShowTraceTarget(string nodeName)
     {
-        tracingTileName = tile.name;
+        tracingTileName = nodeName;
 
-        var node = boardManager.FindNode(tile.name);
+        var node = boardManager.FindNode(nodeName);
 
         var enemies = boardManager.enemies;
 
@@ -788,7 +819,7 @@ public class Enemy : Character
         {
             var enemy = enemies[i];
             var targetingTileName = enemy.tracingTileName;
-            if (!string.IsNullOrEmpty(targetingTileName) && targetingTileName == tile.name)
+            if (!string.IsNullOrEmpty(targetingTileName) && targetingTileName == nodeName)
             {
                 var enemyMove = enemy.enemyMove;
                 var index = targetingTiles.IndexOf(targetingTileName);

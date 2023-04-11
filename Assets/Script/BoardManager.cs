@@ -66,17 +66,9 @@ public class BoardManager : MonoBehaviour
     // 发现主角的追踪点
     public Dictionary<string, Coord> playerCoords;
 
-    // 口哨点
-    public Coord coordWhitsle;
+    public Coord coordLure;
 
-    // 瓶子点
-    public Coord coordBottle;
-
-    // 偷盗点
-    public Coord coordSteal;
-
-    // 切断铁丝网点
-    public Coord coordCut;
+    public int rangeLure;
 
     // 主角捡到瓶子的数量最多只能为1,如果有了瓶子不能继续再捡起来
     public int bottleCount = 0;

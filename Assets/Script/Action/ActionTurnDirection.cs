@@ -5,9 +5,16 @@ using UnityEngine;
 public class ActionTurnDirection : ActionBase
 {
     private Direction targetDirection;
-    public ActionTurnDirection(Character character,  Direction direction) : base(character, ActionType.TurnDirection)
+
+    public ActionTurnDirection(Character character, Direction direciton) : base(character, ActionType.TurnDirection)
     {
-        targetDirection = direction;
+        targetDirection = direciton;
+        Utils.SetDirection(character, targetDirection);
+    }
+
+    public ActionTurnDirection(Character character,  string tileName) : base(character, ActionType.TurnDirection)
+    {
+        targetDirection = character.LookAt(tileName);
         Utils.SetDirection(character, targetDirection);
     }
 
@@ -15,7 +22,7 @@ public class ActionTurnDirection : ActionBase
     {
         if(character.direction == targetDirection)
         {
-            (character as Enemy)?.OnTurnEnd();
+            (character as Enemy)?.Turned();
             //character.body_looking = false;
             return true;
         }
@@ -33,8 +40,8 @@ public class ActionTurnDirection : ActionBase
         if(angle < 1)
         {
             //character.transform.forward = tar_dir;
-            character.ResetDirection();
             character.body_looking = false;
+            character.Turned();
         }
     }
 
