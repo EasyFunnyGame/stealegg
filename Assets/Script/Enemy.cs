@@ -47,7 +47,7 @@ public class Enemy : Character
     }
 
     // 玩家当前所在坐标
-    public Coord coordPlayer = new Coord();
+    public Coord coordPlayer;
 
     // 玩家上一个坐标
     public Coord coodPlayerLastRound;
@@ -120,7 +120,14 @@ public class Enemy : Character
     // 主角定位点更新
     public void UpdateTracingPlayerTile()
     {
-        var coord = Game.Instance.player.coord;
+        if (coordPlayer == null) return;
+        var player = Game.Instance.player;
+        if(player.justThroughNet)
+        {
+            // 如果玩家刚刚穿过铁丝网,则追踪玩家坐标无效,如果无效,则追踪到目的点时往回头看;
+            coordPlayer = new Coord();
+        }
+        
     }
 
     public virtual void CheckAction()
@@ -147,12 +154,14 @@ public class Enemy : Character
                 {
                     currentAction = new ActionTurnDirection(this, coordLure.name);
                 }
-                // 不用在TurnEnd再执行找人抓人行为
-                if(rangeLure <= checkRange)
+                // 不用在TurnEnd再执行找人抓人行为,此处直接赋值 coordPlayer
+                var player = Game.Instance.player;
+                if( Coord.inLine(player.coord, coord) )
                 {
-                    // var playerCoord = Game.Instance.player.coord;
-
-                    
+                    if(player.CanReachInSteps(coord.name, checkRange))
+                    {
+                        coordPlayer = player.coord.Clone();
+                    }
                 }
             }
             coordTracing = coordLure.Clone();
@@ -164,10 +173,7 @@ public class Enemy : Character
 
         if ( coordTracing.isLegal )
         {
-            if(coordPlayer.isLegal)
-            {
-                UpdateTracingPlayerTile();
-            }    
+            UpdateTracingPlayerTile();
             
 
             var tile = gridManager.GetTileByName(coordTracing.name);
@@ -183,7 +189,7 @@ public class Enemy : Character
                 // 如果不在起点就返回起点。
                 return;
             }
-            currentAction = new ActionEnemyMove(this, nextTile);
+            currentAction = new ActionEnemyMove(this, tile);
         }
 
         
@@ -502,7 +508,7 @@ public class Enemy : Character
             return leftTileName;
         }
         else if (tileName == rightTileName)
-        {
+        { 
             return rightTileName;
         }
         return string.Empty;
@@ -536,18 +542,18 @@ public class Enemy : Character
     {
         var player = Game.Instance.player;
         if (player == null) return false;
-        var coordPlayer = player.coord;
-        if (!coordPlayer.isLegal) return false;
+        var foundPlayerCoord = player.coord;
+        if (!foundPlayerCoord.isLegal) return false;
         for(var index = 0; index < this.redNodes.Count; index++)
         {
             var coordRed = this.redNodes[index].coord;
-            if(coordRed.Equals(coordPlayer))
+            if(coordRed.Equals(foundPlayerCoord))
             {
                 var targetTile = gridManager.GetTileByName(coordRed.name);
                 if (targetTile != null)
                 {
-                    coordTracing = coordPlayer.Clone();
-                    coordPlayer = coordPlayer.Clone();
+                    coordTracing = foundPlayerCoord.Clone();
+                    coordPlayer = foundPlayerCoord.Clone();
                     ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;

@@ -59,7 +59,6 @@ public class Character : MonoBehaviour
 
     public ActionBase currentAction = null;
 
-
     public Direction direction
     {
         set { _direction = value; }
@@ -84,17 +83,17 @@ public class Character : MonoBehaviour
                 bodyRotation -= 360;
             }
 
-            if (Mathf.Abs(90 - bodyRotation) < 5)
+            if (Mathf.Abs(90 - bodyRotation) < 1)
             {
                 Debug.Log("右" + Enemy.count);
                 _direction = Direction.Right;
             }
-            else if (Mathf.Abs(180 - bodyRotation) < 5)
+            else if (Mathf.Abs(180 - bodyRotation) < 1)
             {
                 Debug.Log("下" + Enemy.count);
                 _direction = Direction.Down;
             }
-            else if (Mathf.Abs(270 - bodyRotation) < 5)
+            else if (Mathf.Abs(270 - bodyRotation) < 1 )
             {
                 Debug.Log("左" + Enemy.count);
                 _direction = Direction.Left;
@@ -251,7 +250,7 @@ public class Character : MonoBehaviour
         tileNameArr = currentTile.name.Split('_');
         var tileX = int.Parse(tileNameArr[0]);
         var tileZ = int.Parse(tileNameArr[1]);
-        targetDirection = direction;
+        targetDirection = _direction;
         if (nxtTileX - tileX == 1 && nxtTileZ == tileZ)
         {
             targetDirection = Direction.Right;
@@ -331,7 +330,9 @@ public class Character : MonoBehaviour
                 }
             }
         }
+
         selected_tile_s = to;
+
         if (fromTile)
         {
             gridManager.find_paths_realtime(this, to);
@@ -365,14 +366,18 @@ public class Character : MonoBehaviour
         {
             gridManager.find_paths_realtime(this, to);
         }
+
         UpdateMoves(selected_tile_s);
+
         path.Clear();
+
         for (var index = 0; index < selected_tile_s.db_path_lowest.Count; index++)
         {
             path.Add(selected_tile_s.db_path_lowest[index].gameObject.name);
         }
 
         LookAt(nextTile.name);
+
         return true;
     }
 
@@ -413,6 +418,7 @@ public class Character : MonoBehaviour
     {
         body_looking = false;
         m_animator.SetBool("moving", false);
+        _direction = targetDirection;
     }
 
     public virtual void Reached()
@@ -467,7 +473,7 @@ public class Character : MonoBehaviour
             gridManager.find_paths_realtime(this, tile);
             pathLength = tile.db_path_lowest.Count;
             Clear();
-            return pathLength == step;
+            return pathLength <= step;
         }
         return false;
     }

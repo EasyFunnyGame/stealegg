@@ -5,22 +5,25 @@ public class ActionEnemyMove : ActionBase
     Vector3 velocity = new Vector3();
     private Vector3 targetPosition;
     float height = 0f;
-    bool findPathSuccess = true;
+    //bool findPathSuccess = true;
+
+    private bool reached = false;
 
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
+        reached = false;
         velocity = new Vector3();
         var player = Game.Instance.player;
-        findPathSuccess = enemy.FindPathRealTime(tile);
-        if (!findPathSuccess)
-        {
-            enemy.ShowNotFound();
-            enemy.ReturnOriginal(false);
-        }
-        else
-        {
+        //findPathSuccess =
+            enemy.FindPathRealTime(tile);
+        //if (!findPathSuccess)
+        //{
+        //    enemy.ShowNotFound();
+        //    enemy.ReturnOriginal(false);
+        //}
+        //else
+        //{
             targetPosition = enemy.db_moves[0].position;
-
             var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
             height = targetNode.transform.position.y - enemy.transform.position.y;
 
@@ -46,7 +49,7 @@ public class ActionEnemyMove : ActionBase
             }
 
             enemy.m_animator.SetBool("moving", true);
-        }
+        //}
         
     }
 
@@ -60,35 +63,107 @@ public class ActionEnemyMove : ActionBase
 
     public override bool CheckComplete()
     {
-        if (!findPathSuccess)
-        {
-            character.LookAt(character.nextTile.name);
-            if (character.direction == character.targetDirection)
-            {
-                character.Reached();
-                //if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
-                //{
+        //if (!findPathSuccess)
+        //{
+        //    character.LookAt(character.nextTile.name);
+        //    if (character.direction == character.targetDirection)
+        //    {
+        //        character.Reached();
+        //        //if (!enemy.TryCatch() && !enemy.TryFoundPlayer())
+        //        //{
                     
-                //}
-                return true;
-            }
-            return false;
-        }
-       
+        //        //}
+        //        return true;
+        //    }
+        //    return false;
+        //}
         var myPosition = character.transform.position;
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist < 0.001f)
         {
+            if(!reached)
+            {
+                enemy.Reached();
+                reached = true;
+            }
             return OnReachPosition();
         }
         return false;
     }
 
 
-
     bool OnReachPosition()
     {
-        enemy.Reached();
+        if(enemy.coordTracing.isLegal)
+        {
+            if( enemy.coord.Equals( enemy.coordTracing ) )
+            {
+                // 到达追踪点
+                // 如果 coordPlayer 不合法，转向上一个路径点 如果合法，转向主角逃跑寻路点下一个路径点，这里要从主角开始寻路到敌人
+                if(enemy.coordPlayer==null)
+                {
+                    // 不转向
+                    Debug.Log("到达追踪点不转向");
+                    var checkResult = enemy.CheckPlayer();
+                    if (!checkResult)
+                    {
+                        enemy.LostTarget();
+                    }
+                    return true
+                }
+                else if(!enemy.coordPlayer.isLegal)
+                {
+                    // 转向上一个路径点
+                    Debug.Log("到达追踪点转向上一个路径点");
+                    enemy.LookAt(enemy.lastCoord.name);
+                    var sameDirection = enemy._direction == enemy.targetDirection;
+                    if(sameDirection)
+                    {
+                        var checkResult = enemy.CheckPlayer();
+                        if(!checkResult)
+                        {
+                            enemy.LostTarget();
+                        }
+                    }
+                    return sameDirection;
+                }
+                else
+                {
+                    // 转向从主角寻路到敌人本身到倒数第二个点
+                    var player = Game.Instance.player;
+                    player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
+                    var path = player.path;
+                    var nextTileName = "";
+                    if (path.Count >= 2)
+                    {
+                        nextTileName = path[path.Count - 2];
+                    }
+                    else
+                    {
+                        nextTileName = player.currentTile.name;
+                    }
+                    Debug.Log("到达追踪点转向转向从主角寻路到敌人本身到倒数第二个点");
+                    enemy.LookAt(nextTileName);
+                    var sameDirection = enemy._direction == enemy.targetDirection;
+                    if (sameDirection)
+                    {
+                        var checkResult = enemy.CheckPlayer();
+                        if (!checkResult)
+                        {
+                            enemy.LostTarget();
+                        }
+                    }
+                    return sameDirection;
+                }
+            }
+            else
+            {
+                // 继续转向下一个路径点
+                enemy.LookAt(character.nextTile.name);
+                return enemy._direction == enemy.targetDirection;
+            }
+        }
+        
         
         //if (enemy.foundPlayerTile)
         //{
