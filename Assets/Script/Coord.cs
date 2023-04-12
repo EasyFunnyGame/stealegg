@@ -67,19 +67,42 @@ public class Coord
         return new Coord(new Vector3(x, height, z));
     }
     
+    public bool isMin
+    {
+        get
+        {
+            return x == int.MinValue && z == int.MinValue;
+        }
+    }
+
+    public bool isMax
+    {
+        get
+        {
+            return x == int.MaxValue && z == int.MaxValue;
+        }
+    }
+
     public bool isLegal
     {
         get
         {
-            return x != int.MinValue && z != int.MinValue;
+            return x != int.MinValue && z != int.MinValue && x != int.MaxValue && z != int.MaxValue;
         }
     }
 
-    public void Clear()
+    public void SetMax()
+    {
+        x = int.MaxValue;
+        z = int.MaxValue;
+    }
+
+    public void SetMin()
     {
         x = int.MinValue;
         z = int.MinValue;
     }
+
 
     public static bool WithIn(Coord from , Coord to, int range)
     {

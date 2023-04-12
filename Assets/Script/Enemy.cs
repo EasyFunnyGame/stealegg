@@ -47,10 +47,7 @@ public class Enemy : Character
     }
 
     // 玩家当前所在坐标
-    public Coord coordPlayer;
-
-    // 玩家上一个坐标
-    public Coord coodPlayerLastRound;
+    public Coord coordPlayer = null;
 
     // 原点Tile
     public GridTile originalTile = null;
@@ -120,14 +117,15 @@ public class Enemy : Character
     // 主角定位点更新
     public void UpdateTracingPlayerTile()
     {
-        if (coordPlayer == null) return;
         var player = Game.Instance.player;
         if(player.justThroughNet)
         {
             // 如果玩家刚刚穿过铁丝网,则追踪玩家坐标无效,如果无效,则追踪到目的点时往回头看;
-            coordPlayer = new Coord();
+            if(coordPlayer.isLegal)
+            {
+                coordPlayer.SetMax();
+            }
         }
-        
     }
 
     public virtual void CheckAction()
@@ -186,7 +184,10 @@ public class Enemy : Character
             var success = FindPathRealTime(tile);
             if( !success )
             {
-                // 如果不在起点就返回起点。
+                // 寻路失败就返回起点。
+
+                // 如果主角在正前方而且 前方一格可达 则继续前进
+
                 return;
             }
             currentAction = new ActionEnemyMove(this, tile);
@@ -317,7 +318,7 @@ public class Enemy : Character
     {
         if (Game.Instance.result != GameResult.NONE)
         {
-            ShowCatch();
+            ClearAllIconsAboveHead();
             return;
         }
         icons.shuijiao.gameObject.SetActive(false);
@@ -532,7 +533,7 @@ public class Enemy : Character
             m_animator.SetBool("catch", true);
             m_animator.SetBool("moving", false);
             Game.Instance.FailGame(this);
-            ShowCatch();
+            ClearAllIconsAboveHead();
             return true;
         }
         return false;
@@ -790,7 +791,7 @@ public class Enemy : Character
         icons.cw.gameObject.SetActive(true);
     }
 
-    public virtual void ShowCatch()
+    public virtual void ClearAllIconsAboveHead()
     {
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
@@ -861,6 +862,8 @@ public class Enemy : Character
     {
         ShowNotFound();
         targetIdleType = 1;
+        coordPlayer.SetMin();
+        coordPlayer.SetMin();
     }
 
     protected float idleType;

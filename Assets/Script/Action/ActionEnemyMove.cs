@@ -100,7 +100,7 @@ public class ActionEnemyMove : ActionBase
             {
                 // 到达追踪点
                 // 如果 coordPlayer 不合法，转向上一个路径点 如果合法，转向主角逃跑寻路点下一个路径点，这里要从主角开始寻路到敌人
-                if(enemy.coordPlayer==null)
+                if(enemy.coordPlayer.isMin)
                 {
                     // 不转向
                     Debug.Log("到达追踪点不转向");
@@ -109,9 +109,9 @@ public class ActionEnemyMove : ActionBase
                     {
                         enemy.LostTarget();
                     }
-                    return true
+                    return true;
                 }
-                else if(!enemy.coordPlayer.isLegal)
+                else if(enemy.coordPlayer.isMax)
                 {
                     // 转向上一个路径点
                     Debug.Log("到达追踪点转向上一个路径点");
