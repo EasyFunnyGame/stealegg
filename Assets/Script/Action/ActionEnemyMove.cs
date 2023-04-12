@@ -89,7 +89,7 @@ public class ActionEnemyMove : ActionBase
     bool OnReachPosition()
     {
         enemy.Reached();
-
+        
         //if (enemy.foundPlayerTile)
         //{
         //    character.UpdateTargetDirection(character.nextTile);
@@ -270,15 +270,7 @@ public class ActionEnemyMove : ActionBase
             if (angle <= 1 )
             {
                 enemy.tr_body.GetChild(0).forward = tar_dir;
-                // character.tr_body.forward = tar_dir;
-                
                 enemy.Turned();
-                //var tdist = Vector3.Distance(character.tr_body.position, character.db_moves[0].position);
-                //if (tdist < 0.01f)
-                //{
-                //enemy.Reached();
-                //enemy.OnTurnEnd();
-                //}
             }
         }
         else if (character.moving)

@@ -25,6 +25,8 @@ public class Player : Character
 
     public Camera failCamera;
 
+    public bool justThroughNet = false;
+
     public void Awake()
     {
         failCamera.gameObject.SetActive(false);
@@ -51,11 +53,10 @@ public class Player : Character
         for(var index = 0; index < boardManager.enemies.Count;index++)
         {
             var enemy = boardManager.enemies[index];
-
-            //if( enemy.hearSoundTile!=null || enemy.foundPlayerTile!=null || enemy.growthTile!=null)
-            //{
-            //    founded = true;
-            //}
+            if(enemy.coordTracing.isLegal)
+            {
+                founded = true;
+            }
             if(founded)
             {
                 break;

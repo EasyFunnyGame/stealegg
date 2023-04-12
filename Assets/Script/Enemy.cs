@@ -47,7 +47,7 @@ public class Enemy : Character
     }
 
     // 玩家当前所在坐标
-    public Coord coodPlayer = new Coord();
+    public Coord coordPlayer = new Coord();
 
     // 玩家上一个坐标
     public Coord coodPlayerLastRound;
@@ -120,10 +120,6 @@ public class Enemy : Character
     // 主角定位点更新
     public void UpdateTracingPlayerTile()
     {
-        //if (!coordTracing.isLegal || !coodPlayer.isLegal)
-        //{
-        //    return;
-        //}
         var coord = Game.Instance.player.coord;
     }
 
@@ -138,8 +134,6 @@ public class Enemy : Character
             return;
         }
 
-        
-
         var coordLure = boardManager.coordLure;
 
         var rangeLure = boardManager.rangeLure;
@@ -153,6 +147,13 @@ public class Enemy : Character
                 {
                     currentAction = new ActionTurnDirection(this, coordLure.name);
                 }
+                // 不用在TurnEnd再执行找人抓人行为
+                if(rangeLure <= checkRange)
+                {
+                    // var playerCoord = Game.Instance.player.coord;
+
+                    
+                }
             }
             coordTracing = coordLure.Clone();
             ShowTraceTarget(coordLure.name);
@@ -163,11 +164,11 @@ public class Enemy : Character
 
         if ( coordTracing.isLegal )
         {
-            if(coodPlayer.isLegal)
+            if(coordPlayer.isLegal)
             {
-
+                UpdateTracingPlayerTile();
             }    
-            UpdateTracingPlayerTile();
+            
 
             var tile = gridManager.GetTileByName(coordTracing.name);
             if (tile == null)
@@ -180,7 +181,6 @@ public class Enemy : Character
             if( !success )
             {
                 // 如果不在起点就返回起点。
-                // 
                 return;
             }
             currentAction = new ActionEnemyMove(this, nextTile);
@@ -547,7 +547,7 @@ public class Enemy : Character
                 if (targetTile != null)
                 {
                     coordTracing = coordPlayer.Clone();
-                    coodPlayer = coordPlayer.Clone();
+                    coordPlayer = coordPlayer.Clone();
                     ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;

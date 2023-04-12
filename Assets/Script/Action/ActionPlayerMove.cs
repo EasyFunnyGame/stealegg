@@ -17,6 +17,8 @@ public class ActionPlayerMove : ActionBase
 
     public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
+        player.justThroughNet = false;
+
         endPosition = tile.transform.position;
         startPosition = player.transform.position;
 
@@ -57,6 +59,7 @@ public class ActionPlayerMove : ActionBase
             if(linkLine.playerMoveType == 0.5f)
             {
                 player.m_animator.SetFloat("move_type", 0.5f);
+                player.justThroughNet = true;
                 crounching = true;
             }
             else
