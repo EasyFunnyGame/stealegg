@@ -148,6 +148,8 @@ public class Enemy : Character
         {
             if (Coord.Distance(coordLure, coord) <= rangeLure)
             {
+                checkRange = 3;
+
                 var player = Game.Instance.player;
                 coordTracing = coordLure.Clone();
                 if (Coord.inLine(coordLure, coord) && player.CanReachInSteps(coord.name, rangeLure))
@@ -415,7 +417,7 @@ public class Enemy : Character
         var routeCoordName = "";
         var coordX = coord.x;
         var coordZ = coord.z;
-        for(var index = 0; index < this.checkRange; index++)
+        for(var index = 0; index < checkRange; index++)
         {
             routeCoordName = string.Format("{0}_{1}", coordX, coordZ);
 

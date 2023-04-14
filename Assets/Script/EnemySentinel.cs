@@ -363,5 +363,6 @@ public class EnemySentinel : Enemy
         HideSentinelTurn();
         watching = true;
         willTurn = false;
+        this.checkRange = 10;
     }
 }

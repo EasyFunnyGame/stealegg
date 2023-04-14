@@ -578,23 +578,16 @@ public class Game : MonoBehaviour
         camera.SetTargets(new List<GameObject>().ToArray());
     }
 
-    public void BottleThorwed(string targetTile)
+    public void BottleThorwed(string tileName)
     {
-        var targetArray = targetTile.Split('_');
+        var targetArray = tileName.Split('_');
         var x = int.Parse(targetArray[0]);
         var z = int.Parse(targetArray[1]);
+        var height = boardManager.FindNode(tileName)?.transform.position.y ?? 0;
 
-        foreach (var enemy in boardManager.enemies)
-        {
-            var coord = enemy.coord;
-            var distanceFromX = Mathf.Abs(x - coord.x);
-            var distanceFromZ = Mathf.Abs(z - coord.z);
-            if (distanceFromX <= 2 && distanceFromZ <= 2)
-            {
-                enemy.LureBottle(targetTile);
-            }
-            
-        }
+        boardManager.coordLure = new Coord(x, z, height);
+        boardManager.rangeLure = 2;
+
         bottleSelectingTarget = false;
     }
 

@@ -408,6 +408,7 @@ public class EnemyPatrol : Enemy
     public override void ReachedOriginal()
     {
         base.ReachedOriginal();
+        this.checkRange = 3;
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);

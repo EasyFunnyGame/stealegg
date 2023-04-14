@@ -51,5 +51,6 @@ public class EnemyDistracted : Enemy
         idleType = 0;
         sleeping = true;
         sleepSoundTime = 0;
+        checkRange = 1;
     }
 }
