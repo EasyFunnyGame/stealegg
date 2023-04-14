@@ -120,14 +120,14 @@ public class Enemy : Character
     public void UpdateTracingPlayerTile()
     {
         var player = Game.Instance.player;
-        if(stepsAfterFoundPlayer>2)
-        {
-            // 追踪步数超过5则丢失玩家;
-            if(coordPlayer.isLegal)
-            {
-                coordPlayer.SetMax();
-            }
-        }
+        //if(stepsAfterFoundPlayer>2)
+        //{
+        //    // 追踪步数超过5则丢失玩家;
+        //    if(coordPlayer.isLegal)
+        //    {
+        //        coordPlayer.SetMax();
+        //    }
+        //}
     }
 
     public virtual void CheckAction()
@@ -176,8 +176,8 @@ public class Enemy : Character
                         {
                             coordTracing = player.coord.Clone();
                             ShowTraceTarget(player.coord.name);
-
                             coordPlayer = player.coord.Clone();
+                            coordPlayer.SetMax();
                             stepsAfterFoundPlayer = 0;
                         }
                     }
@@ -422,7 +422,7 @@ public class Enemy : Character
         UpdateRouteMark();
         Debug.Log("到达更新监测点");
         Debug.Log(gameObject.name + " 到达点" + coord.name);
-        if (originalCoord.Equals(coord) && _direction == originalDirection && !coordTracing.isLegal)
+        if (originalCoord.Equals(coord)  && !coordTracing.isLegal) // && _direction == originalDirection
         {
             ReachedOriginal();
         }
@@ -641,6 +641,10 @@ public class Enemy : Character
                 {
                     coordTracing = foundPlayerCoord.Clone();
                     coordPlayer = foundPlayerCoord.Clone();
+                    if(index == 1)
+                    {
+                        coordPlayer.SetMax();
+                    }
                     ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;
