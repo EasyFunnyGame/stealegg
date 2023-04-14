@@ -100,6 +100,8 @@ public class Enemy : Character
     // 红点范围
     public int checkRange = 0;
 
+    public Coord coordLureMe = new Coord();
+
     public override void Start()
     {
         lookAroundTime = 9;
@@ -118,9 +120,9 @@ public class Enemy : Character
     public void UpdateTracingPlayerTile()
     {
         var player = Game.Instance.player;
-        if(player.justThroughNet)
+        if(stepsAfterFoundPlayer>2)
         {
-            // 如果玩家刚刚穿过铁丝网,则追踪玩家坐标无效,如果无效,则追踪到目的点时往回头看;
+            // 追踪步数超过5则丢失玩家;
             if(coordPlayer.isLegal)
             {
                 coordPlayer.SetMax();
@@ -139,40 +141,61 @@ public class Enemy : Character
             return;
         }
 
+        //
         var coordLure = boardManager.coordLure;
-
         var rangeLure = boardManager.rangeLure;
-
-        if (coordLure.isLegal )
+        if (coordLure.isLegal)
         {
-            if(Coord.Distance(coordLure, coord) <= rangeLure)
+            if (Coord.Distance(coordLure, coord) <= rangeLure)
             {
+                var player = Game.Instance.player;
                 coordTracing = coordLure.Clone();
-                if(Coord.inLine(coordLure, coord))
+                if (Coord.inLine(coordLure, coord) && player.CanReachInSteps(coord.name, rangeLure))
                 {
                     currentAction = new ActionTurnDirection(this, coordLure.name);
-                }
-                // 不用在TurnEnd再执行找人抓人行为,此处直接赋值 coordPlayer
-                var player = Game.Instance.player;
-                if( Coord.inLine(player.coord, coord) )
-                {
-                    if(player.CanReachInSteps(coord.name, checkRange))
+                    // 不用在TurnEnd再执行找人抓人行为,此处直接赋值 coordPlayer
+                    if (player.CanReachInSteps(coord.name, checkRange - 1))
                     {
                         coordPlayer = player.coord.Clone();
+                        stepsAfterFoundPlayer = 0;
                     }
                 }
+                else
+                {
+                    var lureTile = gridManager.GetTileByName(coordLure.name);
+                    var success = FindPathRealTime(lureTile);
+                    if (success)
+                    {
+                        LookAt(nextTile.name);
+                        if (_direction != targetDirection)
+                        {
+                            currentAction = new ActionTurnDirection(this, nextTile.name);
+                        }
+                    }
+                    else
+                    { 
+                        // 寻路失败就返回起点。
+
+                        // 如果主角在正前方而且 前方一格可达 则继续前进
+                    }
+                }
+
+                originalTile = null;
+                coordTracing = coordLure.Clone();
+                ShowTraceTarget(coordLure.name);
+                ShowFound();
+                if (!coordLureMe.isLegal || !coordLureMe.Equals(coordLure))
+                {
+                    coordLureMe = coordLure.Clone();
+                    return;
+                }
             }
-            coordTracing = coordLure.Clone();
-            ShowTraceTarget(coordLure.name);
-            ShowFound();
-            return;
         }
 
-
-        if ( coordTracing.isLegal )
+        //
+        if (coordTracing.isLegal)
         {
             UpdateTracingPlayerTile();
-            
 
             var tile = gridManager.GetTileByName(coordTracing.name);
             if (tile == null)
@@ -182,7 +205,7 @@ public class Enemy : Character
                 return;
             }
             var success = FindPathRealTime(tile);
-            if( !success )
+            if (!success)
             {
                 // 寻路失败就返回起点。
 
@@ -191,9 +214,25 @@ public class Enemy : Character
                 return;
             }
             currentAction = new ActionEnemyMove(this, tile);
+            return;
         }
 
-        
+
+        if (coord.name != originalCoord.name)
+        {
+            if(originalTile==null)
+            {
+                originalTile = gridManager.GetTileByName(originalCoord.name);
+                FindPathRealTime(originalTile);
+                currentAction = new ActionTurnDirection(this, nextTile.name);
+                ShowBackToOriginal();
+            }
+            else
+            {
+                currentAction = new ActionEnemyMove(this, originalTile);
+            }
+        }
+
         //if (hearSoundTile != null)
         //{
         //    var player = Game.Instance.player;
@@ -561,7 +600,7 @@ public class Enemy : Character
                     patroling = false;
                     routeArrow.gameObject.SetActive(true);
                     lookAroundTime = 9;
-                    
+                    stepsAfterFoundPlayer = 0;
                     return true;
                 }
                 break;
@@ -862,12 +901,17 @@ public class Enemy : Character
     {
         ShowNotFound();
         targetIdleType = 1;
+        coordTracing.SetMin();
         coordPlayer.SetMin();
-        coordPlayer.SetMin();
+        coordLureMe.SetMin();
+        stepsAfterFoundPlayer = -1;
+
     }
 
     protected float idleType;
     protected float targetIdleType;
     protected float lookAroundTime = 0;
+
+    public int stepsAfterFoundPlayer = -1;
 
 }

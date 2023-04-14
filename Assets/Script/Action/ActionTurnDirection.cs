@@ -20,7 +20,7 @@ public class ActionTurnDirection : ActionBase
 
     public override bool CheckComplete()
     {
-        if(character.direction == targetDirection)
+        if(character._direction == targetDirection)
         {
             (character as Enemy)?.Turned();
             //character.body_looking = false;

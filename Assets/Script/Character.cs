@@ -251,22 +251,22 @@ public class Character : MonoBehaviour
         var tileX = int.Parse(tileNameArr[0]);
         var tileZ = int.Parse(tileNameArr[1]);
         targetDirection = _direction;
-        if (nxtTileX - tileX == 1 && nxtTileZ == tileZ)
+        if (nxtTileX - tileX > 0 && nxtTileZ == tileZ)
         {
             targetDirection = Direction.Right;
             db_moves[1].position = transform.position + new Vector3(1, 0, 0);
         }
-        else if (nxtTileX - tileX == -1 && nxtTileZ == tileZ)
+        else if (nxtTileX - tileX < 0 && nxtTileZ == tileZ)
         {
             targetDirection = Direction.Left;
             db_moves[1].position = transform.position + new Vector3(-1, 0, 0);
         }
-        else if (nxtTileX == tileX && nxtTileZ - tileZ == 1)
+        else if (nxtTileX == tileX && nxtTileZ - tileZ > 0)
         {
             targetDirection = Direction.Up;
             db_moves[1].position = transform.position + new Vector3(0, 0, 1);
         }
-        else if (nxtTileX == tileX && nxtTileZ - tileZ == -1)
+        else if (nxtTileX == tileX && nxtTileZ - tileZ < 0)
         {
             targetDirection = Direction.Down;
             db_moves[1].position = transform.position + new Vector3(0,0,-1);
