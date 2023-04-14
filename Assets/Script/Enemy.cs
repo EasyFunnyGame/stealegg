@@ -149,15 +149,28 @@ public class Enemy : Character
             if (Coord.Distance(coordLure, coord) <= rangeLure)
             {
                 checkRange = 3;
+                UpdateRouteMark();
+                if(CheckPlayer())// 睡觉敌人更新视野之后尝试发现敌人，如果发现了敌人此回合结束
+                {
+                    return;
+                }
+
+                originalTile = null;
+                coordTracing = coordLure.Clone();
+                ShowTraceTarget(coordLure.name);
+                ShowFound();
 
                 var player = Game.Instance.player;
                 coordTracing = coordLure.Clone();
                 if (Coord.inLine(coordLure, coord) && player.CanReachInSteps(coord.name, rangeLure))
                 {
                     currentAction = new ActionTurnDirection(this, coordLure.name);
-                    // 不用在TurnEnd再执行找人抓人行为,此处直接赋值 coordPlayer
+                    // 不用在 TurnEnd 再执行找人抓人行为,此处直接赋值 coordPlayer
                     if (player.CanReachInSteps(coord.name, checkRange - 1))
                     {
+                        coordTracing = player.coord.Clone();
+                        ShowTraceTarget(player.coord.name);
+
                         coordPlayer = player.coord.Clone();
                         stepsAfterFoundPlayer = 0;
                     }
@@ -182,10 +195,7 @@ public class Enemy : Character
                     }
                 }
 
-                originalTile = null;
-                coordTracing = coordLure.Clone();
-                ShowTraceTarget(coordLure.name);
-                ShowFound();
+                
                 if (!coordLureMe.isLegal || !coordLureMe.Equals(coordLure))
                 {
                     coordLureMe = coordLure.Clone();
@@ -220,20 +230,30 @@ public class Enemy : Character
         }
 
 
-        if (coord.name != originalCoord.name)
+        if (coord.name != originalCoord.name || _direction != originalDirection)
         {
-            if(originalTile==null)
+            if(coord.name != originalCoord.name)
             {
-                originalTile = gridManager.GetTileByName(originalCoord.name);
-                FindPathRealTime(originalTile);
-                currentAction = new ActionTurnDirection(this, nextTile.name);
-                ShowBackToOriginal();
+                if (originalTile == null)
+                {
+                    originalTile = gridManager.GetTileByName(originalCoord.name);
+                    FindPathRealTime(originalTile);
+                    currentAction = new ActionTurnDirection(this, nextTile.name);
+                    ShowBackToOriginal();
+                }
+                else
+                {
+                    currentAction = new ActionEnemyMove(this, originalTile);
+                }
             }
             else
             {
-                currentAction = new ActionEnemyMove(this, originalTile);
+                ShowBackToOriginal();
+                targetDirection = originalDirection;
+                currentAction = new ActionTurnDirection(this, originalDirection);
             }
         }
+
 
         //if (hearSoundTile != null)
         //{
@@ -376,6 +396,11 @@ public class Enemy : Character
         base.Turned();
         UpdateRouteMark();
         Debug.Log("转向完毕更新检测点");
+
+        if(coord.name == originalCoord.name || _direction == originalDirection)
+        {
+            ReachedOriginal();
+        }
     }
 
     public override void Reached()
@@ -424,6 +449,15 @@ public class Enemy : Character
             var node = boardManager.FindNode(routeCoordName);
 
             if (node == null) break;
+
+            if(index > 0 )
+            {
+                var linkLine = boardManager.FindLine(lastCoordName, routeCoordName);
+                if (linkLine==null || !linkLine.through)
+                {
+                    break;
+                }
+            }
 
             RedNode(node);
 

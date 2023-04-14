@@ -17,13 +17,18 @@ public class ActionTurnDirection : ActionBase
         targetDirection = character.LookAt(tileName);
         Utils.SetDirection(character, targetDirection);
     }
-
+    public Enemy enemy
+    {
+        get
+        {
+            return character as Enemy;
+        }
+    }
     public override bool CheckComplete()
     {
         if(character._direction == targetDirection)
         {
-            (character as Enemy)?.Turned();
-            //character.body_looking = false;
+            enemy.Turned();
             return true;
         }
         return false;

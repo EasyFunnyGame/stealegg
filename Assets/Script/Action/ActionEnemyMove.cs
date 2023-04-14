@@ -74,6 +74,7 @@ public class ActionEnemyMove : ActionBase
             if(!reached)
             {
                 enemy.Reached();
+                enemy.CheckPlayer();
                 reached = true;
             }
 
