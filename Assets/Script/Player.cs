@@ -368,7 +368,9 @@ public class Player : Character
                 var distanceFromZ = Mathf.Abs(z - coord.z);
                 if (distanceFromX <= 2 && distanceFromZ <= 2)
                 {
-                    enemy.LureSteal(playerTileName);
+                    // enemy.LureSteal(playerTileName);
+                    Game.Instance.boardManager.coordLure = coord.Clone();
+                    Game.Instance.boardManager.rangeLure = 2;
                 }
             }
         }

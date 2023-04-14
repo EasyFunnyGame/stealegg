@@ -482,7 +482,7 @@ public class EnemyPatrol : Enemy
 
         if(!patroling && originalTile == null)
         {
-            ReturnOriginal(true);
+            // ReturnOriginal(true);
             return;
         }
         if (originalTile != null)

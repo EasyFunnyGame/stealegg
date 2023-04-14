@@ -6,14 +6,17 @@ public class ActionTurnDirection : ActionBase
 {
     private Direction targetDirection;
 
-    public ActionTurnDirection(Character character, Direction direciton) : base(character, ActionType.TurnDirection)
+    bool checkPlayer;
+    public ActionTurnDirection(Character character, Direction direciton, bool needCheckPlayerWhenComplete) : base(character, ActionType.TurnDirection)
     {
+        checkPlayer = needCheckPlayerWhenComplete;
         targetDirection = direciton;
         Utils.SetDirection(character, targetDirection);
     }
 
-    public ActionTurnDirection(Character character,  string tileName) : base(character, ActionType.TurnDirection)
+    public ActionTurnDirection(Character character,  string tileName, bool needCheckPlayerWhenComplete) : base(character, ActionType.TurnDirection)
     {
+        checkPlayer = needCheckPlayerWhenComplete;
         targetDirection = character.LookAt(tileName);
         Utils.SetDirection(character, targetDirection);
     }
@@ -29,6 +32,10 @@ public class ActionTurnDirection : ActionBase
         if(character._direction == targetDirection)
         {
             enemy.Turned();
+            if(checkPlayer)
+            {
+                enemy.CheckPlayer();
+            }
             return true;
         }
         return false;

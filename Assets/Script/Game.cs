@@ -627,7 +627,7 @@ public class Game : MonoBehaviour
 
     public void SkipPlayerTurn()
     {
-        player.currentAction = new ActionTurnDirection(player, player.direction);
+        player.currentAction = new ActionTurnDirection(player, player.direction, false);
         if (teaching && showingStep != null)
         {
             if (showingStep.actionType == ActionType.TurnDirection)

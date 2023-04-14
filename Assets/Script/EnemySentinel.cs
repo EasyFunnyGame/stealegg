@@ -174,7 +174,7 @@ public class EnemySentinel : Enemy
 
         if (!watching && originalTile == null)
         {
-            ReturnOriginal(true);
+            // ReturnOriginal(true);
             return;
         }
 
@@ -229,7 +229,7 @@ public class EnemySentinel : Enemy
         else
         {
             // 执行转向动作
-            currentAction = new ActionTurnDirection(this, targetDirection);
+            currentAction = new ActionTurnDirection(this, targetDirection, true);
             AudioPlay.Instance.PlayWatchTurn();
             willTurn = false;
             HideSentinelTurn();
@@ -334,29 +334,16 @@ public class EnemySentinel : Enemy
     //    return false;
     //}
 
-    public override bool LureBottle(string tileName)
-    {
-        var result = base.LureBottle(tileName);
-        UpdateRouteMark();
-        watching = false;
-        return result;
-    }
 
-    public override bool LureSteal(string tileName)
-    {
-        var result = base.LureSteal(tileName);
-        UpdateRouteMark();
-        watching = false;
-        return result;
-    }
-
-    //public override void LureWhistle(string tileName)
+    //public override bool LureSteal(string tileName)
     //{
-    //    base.LureWhistle(tileName);
+    //    var result = base.LureSteal(tileName);
     //    UpdateRouteMark();
     //    watching = false;
+    //    return result;
     //}
 
+   
     public override void ReachedOriginal()
     {
         base.ReachedOriginal();
