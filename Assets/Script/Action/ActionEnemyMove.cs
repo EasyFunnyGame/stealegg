@@ -98,23 +98,15 @@ public class ActionEnemyMove : ActionBase
         if (enemy.coord.name == enemy.originalCoord.name)
         {
             // 回到原点要转向
-            if (enemy.direction != enemy.originalDirection)
+            if (enemy._direction != enemy.originalDirection)
             {
                 Utils.SetDirection(character, enemy.originalDirection);
-                var sameDirection = enemy._direction == enemy.originalDirection;
-                if(sameDirection)
-                {
-                    enemy.CheckPlayer();
-                    enemy.originalTile = null;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                enemy.targetDirection = enemy.originalDirection;
+                return false;
             }
             else
             {
+                enemy.CheckPlayer();
                 enemy.originalTile = null;
                 return true;
             }

@@ -550,7 +550,7 @@ public class Game : MonoBehaviour
             }
 
             node.contour.gameObject.SetActive(selectable);
-            node.contour.transform.localPosition = new Vector3(0,0.017f,0);
+            node.contour.transform.localPosition = new Vector3(0,0.025f,0);
             if(selectable)
             {
                 bottleSelectable.Add(nodeName);

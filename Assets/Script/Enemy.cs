@@ -172,7 +172,10 @@ public class Enemy : Character
                         currentAction = new ActionTurnDirection(this, coordLure.name, false);
                         // 不用在 TurnEnd 再执行找人抓人行为,此处直接赋值 coordPlayer
                         // 如果誘惑點 和 主角  共綫 共享;
-                        if (Coord.inLine(coordLure, player.coord) && player.CanReachInSteps(coordLure.name, rangeLure) && player.CanReachInSteps(coord.name, checkRange - 1))
+                        if (Coord.inLine(coordLure, player.coord) &&
+                            Coord.inLine(coord, player.coord) && 
+                            player.CanReachInSteps(coordLure.name, rangeLure) &&
+                            player.CanReachInSteps(coord.name, checkRange - 1))
                         {
                             coordTracing = player.coord.Clone();
                             ShowTraceTarget(player.coord.name);

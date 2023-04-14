@@ -356,23 +356,23 @@ public class Player : Character
         if (item.itemType == ItemType.Graff)
         {
             var boardManager = Game.Instance.boardManager;
+            Game.Instance.boardManager.coordLure = coord.Clone();
+            Game.Instance.boardManager.rangeLure = 2;
+            //var targetArray = playerTileName.Split('_');
+            //var x = int.Parse(targetArray[0]);
+            //var z = int.Parse(targetArray[1]);
 
-            var targetArray = playerTileName.Split('_');
-            var x = int.Parse(targetArray[0]);
-            var z = int.Parse(targetArray[1]);
-
-            foreach (var enemy in boardManager.enemies)
-            {
-                var coord = enemy.coord;
-                var distanceFromX = Mathf.Abs(x - coord.x);
-                var distanceFromZ = Mathf.Abs(z - coord.z);
-                if (distanceFromX <= 2 && distanceFromZ <= 2)
-                {
-                    // enemy.LureSteal(playerTileName);
-                    Game.Instance.boardManager.coordLure = coord.Clone();
-                    Game.Instance.boardManager.rangeLure = 2;
-                }
-            }
+            //foreach (var enemy in boardManager.enemies)
+            //{
+            //    var coord = enemy.coord;
+            //    var distanceFromX = Mathf.Abs(x - coord.x);
+            //    var distanceFromZ = Mathf.Abs(z - coord.z);
+            //    if (distanceFromX <= 2 && distanceFromZ <= 2)
+            //    {
+            //        // enemy.LureSteal(playerTileName);
+                    
+            //    }
+            //}
         }
 
         var items = this.boardManager.allItems;
