@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class ActionEnemyMove : ActionBase
 {
@@ -74,7 +75,11 @@ public class ActionEnemyMove : ActionBase
             if(!reached)
             {
                 enemy.Reached();
-                enemy.CheckPlayer();
+                var result = enemy.CheckPlayer();
+                if(result != CheckPlayerResult.None)
+                {
+                    return true;
+                }
                 reached = true;
             }
 
@@ -167,28 +172,53 @@ public class ActionEnemyMove : ActionBase
                 var player = Game.Instance.player;
                 var lastTile = player.gridManager.GetTileByName(player.lastCoord.name);
                 var dstTile = player.gridManager.GetTileByName(enemy.currentTile.name);
-                var path = player.GetPathFromTo(dstTile, lastTile);
+                var path = new List<string>();
                 var lookAtTileName = "";
-                if (path.Count >= 2)
+                if (player.lastCoord.name.Equals(enemy.currentTile.name))
                 {
-                    lookAtTileName = path[path.Count - 2];
+                    path = player.GetPathFromTo(dstTile, player.currentTile);
+                    if (path.Count >= 2)
+                    {
+                        lookAtTileName = path[path.Count - 2];
+                    }
+                    else
+                    {
+                        lookAtTileName = player.coord.name;
+                    }
                 }
                 else
                 {
-                    lookAtTileName = player.lastCoord.name;
-                }
-                Debug.Log("到达追踪点转向转向从主角寻路到敌人本身到倒数第二个点");
-                enemy.LookAt(lookAtTileName);
-                var sameDirection = enemy._direction == enemy.targetDirection;
-                if (sameDirection)
-                {
-                    var checkResult = enemy.CheckPlayer();
-                    if (checkResult == CheckPlayerResult.None)
+                    path = player.GetPathFromTo(dstTile, lastTile);
+                    if (path.Count >= 2)
                     {
-                        enemy.LostTarget();
+                        lookAtTileName = path[path.Count - 2];
+                    }
+                    else
+                    {
+                        lookAtTileName = player.lastCoord.name;
                     }
                 }
-                return sameDirection;
+               
+                
+                if(!string.IsNullOrEmpty(lookAtTileName))
+                {
+                    enemy.LookAt(lookAtTileName);
+                    var sameDirection = enemy._direction == enemy.targetDirection;
+                    if (sameDirection)
+                    {
+                        var checkResult = enemy.CheckPlayer();
+                        if (checkResult == CheckPlayerResult.None)
+                        {
+                            enemy.LostTarget();
+                        }
+                    }
+                    return sameDirection;
+                }
+                else
+                {
+                    Debug.LogWarning("敌人看到主角后，到达追踪点转向异常");
+                    return true;
+                }
             }
         }
         else
@@ -204,7 +234,32 @@ public class ActionEnemyMove : ActionBase
                 }
                 return sameDirection;
             }
-            return true;
+            else
+            {
+                if(enemy.coordTracing.isLegal)
+                {
+                    var tileTracing = enemy.gridManager.GetTileByName(enemy.coordTracing.name);
+                    var path = enemy.GetPathFromTo(tileTracing, enemy.currentTile);
+                    if(path.Count>0)
+                    {
+                        enemy.LookAt(path[0]);
+                    }
+                    else
+                    {
+                        enemy.LookAt(enemy.coordTracing.name);
+                    }
+                    var sameDirection = enemy._direction == enemy.targetDirection;
+                    if (sameDirection)
+                    {
+                        enemy.CheckPlayer();
+                    }
+                    return sameDirection;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
     }
 
