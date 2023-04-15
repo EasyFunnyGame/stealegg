@@ -8,6 +8,13 @@ public enum EnemyType
     Sentinel
 }
 
+public enum CheckPlayerResult
+{
+    None,
+    Catch,
+    Found,
+}
+
 public static class EnemyName
 {
     public const string Enemy_Distracted = "Enemy_Distracted";
@@ -120,6 +127,12 @@ public class Enemy : Character
     public void UpdateTracingPlayerTile()
     {
         var player = Game.Instance.player;
+
+        //if (player.justJump)
+        //{
+        //    coordPlayer.SetNoTurn();
+        //}
+        
         //if(stepsAfterFoundPlayer>2)
         //{
         //    // 追踪步数超过5则丢失玩家;
@@ -136,7 +149,7 @@ public class Enemy : Character
 
         if(!coordTracing.isLegal)
         {
-            if (CheckPlayer())
+            if (CheckPlayer() == CheckPlayerResult.Found)
             {
                 UpdateRouteMark();
                 Debug.Log("发现敌人,更新监测点");
@@ -144,8 +157,12 @@ public class Enemy : Character
             }
         }
 
-        var notCatchNorFound = CheckPlayer();
-        if(!notCatchNorFound)
+        var result = CheckPlayer();
+        if(result == CheckPlayerResult.Catch)
+        {
+            return;
+        }
+        if(result == CheckPlayerResult.None)
         {
             if (boardManager.coordLure.isLegal)
             {
@@ -155,7 +172,7 @@ public class Enemy : Character
                 {
                     checkRange = 3;
                     UpdateRouteMark();
-                    if (CheckPlayer())// 睡觉敌人更新视野之后尝试发现敌人，如果发现了敌人此回合结束
+                    if (CheckPlayer()==CheckPlayerResult.Found)// 睡觉敌人更新视野之后尝试发现敌人，如果发现了敌人此回合结束
                     {
                         return;
                     }
@@ -167,25 +184,42 @@ public class Enemy : Character
 
                     var player = Game.Instance.player;
                     coordTracing = coordLure.Clone();
-                    if (Coord.inLine(coordLure, coord) && player.CanReachInSteps(coord.name, rangeLure))
+
+                    var playerSteps = player.StepsReach(coord.name);
+                    if ( Coord.inLine(coordLure,coord) && playerSteps <= rangeLure)// 敌人、引诱点共线 并且路线能通行
                     {
-                        currentAction = new ActionTurnDirection(this, coordLure.name, false);
-                        // 不用在 TurnEnd 再执行找人抓人行为,此处直接赋值 coordPlayer
-                        // 如果誘惑點 和 主角  共綫 共享;
-                        if (Coord.inLine(coordLure, player.coord) &&
-                            Coord.inLine(coord, player.coord) && 
-                            player.CanReachInSteps(coordLure.name, rangeLure) &&
-                            player.CanReachInSteps(coord.name, checkRange - 1))
+                        // 直接赋值玩家追踪点，不在转向后检查主角，否则会直接抓捕
+                        if (Coord.inLine(coordLure,player.coord) )// 玩家、引诱点共线 
                         {
-                            coordTracing = player.coord.Clone();
-                            ShowTraceTarget(player.coord.name);
-                            coordPlayer = player.coord.Clone();
-                            coordPlayer.SetMax();
-                            stepsAfterFoundPlayer = 0;
+                            var dir1 = Utils.DirectionToMultyGrid(coord.name, player.coord.name, _direction);
+                            var dir2 = Utils.DirectionToMultyGrid(coord.name, coordLure.name, _direction);
+                            if(dir2 == dir1 && _direction != dir1)// 同乡
+                            {
+                                playerSteps = player.StepsReach(coord.name);
+                                var enemySteps = StepsReach(player.coord.name);
+
+                                coordTracing = player.coord.Clone();
+                                ShowTraceTarget(player.coord.name);
+                                coordPlayer = player.coord.Clone();
+                                stepsAfterFoundPlayer = 0;
+                                if (playerSteps == enemySteps)
+                                {
+                                    // 敌人能直达
+                                }
+                                else
+                                {
+                                    // 敌人不能直达
+                                    coordPlayer.SetTurnBack();
+                                }
+                            }
                         }
+                        // 这个转向要在后面，否则转向不对
+                        // 共线即转向
+                        currentAction = new ActionTurnDirection(this, coordLure.name, false);
                     }
                     else
                     {
+                        // 不共线转向寻路下一点
                         var lureTile = gridManager.GetTileByName(coordLure.name);
                         var success = FindPathRealTime(lureTile);
                         if (success)
@@ -199,11 +233,9 @@ public class Enemy : Character
                         else
                         {
                             // 寻路失败就返回起点。
-
                             // 如果主角在正前方而且 前方一格可达 则继续前进
                         }
                     }
-
 
                     if (!coordLureMe.isLegal || !coordLureMe.Equals(coordLure))
                     {
@@ -266,6 +298,10 @@ public class Enemy : Character
                 targetDirection = originalDirection;
                 currentAction = new ActionTurnDirection(this, originalDirection,true);
             }
+        }
+        else
+        {
+            ReachedOriginal();
         }
 
 
@@ -604,11 +640,19 @@ public class Enemy : Character
         return string.Empty;
     }
 
-    public bool CheckPlayer()
+    public CheckPlayerResult CheckPlayer()
     {
         var caught = TryCatch();
+        if(caught)
+        {
+            return CheckPlayerResult.Catch;
+        }
         var found = !caught && TryFound();
-        return caught || found;
+        if(found)
+        {
+            return CheckPlayerResult.Found;
+        }
+        return CheckPlayerResult.None;
     }
 
     public bool TryCatch()
@@ -644,10 +688,19 @@ public class Enemy : Character
                 {
                     coordTracing = foundPlayerCoord.Clone();
                     coordPlayer = foundPlayerCoord.Clone();
-                    if(index == 1)
+
+                    var playerSteps = player.StepsReach(coord.name);
+                    var enemySteps = StepsReach(player.coord.name);
+                    if (playerSteps == enemySteps)
                     {
-                        coordPlayer.SetMax();
+                        // 敌人能直达
                     }
+                    else
+                    {
+                        // 敌人不能直达
+                        coordPlayer.SetTurnBack();
+                    }
+
                     ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;
@@ -906,9 +959,9 @@ public class Enemy : Character
     {
         ShowNotFound();
         targetIdleType = 1;
-        coordTracing.SetMin();
-        coordPlayer.SetMin();
-        coordLureMe.SetMin();
+        coordTracing.SetNoTurn();
+        coordPlayer.SetNoTurn();
+        coordLureMe.SetNoTurn();
         stepsAfterFoundPlayer = -1;
 
     }

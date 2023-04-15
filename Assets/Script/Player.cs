@@ -25,7 +25,14 @@ public class Player : Character
 
     public Camera failCamera;
 
+    // 刚刚穿过网
     public bool justThroughNet = false;
+
+    // 刚刚跳过井
+    public bool justJump = false;
+
+    // 刚刚偷过菜
+    public bool justSteal = false;
 
     public void Awake()
     {
@@ -332,7 +339,7 @@ public class Player : Character
 
         }
     }
-    public bool justSteal = false;
+
     private bool triggerSteal = false;
     public override void Lure()
     {
@@ -344,11 +351,6 @@ public class Player : Character
         }
     }
 
-    //void LureBottle()
-    //{
-
-    //}
-
     void LureSteal()
     {
         var playerTileName = Game.Instance.player.currentTile.name;
@@ -358,21 +360,6 @@ public class Player : Character
             var boardManager = Game.Instance.boardManager;
             Game.Instance.boardManager.coordLure = coord.Clone();
             Game.Instance.boardManager.rangeLure = 2;
-            //var targetArray = playerTileName.Split('_');
-            //var x = int.Parse(targetArray[0]);
-            //var z = int.Parse(targetArray[1]);
-
-            //foreach (var enemy in boardManager.enemies)
-            //{
-            //    var coord = enemy.coord;
-            //    var distanceFromX = Mathf.Abs(x - coord.x);
-            //    var distanceFromZ = Mathf.Abs(z - coord.z);
-            //    if (distanceFromX <= 2 && distanceFromZ <= 2)
-            //    {
-            //        // enemy.LureSteal(playerTileName);
-                    
-            //    }
-            //}
         }
 
         var items = this.boardManager.allItems;
@@ -389,5 +376,4 @@ public class Player : Character
             }
         }
     }
-
 }

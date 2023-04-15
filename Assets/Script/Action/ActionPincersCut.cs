@@ -12,6 +12,8 @@ public class ActionPincersCut : ActionBase
     public Quaternion targetRotation;
     public ActionPincersCut(Player player, PincersItem item) : base(player, ActionType.PincersCut)
     {
+        player.justJump = false;
+        player.justThroughNet = false;
         pincers = item;
         cutted = false;
         targetRotation = Quaternion.LookRotation(item.wireNetMesh.transform.position - item.transform.position);

@@ -139,7 +139,7 @@ public class ActionEnemyMove : ActionBase
                 // 不转向
                 Debug.Log("到达追踪点不转向");
                 var checkResult = enemy.CheckPlayer();
-                if (!checkResult)
+                if (checkResult == CheckPlayerResult.None)
                 {
                     enemy.LostTarget();
                 }
@@ -154,7 +154,7 @@ public class ActionEnemyMove : ActionBase
                 if (sameDirection)
                 {
                     var checkResult = enemy.CheckPlayer();
-                    if (!checkResult)
+                    if (checkResult == CheckPlayerResult.None)
                     {
                         enemy.LostTarget();
                     }
@@ -165,24 +165,25 @@ public class ActionEnemyMove : ActionBase
             {
                 // 转向从主角寻路到敌人本身到倒数第二个点
                 var player = Game.Instance.player;
-                player.FindPathRealTime(player.gridManager.GetTileByName(character.currentTile.name));
-                var path = player.path;
-                var nextTileName = "";
+                var lastTile = player.gridManager.GetTileByName(player.lastCoord.name);
+                var dstTile = player.gridManager.GetTileByName(enemy.currentTile.name);
+                var path = player.GetPathFromTo(dstTile, lastTile);
+                var lookAtTileName = "";
                 if (path.Count >= 2)
                 {
-                    nextTileName = path[path.Count - 2];
+                    lookAtTileName = path[path.Count - 2];
                 }
                 else
                 {
-                    nextTileName = player.currentTile.name;
+                    lookAtTileName = player.lastCoord.name;
                 }
                 Debug.Log("到达追踪点转向转向从主角寻路到敌人本身到倒数第二个点");
-                enemy.LookAt(nextTileName);
+                enemy.LookAt(lookAtTileName);
                 var sameDirection = enemy._direction == enemy.targetDirection;
                 if (sameDirection)
                 {
                     var checkResult = enemy.CheckPlayer();
-                    if (!checkResult)
+                    if (checkResult == CheckPlayerResult.None)
                     {
                         enemy.LostTarget();
                     }
@@ -193,13 +194,17 @@ public class ActionEnemyMove : ActionBase
         else
         {
             // 继续转向下一个路径点
-            enemy.LookAt(character.nextTile.name);
-            var sameDirection = enemy._direction == enemy.targetDirection;
-            if (sameDirection)
+            if(enemy.nextTile)
             {
-                enemy.CheckPlayer();
+                enemy.LookAt(character.nextTile.name);
+                var sameDirection = enemy._direction == enemy.targetDirection;
+                if (sameDirection)
+                {
+                    enemy.CheckPlayer();
+                }
+                return sameDirection;
             }
-            return sameDirection;
+            return true;
         }
     }
 

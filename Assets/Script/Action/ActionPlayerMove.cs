@@ -18,6 +18,7 @@ public class ActionPlayerMove : ActionBase
     public ActionPlayerMove(Player player, GridTile tile) : base(player, ActionType.PlayerMove)
     {
         player.justThroughNet = false;
+        player.justJump = false;
 
         endPosition = tile.transform.position;
         startPosition = player.transform.position;

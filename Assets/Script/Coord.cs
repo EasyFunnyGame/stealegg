@@ -91,13 +91,19 @@ public class Coord
         }
     }
 
-    public void SetMax()
+    public void SetFindPath(int _x, int _z)
+    {
+        x = _x;
+        z = _z;
+    }
+
+    public void SetTurnBack()
     {
         x = int.MaxValue;
         z = int.MaxValue;
     }
 
-    public void SetMin()
+    public void SetNoTurn()
     {
         x = int.MinValue;
         z = int.MinValue;

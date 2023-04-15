@@ -13,6 +13,8 @@ public class ActionJumpManholeCover : ActionBase
     private ManholeCoverItem jumpInCover;
     public ActionJumpManholeCover(Player player, ManholeCoverItem item) : base(player, ActionType.ManHoleCover)
     {
+        player.justJump = true;
+
         jumpInDelay = 1.5f;
 
         jumpInCoverDelay = 0.1f;
@@ -49,6 +51,8 @@ public class ActionJumpManholeCover : ActionBase
                     Game.Instance.ShowGuide();
                 }
             }
+
+            player.Reached();
             return true;
         }
         return false;

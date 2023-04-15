@@ -272,8 +272,7 @@ public class Game : MonoBehaviour
                     var enemy = boardManager.enemies[i];
                     enemy.CheckAction();
                 }
-
-                boardManager.coordLure.SetMin();
+                boardManager.coordLure.SetNoTurn();
             }
             else
             {

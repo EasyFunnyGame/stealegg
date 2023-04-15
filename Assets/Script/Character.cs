@@ -282,6 +282,104 @@ public class Character : MonoBehaviour
         return targetDirection;
     }
 
+    public List<string> GetPathFromTo(GridTile to, GridTile from)
+    {
+        var tempTile = _currentTile;
+
+        _currentTile = from;
+        var xOffSet = 0;
+        var zOffset = 0;
+        if (direction == Direction.Up)
+        {
+            zOffset = 1;
+        }
+        else if (direction == Direction.Down)
+        {
+            zOffset = -1;
+        }
+        else if (direction == Direction.Left)
+        {
+            xOffSet = -1;
+        }
+        else if (direction == Direction.Right)
+        {
+            xOffSet = 1;
+        }
+        gridManager.find_paths_realtime(this, to);
+        if (to.db_path_lowest.Count <= 0)
+        {
+            Debug.LogWarning(this.gameObject.name + " ---查找路径点失败，该点不可达----" + to.gameObject.name );
+            return null;
+        }
+        GridTile fromTile = null;
+        var frontalTileName = string.Format("{0}_{1}", coord.x + xOffSet, coord.z + zOffset);
+        if (frontalTileName != to.gameObject.name)
+        {
+            var boardNode = boardManager.FindNode(frontalTileName);
+            if (boardNode?.gameObject.activeSelf == true)
+            {
+                var frontalTile = gridManager.GetTileByName(frontalTileName);
+                if (frontalTile)
+                {
+                    for (var index = 0; index < currentTile.db_neighbors.Count; index++)
+                    {
+                        var neighbor = currentTile.db_neighbors[index];
+                        if (neighbor.tile_s?.name == frontalTileName && neighbor.blocked == false)
+                        {
+                            fromTile = neighbor.tile_s;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        selected_tile_s = to;
+
+        if (fromTile)
+        {
+            gridManager.find_paths_realtime(this, to);
+            var path1 = new List<string>();
+            for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
+            {
+                path1.Add(selected_tile_s.db_path_lowest[idx].name);
+            }
+
+            gridManager.find_paths_realtime(this, to, fromTile);
+            var path2 = new List<string>();
+            for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
+            {
+                path2.Add(selected_tile_s.db_path_lowest[idx].name);
+            }
+
+            if ((path2.Count + 1) > path1.Count)
+            {
+                gridManager.find_paths_realtime(this, to);
+            }
+            else
+            {
+                gridManager.find_paths_realtime(this, to, fromTile);
+                var pathLowest = new List<GridTile>();
+                pathLowest.Add(fromTile);
+                pathLowest.AddRange(selected_tile_s.db_path_lowest);
+                selected_tile_s.db_path_lowest = pathLowest;
+            }
+        }
+        else
+        {
+            gridManager.find_paths_realtime(this, to);
+        }
+
+        var p = new List<string>();
+
+        for (var index = 0; index < selected_tile_s.db_path_lowest.Count; index++)
+        {
+            p.Add(selected_tile_s.db_path_lowest[index].gameObject.name);
+        }
+        _currentTile = tempTile;
+        return p;
+    }
+
 
     public bool FindPathRealTime(GridTile to, GridTile from = null)
     {
@@ -306,6 +404,7 @@ public class Character : MonoBehaviour
         gridManager.find_paths_realtime(this, to);
         if (to.db_path_lowest.Count <= 0)
         {
+            Debug.LogWarning(this.gameObject.name + "查找路径点失败，该点不可达" + to.gameObject.name);
             return false;
         }
         GridTile fromTile = null;
@@ -460,6 +559,22 @@ public class Character : MonoBehaviour
             cube.parent = transform;
             cube.transform.localPosition = new Vector3(0, 0, 0);
         });
+    }
+
+    public int StepsReach(string tileName)
+    {
+        if (gridManager == null) return -1;
+        var tile = gridManager.GetTileByName(tileName);
+        if (tile != null)
+        {
+            var pathLength = 0;
+            selected_tile_s = tile;
+            gridManager.find_paths_realtime(this, tile);
+            pathLength = tile.db_path_lowest.Count;
+            Clear();
+            return pathLength;
+        }
+        return -1;
     }
 
     public bool CanReachInSteps(string tileName,int step = 1)
