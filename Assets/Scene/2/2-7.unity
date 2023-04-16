@@ -12348,6 +12348,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[0]
+      value: 
+      objectReference: {fileID: 157281466811148278}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[1]
+      value: 
+      objectReference: {fileID: 3561921934178363241}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[2]
+      value: 
+      objectReference: {fileID: 5174040663838115965}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[3]
+      value: 
+      objectReference: {fileID: 4786689324659830990}
     - target: {fileID: 9096376541638636844, guid: 050f79cd28c2a485897a9e64c5919c6d,
         type: 3}
       propertyPath: m_Name
@@ -25074,6 +25099,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[0]
+      value: 
+      objectReference: {fileID: 6113129740386809633}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[1]
+      value: 
+      objectReference: {fileID: 3565727317214477405}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[2]
+      value: 
+      objectReference: {fileID: 868727528224058518}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[3]
+      value: 
+      objectReference: {fileID: 7455846965539399989}
     - target: {fileID: 9096376541638636844, guid: 050f79cd28c2a485897a9e64c5919c6d,
         type: 3}
       propertyPath: m_Name
@@ -38784,6 +38834,8 @@ MonoBehaviour:
   node1: 5_2
   node2: 6_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &495701178242109423
 Transform:
   m_ObjectHideFlags: 0
@@ -38867,6 +38919,8 @@ MonoBehaviour:
   node1: 4_2
   node2: 5_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &868727528224058518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38904,6 +38958,8 @@ MonoBehaviour:
   node1: 1_2
   node2: 1_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!33 &920301804394379022
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -38990,6 +39046,8 @@ MonoBehaviour:
   node1: 1_3
   node2: 2_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &1320112198828589652
 GameObject:
   m_ObjectHideFlags: 0
@@ -39330,6 +39388,8 @@ MonoBehaviour:
   node1: 4_2
   node2: 4_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &2666860087271004404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39345,6 +39405,8 @@ MonoBehaviour:
   node1: 3_1
   node2: 3_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &2900225468806849981
 GameObject:
   m_ObjectHideFlags: 0
@@ -39376,6 +39438,8 @@ MonoBehaviour:
   node1: 4_1
   node2: 4_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &2916951187079690207
 Transform:
   m_ObjectHideFlags: 0
@@ -39579,6 +39643,8 @@ MonoBehaviour:
   node1: 1_1
   node2: 2_1
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &3726133996496639143
 GameObject:
   m_ObjectHideFlags: 0
@@ -39628,6 +39694,8 @@ MonoBehaviour:
   node1: 2_1
   node2: 2_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &3893574545501328326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39973,6 +40041,8 @@ MonoBehaviour:
   node1: 3_3
   node2: 4_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &4786689324659830990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40328,6 +40398,8 @@ MonoBehaviour:
   node1: 3_1
   node2: 4_1
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &6113129740386809633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40533,6 +40605,8 @@ MonoBehaviour:
   node1: 2_1
   node2: 3_1
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &6872328800754527188
 Transform:
   m_ObjectHideFlags: 0
@@ -40806,6 +40880,8 @@ MonoBehaviour:
   node1: 2_3
   node2: 3_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &7760335223685183948
 GameObject:
   m_ObjectHideFlags: 0
@@ -40942,6 +41018,8 @@ MonoBehaviour:
   node1: 3_2
   node2: 3_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &8025175214036157763
 GameObject:
   m_ObjectHideFlags: 0
@@ -41125,6 +41203,20 @@ MonoBehaviour:
     tileName: 5_2
   - actionType: 0
     tileName: 6_2
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  growthLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  bottleCount: 0
 --- !u!4 &8342142914831191056
 Transform:
   m_ObjectHideFlags: 0
@@ -41155,6 +41247,8 @@ MonoBehaviour:
   node1: 2_2
   node2: 2_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &8620000421919598651
 Transform:
   m_ObjectHideFlags: 0
@@ -41215,6 +41309,8 @@ MonoBehaviour:
   node1: 1_1
   node2: 1_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &9048120548673268762
 Transform:
   m_ObjectHideFlags: 0
@@ -41284,3 +41380,5 @@ MonoBehaviour:
   node1: 0_2
   node2: 1_2
   through: 1
+  playerMoveType: -1
+  traversability: 0

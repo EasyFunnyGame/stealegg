@@ -29,15 +29,13 @@ public class EnemyPatrol : Enemy
             if ( redNodes.Count > 0)
             {
                 var endPosition = transform.localPosition + transform.GetChild(0).forward * 2;
-                var x = Mathf.CeilToInt(endPosition.x);
-                var z = Mathf.CeilToInt(endPosition.z);
+                var x = Mathf.RoundToInt(endPosition.x);
+                var z = Mathf.RoundToInt(endPosition.z);
+
                 var length = 0f;
-                // Debug.Log("最终点" + x + " " + z);
+                Debug.Log("最终点" + endPosition.x + " " + endPosition.z);
                 var endNode = boardManager.FindNode(string.Format("{0}_{1}", x, z));
-                if (endPosition.x < 0 || endPosition.z < 0)
-                {
-                    endNode = null;
-                }
+                
                 if(endNode)
                 {
                     length = 80;
@@ -47,7 +45,7 @@ public class EnemyPatrol : Enemy
                 else
                 {
                     var finalNode = redNodes[redNodes.Count - 1];
-                    var distance = Vector3.Distance(transform.position, finalNode.transform.localPosition);
+                    var distance = Vector3.Distance(transform.position, finalNode.transform.position);
                     length = distance * 40;
                 }
                 routeLine.transform.localScale = new Vector3(RED_SCALE, 1, length);
