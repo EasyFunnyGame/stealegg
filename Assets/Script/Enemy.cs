@@ -116,6 +116,7 @@ public class Enemy : Character
         base.Start();
         Reached();
         DisapearTraceTarget(false);
+        routeArrow.transform.parent = route.transform.parent;
     }
 
     public Vector3 getHeadPointPosition()
@@ -157,6 +158,9 @@ public class Enemy : Character
             var player = Game.Instance.player;
             if (boardManager.coordLure.isLegal && coordPlayer.isMin && Coord.Distance(coordLure, coord) <= rangeLure)
             {
+                sleeping = false;
+                watching = false;
+                patroling = false;
                 checkRange = 3;
                 UpdateRouteMark();
                 if (CheckPlayer() == CheckPlayerResult.Found)// 睡觉敌人更新视野之后尝试发现敌人，如果发现了敌人此回合结束
@@ -542,24 +546,28 @@ public class Enemy : Character
 
     protected virtual void Update()
     {
-        if(body_looking)
-        {
-            route.SetActive(false);
-        }
-        else
-        {
-            UpdateRouteRedLine();
-            if(this is EnemyPatrol)
-            {
-                routeArrow.gameObject.SetActive(true);
-            }
-        }
+        UpdateRouteRedLine();
         UpdateAnimatorParams();
     }
 
     protected virtual void UpdateRouteRedLine()
     {
         route.SetActive(!sleeping && !patroling && redNodes.Count > 1);
+
+        if( (coordTracing.isLegal || originalTile != null) && redNodes.Count > 1 && !body_looking)
+        {
+            routeArrow.gameObject.SetActive(true);
+            var lastRedNode = redNodes[redNodes.Count - 1];
+            routeArrow.transform.position = lastRedNode.transform.position;
+
+            routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
+            routeArrow.transform.Rotate(new Vector3(0, 0, 180));
+
+        }
+        else
+        {
+            routeArrow.gameObject.SetActive(false);
+        }
     }
 
     private void UpdateAnimatorParams()
@@ -603,8 +611,6 @@ public class Enemy : Character
     public virtual void ReachedOriginal()
     {
         Debug.Log(gameObject.name + " 回到原点");
-
-        routeArrow.gameObject.SetActive(false);
     }
 
     // =======================================================================================
@@ -702,9 +708,17 @@ public class Enemy : Character
                         // 敌人不能直达
                         //coordPlayer.SetTurnBack();
                     }
-                    if(enemySteps >= 3)
+                    if( patroling && enemySteps >= 3)
                     {
                         coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
+                    }
+                    else if(enemySteps > 2)
+                    {
+                        coordPlayer.SetTurnBack();
+                    }
+                    else
+                    {
+
                     }
 
                     ShowTraceTarget(coordRed.name);
@@ -712,7 +726,6 @@ public class Enemy : Character
                     originalTile = null;
                     patroling = false;
                     watching = false;
-                    routeArrow.gameObject.SetActive(true);
                     lookAroundTime = 9;
                     stepsAfterFoundPlayer = 0;
                     return true;
@@ -732,7 +745,6 @@ public class Enemy : Character
         icons.ccw.gameObject.SetActive(false);
         icons.cw.gameObject.SetActive(false);
         targetIdleType = 0.5f;
-        routeArrow.gameObject.SetActive(true);
         m_animator.SetBool("moving",false);
         AudioPlay.Instance.PlayEnemyAlert(this);
     }

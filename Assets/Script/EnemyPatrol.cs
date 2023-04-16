@@ -32,7 +32,6 @@ public class EnemyPatrol : Enemy
                 var distance = Vector3.Distance(transform.position, patrolEnd.transform.position) * 40;
                 distance = Mathf.Min(distance,80);
 
-                
 
                 routeLine.transform.localScale = new Vector3(RED_SCALE, 1, distance);
                 routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
