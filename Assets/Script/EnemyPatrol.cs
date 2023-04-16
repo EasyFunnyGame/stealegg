@@ -18,6 +18,7 @@ public class EnemyPatrol : Enemy
         this.sleeping = false;
         this.patroling = true;
         base.Start();
+        UpdateFartest();
     }
 
     protected override void Update()
@@ -28,30 +29,17 @@ public class EnemyPatrol : Enemy
             routeLine.gameObject.SetActive(patroling);
             if ( redNodes.Count > 0)
             {
-                var endPosition = transform.localPosition + transform.GetChild(0).forward * 2;
-                var x = Mathf.RoundToInt(endPosition.x);
-                var z = Mathf.RoundToInt(endPosition.z);
+                var distance = Vector3.Distance(transform.position, patrolEnd.transform.position) * 40;
+                distance = Mathf.Min(distance,80);
 
-                var length = 0f;
-                Debug.Log("最终点" + endPosition.x + " " + endPosition.z);
-                var endNode = boardManager.FindNode(string.Format("{0}_{1}", x, z));
                 
-                if(endNode)
-                {
-                    length = 80;
-                    routeLine.transform.localScale = new Vector3(1.2f, 1, 80);
-                    routeLine.transform.position = new Vector3(transform.position.x, 0.016f + endNode.transform.position.y, transform.position.z);
-                }
-                else
-                {
-                    var finalNode = redNodes[redNodes.Count - 1];
-                    var distance = Vector3.Distance(transform.position, finalNode.transform.position);
-                    length = distance * 40;
-                }
-                routeLine.transform.localScale = new Vector3(RED_SCALE, 1, length);
+
+                routeLine.transform.localScale = new Vector3(RED_SCALE, 1, distance);
                 routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
-                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * length / 40;
-                //routeArrow.transform.position = new Vector3(routeArrow.transform.position.x,0.006f+ endNode.transform.localPosition.y, routeArrow.transform.position.z);
+                routeLine.transform.position = transform.position;
+                routeLine.transform.Translate(new Vector3(0, 0.0115f, 0));
+
+                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * distance / 40;
                 routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                 routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 
@@ -125,7 +113,9 @@ public class EnemyPatrol : Enemy
 
     public Direction TurnDirection()
     {
-        var nextPatrol = this.front;
+        var nextPatrol = front;
+        
+        
         var index = -1;
         for (var i = 0; i < this.patrolNodes.Count; i++)
         {
@@ -135,7 +125,11 @@ public class EnemyPatrol : Enemy
                 break;
             }
         }
-
+        var steps = StepsReach(nextPatrol.name);
+        if( steps <=0 )
+        {
+            index = -1;
+        }
         if (index == -1)
         {
             if( _direction == Direction.Left )
@@ -164,12 +158,74 @@ public class EnemyPatrol : Enemy
     public override void ReachedOriginal()
     {
         base.ReachedOriginal();
+        this.patroling = true;
         this.checkRange = 3;
         icons.shuijiao.gameObject.SetActive(false);
         icons.tanhao.gameObject.SetActive(false);
         icons.fanhui.gameObject.SetActive(false);
         icons.wenhao.gameObject.SetActive(false);
         UpdateRouteMark();
+    }
+
+    public override void Reached()
+    {
+        base.Reached();
+        if (patroling)
+        {
+            UpdateFartest();
+            Debug.Log("巡逻敌人到达点111");
+        }
+    }
+
+    public override void Turned()
+    {
+        base.Turned();
+        if( patroling )
+        {
+            UpdateFartest();
+            Debug.Log("巡逻敌人到达点222");
+        }
+    }
+
+    BoardNode patrolEnd;
+
+    void UpdateFartest()
+    {
+        var offsetX = 0;
+
+        var offsetZ = 0;
+
+        if(_direction == Direction.Left)
+        {
+            offsetX = -1;
+        }
+        else if (_direction == Direction.Right)
+        {
+            offsetX = 1;
+        }
+        else if (_direction == Direction.Up)
+        {
+            offsetZ = 1;
+        }
+        else
+        {
+            offsetZ = -1;
+        }
+
+        var coord_x = coord.x + offsetX;
+        var coord_z = coord.z + offsetZ;
+        for(var i =  0; i < 3;  i++)
+        {
+            var name = string.Format("{0}_{1}", coord_x, coord_z);
+            var boardNode = boardManager.FindNode(name);
+            if(boardNode?.name == name )
+            {
+                patrolEnd = boardNode;
+                Debug.Log("最远巡逻路径点" + name);
+                coord_x += offsetX;
+                coord_z += offsetZ;
+            }
+        }
     }
 
     public override void LostTarget()
@@ -180,12 +236,13 @@ public class EnemyPatrol : Enemy
         var stepsToOne = StepsReach(one.gameObject.name);
         var stepsToAnother = StepsReach(another.gameObject.name);
 
-        if(stepsToOne < stepsToAnother)
+
+        if(stepsToOne < stepsToAnother )
         {
             originalCoord = one.coord.Clone();
             originalDirection = Utils.DirectionToMultyGrid(one.coord.name, another.coord.name,_direction);
         }
-        else
+        else 
         {
             originalCoord = another.coord.Clone();
             originalDirection = Utils.DirectionToMultyGrid(another.coord.name, one.coord.name, _direction);

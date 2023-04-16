@@ -713,17 +713,15 @@ public class Enemy : Character
     }
 
 
-    public GridTile growthTile = null;
-    public virtual void LureGrowth(string tileName)
-    {
-        var targetTile = gridManager.GetTileByName(tileName);
-        if (targetTile == null) return ;
-        ShowTraceTarget(tileName);
-        growthTile = targetTile;
-        ShowFound();
-    }
-
-
+    //public GridTile growthTile = null;
+    //public virtual void LureGrowth(string tileName)
+    //{
+    //    var targetTile = gridManager.GetTileByName(tileName);
+    //    if (targetTile == null) return ;
+    //    ShowTraceTarget(tileName);
+    //    growthTile = targetTile;
+    //    ShowFound();
+    //}
     
 
     public virtual void ShowFound()

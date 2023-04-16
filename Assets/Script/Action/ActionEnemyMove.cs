@@ -164,18 +164,45 @@ public class ActionEnemyMove : ActionBase
         }
         else
         {
-            enemy.LookAt(enemy.nextTile.name);
-            var sameDirection = enemy._direction == enemy.targetDirection;
-            if (sameDirection)
+            if(enemy.nextTile)
             {
-                enemy.CheckPlayer();
-                return true;
+                enemy.LookAt(enemy.nextTile.name);
+                var sameDirection = enemy._direction == enemy.targetDirection;
+                if (sameDirection)
+                {
+                    enemy.CheckPlayer();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                if (enemy.originalTile)
+                {
+                    var path = enemy.GetPathFromTo(enemy.originalTile, enemy.currentTile);
+                    if (path.Count > 0)
+                    {
+                        enemy.LookAt(path[0]);
+                    }
+                    else
+                    {
+                        enemy.LookAt(enemy.originalTile.name);
+                    }
+                    var sameDirection = enemy._direction == enemy.targetDirection;
+                    if (sameDirection)
+                    {
+                        enemy.CheckPlayer();
+                    }
+                    return sameDirection;
+                }
+                else
+                {
+                    return true;
+                }
             }
-            
         }
     }
 
@@ -270,7 +297,7 @@ public class ActionEnemyMove : ActionBase
         else
         {
             // 继续转向下一个路径点
-            if(enemy.nextTile)
+            if (enemy.nextTile)
             {
                 enemy.LookAt(character.nextTile.name);
                 var sameDirection = enemy._direction == enemy.targetDirection;
