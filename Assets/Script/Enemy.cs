@@ -56,6 +56,9 @@ public class Enemy : Character
     // 玩家当前所在坐标
     public Coord coordPlayer = null;
 
+    // 是否实时更新主角追踪点
+    public bool updateCoordPlayer = false;
+
     // 原点Tile
     public GridTile originalTile = null;
 
@@ -128,6 +131,13 @@ public class Enemy : Character
     public void UpdateTracingPlayerTile()
     {
         var player = Game.Instance.player;
+        if(player.justThroughNet)
+        {
+            if(coordPlayer.isLegal)
+            {
+                coordPlayer.SetTurnBack();
+            }
+        }
         // tobe filled
     }
 
@@ -272,8 +282,10 @@ public class Enemy : Character
             patroling = false;
             watching = false;
 
-
-            UpdateTracingPlayerTile();
+            if(updateCoordPlayer)
+            {
+                UpdateTracingPlayerTile();
+            }
 
             var tile = gridManager.GetTileByName(coordTracing.name);
             if (tile == null)
@@ -397,8 +409,6 @@ public class Enemy : Character
         copyNode.Red();
         redNodes.Add(copyNode);
     }
-
-
 
     public virtual void ShowNotFound()
     {
@@ -697,6 +707,8 @@ public class Enemy : Character
                     coordTracing = foundPlayerCoord.Clone();
                     coordPlayer = foundPlayerCoord.Clone();
 
+                    updateCoordPlayer = true;
+
                     var playerSteps = player.StepsReach(coord.name);
                     var enemySteps = StepsReach(player.coord.name);
                     if (playerSteps == enemySteps)
@@ -712,9 +724,10 @@ public class Enemy : Character
                     {
                         coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
                     }
-                    else if(enemySteps > 2)
+                    else if(enemySteps == 2)
                     {
-                        coordPlayer.SetTurnBack();
+                        updateCoordPlayer = false;
+                        // coordPlayer.SetTurnBack();
                     }
                     else
                     {
