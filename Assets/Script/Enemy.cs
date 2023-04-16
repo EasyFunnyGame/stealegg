@@ -208,7 +208,7 @@ public class Enemy : Character
                                 }
                                 else
                                 {
-                                    // 敌人不能直达
+                                    // 敌人不能直达 吹口哨时回头望
                                     coordPlayer.SetTurnBack();
                                 }
                             }
@@ -711,7 +711,7 @@ public class Enemy : Character
                     else
                     {
                         // 敌人不能直达
-                        coordPlayer.SetTurnBack();
+                        //coordPlayer.SetTurnBack();
                     }
 
                     ShowTraceTarget(coordRed.name);

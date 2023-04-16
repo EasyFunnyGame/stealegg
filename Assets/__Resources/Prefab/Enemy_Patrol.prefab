@@ -786,9 +786,10 @@ MonoBehaviour:
   move_speed: 1
   rotate_speed: 25
   col: {r: 0, g: 0, b: 0, a: 0}
-  tr_body: {fileID: 0}
+  tr_body: {fileID: 4204703778084587755}
   lastTileName: 
   _currentTile: {fileID: 0}
+  Uid: 0
   tar_tile_s: {fileID: 0}
   selected_tile_s: {fileID: 0}
   nextTile: {fileID: 0}
@@ -802,7 +803,7 @@ MonoBehaviour:
   max_tiles: 7
   num_tile: 0
   boardManager: {fileID: 0}
-  direction: 0
+  _direction: 0
   rotation: 0
   reachedTile: 0
   originalDirection: 0
@@ -817,13 +818,26 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 
+  lastCoord:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
   path: []
   currentAction:
     character: {fileID: 0}
     actionType: 0
   enemyType: 2
-  foundPlayerTile: {fileID: 0}
-  hearSoundTile: {fileID: 0}
+  _coordTracing:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  coordPlayer:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
   originalTile: {fileID: 0}
   icons: {fileID: 0}
   headPoint: {fileID: 7865484325890252411}
@@ -835,13 +849,18 @@ MonoBehaviour:
   redLines: []
   sleeping: 0
   patroling: 0
-  waiting: 0
   walkingLineType: 
   up: 0
-  Uid: 0
-  turnOnReached: 0
-  targetTileName: 
+  turnOnReachDirection: 0
+  tracingTileName: 
+  checkRange: 0
+  coordLureMe:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
   growthTile: {fileID: 0}
+  stepsAfterFoundPlayer: -1
   patrolDistance: 2
   edgeCoords: []
   patrolTile: {fileID: 0}
@@ -1088,15 +1107,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 802fbcd5018662c4786b0ae0c348151b, type: 3}
---- !u!1 &4697362588524032566 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7802568774414571684, guid: 802fbcd5018662c4786b0ae0c348151b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3276413358196533906}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3617569255942812930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2255204474031071120, guid: 802fbcd5018662c4786b0ae0c348151b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3276413358196533906}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4697362588524032566 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7802568774414571684, guid: 802fbcd5018662c4786b0ae0c348151b,
     type: 3}
   m_PrefabInstance: {fileID: 3276413358196533906}
   m_PrefabAsset: {fileID: 0}
