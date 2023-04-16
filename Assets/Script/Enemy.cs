@@ -86,6 +86,9 @@ public class Enemy : Character
     //
     public bool patroling = false;
 
+    // 
+    public bool watching = true;
+
     //
     public string walkingLineType;
 
@@ -135,6 +138,7 @@ public class Enemy : Character
         {
             if (CheckPlayer() == CheckPlayerResult.Found)
             {
+                checkRange = 3;
                 UpdateRouteMark();
                 Debug.Log("发现敌人,更新监测点");
                 return;
@@ -262,7 +266,9 @@ public class Enemy : Character
         {
             sleeping = false;
             patroling = false;
-            
+            watching = false;
+
+
             UpdateTracingPlayerTile();
 
             var tile = gridManager.GetTileByName(coordTracing.name);
@@ -696,11 +702,16 @@ public class Enemy : Character
                         // 敌人不能直达
                         //coordPlayer.SetTurnBack();
                     }
+                    if(enemySteps >= 3)
+                    {
+                        coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
+                    }
 
                     ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;
                     patroling = false;
+                    watching = false;
                     routeArrow.gameObject.SetActive(true);
                     lookAroundTime = 9;
                     stepsAfterFoundPlayer = 0;
