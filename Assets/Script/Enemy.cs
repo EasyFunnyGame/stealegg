@@ -712,18 +712,6 @@ public class Enemy : Character
         return false;
     }
 
-
-    //public GridTile growthTile = null;
-    //public virtual void LureGrowth(string tileName)
-    //{
-    //    var targetTile = gridManager.GetTileByName(tileName);
-    //    if (targetTile == null) return ;
-    //    ShowTraceTarget(tileName);
-    //    growthTile = targetTile;
-    //    ShowFound();
-    //}
-    
-
     public virtual void ShowFound()
     {
         icons.shuijiao.gameObject.SetActive(false);

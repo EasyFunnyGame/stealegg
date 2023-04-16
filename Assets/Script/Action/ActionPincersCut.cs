@@ -32,7 +32,8 @@ public class ActionPincersCut : ActionBase
     {
         if (actionDuration < 0)
         {
-           
+            Game.Instance.boardManager.coordLure = player.coord.Clone();
+            Game.Instance.boardManager.rangeLure = 1;
             return true;
         }
         return false;
