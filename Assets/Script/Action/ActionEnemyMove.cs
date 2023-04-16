@@ -6,18 +6,22 @@ public class ActionEnemyMove : ActionBase
     Vector3 velocity = new Vector3();
     private Vector3 targetPosition;
     float height = 0f;
-    //bool findPathSuccess = true;
 
     private bool reached = false;
 
     private Direction patrolTurnDirection;
 
+    private bool actionForceBreak = false;
+
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
+        actionForceBreak = false;
+
         if (enemy.coordPlayer.isLegal)
         {
             enemy.stepsAfterFoundPlayer++;
         }
+
         reached = false;
 
         patrolTurnDirection = enemy._direction;
@@ -73,42 +77,43 @@ public class ActionEnemyMove : ActionBase
 
     public override bool CheckComplete()
     {
+        if (actionForceBreak) return true;
         var myPosition = character.transform.position;
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
-        if (tdist < 0.001f)
+        if (tdist >= 0.001f)
         {
-            if(!reached)
-            {
-                reached = true;
-                enemy.Reached();
-                var result = enemy.CheckPlayer();
-                if(result != CheckPlayerResult.None)
-                {
-                    return true;
-                }
-                // 巡逻敌人到达点之后检查是否需要转向
-                var enemyPatrol = enemy as EnemyPatrol;
-                if(enemyPatrol)
-                {
-                    patrolTurnDirection = enemyPatrol.TurnDirection();
-                }
-            }
-
-            if(enemy.coordTracing.isLegal)
-            {
-                return onReachedWhileTracing();
-            }
-            else if(enemy.originalTile != null)
-            {
-                return onReachedWhileReturning();
-            }
-            else if(enemy.patroling)
-            {
-                return onReachWhilePatrolling();
-            }
-            return OnReachPosition();
+            return false;
         }
-        return false;
+        if(!reached)
+        {
+            reached = true;
+            enemy.Reached();
+            var result = enemy.CheckPlayer();
+            if(result != CheckPlayerResult.None)
+            {
+                return true;
+            }
+            // 巡逻敌人到达点之后检查是否需要转向
+            var enemyPatrol = enemy as EnemyPatrol;
+            if(enemyPatrol)
+            {
+                patrolTurnDirection = enemyPatrol.TurnDirection();
+            }
+        }
+
+        if(enemy.coordTracing.isLegal)
+        {
+            return onReachedWhileTracing();
+        }
+        else if(enemy.originalTile != null)
+        {
+            return onReachedWhileReturning();
+        }
+        else if(enemy.patroling)
+        {
+            return onReachWhilePatrolling();
+        }
+        return true;
     }
 
     bool onReachWhilePatrolling()
@@ -304,58 +309,6 @@ public class ActionEnemyMove : ActionBase
         }
     }
 
-
-    bool OnReachPosition()
-    {
-        
-        //else if (enemy.originalTile != null)
-        //{
-        //    if (character.currentTile.name == character.originalCoord.name)
-        //    {
-        //        // 回到原点要转向
-        //        if (character.direction != character.originalDirection)
-        //        {
-        //            // character.originalDirection = Direction.Up;// for test 
-        //            Utils.SetDirection(character, character.originalDirection);
-        //            return false;
-        //        }
-        //        else
-        //        {
-        //            enemy.originalTile = null;
-        //            enemy.OnReachedOriginal();
-        //            character.Reached();
-        //            return true;
-        //        }
-        //    }
-        //    character.UpdateTargetDirection(character.nextTile);
-        //    if (character.direction == character.targetDirection)
-        //    {
-        //        character.Reached();
-        //        return true;
-        //    }
-        //}
-        //else if (enemy.patroling)
-        //{
-        //    var patrolEnemy = enemy as EnemyPatrol;
-        //    if (patrolEnemy.needTurn())
-        //    {
-        //        Utils.SetDirection(patrolEnemy, patrolEnemy.targetDirection);
-        //    }
-        //    else
-        //    {
-        //        character.Reached();
-        //        return true;
-        //    }
-        //}
-        //else
-        //{
-        //    character.Reached();
-        //    return true;
-        //}
-
-        return true;
-    }
-
     public override void Run()
     {
         if (character.selected_tile_s != null && !character.moving && character.currentTile != character.selected_tile_s && character.selected_tile_s != null)
@@ -383,6 +336,12 @@ public class ActionEnemyMove : ActionBase
             {
                 enemy.tr_body.GetChild(0).forward = tar_dir;
                 enemy.Turned();
+                var result = enemy.CheckPlayer();
+                if( result != CheckPlayerResult.None )
+                {
+                    actionForceBreak = true;
+                    enemy.currentAction = null;
+                }
             }
         }
         else if (character.moving)

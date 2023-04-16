@@ -19,11 +19,22 @@ public class ActionPlayerMove : ActionBase
     {
         player.justThroughNet = false;
         player.justJump = false;
+        walkingExit = false;
+
+        if(player.isHidding)
+        {
+            Debug.Log("走出Hiding");
+            var node = player.boardManager.FindNode(tile.gameObject.name);
+            player.boardManager.growthLure = node.coord.Clone();
+        }
+        else
+        {
+            player.boardManager.growthLure.SetNoTurn();
+        }
 
         endPosition = tile.transform.position;
         startPosition = player.transform.position;
 
-        walkingExit = false;
         velocity = new Vector3();
         player.FindPathRealTime(tile);
         
@@ -80,10 +91,6 @@ public class ActionPlayerMove : ActionBase
                     walkingExit = true;
                 }
             }
-        }
-        else
-        {
-
         }
 
         player.body_looking = true;

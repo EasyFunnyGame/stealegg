@@ -14,9 +14,6 @@ public class BoardManager : MonoBehaviour
     [SerializeField]
     public Transform squareRoot;
 
-    //[SerializeField]
-    //public Transform visualRoot;
-
     [SerializeField]
     public Transform enemyRoot;
 
@@ -52,23 +49,25 @@ public class BoardManager : MonoBehaviour
     public bool enemyTurn = false;
 
     // 瓶子的追踪点
-    public Dictionary<string , Coord> bottleCoords;
+    //public Dictionary<string , Coord> bottleCoords;
 
     // 口哨的追踪点
-    public Dictionary<string, Coord> whitsleCoords;
+    //public Dictionary<string, Coord> whitsleCoords;
 
     // 树林发现的点
-    public Dictionary<string, Coord> growthFoundCoords;
+    //public Dictionary<string, Coord> growthFoundCoords;
 
     // 偷盗的追踪点
-    public Dictionary<string, Coord> stealCoords;
+    //public Dictionary<string, Coord> stealCoords;
 
     // 发现主角的追踪点
-    public Dictionary<string, Coord> playerCoords;
+   // public Dictionary<string, Coord> playerCoords;
 
     public Coord coordLure;
 
     public int rangeLure;
+
+    public Coord growthLure;
 
     // 主角捡到瓶子的数量最多只能为1,如果有了瓶子不能继续再捡起来
     public int bottleCount = 0;
@@ -257,31 +256,6 @@ public class BoardManager : MonoBehaviour
         return null;
     }
 
-
-    //public void ClearReds()
-    //{
-    //    redNodes.ForEach((BoardNode node) =>
-    //    {
-    //        node.targetIcon.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Light_Blue_Mat.mat");
-    //    });
-
-    //    redLines.ForEach((LinkLine line) =>
-    //    {
-    //        line.transform.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Light_Blue_Mat.mat");
-    //    });
-    //}
-
-    //public void RedNode(BoardNode boardNode)
-    //{
-    //    if (boardNode == null) return;
-    //    boardNode.targetIcon.GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Red_Mat.mat");
-    //}
-
-    //public void RedLine(LinkLine linkLine)
-    //{
-    //    if (linkLine == null) return;
-    //    linkLine.transform.GetChild(0).GetComponent<MeshRenderer>().material = Resources.Load<Material>("Material/UI_Red_Mat.mat");
-    //}
 
     public Dictionary<string,BoardNode> FindNodesAround(string curNodeName, int range, bool inCludeDisable = false)
     {
