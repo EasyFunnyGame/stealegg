@@ -27117,6 +27117,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[0]
+      value: 
+      objectReference: {fileID: 6923895905142177859}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[1]
+      value: 
+      objectReference: {fileID: 439914357849176705}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[2]
+      value: 
+      objectReference: {fileID: 7958960860917547019}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[3]
+      value: 
+      objectReference: {fileID: 414879187135694980}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[4]
+      value: 
+      objectReference: {fileID: 8450375284849205581}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[5]
+      value: 
+      objectReference: {fileID: 8248693004046925673}
     - target: {fileID: 9096376541638636844, guid: 050f79cd28c2a485897a9e64c5919c6d,
         type: 3}
       propertyPath: m_Name
@@ -52624,6 +52659,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &141526070473691068
 Transform:
   m_ObjectHideFlags: 0
@@ -52687,6 +52723,7 @@ MonoBehaviour:
   node2: 2_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &414879187135694980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52861,6 +52898,7 @@ MonoBehaviour:
   node2: 1_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &607576637753162791
 Transform:
   m_ObjectHideFlags: 0
@@ -52909,6 +52947,7 @@ MonoBehaviour:
   node2: 5_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &868017999303956492
 Transform:
   m_ObjectHideFlags: 0
@@ -52972,6 +53011,7 @@ MonoBehaviour:
   node2: 3_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &1264493687355778161
 Transform:
   m_ObjectHideFlags: 0
@@ -53020,6 +53060,7 @@ MonoBehaviour:
   node2: 3_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &1339079278998539956
 Transform:
   m_ObjectHideFlags: 0
@@ -53106,6 +53147,7 @@ MonoBehaviour:
   node2: 2_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &1532757822892115361
 Transform:
   m_ObjectHideFlags: 0
@@ -53285,6 +53327,7 @@ MonoBehaviour:
   node2: 0_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &1914884752353067678
 GameObject:
   m_ObjectHideFlags: 0
@@ -53318,6 +53361,7 @@ MonoBehaviour:
   node2: 2_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &2084766875037061073
 GameObject:
   m_ObjectHideFlags: 0
@@ -53368,6 +53412,7 @@ MonoBehaviour:
   node2: 1_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &2162774353050190056
 GameObject:
   m_ObjectHideFlags: 0
@@ -53544,6 +53589,7 @@ MonoBehaviour:
   node2: 6_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &2650641434658893491
 Transform:
   m_ObjectHideFlags: 0
@@ -53690,6 +53736,7 @@ MonoBehaviour:
   node2: 3_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &3009903498756236323
 Transform:
   m_ObjectHideFlags: 0
@@ -53771,6 +53818,7 @@ MonoBehaviour:
   node2: 2_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &3142758172950592421
 Transform:
   m_ObjectHideFlags: 0
@@ -53972,6 +54020,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &3447632539388799250
 Transform:
   m_ObjectHideFlags: 0
@@ -54277,6 +54326,7 @@ MonoBehaviour:
   node2: 6_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &3895402315684591422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3895402314390316399, guid: 737637f57f33f664f9e3640ebc3e204b,
@@ -54316,6 +54366,7 @@ MonoBehaviour:
   node2: 2_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &4007214128089829644
 Transform:
   m_ObjectHideFlags: 0
@@ -54481,6 +54532,20 @@ MonoBehaviour:
     tileName: 5_4
   - actionType: 0
     tileName: 6_4
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  growthLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  bottleCount: 0
 --- !u!1 &4192715444198245219
 GameObject:
   m_ObjectHideFlags: 0
@@ -54514,6 +54579,7 @@ MonoBehaviour:
   node2: 4_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &4201009512978795596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54584,6 +54650,7 @@ MonoBehaviour:
   node2: 6_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &4460884751564216054
 GameObject:
   m_ObjectHideFlags: 0
@@ -54704,6 +54771,7 @@ MonoBehaviour:
   node2: 0_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &4754971939665179844
 Transform:
   m_ObjectHideFlags: 0
@@ -54914,6 +54982,7 @@ MonoBehaviour:
   node2: 4_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &5477315331592582849
 Transform:
   m_ObjectHideFlags: 0
@@ -54962,6 +55031,7 @@ MonoBehaviour:
   node2: 2_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &5501856825486585962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55017,6 +55087,7 @@ MonoBehaviour:
   node2: 2_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &5568197048988236045
 GameObject:
   m_ObjectHideFlags: 0
@@ -55084,6 +55155,7 @@ MonoBehaviour:
   node2: 4_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &5783166359587291616
 GameObject:
   m_ObjectHideFlags: 0
@@ -55117,6 +55189,7 @@ MonoBehaviour:
   node2: 5_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &5853221282142800363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55252,6 +55325,7 @@ MonoBehaviour:
   node2: 2_4
   through: 1
   playerMoveType: 0.5
+  traversability: 0
 --- !u!114 &6082484819997671000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55393,6 +55467,7 @@ MonoBehaviour:
   node2: 5_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &6158078344917645119
 GameObject:
   m_ObjectHideFlags: 0
@@ -55488,6 +55563,7 @@ MonoBehaviour:
   node2: 3_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &6322514704451705257
 Transform:
   m_ObjectHideFlags: 0
@@ -55575,6 +55651,7 @@ MonoBehaviour:
   node2: 3_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &6534865471658975111
 Transform:
   m_ObjectHideFlags: 0
@@ -55638,6 +55715,7 @@ MonoBehaviour:
   node2: 4_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &6902687364191369248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55730,6 +55808,7 @@ MonoBehaviour:
   node2: 4_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &7103478354017720199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55862,6 +55941,7 @@ MonoBehaviour:
   node2: 5_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &7524764446876148298
 GameObject:
   m_ObjectHideFlags: 0
@@ -55895,6 +55975,7 @@ MonoBehaviour:
   node2: 5_0
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &7539070178324197364
 GameObject:
   m_ObjectHideFlags: 0
@@ -55962,6 +56043,7 @@ MonoBehaviour:
   node2: 5_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &7585760545178795679
 GameObject:
   m_ObjectHideFlags: 0
@@ -56012,6 +56094,7 @@ MonoBehaviour:
   node2: 3_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &7680760853897563946
 Transform:
   m_ObjectHideFlags: 0
@@ -56109,6 +56192,7 @@ MonoBehaviour:
   node2: 6_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &7854407923215013697
 GameObject:
   m_ObjectHideFlags: 0
@@ -56233,6 +56317,7 @@ MonoBehaviour:
   node2: 3_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &8013828502590557216
 GameObject:
   m_ObjectHideFlags: 0
@@ -56327,6 +56412,7 @@ MonoBehaviour:
   node2: 6_1
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &8141119229586095050
 Transform:
   m_ObjectHideFlags: 0
@@ -56719,6 +56805,7 @@ MonoBehaviour:
   node2: 4_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &8821897900725378323
 Transform:
   m_ObjectHideFlags: 0
@@ -56891,6 +56978,7 @@ MonoBehaviour:
   node2: 2_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &9028205336624463832
 Transform:
   m_ObjectHideFlags: 0
