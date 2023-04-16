@@ -10,6 +10,8 @@ public class ActionEnemyMove : ActionBase
 
     private bool reached = false;
 
+    private Direction patrolTurnDirection;
+
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         if (enemy.coordPlayer.isLegal)
@@ -17,6 +19,9 @@ public class ActionEnemyMove : ActionBase
             enemy.stepsAfterFoundPlayer++;
         }
         reached = false;
+
+        patrolTurnDirection = enemy._direction;
+
         velocity = new Vector3();
         //var player = Game.Instance.player;
         //findPathSuccess =
@@ -74,13 +79,19 @@ public class ActionEnemyMove : ActionBase
         {
             if(!reached)
             {
+                reached = true;
                 enemy.Reached();
                 var result = enemy.CheckPlayer();
                 if(result != CheckPlayerResult.None)
                 {
                     return true;
                 }
-                reached = true;
+                // 巡逻敌人到达点之后检查是否需要转向
+                var enemyPatrol = enemy as EnemyPatrol;
+                if(enemyPatrol)
+                {
+                    patrolTurnDirection = enemyPatrol.TurnDirection();
+                }
             }
 
             if(enemy.coordTracing.isLegal)
@@ -91,11 +102,41 @@ public class ActionEnemyMove : ActionBase
             {
                 return onReachedWhileReturning();
             }
-
-
+            else if(enemy.patroling)
+            {
+                return onReachWhilePatrolling();
+            }
             return OnReachPosition();
         }
         return false;
+    }
+
+    bool onReachWhilePatrolling()
+    {
+        var patrolEnemy = enemy as EnemyPatrol;
+        if (patrolEnemy != null)
+        {
+            if (patrolTurnDirection != patrolEnemy._direction)
+            {
+                enemy.LookAt(patrolEnemy.lastCoord.name);
+                return false;
+            }
+            else
+            {
+                patrolEnemy.UpdateRouteMark();
+                var result = patrolEnemy.CheckPlayer();
+
+                // 巡逻敌人回头也需要检查敌人是否在警觉范围内
+                if (result != CheckPlayerResult.None)
+                {
+                    return true;
+                }
+                patrolEnemy.ResetOriginal();
+                Debug.Log("巡逻敌人到达新的巡逻点");
+                return true;
+            }
+        }
+        return true;
     }
 
     bool onReachedWhileReturning()
@@ -314,19 +355,6 @@ public class ActionEnemyMove : ActionBase
 
         return true;
     }
-
-
-    void OnTurnToDirection()
-    {
-
-    }
-
-    void OnActionEnd()
-    {
-
-    }
-
-
 
     public override void Run()
     {

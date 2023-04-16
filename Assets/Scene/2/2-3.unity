@@ -35234,7 +35234,7 @@ PrefabInstance:
     - target: {fileID: 1437979140120115682, guid: 050f79cd28c2a485897a9e64c5919c6d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1437979140120115682, guid: 050f79cd28c2a485897a9e64c5919c6d,
         type: 3}
@@ -35286,6 +35286,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[0]
+      value: 
+      objectReference: {fileID: 797404583498840981}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[1]
+      value: 
+      objectReference: {fileID: 7084103198865374241}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[2]
+      value: 
+      objectReference: {fileID: 1516152340837286484}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[3]
+      value: 
+      objectReference: {fileID: 7088020852346857245}
+    - target: {fileID: 2088232885017753737, guid: 050f79cd28c2a485897a9e64c5919c6d,
+        type: 3}
+      propertyPath: patrolNodes.Array.data[4]
+      value: 
+      objectReference: {fileID: 2002262745811427083}
     - target: {fileID: 9096376541638636844, guid: 050f79cd28c2a485897a9e64c5919c6d,
         type: 3}
       propertyPath: m_Name
@@ -41305,6 +41335,15 @@ MonoBehaviour:
     tileName: 4_0
   - actionType: 0
     tileName: 5_0
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  bottleCount: 0
 --- !u!4 &6889798928439192727
 Transform:
   m_ObjectHideFlags: 0

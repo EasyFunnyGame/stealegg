@@ -75,9 +75,6 @@ public class Enemy : Character
     public Transform routeArrow;
 
     //
-    public List<string> routeNodeNames;
-
-    //
     public List<BoardNode> redNodes = new List<BoardNode>();
 
     //
@@ -283,8 +280,10 @@ public class Enemy : Character
             return;
         }
 
-        GoBack();
-
+        if(!GoBack())
+        {
+            DoDefaultAction();
+        }
 
         //if (hearSoundTile != null)
         //{
@@ -354,6 +353,13 @@ public class Enemy : Character
         //}
     }
 
+    // 默认行为
+    public virtual void DoDefaultAction()
+    {
+
+    }
+
+
     public virtual bool TryMoveFrontToWardPlayer()
     {
         var player = Game.Instance.player;
@@ -379,7 +385,8 @@ public class Enemy : Character
         return false;
     }
 
-    public virtual void GoBack()
+    // 回去原点  是否完结此回合
+    public virtual bool GoBack()
     {
         if (coord.name != originalCoord.name || _direction != originalDirection)
         {
@@ -391,10 +398,12 @@ public class Enemy : Character
                     FindPathRealTime(originalTile);
                     currentAction = new ActionTurnDirection(this, nextTile.name, true);
                     ShowBackToOriginal();
+                    return true;
                 }
                 else
                 {
                     currentAction = new ActionEnemyMove(this, originalTile);
+                    return true;
                 }
             }
             else
@@ -402,11 +411,13 @@ public class Enemy : Character
                 ShowBackToOriginal();
                 targetDirection = originalDirection;
                 currentAction = new ActionTurnDirection(this, originalDirection, true);
+                return true;
             }
         }
-        else
+        else 
         {
             ReachedOriginal();
+            return false;
         }
     }
 
@@ -493,8 +504,6 @@ public class Enemy : Character
 
         redLines.Clear();
 
-        routeNodeNames.Clear();
-
         var coordDirection = GetDirectionCoord();
 
         var lastCoordName = "";
@@ -529,13 +538,45 @@ public class Enemy : Character
                 }
             }
 
+            var isBlocked = false;
+            // 是否有敌人阻挡
+            for (var idx = 0; idx < boardManager.enemies.Count; idx++)
+            {
+                var enemy = boardManager.enemies[idx];
+                if (enemy.gameObject.name == gameObject.name)
+                {
+                    continue;
+                }
+                if (enemy.coord.name == routeCoordName)
+                {
+                    isBlocked = true;
+                    break;
+                }
+            }
+
+            // 是否有树林阻挡
+            foreach (var kvp in boardManager.allItems)
+            {
+                var item = kvp.Value;
+                if (item == null) continue;
+                if (item.itemType == ItemType.Growth && item.coord.name == routeCoordName)
+                {
+                    isBlocked = true;
+                    break;
+                }
+            }
+
+            if (isBlocked)
+            {
+                break;
+            }
+
             coordX += coordDirection.x;
 
             coordZ += coordDirection.z;
 
             lastCoordName = routeCoordName;
         }
-        
     }
 
     public override void StartMove()
@@ -567,11 +608,7 @@ public class Enemy : Character
 
     protected virtual void UpdateRouteRedLine()
     {
-        route.SetActive(!sleeping);
-        if(routeNodeNames.Count<=0)
-        {
-            route.SetActive(false);
-        }
+        route.SetActive(!sleeping && !patroling && redNodes.Count > 1);
     }
 
     private void UpdateAnimatorParams()
@@ -615,6 +652,7 @@ public class Enemy : Character
     public virtual void ReachedOriginal()
     {
         Debug.Log(gameObject.name + " 回到原点");
+
         routeArrow.gameObject.SetActive(false);
     }
 
@@ -656,7 +694,7 @@ public class Enemy : Character
         {
             return CheckPlayerResult.Catch;
         }
-        var found = !caught && TryFound();
+        var found = TryFound();
         if(found)
         {
             return CheckPlayerResult.Found;
@@ -694,7 +732,7 @@ public class Enemy : Character
         for(var index = 0; index < this.redNodes.Count; index++)
         {
             var coordRed = this.redNodes[index].coord;
-            if(coordRed.Equals(foundPlayerCoord))
+            if(coordRed.Equals(foundPlayerCoord) && !player.isHidding)
             {
                 var targetTile = gridManager.GetTileByName(coordRed.name);
                 if (targetTile != null)
@@ -873,7 +911,6 @@ public class Enemy : Character
         coordPlayer.SetNoTurn();
         coordLureMe.SetNoTurn();
         stepsAfterFoundPlayer = -1;
-
     }
 
     protected float idleType;

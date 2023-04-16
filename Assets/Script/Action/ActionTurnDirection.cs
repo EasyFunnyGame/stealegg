@@ -20,19 +20,14 @@ public class ActionTurnDirection : ActionBase
         targetDirection = character.LookAt(tileName);
         Utils.SetDirection(character, targetDirection);
     }
-    public Enemy enemy
-    {
-        get
-        {
-            return character as Enemy;
-        }
-    }
+
     public override bool CheckComplete()
     {
         if(character._direction == targetDirection)
         {
-            enemy.Turned();
-            if(checkPlayer)
+            character.Turned();
+            var enemy = character as Enemy;
+            if (enemy != null && checkPlayer)
             {
                 enemy.CheckPlayer();
             }
@@ -51,7 +46,6 @@ public class ActionTurnDirection : ActionBase
         var angle = Vector3.Angle(tar_dir, character.tr_body.GetChild(0).forward);
         if(angle < 1)
         {
-            //character.transform.forward = tar_dir;
             character.body_looking = false;
             character.Turned();
         }
