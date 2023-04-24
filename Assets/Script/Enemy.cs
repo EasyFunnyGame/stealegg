@@ -131,7 +131,7 @@ public class Enemy : Character
     public void UpdateTracingPlayerTile()
     {
         var player = Game.Instance.player;
-        if(player.justThroughNet)
+        if (player.justThroughNet && Coord.Distance(player.lastCoord, coord) > 1)
         {
             if(coordPlayer.isLegal)
             {
