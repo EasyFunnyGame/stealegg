@@ -85,22 +85,22 @@ public class Character : MonoBehaviour
 
             if (Mathf.Abs(90 - bodyRotation) < 1)
             {
-                Debug.Log("右" + Enemy.count);
+                //Debug.Log("右" + Enemy.count);
                 _direction = Direction.Right;
             }
             else if (Mathf.Abs(180 - bodyRotation) < 1)
             {
-                Debug.Log("下" + Enemy.count);
+                //Debug.Log("下" + Enemy.count);
                 _direction = Direction.Down;
             }
             else if (Mathf.Abs(270 - bodyRotation) < 1 )
             {
-                Debug.Log("左" + Enemy.count);
+                //Debug.Log("左" + Enemy.count);
                 _direction = Direction.Left;
             }
             else
             {
-                Debug.Log("上 " + Enemy.count);
+                //Debug.Log("上 " + Enemy.count);
                 _direction = Direction.Up;
             }
             return _direction;

@@ -444,8 +444,8 @@ public class Enemy : Character
         lookAroundTime = 9;
         m_animator.SetBool("moving", false);
         UpdateRouteMark();
-        Debug.Log("到达更新监测点");
-        Debug.Log(gameObject.name + " 到达点" + coord.name);
+        //Debug.Log("到达更新监测点");
+        //Debug.Log(gameObject.name + " 到达点" + coord.name);
         if (originalCoord.Equals(coord)  && !coordTracing.isLegal) // && _direction == originalDirection
         {
             ReachedOriginal();
@@ -620,7 +620,7 @@ public class Enemy : Character
 
     public virtual void ReachedOriginal()
     {
-        Debug.Log(gameObject.name + " 回到原点");
+        //Debug.Log(gameObject.name + " 回到原点");
     }
 
     // =======================================================================================

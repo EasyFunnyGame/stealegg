@@ -503,7 +503,7 @@ public class AudioManager : MonoBehaviour
     public void playShort()
     {
         var index = new System.Random().Next(0, 5);
-        Debug.Log("playShort:" + index);
+        //Debug.Log("playShort:" + index);
 
         playAfterDownload(index, true);
     }
@@ -521,7 +521,7 @@ public class AudioManager : MonoBehaviour
     public void playBGM()
     {
         var index = new System.Random().Next(5, 10);
-        Debug.Log("Play:" + index);
+        //Debug.Log("Play:" + index);
 
         if (audioBGM != null)
         {

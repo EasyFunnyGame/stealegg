@@ -23,7 +23,7 @@ public class ActionPlayerMove : ActionBase
 
         if(player.isHidding)
         {
-            Debug.Log("走出Hiding");
+            //Debug.Log("走出Hiding");
             var node = player.boardManager.FindNode(tile.gameObject.name);
             player.boardManager.growthLure = node.coord.Clone();
         }
@@ -136,8 +136,8 @@ public class ActionPlayerMove : ActionBase
         {
             if (character.selected_tile_s.db_path_lowest.Count > 0)
                 character.move_tile(character.selected_tile_s);
-            else
-                Debug.Log("no valid tile selected");
+            //else
+            //    Debug.Log("no valid tile selected");
         }
 
         // 先转向 再位移

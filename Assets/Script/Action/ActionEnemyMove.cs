@@ -127,7 +127,7 @@ public class ActionEnemyMove : ActionBase
                     return true;
                 }
                 patrolEnemy.ResetOriginal();
-                Debug.Log("巡逻敌人到达新的巡逻点");
+                //Debug.Log("巡逻敌人到达新的巡逻点");
                 return true;
             }
         }
@@ -205,7 +205,7 @@ public class ActionEnemyMove : ActionBase
             if (enemy.coordPlayer.isMin)
             {
                 // 不转向
-                Debug.Log("到达追踪点不转向");
+                //Debug.Log("到达追踪点不转向");
                 var checkResult = enemy.CheckPlayer();
                 if (checkResult == CheckPlayerResult.None)
                 {
@@ -216,7 +216,7 @@ public class ActionEnemyMove : ActionBase
             else if (enemy.coordPlayer.isMax)
             {
                 // 转向上一个路径点
-                Debug.Log("到达追踪点转向上一个路径点");
+                //Debug.Log("到达追踪点转向上一个路径点");
                 enemy.LookAt(enemy.lastCoord.name);
                 var sameDirection = enemy._direction == enemy.targetDirection;
                 if (sameDirection)
@@ -332,8 +332,8 @@ public class ActionEnemyMove : ActionBase
         {
             if (character.selected_tile_s.db_path_lowest.Count > 0)
                 character.move_tile(character.selected_tile_s);
-            else
-                Debug.Log("no valid tile selected");
+            //else
+            //    Debug.Log("no valid tile selected");
         }
 
         // 先转向 再位移

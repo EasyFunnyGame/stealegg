@@ -788,9 +788,9 @@ public class GameCanvas : BaseCanvas
     }
 
 
-    Vector2 beginPosition;
+    Vector3 beginPosition;
 
-    Vector2 endPosition;
+    float beginDragTime;
 
     public void BeginDrag()
     {
@@ -800,51 +800,72 @@ public class GameCanvas : BaseCanvas
             return;
         }
         beginPosition = Input.mousePosition;
+        Game.Instance.draging = true;
+        beginDragTime = Time.time;
     }
+
 
     public void EndDrag()
     {
+        var endDragTime = Time.time;
+        if(endDragTime - beginDragTime > 0.5f)
+        {
+            Debug.Log("滑动时间太长");
+            return;
+        }
+        Game.Instance.draging = false;
         if (Game.Instance.result != GameResult.NONE) return;
         if(Input.touchCount>1)
         {
             Debug.Log("EndDrag 多点触控" + Input.touchCount);
             return;
         }
-        endPosition = Input.mousePosition;
-        var direction = endPosition - beginPosition;
-        var sceneDirection = Game.Instance.camera.transform.InverseTransformPoint(direction).normalized;
-        var player = Game.Instance.player;
+        var  sceneDirection  = Input.mousePosition - beginPosition;
+
+        var direction = Game.Instance.camera.transform.InverseTransformPoint(sceneDirection).normalized;
 
         if (Game.Instance.pausing) return;
+        var player = Game.Instance.player;
         if (player.currentAction != null)
         {
             return;
         }
-          
+       
+
+        var thresHold = Mathf.Abs(direction.x) - Mathf.Abs(direction.z);
+
+        if (Mathf.Abs(thresHold) < 0.2f)
+        {
+            return;
+        }
+
+        direction.x = thresHold > 0 ? Mathf.Round(direction.x) : 0;
+
+        direction.z = thresHold < 0 ? Mathf.Round(direction.z) : 0;
+
+        
         var targetOffsetX = 0;
         var targetOffsetZ = 0;
 
-        if (Mathf.Abs(sceneDirection.x) > Mathf.Abs(sceneDirection.y))
+        if (direction.x == 1 && direction.z == 0)
         {
-            if (sceneDirection.x > 0)
-            {
-                targetOffsetZ = -1;
-            }
-            else
-            {
-                targetOffsetZ = 1;
-            }
+            targetOffsetX = 1;
+            //Debug.Log("滑动方向右");
         }
-        else
+        else if (direction.x == -1 && direction.z == 0)
         {
-            if (sceneDirection.z > 0)
-            {
-                targetOffsetX = -1;
-            }
-            else
-            {
-                targetOffsetX = 1;
-            }
+            targetOffsetX = -1;
+            //Debug.Log("滑动方向左");
+        }
+        else if (direction.z == 1 && direction.x == 0)
+        {
+            targetOffsetZ = -1;
+            //Debug.Log("滑动方向上");
+        }
+        else if (direction.z == -1 && direction.x == 0)
+        {
+            targetOffsetZ = 1;
+            //Debug.Log("滑动方向下");
         }
 
         var targetCoordX = player.coord.x + targetOffsetX;
@@ -875,7 +896,7 @@ public class GameCanvas : BaseCanvas
         var linkLine = player.boardManager.FindLine(player.currentTile.name, targetTileName);
         if (linkLine == null || linkLine.through == false)
         {
-            AudioPlay.Instance.ClickUnWalkable();
+            //AudioPlay.Instance.ClickUnWalkable();
             return;
         }
         if (player.moving || player.currentTile != targetTile)

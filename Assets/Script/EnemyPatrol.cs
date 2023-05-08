@@ -75,7 +75,7 @@ public class EnemyPatrol : Enemy
 
     public override void DoDefaultAction()
     {
-        Debug.Log( this.gameObject.name +  "进行默认行为");
+        //Debug.Log( this.gameObject.name +  "进行默认行为");
         this.patroling = true;
 
         var nextPatrol = this.front;
@@ -172,7 +172,7 @@ public class EnemyPatrol : Enemy
         if (patroling)
         {
             UpdateFartest();
-            Debug.Log("巡逻敌人到达点111");
+            //Debug.Log("巡逻敌人到达点111");
         }
     }
 
@@ -182,7 +182,7 @@ public class EnemyPatrol : Enemy
         if( patroling )
         {
             UpdateFartest();
-            Debug.Log("巡逻敌人到达点222");
+            //Debug.Log("巡逻敌人到达点222");
         }
     }
 
@@ -220,7 +220,7 @@ public class EnemyPatrol : Enemy
             if(boardNode?.name == name )
             {
                 patrolEnd = boardNode;
-                Debug.Log("最远巡逻路径点" + name);
+                //Debug.Log("最远巡逻路径点" + name);
                 coord_x += offsetX;
                 coord_z += offsetZ;
             }

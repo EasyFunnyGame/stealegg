@@ -312,11 +312,13 @@ public class Game : MonoBehaviour
         player.CheckBottle();
     }
 
+    public bool draging = false;
+
     void ListenBottleTargetSelect()
     {
         if (pausing) return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !draging)
         {
             Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
@@ -741,7 +743,7 @@ public class Game : MonoBehaviour
             {
                 if (linkLine == null)
                 {
-                    Debug.Log("路径点连接GameObject名字出错");
+                    //Debug.Log("路径点连接GameObject名字出错");
                 }
                 AudioPlay.Instance.ClickUnWalkable();
                 return;

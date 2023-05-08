@@ -87,7 +87,7 @@ public class BoardManager : MonoBehaviour
 
     public void Ready()
     {
-        Debug.Log("准备好");
+        //Debug.Log("准备好");
     }
 
 
