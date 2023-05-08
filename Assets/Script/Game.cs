@@ -312,13 +312,12 @@ public class Game : MonoBehaviour
         player.CheckBottle();
     }
 
-    public bool draging = false;
 
     void ListenBottleTargetSelect()
     {
         if (pausing) return;
 
-        if (Input.GetMouseButtonDown(0) && !draging)
+        if (Input.GetMouseButtonDown(0) )
         {
             Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;

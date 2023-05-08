@@ -430,7 +430,7 @@ public class Enemy : Character
     {
         base.Turned();
         UpdateRouteMark();
-        Debug.Log("转向完毕更新检测点");
+        //Debug.Log("转向完毕更新检测点");
 
         if(coord.name == originalCoord.name && _direction == originalDirection && !coordTracing.isLegal)
         {

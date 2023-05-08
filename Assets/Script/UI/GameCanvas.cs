@@ -800,7 +800,6 @@ public class GameCanvas : BaseCanvas
             return;
         }
         beginPosition = Input.mousePosition;
-        Game.Instance.draging = true;
         beginDragTime = Time.time;
     }
 
@@ -810,10 +809,9 @@ public class GameCanvas : BaseCanvas
         var endDragTime = Time.time;
         if(endDragTime - beginDragTime > 0.5f)
         {
-            Debug.Log("滑动时间太长");
+            //Debug.Log("滑动时间太长");
             return;
         }
-        Game.Instance.draging = false;
         if (Game.Instance.result != GameResult.NONE) return;
         if(Input.touchCount>1)
         {
@@ -834,7 +832,7 @@ public class GameCanvas : BaseCanvas
 
         var thresHold = Mathf.Abs(direction.x) - Mathf.Abs(direction.z);
 
-        if (Mathf.Abs(thresHold) < 0.2f)
+        if (Mathf.Abs(thresHold) < 0.25f)
         {
             return;
         }
@@ -906,10 +904,21 @@ public class GameCanvas : BaseCanvas
         }
     }
 
+    Vector3 downPosition;
 
-    public void ClickGameBoard()
+    public void PointerDown()
     {
-        Game.Instance.ClickGameBoard();
+        downPosition = Input.mousePosition;
+    }
+
+    public void PointerUp()
+    {
+        var upPosition = Input.mousePosition;
+        var distance = Vector3.Distance(upPosition, downPosition);
+        if (distance < 10 )
+        {
+            Game.Instance.ClickGameBoard();
+        }
     }
 
 }
