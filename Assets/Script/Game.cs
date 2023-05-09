@@ -160,6 +160,8 @@ public class Game : MonoBehaviour
         camera.upper = false;
 
         boardManager.Ready();
+
+        CleearMoves();
     }
 
 
@@ -274,6 +276,7 @@ public class Game : MonoBehaviour
                 playerTurn = false;
                 enemyTurn = true;
 
+                
                 // 更新敌人行为
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
@@ -314,6 +317,7 @@ public class Game : MonoBehaviour
         if (result == GameResult.NONE && player.currentAction == null && !enemyActionRunning)
         {
             ShowGuide();
+            UpdateMoves();
             // ListenClick();
         }
 
@@ -763,5 +767,81 @@ public class Game : MonoBehaviour
                 //Debug.Log("主角行为====移动");
             }
         }
+    }
+
+    private List<Animator> enemyMoves = new List<Animator>();
+    private Dictionary<string, Animator> showingMoves = new Dictionary<string, Animator>();
+
+    private void CleearMoves()
+    {
+        foreach(var kvp in showingMoves)
+        {
+            //if (kvp.Value.gameObject.) continue;
+            //Destroy(kvp.Value.gameObject);
+        }
+        showingMoves.Clear();
+        for(var index = 0; index < enemyMoves.Count; index++)
+        {
+            //Destroy(enemyMoves[index]);
+        }
+        enemyMoves.Clear();
+    }
+
+    public void AddMoves(Animator enemyMove)
+    {
+        enemyMoves.Add(enemyMove);
+        enemyMove.gameObject.SetActive(false);
+        //Debug.Log("添加  enemy move " + enemyMoves.Count);
+    }
+
+    public void UpdateMoves(string playName ="")
+    {
+        // 所有需要显示的追踪点
+        var tracingCoords = new List<string>();
+        if(!string.IsNullOrEmpty(playName))
+        {
+            tracingCoords.Add(playName);
+        }
+        for(var index = 0; index < boardManager.enemies.Count; index++)
+        {
+            var enemy = boardManager.enemies[index];
+            var coord = enemy.coordTracing;
+            if (!coord.isLegal) continue;
+            tracingCoords.Add(coord.name);
+        }
+
+        // 删掉已经不需要继续显示的特效
+        var removeKeys = new List<string>();
+        foreach (var kvp in showingMoves)
+        {
+            if (tracingCoords.IndexOf(kvp.Key) == -1)
+            {
+                kvp.Value.gameObject.SetActive(false);
+                enemyMoves.Add(kvp.Value);
+                removeKeys.Add(kvp.Key);
+            }
+        }
+        for(var index = 0; index  < removeKeys.Count; index++)
+        {
+            showingMoves.Remove(removeKeys[index]);
+        }
+
+        // 如果没有显示，则添加
+        for (var index = 0; index < tracingCoords.Count; index ++)
+        {
+            var coordName = tracingCoords[index];
+            var showingMove = showingMoves.ContainsKey(coordName);
+            if (showingMove) continue;
+            if (enemyMoves.Count <= 0) continue;
+            var move = enemyMoves[0];
+            enemyMoves.RemoveAt(0);
+            var node = boardManager.FindNode(coordName);
+            if (node == null) continue;
+            move.gameObject.SetActive(true);
+            move.transform.position = node.transform.position;
+            move.transform.parent = null;
+            showingMoves.Add(coordName, move);
+        }
+        
     }
 }

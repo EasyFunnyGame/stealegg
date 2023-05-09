@@ -120,6 +120,7 @@ public class Enemy : Character
         Reached();
         DisapearTraceTarget(false);
         routeArrow.transform.parent = route.transform.parent;
+        Game.Instance.AddMoves(enemyMove);
     }
 
     public Vector3 getHeadPointPosition()
@@ -184,7 +185,8 @@ public class Enemy : Character
 
                 originalTile = null;
                 coordTracing = coordLure.Clone();
-                ShowTraceTarget(coordLure.name);
+                Game.Instance.UpdateMoves();
+                //ShowTraceTarget(coordLure.name);
                 ShowFound();
 
                 var playerSteps = player.StepsReach(coord.name);
@@ -201,7 +203,8 @@ public class Enemy : Character
                             var enemySteps = StepsReach(player.coord.name);
 
                             coordTracing = player.coord.Clone();
-                            ShowTraceTarget(player.coord.name);
+                            Game.Instance.UpdateMoves();
+                            //ShowTraceTarget(player.coord.name);
                             coordPlayer = player.coord.Clone();
                             stepsAfterFoundPlayer = 0;
                             updateCoordPlayer = true;
@@ -267,7 +270,8 @@ public class Enemy : Character
                     }
 
                     coordTracing = boardManager.growthLure.Clone();
-                    ShowTraceTarget(player.coord.name);
+                    Game.Instance.UpdateMoves();
+                    //ShowTraceTarget(player.coord.name);
                     ShowFound();
 
                     //else
@@ -727,25 +731,25 @@ public class Enemy : Character
 
                     updateCoordPlayer = true;
 
-                    var playerSteps = player.StepsReach(coord.name);
+                    //var playerSteps = player.StepsReach(coord.name);
                     var enemySteps = StepsReach(player.coord.name);
-                    if (playerSteps == enemySteps)
-                    {
-                        // 敌人能直达
-                    }
-                    else
-                    {
-                        // 敌人不能直达
-                        //coordPlayer.SetTurnBack();
-                    }
+                    //if (playerSteps == enemySteps)
+                    //{
+                    //    // 敌人能直达
+                    //}
+                    //else
+                    //{
+                    //    // 敌人不能直达
+                    //    //coordPlayer.SetTurnBack();
+                    //}
                     if( patroling && enemySteps >= 3)
                     {
                         coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
                     }
 
-                   
 
-                    ShowTraceTarget(coordRed.name);
+                    Game.Instance.UpdateMoves();
+                    //ShowTraceTarget(coordRed.name);
                     ShowFound();
                     originalTile = null;
                     patroling = false;
@@ -863,7 +867,7 @@ public class Enemy : Character
                 }
                 else
                 {
-                    enemyMove.gameObject.SetActive(false);
+                    //enemyMove.gameObject.SetActive(false);
                 }
             }
         }
@@ -872,8 +876,8 @@ public class Enemy : Character
 
     public virtual void DisapearTraceTarget(bool play = true)
     {
-        enemyMove.transform.parent = transform;
-        enemyMove.gameObject.SetActive(false);
+        //enemyMove.transform.parent = transform;
+        //enemyMove.gameObject.SetActive(false);
         if(play)
         {
             AudioPlay.Instance.PlayNotFound(this);

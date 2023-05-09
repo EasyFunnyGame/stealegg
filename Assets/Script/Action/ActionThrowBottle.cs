@@ -92,7 +92,9 @@ public class ActionThrowBottle : ActionBase
                     var distanceFromZ = Mathf.Abs(z - coord.z);
                     if (distanceFromX <= 2 && distanceFromZ <= 2)
                     {
-                        enemy.ShowTraceTarget(targetTileName);
+                        Game.Instance.UpdateMoves(targetTileName);
+                        break;
+                        //enemy.ShowTraceTarget(targetTileName);
                     }
                 }
                 AudioPlay.Instance.PlayerBottleGrounded();

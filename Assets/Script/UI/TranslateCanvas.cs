@@ -108,7 +108,21 @@ public class TranslateCanvas : BaseCanvas
             if (player != null)
             {
                 player.PlayStealEffect(player.transform.position);
-
+                var targetArray = player.coord.name.Split('_');
+                var x = int.Parse(targetArray[0]);
+                var z = int.Parse(targetArray[1]);
+                foreach (var enemy in player.boardManager.enemies)
+                {
+                    var coord = enemy.coord;
+                    var distanceFromX = Mathf.Abs(x - coord.x);
+                    var distanceFromZ = Mathf.Abs(z - coord.z);
+                    if (distanceFromX <= 2 && distanceFromZ <= 2)
+                    {
+                        Game.Instance.UpdateMoves(player.coord.name);
+                        break;
+                        //enemy.ShowTraceTarget(targetTileName);
+                    }
+                }
                 player.justSteal = true;
             }
         }
