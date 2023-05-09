@@ -216,7 +216,7 @@ public class ActionEnemyMove : ActionBase
             else if (enemy.coordPlayer.isMax)
             {
                 // 转向上一个路径点
-                //Debug.Log("到达追踪点转向上一个路径点");
+                // Debug.Log("到达追踪点转向上一个路径点");
                 enemy.LookAt(enemy.lastCoord.name);
                 var sameDirection = enemy._direction == enemy.targetDirection;
                 if (sameDirection)
@@ -232,38 +232,39 @@ public class ActionEnemyMove : ActionBase
             else
             {
                 // 转向从主角寻路到敌人本身到倒数第二个点
-                var player = Game.Instance.player;
-                var lastTile = player.gridManager.GetTileByName(player.lastCoord.name);
-                var dstTile = player.gridManager.GetTileByName(enemy.currentTile.name);
-                var path = new List<string>();
-                var lookAtTileName = "";
-                if (player.lastCoord.name.Equals(enemy.currentTile.name))
-                {
-                    path = player.GetPathFromTo(dstTile, player.currentTile);
-                    if (path.Count >= 2)
-                    {
-                        lookAtTileName = path[path.Count - 2];
-                    }
-                    else
-                    {
-                        lookAtTileName = player.coord.name;
-                    }
-                }
-                else
-                {
-                    path = player.GetPathFromTo(dstTile, lastTile);
-                    if (path.Count >= 2)
-                    {
-                        lookAtTileName = path[path.Count - 2];
-                    }
-                    else
-                    {
-                        lookAtTileName = player.lastCoord.name;
-                    }
-                }
-               
-                
-                if(!string.IsNullOrEmpty(lookAtTileName))
+                //var player = Game.Instance.player;
+                //var lastTile = player.gridManager.GetTileByName(player.lastCoord.name);
+                //var dstTile = player.gridManager.GetTileByName(enemy.currentTile.name);
+                //var path = new List<string>();
+                //var lookAtTileName = "";
+                //if (player.lastCoord.name.Equals(enemy.currentTile.name))
+                //{
+                //    path = player.GetPathFromTo(dstTile, player.currentTile);
+                //    if (path.Count >= 2)
+                //    {
+                //        lookAtTileName = path[path.Count - 2];
+                //    }
+                //    else
+                //    {
+                //        lookAtTileName = player.coord.name;
+                //    }
+                //}
+                //else
+                //{
+                //    path = player.GetPathFromTo(dstTile, lastTile);
+                //    if (path.Count >= 2)
+                //    {
+                //        lookAtTileName = path[path.Count - 2];
+                //    }
+                //    else
+                //    {
+                //        lookAtTileName = player.lastCoord.name;
+                //    }
+                //}
+                var lookAtTileName = enemy.coordPlayer.name;
+
+
+                if (!string.IsNullOrEmpty(lookAtTileName))
                 {
                     enemy.LookAt(lookAtTileName);
                     var sameDirection = enemy._direction == enemy.targetDirection;

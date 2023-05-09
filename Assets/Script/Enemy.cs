@@ -131,13 +131,17 @@ public class Enemy : Character
     public void UpdateTracingPlayerTile()
     {
         var player = Game.Instance.player;
-        if (player.justThroughNet && Coord.Distance(player.lastCoord, coord) > 1)
-        {
-            if(coordPlayer.isLegal)
-            {
-                coordPlayer.SetTurnBack();
-            }
-        }
+        //if (player.justThroughNet && Coord.Distance(player.lastCoord, coord) > 1)
+        //{
+        //    if(coordPlayer.isLegal)
+        //    {
+        //        coordPlayer.SetTurnBack();
+        //    }
+        //}
+
+        coordPlayer = player.coord.Clone();
+
+        updateCoordPlayer = false;
         // tobe filled
     }
 
@@ -161,7 +165,7 @@ public class Enemy : Character
         {
             return;
         }
-        if(result == CheckPlayerResult.None)
+        //if(result == CheckPlayerResult.None)
         {
             var coordLure = boardManager.coordLure;
             var rangeLure = boardManager.rangeLure;
@@ -200,6 +204,7 @@ public class Enemy : Character
                             ShowTraceTarget(player.coord.name);
                             coordPlayer = player.coord.Clone();
                             stepsAfterFoundPlayer = 0;
+                            updateCoordPlayer = true;
                             if (playerSteps == enemySteps)
                             {
                                 // 敌人能直达
@@ -207,7 +212,7 @@ public class Enemy : Character
                             else
                             {
                                 // 敌人不能直达 吹口哨时回头望
-                                coordPlayer.SetTurnBack();
+                                //coordPlayer.SetTurnBack();
                             }
                         }
                     }
@@ -287,6 +292,9 @@ public class Enemy : Character
                 UpdateTracingPlayerTile();
             }
 
+            
+
+
             var tile = gridManager.GetTileByName(coordTracing.name);
             if (tile == null)
             {
@@ -295,6 +303,16 @@ public class Enemy : Character
                 GoBack();
                 return;
             }
+
+            var same = Utils.SameDirectionWithLookingAt(coord.name, Game.Instance.player.coord.name, _direction);
+            var coordDistance = Coord.Distance(coordPlayer, coord);
+            var stepFront = StepsReach(front.name);
+            // 距离主角为2，而且前面一步可抵达，并且为敌人回合，并且敌人朝向主角
+            if (coordDistance == 2 && same && stepFront == 1 && Game.Instance.enemyTurn)
+            {
+                tile = gridManager.GetTileByName(front.name);
+            }
+
             var success = FindPathRealTime(tile);
             if (!success)
             {
@@ -512,7 +530,7 @@ public class Enemy : Character
                 {
                     continue;
                 }
-                if (enemy.coord.name == routeCoordName)
+                if (enemy.coord.name == routeCoordName && coord.name != routeCoordName)
                 {
                     isBlocked = true;
                     break;
@@ -694,18 +712,18 @@ public class Enemy : Character
     {
         var player = Game.Instance.player;
         if (player == null) return false;
-        var foundPlayerCoord = player.coord;
-        if (!foundPlayerCoord.isLegal) return false;
+
+        if (!player.coord.isLegal) return false;
         for(var index = 0; index < this.redNodes.Count; index++)
         {
             var coordRed = this.redNodes[index].coord;
-            if(coordRed.Equals(foundPlayerCoord) && !player.isHidding)
+            if(coordRed.Equals(player.coord) && !player.isHidding)
             {
                 var targetTile = gridManager.GetTileByName(coordRed.name);
                 if (targetTile != null)
                 {
-                    coordTracing = foundPlayerCoord.Clone();
-                    coordPlayer = foundPlayerCoord.Clone();
+                    coordTracing = player.coord.Clone();
+                    coordPlayer = player.coord.Clone();
 
                     updateCoordPlayer = true;
 
@@ -724,15 +742,8 @@ public class Enemy : Character
                     {
                         coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
                     }
-                    else if(enemySteps == 2)
-                    {
-                        updateCoordPlayer = false;
-                        // coordPlayer.SetTurnBack();
-                    }
-                    else
-                    {
 
-                    }
+                   
 
                     ShowTraceTarget(coordRed.name);
                     ShowFound();

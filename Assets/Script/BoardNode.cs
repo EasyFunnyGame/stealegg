@@ -64,6 +64,35 @@ public class BoardNode : MonoBehaviour
 
         if (characters.Count > 1)
         {
+            // 位置排序
+
+            var poses = new List<Vector3>();
+            foreach (var kvp  in positions)
+            {
+                poses.Add(kvp.Value);
+            }
+            for (var index = 0; index < characters.Count; index++)
+            {
+                var shortest = float.MaxValue;
+                Vector3 nearstPosition = Vector3.zero;
+                var nearestIndex = -1;
+                for (var jndex = 0; jndex < poses.Count; jndex++)
+                {
+                    var distance = Vector3.Distance(characters[index].transform.GetChild(0).position, poses[jndex]);
+                    if (distance < shortest)
+                    {
+                        shortest = distance;
+                        nearstPosition = poses[jndex];
+                        nearestIndex = jndex;
+                    }
+                }
+                if (nearestIndex != -1)
+                {
+                    poses.RemoveAt(nearestIndex);
+                    positions[characters[index].Uid] = nearstPosition;
+                }
+            }
+
             var count = characters.Count;
             for(var index = 0; index < characters.Count; index++)
             {
@@ -72,7 +101,7 @@ public class BoardNode : MonoBehaviour
                 {
                     var position = positions[enemy.Uid];
                     var child = enemy.transform.GetChild(0);
-                    child.position = Vector3.MoveTowards(child.position, position, 2 * Time.deltaTime);
+                    child.position = Vector3.MoveTowards(child.position, position, 3 * Time.deltaTime);
                 }
             }
         }
@@ -115,7 +144,7 @@ public class BoardNode : MonoBehaviour
     }
 
     Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
-
+    // List<Vector3> positions = new List<Vector3>();
     void RrefreshEnemyPosition()
     {
         positions.Clear();
@@ -175,6 +204,7 @@ public class BoardNode : MonoBehaviour
                 positions.Add(enemy.Uid, position - transform.right * 0.25f - transform.forward * 0.25f);
             }
         }
+
     }
 
     public void Red()

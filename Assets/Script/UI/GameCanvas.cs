@@ -229,6 +229,7 @@ public class GameCanvas : BaseCanvas
 
     private void onClickUseWhistleHandler()
     {
+        if (Game.Instance.bottleSelectingTarget) return;
         if (Game.Instance.player.moving) return;
         //if (Game.Instance.player.body_looking) return;
         if (Game.Instance.player.currentAction != null) return;
@@ -602,7 +603,7 @@ public class GameCanvas : BaseCanvas
                     icon_star.gameObject.SetActive(true);
                     break;
                 case ItemName.Item_Pincers:
-                    var pincersIcon = Instantiate(icon_template_pricers_template, transform);
+                    var pincersIcon = Instantiate(icon_template_pricers_template, icon_template_pricers_template.transform.parent);
                     pincersIcon.gameObject.SetActive(true);
                     icon_pincers.Add(pincersIcon);
                     pincersIcon.item = item;
@@ -610,7 +611,7 @@ public class GameCanvas : BaseCanvas
                     pincersIcon.button.onClick.AddListener(OnClickPricersHandler);
                     break;
                 case ItemName.Item_ManholeCover:
-                    var manCoverIcon = Instantiate(icon_template_manholecover_template, transform);
+                    var manCoverIcon = Instantiate(icon_template_manholecover_template, icon_template_manholecover_template.transform.parent);
                     manCoverIcon.gameObject.SetActive(true);
                     icon_manholecover.Add(manCoverIcon);
                     manCoverIcon.item = item;
@@ -620,7 +621,7 @@ public class GameCanvas : BaseCanvas
                     });
                     break;
                 case ItemName.Item_LureBottle:
-                    var bottleIcon = Instantiate(icon_template_bottle_template, transform);
+                    var bottleIcon = Instantiate(icon_template_bottle_template, icon_template_bottle_template.transform.parent);
                     bottleIcon.gameObject.SetActive(true);
                     icon_bottles.Add(bottleIcon);
                     bottleIcon.item = item;
@@ -628,7 +629,7 @@ public class GameCanvas : BaseCanvas
                     break;
                 case ItemName.item_Growth:
 
-                    var growthIcon = Instantiate(icon_template_growth_template, transform);
+                    var growthIcon = Instantiate(icon_template_growth_template, icon_template_growth_template.transform.parent);
                     growthIcon.gameObject.SetActive(true);
                     icon_growth.Add(growthIcon);
                     growthIcon.item = item;
@@ -650,6 +651,7 @@ public class GameCanvas : BaseCanvas
                     break;
             }
         }
+        icon_graff.transform.SetAsLastSibling();
     }
 
     void InitEnemyIcons(BoardManager boardManager)
@@ -657,7 +659,7 @@ public class GameCanvas : BaseCanvas
         for(var index = 0; index < boardManager.enemies.Count; index ++)
         {
             var enemy = boardManager.enemies[index];
-            var enemyIcon = Instantiate(icon_enemy_template,transform);
+            var enemyIcon = Instantiate(icon_enemy_template, icon_enemy_template.transform.parent);
             enemyIcon.enemy = enemy;
             enemy.icons = enemyIcon;
             icon_enemies.Add(enemyIcon);
@@ -807,7 +809,7 @@ public class GameCanvas : BaseCanvas
     public void EndDrag()
     {
         var endDragTime = Time.time;
-        if(endDragTime - beginDragTime > 0.5f)
+        if(endDragTime - beginDragTime > 1f)
         {
             //Debug.Log("滑动时间太长");
             return;
@@ -832,7 +834,7 @@ public class GameCanvas : BaseCanvas
 
         var thresHold = Mathf.Abs(direction.x) - Mathf.Abs(direction.z);
 
-        if (Mathf.Abs(thresHold) < 0.25f)
+        if (Mathf.Abs(thresHold) < 0.1f)
         {
             return;
         }

@@ -85,7 +85,6 @@ public class ActionThrowBottle : ActionBase
                 var targetArray = targetTileName.Split('_');
                 var x = int.Parse(targetArray[0]);
                 var z = int.Parse(targetArray[1]);
-                var targetTile = player.gridManager.GetTileByName(targetTileName);
                 foreach (var enemy in player.boardManager.enemies)
                 {
                     var coord = enemy.coord;
@@ -93,10 +92,7 @@ public class ActionThrowBottle : ActionBase
                     var distanceFromZ = Mathf.Abs(z - coord.z);
                     if (distanceFromX <= 2 && distanceFromZ <= 2)
                     {
-                        //if(enemy.foundPlayerTile==null)
-                        //{
-                        //    enemy.ShowTraceTarget(targetTile);
-                        //}
+                        enemy.ShowTraceTarget(targetTileName);
                     }
                 }
                 AudioPlay.Instance.PlayerBottleGrounded();

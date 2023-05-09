@@ -253,7 +253,9 @@ public class Game : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
-    
+
+    public bool enemyTurn = false;
+    public bool playerTurn = false;
 
     void GamePlayingUpdate()
     {
@@ -262,10 +264,16 @@ public class Game : MonoBehaviour
         if (player.justSteal) return;
         if (player.currentAction != null)
         {
+            playerTurn = true;
+            enemyTurn = false;
             if (player.currentAction.CheckComplete())
             {
                 // 主角动作完成回调
                 player.currentAction = null;
+
+                playerTurn = false;
+                enemyTurn = true;
+
                 // 更新敌人行为
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
@@ -282,7 +290,8 @@ public class Game : MonoBehaviour
         }
         else
         {
-            for(var i = 0; i < boardManager.enemies.Count; i++)
+            
+            for (var i = 0; i < boardManager.enemies.Count; i++)
             {
                 var enemy = boardManager.enemies[i];
                 if(enemy.currentAction!=null)
