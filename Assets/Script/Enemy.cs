@@ -104,9 +104,6 @@ public class Enemy : Character
     //
     public ReachTurnTo turnOnReachDirection = ReachTurnTo.None;
 
-    //
-    public string tracingTileName;
-
     // 红点范围
     public int checkRange = 0;
 
@@ -189,7 +186,7 @@ public class Enemy : Character
                 //ShowTraceTarget(coordLure.name);
                 ShowFound();
 
-                var playerSteps = player.StepsReach(coord.name);
+                var playerSteps = player.ReachInStepsFrom(coordLure.name,coord.name);   //player.StepsReach(coord.name);
                 if ( Coord.inLine(coordLure,coord) && playerSteps <= rangeLure)// 敌人、引诱点共线 并且路线能通行
                 {
                     // 直接赋值玩家追踪点，不在转向后检查主角，否则会直接抓捕
@@ -590,7 +587,7 @@ public class Enemy : Character
         {
             routeArrow.gameObject.SetActive(true);
             var lastRedNode = redNodes[redNodes.Count - 1];
-            routeArrow.transform.position = lastRedNode.transform.position;
+            routeArrow.transform.position = lastRedNode.transform.position+ new Vector3(0,0.015f,0);
 
             routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
             routeArrow.transform.Rotate(new Vector3(0, 0, 180));
@@ -839,40 +836,10 @@ public class Enemy : Character
     }
 
 
-    public virtual void ShowTraceTarget(string nodeName)
-    {
-        tracingTileName = nodeName;
-
-        var node = boardManager.FindNode(nodeName);
-
-        var enemies = boardManager.enemies;
-
-        var targetingTiles = new List<string>();
-
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            var enemy = enemies[i];
-            var targetingTileName = enemy.tracingTileName;
-            if (!string.IsNullOrEmpty(targetingTileName) && targetingTileName == nodeName)
-            {
-                var enemyMove = enemy.enemyMove;
-                var index = targetingTiles.IndexOf(targetingTileName);
-                if(index == -1)
-                {
-                    enemyMove.transform.parent = null;
-                    enemyMove.gameObject.SetActive(true);
-                    enemyMove.Play("Movement_Animation");
-                    enemyMove.transform.transform.position = node.transform.position;
-                    targetingTiles.Add(targetingTileName);
-                }
-                else
-                {
-                    //enemyMove.gameObject.SetActive(false);
-                }
-            }
-        }
-        m_animator.SetTrigger("stop_looking");
-    }
+    //public virtual void ShowTraceTarget(string nodeName)
+    //{
+    //    m_animator.SetTrigger("stop_looking");
+    //}
 
     public virtual void DisapearTraceTarget(bool play = true)
     {
@@ -882,7 +849,6 @@ public class Enemy : Character
         {
             AudioPlay.Instance.PlayNotFound(this);
         }
-        tracingTileName = "";
     }
 
     public virtual void LostTarget()

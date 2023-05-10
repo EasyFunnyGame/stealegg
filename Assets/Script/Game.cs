@@ -52,6 +52,8 @@ public class Game : MonoBehaviour
 
     public bool stealed = false;
 
+    public bool walkingToExit = false;
+
     public bool bottleSelectingTarget = false;
 
     public static int MAX_LEVEL = 35;
@@ -107,6 +109,7 @@ public class Game : MonoBehaviour
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
         stealed = false;
+        walkingToExit = false;
         boardManager = boardMgr;
         var nameArr = sceneName.Split('-');
         var chapter = int.Parse(nameArr[0]);

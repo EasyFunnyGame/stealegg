@@ -577,6 +577,26 @@ public class Character : MonoBehaviour
         return -1;
     }
 
+    public int ReachInStepsFrom(string to, string from)
+    {
+        if (gridManager == null) return int.MaxValue;
+        var fromTile = gridManager.GetTileByName(from);
+        var toTile = gridManager.GetTileByName(to);
+        if (fromTile == null || toTile == null) return int.MaxValue;
+
+        var tempCurrentTile = _currentTile;
+
+        _currentTile = fromTile;
+
+        var pathLength = 0;
+        selected_tile_s = toTile;
+        gridManager.find_paths_realtime(this, toTile);
+        pathLength = toTile.db_path_lowest.Count;
+        Clear();
+        _currentTile = tempCurrentTile;
+        return pathLength;
+    }
+
     public bool CanReachInSteps(string tileName,int step = 1)
     {
         if (gridManager == null) return false;

@@ -8,8 +8,6 @@ public class ActionPlayerMove : ActionBase
 
     bool crounching=false;
 
-    bool walkingExit = false;
-
 
     Vector3 startPosition;
 
@@ -19,7 +17,6 @@ public class ActionPlayerMove : ActionBase
     {
         player.justThroughNet = false;
         player.justJump = false;
-        walkingExit = false;
 
         if(player.isHidding)
         {
@@ -88,7 +85,7 @@ public class ActionPlayerMove : ActionBase
                 if (endItem != null && endItem.itemType == ItemType.End)
                 {
                     player.m_animator.SetFloat("move_type", 1);
-                    walkingExit = true;
+                    Game.Instance.walkingToExit = true;
                 }
             }
         }
@@ -116,7 +113,7 @@ public class ActionPlayerMove : ActionBase
             {
                 character.body_looking = false;
                 character.Reached();
-                if(walkingExit)
+                if(Game.Instance.walkingToExit)
                 {
                     AudioPlay.Instance.PlayReachExit();
                 }
@@ -160,7 +157,7 @@ public class ActionPlayerMove : ActionBase
         if (character.moving)
         {
            
-            if(crounching || walkingExit)
+            if(crounching || Game.Instance.walkingToExit)
             {
                 float step = character.move_speed * Time.deltaTime;
                 character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);

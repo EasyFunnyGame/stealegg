@@ -153,6 +153,15 @@ public class GameCanvas : BaseCanvas
 
     private void onClickPasueGameHandler()
     {
+        if(Game.Instance.result != GameResult.NONE)
+        {
+            return;
+        }
+        if (Game.Instance.walkingToExit)
+        {
+            return; 
+        }
+
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
         AudioPlay.Instance.PlayClick();

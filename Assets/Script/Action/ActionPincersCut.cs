@@ -67,18 +67,19 @@ public class ActionPincersCut : ActionBase
         AudioPlay.Instance.PlayPrincersCut();
         var boardManager = Game.Instance.boardManager;
         var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
-        foreach (var kvp in nodes)
-        {
-            for (var index = 0; index < boardManager.enemies.Count; index++)
-            {
-                var enemy = boardManager.enemies[index];
-                if (enemy.coord.name == kvp.Key)
-                {
-                    //enemy.LureWhistle(player.currentTile.name);
-                    enemy.ShowTraceTarget(player.coord.name);
-                }
-            }
-        }
+        //foreach (var kvp in nodes)
+        //{
+        //    for (var index = 0; index < boardManager.enemies.Count; index++)
+        //    {
+        //        var enemy = boardManager.enemies[index];
+        //        if (enemy.coord.name == kvp.Key)
+        //        {
+        //            //enemy.LureWhistle(player.currentTile.name);
+        //            enemy.ShowTraceTarget(player.coord.name);
+        //        }
+        //    }
+        //}
+        Game.Instance.UpdateMoves();
         pincers.Cut();
         player.PlayeWhitsleEffect(player.transform.position);
         pincers.picked = true;
