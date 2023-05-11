@@ -29,7 +29,7 @@ public class ActionEnemyMove : ActionBase
         velocity = new Vector3();
         enemy.FindPathRealTime(tile);
 
-        Debug.Log("位置偏移量:" + enemy.bodyPositionOffset);
+        // Debug.Log("位置偏移量:" + enemy.bodyPositionOffset);
 
         targetPosition = enemy.db_moves[0].position;
         var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
@@ -379,7 +379,7 @@ public class ActionEnemyMove : ActionBase
             //}
             
             var myPosition = character.transform.position;
-            var targetPosition = character.db_moves[0].position;
+            //var targetPosition = character.db_moves[0].position;
             var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
             if (tdist < 0.001f)
             {

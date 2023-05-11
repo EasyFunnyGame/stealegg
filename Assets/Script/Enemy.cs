@@ -111,6 +111,8 @@ public class Enemy : Character
 
     public Vector3 bodyPositionOffset = Vector3.zero;
 
+    public float moveDistance = 0;
+
     public override void Start()
     {
         lookAroundTime = 9;

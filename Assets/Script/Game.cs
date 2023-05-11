@@ -287,74 +287,103 @@ public class Game : MonoBehaviour
                     enemy.CheckAction();
                 }
 
-                var enemyUid2Poses = new Dictionary<string, List<Enemy>>();
-                for (var i = 0; i < boardManager.enemies.Count; i++)
-                {
-                    var enemy = boardManager.enemies[i];
-                    enemy.bodyPositionOffset = Vector3.zero;
-                    var action = enemy.currentAction;
-                    if(action == null || action is ActionEnemyMove)
-                    {
-                        var moveOne = enemy.db_moves[0];
-                        Debug.Log("敌人:" + enemy.Uid + " 下一个目的点:" + moveOne.transform.position);
-                        var targetNodeName = string.Format("{0}_{1}", moveOne.transform.position.x, moveOne.transform.position.z);
-                        
-                        if(enemyUid2Poses.ContainsKey(targetNodeName))
-                        {
-                            enemyUid2Poses[targetNodeName].Add(enemy);
-                        }
-                        else
-                        {
-                            var list = new List<Enemy>();
-                            list.Add(enemy);
-                            enemyUid2Poses[targetNodeName] = list;
-                        }
-                    }
-                }
+                //var enemyUid2Poses = new Dictionary<string, List<Enemy>>();
+                //for (var i = 0; i < boardManager.enemies.Count; i++)
+                //{
+                //    var enemy = boardManager.enemies[i];
+                //    enemy.bodyPositionOffset = Vector3.zero;
+                //    var targetNodeName = "";
+                //    if (enemy.currentAction is ActionEnemyMove)
+                //    {
+                //        var moveOne = enemy.db_moves[0];
+                //        Debug.Log("敌人:" + enemy.Uid + " 下一个目的点:" + moveOne.transform.position);
+                //        targetNodeName = string.Format("{0}_{1}", moveOne.transform.position.x, moveOne.transform.position.z);
+                //    }
+                //    else
+                //    {
+                //        targetNodeName = enemy.coord.name;
+                //    }
+
+                //    if (string.IsNullOrEmpty(targetNodeName)) continue;
+
+                //    if (enemyUid2Poses.ContainsKey(targetNodeName))
+                //    {
+                //        enemyUid2Poses[targetNodeName].Add(enemy);
+                //    }
+                //    else
+                //    {
+                //        var list = new List<Enemy>();
+                //        list.Add(enemy);
+                //        enemyUid2Poses[targetNodeName] = list;
+                //    }
+                //}
+
+                //var nodes = boardManager.nodes;
+                //foreach(var kvp in nodes)
+                //{
+                //    var node = kvp.Value;
+                //    node.ClearCharacters();
+                //}
+
+                //foreach ( var kvp in enemyUid2Poses)
+                //{
+                //    var nodeName = kvp.Key;
+
+                //    var enemyList = kvp.Value;
+
+                //    var boardNode = boardManager.FindNode(nodeName);
+                //    if (boardNode == null) continue;
+
+                //    if (enemyList.Count < 1 || enemyList.Count > 4) continue;
+
+                //    var positions = boardNode.getPositions(enemyList.Count);
+
+                //    var occupied = new List<Vector3>();
+
+                //    for( var index = 0; index < enemyList.Count; index++ ) 
+                //    {
+                //        var dis = float.MaxValue;
+                //        var selectedPosition = Vector3.zero;
+                //        var enemy = enemyList[index];
+                //        for(var posIndex = 0; posIndex < positions.Count; posIndex++)
+                //        {
+                //            var pos = positions[posIndex];
+                //            if (occupied.IndexOf(pos) != -1)
+                //            {
+                //                continue;
+                //            }
+                //            var testDis = Vector3.Distance(enemy.tr_body.GetChild(0).position, pos);
+                //            if(testDis < dis)
+                //            {
+                //                dis = testDis;
+                //                selectedPosition = pos;
+                //            }
+                //        }
+                //        if (!selectedPosition.Equals(Vector3.zero))
+                //        {
+                //            enemy.bodyPositionOffset = selectedPosition;
+                //            occupied.Add(selectedPosition);
+                //            // enemy.db_moves[0].transform.position = selectedPosition;
+                //        }
+                //    }
+                //}
+
+                //foreach(var kvp  in enemyUid2Poses)
+                //{
+                //    var nodeName = kvp.Key;
+
+                //    var enemyList = kvp.Value;
+                    
+                //    var boardNode = boardManager.FindNode(nodeName);
+                //    if (boardNode == null) continue;
+                //    boardNode.SetCharacterCount(enemyList.Count);
+                //    for (var index = 0;index < enemyList.Count; index++)
+                //    {
+                //        boardNode.AddCharacter(enemyList[index]);
+                //    }
+                //}
 
 
-                foreach( var kvp in enemyUid2Poses)
-                {
-                    var nodeName = kvp.Key;
-
-                    var enemyList = kvp.Value;
-
-                    var boardNode = boardManager.FindNode(nodeName);
-                    if (boardNode == null) continue;
-
-                    if (enemyList.Count < 2 || enemyList.Count > 4) continue;
-
-                    var positions = boardNode.getPositions(enemyList.Count);
-
-                    var occupied = new List<Vector3>();
-
-                    for( var index = 0; index < enemyList.Count; index++ ) 
-                    {
-                        var dis = float.MaxValue;
-                        var selectedPosition = Vector3.zero;
-                        var enemy = enemyList[index];
-                        for(var posIndex = 0; posIndex < positions.Count; posIndex++)
-                        {
-                            var pos = positions[posIndex];
-                            if (occupied.IndexOf(pos) != -1)
-                            {
-                                continue;
-                            }
-                            var testDis = Vector3.Distance(enemy.tr_body.position, pos);
-                            if(testDis < dis)
-                            {
-                                dis = testDis;
-                                selectedPosition = pos;
-                            }
-                        }
-                        if (!selectedPosition.Equals(Vector3.zero))
-                        {
-                            enemy.bodyPositionOffset = selectedPosition;
-                            occupied.Add(selectedPosition);
-                            // enemy.db_moves[0].transform.position = selectedPosition;
-                        }
-                    }
-                }
                 boardManager.coordLure.SetNoTurn();
                 boardManager.growthLure.SetNoTurn();
             }

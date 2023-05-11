@@ -72,6 +72,7 @@ public class BoardManager : MonoBehaviour
     // 主角捡到瓶子的数量最多只能为1,如果有了瓶子不能继续再捡起来
     public int bottleCount = 0;
 
+
     private void Awake()
     {
         Enemy.count = 0;
@@ -82,18 +83,13 @@ public class BoardManager : MonoBehaviour
         ResetItems();
         ResetEnemies();
         ResetSquareNodes();
+
         Game.Instance.SceneLoaded(this, name);
     }
 
     public void Ready()
     {
         //Debug.Log("准备好");
-    }
-
-
-    // Update is called once per frame
-    void Update() {
-        
     }
 
     #region RunTime

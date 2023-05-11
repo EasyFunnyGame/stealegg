@@ -51,16 +51,19 @@ public class BoardNode : MonoBehaviour
         trigger.node = this;
 
         var list = new List<Vector3>();
+        list.Add(transform.position);
+        m_positions[1] = list;
+
+        list = new List<Vector3>();
         list.Add(transform.position + transform.right * 0.25f);
         list.Add(transform.position - transform.right * 0.25f);
         m_positions[2] = list;
 
         list = new List<Vector3>();
-
-        m_positions[3] = list;
         list.Add(transform.position + transform.right * 0.25f + transform.forward * 0.25f);
         list.Add(transform.position - transform.right * 0.25f + transform.forward * 0.25f);
         list.Add(transform.position - transform.forward * 0.25f);
+        m_positions[3] = list;
 
         list = new List<Vector3>();
         list.Add(transform.position + transform.right * 0.25f + transform.forward * 0.25f);
@@ -71,12 +74,6 @@ public class BoardNode : MonoBehaviour
     }
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     float counturScale = 1;
     // Update is called once per frame
     void Update()
@@ -86,7 +83,58 @@ public class BoardNode : MonoBehaviour
             counturScale = Mathf.Abs(Mathf.Sin(Time.time * 2))*0.05f;
             contour.transform.localScale = new Vector3(0.15f + counturScale, 0.15f + counturScale, 0.15f + counturScale);
         }
+        //if (characters.Count > 1)
+        //{
+        //    // 位置排序
+
+        //    var poses = new List<Vector3>();
+        //    foreach (var kvp in positions)
+        //    {
+        //        poses.Add(kvp.Value);
+        //    }
+        //    for (var index = 0; index < characters.Count; index++)
+        //    {
+        //        var shortest = float.MaxValue;
+        //        Vector3 nearstPosition = Vector3.zero;
+        //        var nearestIndex = -1;
+        //        for (var jndex = 0; jndex < poses.Count; jndex++)
+        //        {
+        //            var distance = Vector3.Distance(characters[index].transform.GetChild(0).position, poses[jndex]);
+        //            if (distance < shortest)
+        //            {
+        //                shortest = distance;
+        //                nearstPosition = poses[jndex];
+        //                nearestIndex = jndex;
+        //            }
+        //        }
+        //        if (nearestIndex != -1)
+        //        {
+        //            poses.RemoveAt(nearestIndex);
+        //            positions[characters[index].Uid] = nearstPosition;
+        //        }
+        //    }
+
+        var count = characters.Count;
+        if (count < 1) return;
+        for (var index = 0; index < characters.Count; index++)
+        {
+            var enemy = characters[index];
+            if (positions.ContainsKey(enemy.Uid))
+            {
+                var position = positions[enemy.Uid];
+                var child = enemy.transform.GetChild(0);
+                child.position = Vector3.MoveTowards(child.position, position, 3 * Time.deltaTime);
+            }
+        }
+        //}
+        //else if (characters.Count == 1)
+        //{
+        //    var enemy = characters[0];
+        //    var child = enemy.transform.GetChild(0);
+        //    child.localPosition = Vector3.MoveTowards(child.localPosition, Vector3.zero, 2 * Time.deltaTime);
+        //}
     }
+
     public void OnTriggerEnter(Collider other)
     {
         var enemy = other.transform.parent?.GetComponent<Enemy>();
@@ -96,10 +144,10 @@ public class BoardNode : MonoBehaviour
             {
                 characters.Add(enemy);
             }
+            RrefreshEnemyPosition();
             //Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
         }
     }
-
     public void OnTriggerExit(Collider other)
     {
         var enemy = other.transform.parent?.GetComponent<Enemy>();
@@ -111,8 +159,149 @@ public class BoardNode : MonoBehaviour
             {
                 characters.RemoveAt(index);
             }
+            RrefreshEnemyPosition();
             //Debug.Log("位置:"+ gameObject.name + " 敌人数量:" + characters.Count);
         }
+    }
+
+
+    private int characterCount = 0;
+    
+    public void SetCharacterCount(int count)
+    {
+        //characterCount = count;
+    }
+
+    public void AddCharacter(Enemy enemy)
+    { 
+        //if (characters.IndexOf(enemy) != -1) return;
+        //characters.Add(enemy);
+        //var poses = m_positions[characterCount];
+        //for( var index = 0; index < poses.Count; index++ )
+        //{
+        //    var position = poses[index];
+        //    if(enemy.bodyPositionOffset.Equals(position))
+        //    {
+        //         positions[enemy.Uid] = position;
+        //    }
+        //}
+    }
+
+    public void ClearCharacters()
+    {
+        //characters.Clear();
+        //characterCount = 0;
+    }
+
+    Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
+    //// List<Vector3> positions = new List<Vector3>();
+    void RrefreshEnemyPosition()
+    {
+        positions.Clear();
+        if(characters.Count<1)
+        {
+            return;
+        }
+        var poses = m_positions[characters.Count];
+        var occupied = new List<Vector3>();
+        for (var index = 0; index < characters.Count; index++)
+        {
+            var dis = float.MaxValue;
+            var selectedPosition = Vector3.zero;
+            var enemy = characters[index];
+            for (var posIndex = 0; posIndex < poses.Count; posIndex++)
+            {
+                var pos = poses[posIndex];
+                if (occupied.IndexOf(pos) != -1)
+                {
+                    continue;
+                }
+                var testDis = Vector3.Distance(enemy.tr_body.GetChild(0).position, pos);
+                if (testDis <= dis && testDis <= 1.01f)
+                {
+                    dis = testDis;
+                    selectedPosition = pos;
+                }
+            }
+            if (!selectedPosition.Equals(Vector3.zero))
+            {
+                positions[enemy.Uid] = selectedPosition;
+                if(enemy is Enemy)
+                {
+                    (enemy as Enemy).bodyPositionOffset = selectedPosition;
+                    (enemy as Enemy).moveDistance = dis;
+                }
+                occupied.Add(selectedPosition);
+                // enemy.db_moves[0].transform.position = selectedPosition;
+            }
+        }
+        for (var index = 0; index < characters.Count; index++)
+        {
+            var enemy = characters[index] as Enemy;
+            if(enemy!=null)
+            {
+                Debug.Log("敌人的偏移量:" + "  " + enemy.Uid + "  " + (enemy.bodyPositionOffset - this.transform.position));
+                Debug.Log("敌人的移动的距离:" + "  " + enemy.Uid + "  " + enemy.moveDistance);
+            }
+        }
+
+        //positions.Clear();
+        //var position = transform.position;
+        //Enemy enemy = null;
+        //if (characters.Count == 2)
+        //{
+        //    enemy = (characters[0] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position + transform.right * 0.25f);
+        //    }
+        //    enemy = (characters[1] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position - transform.right * 0.25f);
+        //    }
+        //}
+        //else if (characters.Count == 3)
+        //{
+        //    enemy = (characters[0] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
+        //    }
+        //    enemy = (characters[1] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
+        //    }
+        //    enemy = (characters[2] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position - transform.forward * 0.25f);
+        //    }
+        //}
+        //else if (characters.Count > 3)
+        //{
+        //    enemy = (characters[0] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
+        //    }
+        //    enemy = (characters[1] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
+        //    }
+        //    enemy = (characters[2] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position + transform.right * 0.25f - transform.forward * 0.25f);
+        //    }
+        //    enemy = (characters[3] as Enemy);
+        //    if (enemy != null)
+        //    {
+        //        positions.Add(enemy.Uid, position - transform.right * 0.25f - transform.forward * 0.25f);
+        //    }
+        //}
     }
 
 
