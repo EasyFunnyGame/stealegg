@@ -55,21 +55,21 @@ public class BoardNode : MonoBehaviour
         m_positions[1] = list;
 
         list = new List<Vector3>();
-        list.Add(transform.position + transform.right * 0.25f);
-        list.Add(transform.position - transform.right * 0.25f);
+        list.Add(transform.position + transform.right * 0.255f);
+        list.Add(transform.position - transform.right * 0.245f);
         m_positions[2] = list;
 
         list = new List<Vector3>();
-        list.Add(transform.position + transform.right * 0.25f + transform.forward * 0.25f);
-        list.Add(transform.position - transform.right * 0.25f + transform.forward * 0.25f);
+        list.Add(transform.position + transform.right * 0.255f + transform.forward * 0.245f);
+        list.Add(transform.position - transform.right * 0.245f + transform.forward * 0.2551f);
         list.Add(transform.position - transform.forward * 0.25f);
         m_positions[3] = list;
 
         list = new List<Vector3>();
-        list.Add(transform.position + transform.right * 0.25f + transform.forward * 0.25f);
-        list.Add(transform.position - transform.right * 0.25f + transform.forward * 0.25f);
-        list.Add(transform.position + transform.right * 0.25f - transform.forward * 0.25f);
-        list.Add(transform.position - transform.right * 0.25f - transform.forward * 0.25f);
+        list.Add(transform.position + transform.right * 0.255f + transform.forward * 0.245f);
+        list.Add(transform.position - transform.right * 0.245f + transform.forward * 0.2551f);
+        list.Add(transform.position + transform.right * 0.245f - transform.forward * 0.255f);
+        list.Add(transform.position - transform.right * 0.255f - transform.forward * 0.2452f);
         m_positions[4] = list;
     }
 
@@ -208,7 +208,7 @@ public class BoardNode : MonoBehaviour
         {
             var dis = float.MaxValue;
             var selectedPosition = Vector3.zero;
-            var enemy = characters[index];
+            var enemy = characters[index] as Enemy;
             for (var posIndex = 0; posIndex < poses.Count; posIndex++)
             {
                 var pos = poses[posIndex];
@@ -217,8 +217,9 @@ public class BoardNode : MonoBehaviour
                     continue;
                 }
                 var testDis = Vector3.Distance(enemy.tr_body.GetChild(0).position, pos);
-                if (testDis <= dis && testDis <= 1.01f)
+                if (testDis < dis )
                 {
+                    
                     dis = testDis;
                     selectedPosition = pos;
                 }
@@ -226,11 +227,8 @@ public class BoardNode : MonoBehaviour
             if (!selectedPosition.Equals(Vector3.zero))
             {
                 positions[enemy.Uid] = selectedPosition;
-                if(enemy is Enemy)
-                {
-                    (enemy as Enemy).bodyPositionOffset = selectedPosition;
-                    (enemy as Enemy).moveDistance = dis;
-                }
+                enemy.bodyPositionOffset = selectedPosition;
+                enemy.moveDistance = dis;
                 occupied.Add(selectedPosition);
                 // enemy.db_moves[0].transform.position = selectedPosition;
             }
@@ -238,10 +236,37 @@ public class BoardNode : MonoBehaviour
         for (var index = 0; index < characters.Count; index++)
         {
             var enemy = characters[index] as Enemy;
-            if(enemy!=null)
+            if (enemy != null)
             {
-                Debug.Log("敌人的偏移量:" + "  " + enemy.Uid + "  " + (enemy.bodyPositionOffset - this.transform.position));
-                Debug.Log("敌人的移动的距离:" + "  " + enemy.Uid + "  " + enemy.moveDistance);
+                if (enemy.moveDistance > 1.1f)
+                {
+                    //Debug.Log("出现换位" + enemy.moveDistance);
+                    var farestPosition = positions[enemy.Uid];
+                    Enemy nearestEnemy = null;
+                    var nearestDistance = float.MaxValue;
+                    for(var d = 0; d < characters.Count; d++)
+                    {
+                        var targetEnemy = characters[d] as Enemy;
+                        if (targetEnemy.Uid == enemy.Uid) continue;
+                        if(nearestDistance > targetEnemy.moveDistance)
+                        {
+                            nearestEnemy = targetEnemy;
+                            nearestDistance = targetEnemy.moveDistance;
+                        }
+                    }
+                    if(nearestEnemy != null)
+                    {
+                        var nearestPosition = positions[nearestEnemy.Uid];
+
+                        positions[nearestEnemy.Uid] = farestPosition;
+                        positions[enemy.Uid] = nearestPosition;
+
+                        // Debug.Log("修正换位");
+                    }
+                    break;
+                }
+                //Debug.Log("敌人的偏移量:" + "  " + enemy.Uid + "  " + (enemy.bodyPositionOffset - this.transform.position));
+                //Debug.Log("敌人的移动的距离:" + "  " + enemy.Uid + "  " + enemy.moveDistance);
             }
         }
 
