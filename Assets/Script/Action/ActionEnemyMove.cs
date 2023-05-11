@@ -28,6 +28,9 @@ public class ActionEnemyMove : ActionBase
 
         velocity = new Vector3();
         enemy.FindPathRealTime(tile);
+
+        Debug.Log("位置偏移量:" + enemy.bodyPositionOffset);
+
         targetPosition = enemy.db_moves[0].position;
         var targetNode = enemy.boardManager.FindNode(enemy.nextTile.name);
         height = targetNode.transform.position.y - enemy.transform.position.y;
