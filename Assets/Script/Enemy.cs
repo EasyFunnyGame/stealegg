@@ -109,6 +109,8 @@ public class Enemy : Character
 
     public Coord coordLureMe = new Coord();
 
+    public Vector3 bodyPositionOffset = Vector3.zero;
+
     public override void Start()
     {
         lookAroundTime = 9;

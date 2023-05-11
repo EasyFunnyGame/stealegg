@@ -21,6 +21,12 @@ public class BoardNode : MonoBehaviour
 
     public List<Character>characters = new List<Character>();
 
+    private Dictionary<int, List<Vector3>> m_positions = new Dictionary<int, List<Vector3>>();
+    public List<Vector3> getPositions(int count)
+    {
+        return m_positions[count];
+    }
+
     public void initWithTransform(Transform node )
     {
         var baseSquare = node.GetChild(0);
@@ -43,6 +49,25 @@ public class BoardNode : MonoBehaviour
             trigger = sphereCollider.gameObject.AddComponent<BoardNodeTrigger>();
         }
         trigger.node = this;
+
+        var list = new List<Vector3>();
+        list.Add(transform.position + transform.right * 0.25f);
+        list.Add(transform.position - transform.right * 0.25f);
+        m_positions[2] = list;
+
+        list = new List<Vector3>();
+
+        m_positions[3] = list;
+        list.Add(transform.position + transform.right * 0.25f + transform.forward * 0.25f);
+        list.Add(transform.position - transform.right * 0.25f + transform.forward * 0.25f);
+        list.Add(transform.position - transform.forward * 0.25f);
+
+        list = new List<Vector3>();
+        list.Add(transform.position + transform.right * 0.25f + transform.forward * 0.25f);
+        list.Add(transform.position - transform.right * 0.25f + transform.forward * 0.25f);
+        list.Add(transform.position + transform.right * 0.25f - transform.forward * 0.25f);
+        list.Add(transform.position - transform.right * 0.25f - transform.forward * 0.25f);
+        m_positions[4] = list;
     }
 
 
@@ -61,68 +86,16 @@ public class BoardNode : MonoBehaviour
             counturScale = Mathf.Abs(Mathf.Sin(Time.time * 2))*0.05f;
             contour.transform.localScale = new Vector3(0.15f + counturScale, 0.15f + counturScale, 0.15f + counturScale);
         }
-
-        if (characters.Count > 1)
-        {
-            // 位置排序
-
-            var poses = new List<Vector3>();
-            foreach (var kvp  in positions)
-            {
-                poses.Add(kvp.Value);
-            }
-            for (var index = 0; index < characters.Count; index++)
-            {
-                var shortest = float.MaxValue;
-                Vector3 nearstPosition = Vector3.zero;
-                var nearestIndex = -1;
-                for (var jndex = 0; jndex < poses.Count; jndex++)
-                {
-                    var distance = Vector3.Distance(characters[index].transform.GetChild(0).position, poses[jndex]);
-                    if (distance < shortest)
-                    {
-                        shortest = distance;
-                        nearstPosition = poses[jndex];
-                        nearestIndex = jndex;
-                    }
-                }
-                if (nearestIndex != -1)
-                {
-                    poses.RemoveAt(nearestIndex);
-                    positions[characters[index].Uid] = nearstPosition;
-                }
-            }
-
-            var count = characters.Count;
-            for(var index = 0; index < characters.Count; index++)
-            {
-                var enemy = characters[index];
-                if (positions.ContainsKey(enemy.Uid))
-                {
-                    var position = positions[enemy.Uid];
-                    var child = enemy.transform.GetChild(0);
-                    child.position = Vector3.MoveTowards(child.position, position, 3 * Time.deltaTime);
-                }
-            }
-        }
-        else if(characters.Count == 1)
-        {
-            var enemy = characters[0];
-            var child = enemy.transform.GetChild(0);
-            child.localPosition = Vector3.MoveTowards(child.localPosition, Vector3.zero, 2 * Time.deltaTime);
-        }
     }
-
     public void OnTriggerEnter(Collider other)
     {
         var enemy = other.transform.parent?.GetComponent<Enemy>();
-        if(enemy != null)
+        if (enemy != null)
         {
-            if(characters.IndexOf(enemy)==-1)
+            if (characters.IndexOf(enemy) == -1)
             {
                 characters.Add(enemy);
             }
-            RrefreshEnemyPosition();
             //Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
         }
     }
@@ -130,82 +103,18 @@ public class BoardNode : MonoBehaviour
     public void OnTriggerExit(Collider other)
     {
         var enemy = other.transform.parent?.GetComponent<Enemy>();
-        if(enemy != null)
+        if (enemy != null)
         {
-            
+
             var index = characters.IndexOf(enemy);
             if (index != -1)
             {
                 characters.RemoveAt(index);
             }
-            RrefreshEnemyPosition();
             //Debug.Log("位置:"+ gameObject.name + " 敌人数量:" + characters.Count);
         }
     }
 
-    Dictionary<int, Vector3> positions = new Dictionary<int, Vector3>();
-    // List<Vector3> positions = new List<Vector3>();
-    void RrefreshEnemyPosition()
-    {
-        positions.Clear();
-        var position = transform.position;
-        Enemy enemy = null;
-        if (characters.Count == 2)
-        {
-            enemy = (characters[0] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position + transform.right * 0.25f);
-            }
-            enemy = (characters[1] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position - transform.right * 0.25f);
-            }
-        }
-        else if (characters.Count == 3)
-        {
-            enemy = (characters[0] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
-            }
-            enemy = (characters[1] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
-            }
-            enemy = (characters[2] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position - transform.forward * 0.25f);
-            }
-        }
-        else if (characters.Count > 3)
-        {
-            enemy = (characters[0] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
-            }
-            enemy = (characters[1] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
-            }
-            enemy = (characters[2] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position + transform.right * 0.25f - transform.forward * 0.25f);
-            }
-            enemy = (characters[3] as Enemy);
-            if (enemy != null)
-            {
-                positions.Add(enemy.Uid, position - transform.right * 0.25f - transform.forward * 0.25f);
-            }
-        }
-
-    }
 
     public void Red()
     {
