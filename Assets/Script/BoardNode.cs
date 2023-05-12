@@ -55,21 +55,21 @@ public class BoardNode : MonoBehaviour
         m_positions[1] = list;
 
         list = new List<Vector3>();
-        list.Add(transform.position + transform.right * 0.255f);
-        list.Add(transform.position - transform.right * 0.245f);
+        list.Add(transform.position + Vector3.right * 0.251f);
+        list.Add(transform.position - Vector3.right * 0.252f);
         m_positions[2] = list;
 
         list = new List<Vector3>();
-        list.Add(transform.position + transform.right * 0.255f + transform.forward * 0.245f);
-        list.Add(transform.position - transform.right * 0.245f + transform.forward * 0.2551f);
-        list.Add(transform.position - transform.forward * 0.25f);
+        list.Add(transform.position + Vector3.right * 0.25f + Vector3.forward * 0.25f);
+        list.Add(transform.position - Vector3.right * 0.25f + Vector3.forward * 0.25f);
+        list.Add(transform.position - Vector3.forward * 0.25f);
         m_positions[3] = list;
 
         list = new List<Vector3>();
-        list.Add(transform.position + transform.right * 0.255f + transform.forward * 0.245f);
-        list.Add(transform.position - transform.right * 0.245f + transform.forward * 0.2551f);
-        list.Add(transform.position + transform.right * 0.245f - transform.forward * 0.255f);
-        list.Add(transform.position - transform.right * 0.255f - transform.forward * 0.2452f);
+        list.Add(transform.position + Vector3.right * 0.25f + Vector3.forward * 0.25f);
+        list.Add(transform.position - Vector3.right * 0.25f + Vector3.forward * 0.25f);
+        list.Add(transform.position + Vector3.right * 0.25f - Vector3.forward * 0.25f);
+        list.Add(transform.position - Vector3.right * 0.25f - Vector3.forward * 0.25f);
         m_positions[4] = list;
     }
 
@@ -142,7 +142,20 @@ public class BoardNode : MonoBehaviour
         {
             if (characters.IndexOf(enemy) == -1)
             {
-                characters.Add(enemy);
+                if( characters.Count < 2 )
+                {
+                    characters.Add(enemy);
+                }
+                else
+                {
+                    var chars = new List<Character>();
+                    chars.Add(enemy);
+                    for(var index = 0; index < characters.Count; index ++)
+                    {
+                        chars.Add(characters[index]);
+                    }
+                    characters = chars;
+                }
             }
             RrefreshEnemyPosition();
             //Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
@@ -209,6 +222,7 @@ public class BoardNode : MonoBehaviour
             var dis = float.MaxValue;
             var selectedPosition = Vector3.zero;
             var enemy = characters[index] as Enemy;
+            enemy.moveDistance = 0;
             for (var posIndex = 0; posIndex < poses.Count; posIndex++)
             {
                 var pos = poses[posIndex];
@@ -219,7 +233,6 @@ public class BoardNode : MonoBehaviour
                 var testDis = Vector3.Distance(enemy.tr_body.GetChild(0).position, pos);
                 if (testDis < dis )
                 {
-                    
                     dis = testDis;
                     selectedPosition = pos;
                 }
@@ -240,7 +253,8 @@ public class BoardNode : MonoBehaviour
             {
                 if (enemy.moveDistance > 1.1f)
                 {
-                    //Debug.Log("出现换位" + enemy.moveDistance);
+                    //Debug.Log("出现换位出现换位出现换位" + enemy.moveDistance + "  enemy uid:" + enemy.Uid);
+                    //Debug.Break();
                     var farestPosition = positions[enemy.Uid];
                     Enemy nearestEnemy = null;
                     var nearestDistance = float.MaxValue;
@@ -269,64 +283,6 @@ public class BoardNode : MonoBehaviour
                 //Debug.Log("敌人的移动的距离:" + "  " + enemy.Uid + "  " + enemy.moveDistance);
             }
         }
-
-        //positions.Clear();
-        //var position = transform.position;
-        //Enemy enemy = null;
-        //if (characters.Count == 2)
-        //{
-        //    enemy = (characters[0] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position + transform.right * 0.25f);
-        //    }
-        //    enemy = (characters[1] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position - transform.right * 0.25f);
-        //    }
-        //}
-        //else if (characters.Count == 3)
-        //{
-        //    enemy = (characters[0] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
-        //    }
-        //    enemy = (characters[1] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
-        //    }
-        //    enemy = (characters[2] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position - transform.forward * 0.25f);
-        //    }
-        //}
-        //else if (characters.Count > 3)
-        //{
-        //    enemy = (characters[0] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position + transform.right * 0.25f + transform.forward * 0.25f);
-        //    }
-        //    enemy = (characters[1] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position - transform.right * 0.25f + transform.forward * 0.25f);
-        //    }
-        //    enemy = (characters[2] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position + transform.right * 0.25f - transform.forward * 0.25f);
-        //    }
-        //    enemy = (characters[3] as Enemy);
-        //    if (enemy != null)
-        //    {
-        //        positions.Add(enemy.Uid, position - transform.right * 0.25f - transform.forward * 0.25f);
-        //    }
-        //}
     }
 
 
