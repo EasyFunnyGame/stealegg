@@ -297,9 +297,6 @@ public class Enemy : Character
                 UpdateTracingPlayerTile();
             }
 
-            
-
-
             var tile = gridManager.GetTileByName(coordTracing.name);
             if (tile == null)
             {
@@ -420,8 +417,13 @@ public class Enemy : Character
         copy.transform.localScale = new Vector3(RED_SCALE, scale.y, scale.z);
         copy.transform.position = new Vector3(line.transform.position.x, 0.006f + line.transform.position.y, line.transform.position.z);
         copy.transform.rotation = line.transform.rotation;
-        var renderer = copy.transform.GetChild(0).GetComponent<MeshRenderer>();
-        renderer.material = Resources.Load<Material>("Material/RouteRed");
+
+        var childCount = copy.transform.childCount;
+        for(var index = 0; index < childCount; index++)
+        {
+            var renderer = copy.transform.GetChild(index).GetComponent<MeshRenderer>();
+            renderer.material = Resources.Load<Material>("Material/RouteRed");
+        }
         redLines.Add(copy);
     }
 

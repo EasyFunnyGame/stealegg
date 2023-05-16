@@ -130,28 +130,33 @@ namespace WeChatWASM
             _loop = param.loop;
             _playbackRate = param.playbackRate;
             _needDownload = param.needDownload;
-            Dict.Add(id, this);
+            if(!Dict.ContainsKey(id))
+            {
+                Dict.Add(id, this);
+                OnPlay(() => {
+                    _isPlaying = true;
+                });
 
-            OnPlay(()=> {
-                _isPlaying = true;
-            });
+                OnEnded(() => {
+                    _isPlaying = false;
+                });
 
-            OnEnded(()=> {
-                _isPlaying = false;
-            });
+                OnPause(() => {
+                    _isPlaying = false;
+                });
 
-            OnPause(()=> {
-                _isPlaying = false;
-            });
-
-            OnStop(()=> {
-                _isPlaying = false;
-            });
+                OnStop(() => {
+                    _isPlaying = false;
+                });
 
 #if UNITY_EDITOR
-            _isPlaying = autoplay;
+                _isPlaying = autoplay;
 #endif
-
+            }
+            else
+            {
+                Debug.LogWarning("Add WXInnerAudioContext Repeatly:" + id);
+            }
         }
 
         /// <summary>

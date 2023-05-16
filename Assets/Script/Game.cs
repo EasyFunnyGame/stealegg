@@ -287,6 +287,8 @@ public class Game : MonoBehaviour
                     enemy.CheckAction();
                 }
 
+                enemyTurnStart = true;
+
                 //var enemyUid2Poses = new Dictionary<string, List<Enemy>>();
                 //for (var i = 0; i < boardManager.enemies.Count; i++)
                 //{
@@ -373,7 +375,7 @@ public class Game : MonoBehaviour
                 //    var nodeName = kvp.Key;
 
                 //    var enemyList = kvp.Value;
-                    
+
                 //    var boardNode = boardManager.FindNode(nodeName);
                 //    if (boardNode == null) continue;
                 //    boardNode.SetCharacterCount(enemyList.Count);
@@ -410,6 +412,16 @@ public class Game : MonoBehaviour
                         enemy.currentAction.Run();
                         enemyActionRunning = true;
                     }
+                }
+            }
+            if(enemyTurnStart && !enemyActionRunning)
+            {
+                //Debug.Log("敌人回合结束");
+                enemyTurnStart = false;
+                for (var i = 0; i < boardManager.enemies.Count; i++)
+                {
+                    var enemy = boardManager.enemies[i];
+                    enemy.UpdateRouteMark();
                 }
             }
         }
@@ -591,6 +603,8 @@ public class Game : MonoBehaviour
 
 
     bool enemyActionRunning = false;
+
+    bool enemyTurnStart = false;
 
     public void Steal()
     {
