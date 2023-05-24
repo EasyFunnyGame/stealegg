@@ -537,7 +537,8 @@ public class Enemy : Character
                 {
                     continue;
                 }
-                if (enemy.coord.name == routeCoordName && coord.name != routeCoordName)
+                var exactPos = string.Format("{0}_{1}", Mathf.RoundToInt(enemy.transform.position.x), Mathf.RoundToInt(enemy.transform.position.z));
+                if (exactPos == routeCoordName && coord.name != routeCoordName)
                 {
                     isBlocked = true;
                     break;

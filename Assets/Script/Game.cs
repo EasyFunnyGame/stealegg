@@ -423,6 +423,7 @@ public class Game : MonoBehaviour
                     var enemy = boardManager.enemies[i];
                     enemy.UpdateRouteMark();
                 }
+                UpdateMoves();
             }
         }
 

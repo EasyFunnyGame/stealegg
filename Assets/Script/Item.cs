@@ -155,10 +155,13 @@ public class Item : MonoBehaviour
         upper = true;
         velocity = Vector3.zero;
 
-        if(itemType==ItemType.LureBottle)
+        if (itemType == ItemType.LureBottle)
         {
-            Game.Instance.player.m_animator.SetTrigger("pick");
-            picked = true;
+            if (Game.Instance.boardManager.bottleCount <= 0)
+            {
+                Game.Instance.player.m_animator.SetTrigger("pick");
+                picked = true;
+            }
         }
     }
 
