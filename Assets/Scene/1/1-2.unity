@@ -28000,6 +28000,8 @@ MonoBehaviour:
   node1: 2_0
   node2: 3_0
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &172170727552418543
 GameObject:
   m_ObjectHideFlags: 0
@@ -28104,6 +28106,20 @@ MonoBehaviour:
     tileName: 3_3
   - actionType: 0
     tileName: 3_4
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  growthLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  bottleCount: 0
 --- !u!1 &587299058627872598
 GameObject:
   m_ObjectHideFlags: 0
@@ -28176,6 +28192,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 0_1
+  words: {fileID: 0}
   characters: []
 --- !u!4 &744414904640665859
 Transform:
@@ -28239,6 +28256,8 @@ MonoBehaviour:
   node1: 2_2
   node2: 3_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &1133545835229656778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28377,6 +28396,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 2_1
+  words: {fileID: 0}
   characters: []
 --- !u!114 &1782375385173194481
 MonoBehaviour:
@@ -28393,6 +28413,8 @@ MonoBehaviour:
   node1: 1_1
   node2: 1_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &1920736811977382677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28414,6 +28436,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 3_0
+  words: {fileID: 0}
   characters: []
 --- !u!4 &2090088653189397887
 Transform:
@@ -28481,6 +28504,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 1_2
+  words: {fileID: 3134874917641937963}
   characters: []
 --- !u!1 &2351920919859291495
 GameObject:
@@ -28571,6 +28595,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 3_3
+  words: {fileID: 0}
   characters: []
 --- !u!1 &2680127286648469083
 GameObject:
@@ -28642,6 +28667,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 1_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3116559009004000914
 GameObject:
@@ -28726,6 +28752,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: 1-2
       objectReference: {fileID: 0}
+    - target: {fileID: 737364012003900107, guid: 32283e5ff11929d4a917a973b0b53f4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2794259628201149147, guid: 32283e5ff11929d4a917a973b0b53f4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6948435677080691378, guid: 32283e5ff11929d4a917a973b0b53f4a,
         type: 3}
       propertyPath: m_Intensity
@@ -28754,6 +28790,39 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 3134874917641937958}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3134874917641937960 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2794259628201149147, guid: 32283e5ff11929d4a917a973b0b53f4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3134874917641937958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3134874917641937961 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 737364012003900107, guid: 32283e5ff11929d4a917a973b0b53f4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3134874917641937958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3134874917641937962 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5976752420410969282, guid: 32283e5ff11929d4a917a973b0b53f4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3134874917641937958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3134874917641937963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3134874917641937962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eca9a77ff71846ea937d129a3670940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characters:
+  - {fileID: 3134874917641937961}
+  - {fileID: 3134874917641937960}
 --- !u!4 &3223753213117425853
 Transform:
   m_ObjectHideFlags: 0
@@ -28804,6 +28873,8 @@ MonoBehaviour:
   node1: 1_2
   node2: 2_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &3444943905629260787
 Transform:
   m_ObjectHideFlags: 0
@@ -28866,6 +28937,8 @@ MonoBehaviour:
   node1: 3_1
   node2: 3_0
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!1 &4092025622262698489
 GameObject:
   m_ObjectHideFlags: 0
@@ -29356,6 +29429,8 @@ MonoBehaviour:
   node1: 3_3
   node2: 3_4
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &4406364280817000296
 Transform:
   m_ObjectHideFlags: 0
@@ -29502,6 +29577,8 @@ MonoBehaviour:
   node1: 2_1
   node2: 2_0
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &5354305705461128142
 Transform:
   m_ObjectHideFlags: 0
@@ -29627,6 +29704,8 @@ MonoBehaviour:
   node1: 3_2
   node2: 3_3
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &5705440800133918224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29642,6 +29721,8 @@ MonoBehaviour:
   node1: 0_1
   node2: 1_1
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!4 &5735885976201406459
 Transform:
   m_ObjectHideFlags: 0
@@ -29785,6 +29866,8 @@ MonoBehaviour:
   node1: 3_1
   node2: 3_2
   through: 1
+  playerMoveType: -1
+  traversability: 0
 --- !u!114 &7181135312158153037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29884,6 +29967,7 @@ MonoBehaviour:
     z: 4
     height: 0
     name: 3_4
+  words: {fileID: 0}
   characters: []
 --- !u!114 &7992042139472722738
 MonoBehaviour:
@@ -29906,6 +29990,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 3_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &7996619425601455556
 GameObject:
@@ -29945,6 +30030,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 2_2
+  words: {fileID: 0}
   characters: []
 --- !u!4 &8021201658273086479
 Transform:
@@ -29999,6 +30085,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 2_0
+  words: {fileID: 0}
   characters: []
 --- !u!114 &8262138684019566408
 MonoBehaviour:
@@ -30021,6 +30108,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 3_2
+  words: {fileID: 0}
   characters: []
 --- !u!4 &8289248242783712044
 Transform:

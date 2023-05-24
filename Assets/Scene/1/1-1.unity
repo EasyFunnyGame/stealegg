@@ -32150,6 +32150,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 3_2
+  words: {fileID: 0}
   characters: []
 --- !u!114 &162857310354012977
 MonoBehaviour:
@@ -32187,6 +32188,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 2_0
+  words: {fileID: 0}
   characters: []
 --- !u!4 &225479266334276415
 Transform:
@@ -32260,6 +32262,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2593148124415175310, guid: d97b01671e63f2347bf39292b03e52f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3422425637076065494, guid: d97b01671e63f2347bf39292b03e52f1,
         type: 3}
@@ -32336,6 +32343,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.2
       objectReference: {fileID: 0}
+    - target: {fileID: 4546498605290298297, guid: d97b01671e63f2347bf39292b03e52f1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d97b01671e63f2347bf39292b03e52f1, type: 3}
 --- !u!4 &558286864074518320 stripped
@@ -32347,6 +32359,39 @@ Transform:
 --- !u!1 &558286864074518321 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1187766939859828464, guid: d97b01671e63f2347bf39292b03e52f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 558286864074518319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &558286864074518322 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5859345694606112277, guid: d97b01671e63f2347bf39292b03e52f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 558286864074518319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &558286864074518323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558286864074518322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eca9a77ff71846ea937d129a3670940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characters:
+  - {fileID: 558286864074518325}
+  - {fileID: 558286864074518324}
+--- !u!1 &558286864074518324 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4546498605290298297, guid: d97b01671e63f2347bf39292b03e52f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 558286864074518319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &558286864074518325 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2593148124415175310, guid: d97b01671e63f2347bf39292b03e52f1,
     type: 3}
   m_PrefabInstance: {fileID: 558286864074518319}
   m_PrefabAsset: {fileID: 0}
@@ -32386,6 +32431,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 0_0
+  words: {fileID: 0}
   characters: []
 --- !u!1 &936171283759956436
 GameObject:
@@ -32502,6 +32548,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 4_1
+  words: {fileID: 0}
   characters: []
 --- !u!4 &1888268906299825622
 Transform:
@@ -32539,6 +32586,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 2_2
+  words: {fileID: 0}
   characters: []
 --- !u!1 &2084054396338556391
 GameObject:
@@ -32578,6 +32626,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 3_1
+  words: {fileID: 0}
   characters: []
 --- !u!114 &2127982140248681249
 MonoBehaviour:
@@ -32888,6 +32937,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 5_1
+  words: {fileID: 0}
   characters: []
 --- !u!4 &4154280265446576126
 Transform:
@@ -33036,6 +33086,20 @@ MonoBehaviour:
     tileName: 4_1
   - actionType: 0
     tileName: 5_1
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  growthLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  bottleCount: 0
 --- !u!1 &4871295179870423875
 GameObject:
   m_ObjectHideFlags: 0
@@ -33614,6 +33678,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 3_0
+  words: {fileID: 0}
   characters: []
 --- !u!1 &7581730035281598941
 GameObject:
@@ -33652,6 +33717,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 1_0
+  words: {fileID: 0}
   characters: []
 --- !u!114 &7776190176791525975
 MonoBehaviour:
@@ -33674,6 +33740,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 2_1
+  words: {fileID: 558286864074518323}
   characters: []
 --- !u!4 &7862647427764327934
 Transform:

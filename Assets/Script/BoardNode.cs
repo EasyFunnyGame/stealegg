@@ -19,6 +19,9 @@ public class BoardNode : MonoBehaviour
     [SerializeField]
     public Coord coord;
 
+    [SerializeField]
+    public ShowUpCharacters words;
+
     public List<Character>characters = new List<Character>();
 
     private Dictionary<int, List<Vector3>> m_positions = new Dictionary<int, List<Vector3>>();
@@ -160,6 +163,16 @@ public class BoardNode : MonoBehaviour
             RrefreshEnemyPosition();
             //Debug.Log("位置:" + gameObject.name + " 敌人数量:" + characters.Count);
         }
+
+        var player = other.transform.parent?.GetComponent<Player>();
+        if(player!= null)
+        {
+            if(words != null)
+            {
+                words.Show();
+            }
+        }
+
     }
     public void OnTriggerExit(Collider other)
     {
