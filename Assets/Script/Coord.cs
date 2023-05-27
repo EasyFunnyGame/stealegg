@@ -54,7 +54,7 @@ public class Coord
 
     public bool Equals(Coord coord)
     {
-        return x == coord.x && z == coord.z && Mathf.Abs(height - coord.height)<0.5f;
+        return x == coord.x && z == coord.z;//  && Mathf.Abs(height - coord.height)<0.76f
     }
 
     public bool EqualsIgnoreY(Coord coord)

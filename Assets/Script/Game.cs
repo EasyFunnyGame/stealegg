@@ -66,6 +66,10 @@ public class Game : MonoBehaviour
 
     public int gainEergy = 0;
 
+    public int playerRound = 0;
+
+    public int enemyRound = 0;
+
     private void Awake()
     {
         Instance = this;
@@ -165,6 +169,9 @@ public class Game : MonoBehaviour
         boardManager.Ready();
 
         CleearMoves();
+
+        playerRound = 0;
+        enemyRound = 0;
     }
 
 
@@ -289,6 +296,7 @@ public class Game : MonoBehaviour
                 playerTurn = false;
                 enemyTurn = true;
 
+                playerRound++;
                 
                 // 更新敌人行为
                 for (var i = 0; i < boardManager.enemies.Count; i++)
@@ -427,6 +435,7 @@ public class Game : MonoBehaviour
             if(enemyTurnStart && !enemyActionRunning)
             {
                 //Debug.Log("敌人回合结束");
+                enemyRound++;
                 enemyTurnStart = false;
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {

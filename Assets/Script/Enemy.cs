@@ -40,7 +40,7 @@ public class Enemy : Character
 
     // 追踪的目标点
     public Coord _coordTracing = new Coord();
-
+    private float m_traceRound = int.MinValue;
     public Coord coordTracing
     {
         get
@@ -49,6 +49,15 @@ public class Enemy : Character
         }
         set
         {
+            if(!value.isLegal)
+            {
+                m_traceRound = int.MinValue;
+            }
+            if(!_coordTracing.isLegal &&  value.isLegal)
+            {
+                m_traceRound = Game.Instance.enemyRound;
+                // m_traceTime = //Random.Range(0,99999);
+            }
             _coordTracing = value;
         }
     }
@@ -541,6 +550,24 @@ public class Enemy : Character
                 }
             }
 
+            var blockByHeight = false; 
+            // 视线会被中间的高台挡住。参考第二章第十关；
+            for (var x = 1; x < index; x++)
+            {
+                var middleNode = redNodes[x];
+                var middleNodeY = middleNode.transform.position.y;
+                if (middleNodeY > transform.position.y && middleNodeY > node.transform.position.y)
+                {
+                    // return false;
+                    blockByHeight = true;
+                    break;
+                }
+            }
+            if (blockByHeight)
+            {
+                break;
+            }
+
             RedNode(node);
 
             if(!string.IsNullOrEmpty(lastCoordName))
@@ -706,6 +733,7 @@ public class Enemy : Character
 
     public CheckPlayerResult CheckPlayer()
     {
+        if (sleeping) return CheckPlayerResult.None;
         var caught = TryCatch();
         if(caught)
         {
@@ -722,8 +750,13 @@ public class Enemy : Character
     public bool TryCatch()
     {
         if (Game.Instance.result == GameResult.WIN) return false;
-        if (!coordTracing.isLegal) return false;
         if (sleeping) return false;
+        if(m_traceRound == Game.Instance.enemyRound)
+        {
+            return false;
+        }
+        if (!coordTracing.isLegal) return false;
+        
         var player = Game.Instance.player;
         //
         var playerSteps = player.StepsReach(coord.name);
@@ -746,14 +779,27 @@ public class Enemy : Character
         if (player == null) return false;
 
         if (!player.coord.isLegal) return false;
-        for(var index = 0; index < this.redNodes.Count; index++)
+
+        for(var index = 0; index < redNodes.Count; index++)
         {
-            var coordRed = this.redNodes[index].coord;
+            var coordRed = redNodes[index].coord;
             if(coordRed.Equals(player.coord) && !player.isHidding)
             {
+               
                 var targetTile = gridManager.GetTileByName(coordRed.name);
                 if (targetTile != null)
                 {
+                    // 视线会被中间的高台挡住。参考第二章第十关；
+                    for (var x = 1; x < index; x++)
+                    {
+                        var middleNode = redNodes[x];
+                        var middleNodeY = middleNode.transform.position.y;
+                        if (middleNodeY > transform.position.y && middleNodeY > player.transform.position.y)
+                        {
+                            return false;
+                        }
+                    }
+
                     coordTracing = player.coord.Clone();
                     coordPlayer = player.coord.Clone();
 

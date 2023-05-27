@@ -26,7 +26,9 @@ public class ActionThrowBottle : ActionBase
         _targetPositon = boardNode.transform.position;
         targetTileName = targetTile;
 
-        targetRotation = Quaternion.LookRotation(boardNode.transform.position - player.transform.position);
+        var targetPosition = boardNode.transform.position;
+        targetPosition.y = player.transform.position.y;
+        targetRotation = Quaternion.LookRotation(targetPosition - player.transform.position);
 
         Game.Instance.boardManager.bottleCount = 0;
         AudioPlay.Instance.PlayerThrowBottle();
