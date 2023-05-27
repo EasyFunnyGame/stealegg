@@ -18,9 +18,9 @@ public class ActionPlayerMove : ActionBase
         player.justThroughNet = false;
         player.justJump = false;
 
-        if(player.isHidding)
+     
+        if(player.boardManager.allItems.ContainsKey(player.coord.name) && player.boardManager.allItems[player.coord.name].itemType == ItemType.Growth)
         {
-            //Debug.Log("走出Hiding");
             var node = player.boardManager.FindNode(tile.gameObject.name);
             player.boardManager.growthLure = node.coord.Clone();
         }
@@ -28,6 +28,7 @@ public class ActionPlayerMove : ActionBase
         {
             player.boardManager.growthLure.SetNoTurn();
         }
+        
 
         endPosition = tile.transform.position;
         startPosition = player.transform.position;

@@ -54,6 +54,11 @@ public class EnemyPatrol : Enemy
                     routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                     routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 }
+                //route.gameObject.SetActive(!body_looking);
+                //for (var index = 0; index < redLines.Count; index++)
+                //{
+                //    redLines[index].gameObject.SetActive(true);
+                //}
             }
             else
             {

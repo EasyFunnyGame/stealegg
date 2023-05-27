@@ -142,7 +142,7 @@ public class Player : Character
                             targetName = front.name;
                         }
 
-                        var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && targetName == lastTileName;
+                        var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == lastTileName || targetName == coord.name);
 
                         if (lookingAtGrowthTile)
                         {

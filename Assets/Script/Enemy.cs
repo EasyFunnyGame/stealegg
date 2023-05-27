@@ -269,7 +269,7 @@ public class Enemy : Character
                     targetName = front.name;
                 }
 
-                var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth &&  targetName == player.lastTileName;
+                var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth &&  (targetName == player.lastTileName || targetName == player.coord.name);
                 if(lookingAtGrowthTile )
                 {
                     var lureTile = gridManager.GetTileByName(growthLure.name);
@@ -297,6 +297,8 @@ public class Enemy : Character
                             currentAction = new ActionEnemyMove(this, tile);
                         }
                     }
+                    patroling = false;
+                    UpdateRouteMark();
                     //else
                     //{
                     //    Debug.LogWarning("在敌人不可达的出逃树林！！！");
