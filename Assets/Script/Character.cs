@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
     public bool moving;
     public bool moving_tiles;
     public float move_speed = 1f;
-    public float rotate_speed = 1f;
+    public float rotate_speed = 0.5f;
     public Color col;
     public Transform tr_body;
     public string lastTileName;
@@ -381,90 +381,100 @@ public class Character : MonoBehaviour
     }
 
 
-    public bool FindPathRealTime(GridTile to, GridTile from = null)
+    public bool FindPathRealTime(GridTile to, GridTile from, bool useFastestWay )
     {
-        var xOffSet = 0;
-        var zOffset = 0;
-        if (direction == Direction.Up)
+
+        if(useFastestWay)
         {
-            zOffset = 1;
-        }
-        else if (direction == Direction.Down)
-        {
-            zOffset = -1;
-        }
-        else if (direction == Direction.Left)
-        {
-            xOffSet = -1;
-        }
-        else if (direction == Direction.Right)
-        {
-            xOffSet = 1;
-        }
-        gridManager.find_paths_realtime(this, to);
-        if (to.db_path_lowest.Count <= 0)
-        {
-            Debug.LogWarning(this.gameObject.name + "查找路径点失败，该点不可达" + to.gameObject.name);
-            return false;
-        }
-        GridTile fromTile = null;
-        var frontalTileName = string.Format("{0}_{1}", coord.x + xOffSet, coord.z + zOffset);
-        if(frontalTileName != to.gameObject.name)
-        {
-            var boardNode = boardManager.FindNode(frontalTileName);
-            if(boardNode?.gameObject.activeSelf == true)
+            var xOffSet = 0;
+            var zOffset = 0;
+            if (direction == Direction.Up)
             {
-                var frontalTile = gridManager.GetTileByName(frontalTileName);
-                if (frontalTile)
+                zOffset = 1;
+            }
+            else if (direction == Direction.Down)
+            {
+                zOffset = -1;
+            }
+            else if (direction == Direction.Left)
+            {
+                xOffSet = -1;
+            }
+            else if (direction == Direction.Right)
+            {
+                xOffSet = 1;
+            }
+            gridManager.find_paths_realtime(this, to);
+            if (to.db_path_lowest.Count <= 0)
+            {
+                Debug.LogWarning(this.gameObject.name + "查找路径点失败，该点不可达" + to.gameObject.name);
+                return false;
+            }
+            GridTile fromTile = null;
+            var frontalTileName = string.Format("{0}_{1}", coord.x + xOffSet, coord.z + zOffset);
+            if (frontalTileName != to.gameObject.name)
+            {
+                var boardNode = boardManager.FindNode(frontalTileName);
+                if (boardNode?.gameObject.activeSelf == true)
                 {
-                    for (var index = 0; index < currentTile.db_neighbors.Count; index++)
+                    var frontalTile = gridManager.GetTileByName(frontalTileName);
+                    if (frontalTile)
                     {
-                        var neighbor = currentTile.db_neighbors[index];
-                        if (neighbor.tile_s?.name == frontalTileName && neighbor.blocked == false)
+                        for (var index = 0; index < currentTile.db_neighbors.Count; index++)
                         {
-                            fromTile = neighbor.tile_s;
-                            break;
+                            var neighbor = currentTile.db_neighbors[index];
+                            if (neighbor.tile_s?.name == frontalTileName && neighbor.blocked == false)
+                            {
+                                fromTile = neighbor.tile_s;
+                                break;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        selected_tile_s = to;
+            selected_tile_s = to;
 
-        if (fromTile)
-        {
-            gridManager.find_paths_realtime(this, to);
-            var path1 = new List<string>();
-            for(var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
-            {
-                path1.Add(selected_tile_s.db_path_lowest[idx].name);
-            }
-
-            gridManager.find_paths_realtime(this, to, fromTile);
-            var path2 = new List<string>();
-            for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
-            {
-                path2.Add(selected_tile_s.db_path_lowest[idx].name);
-            }
-
-            if ((path2.Count + 1) > path1.Count)
+            if (fromTile)
             {
                 gridManager.find_paths_realtime(this, to);
+                var path1 = new List<string>();
+                for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
+                {
+                    path1.Add(selected_tile_s.db_path_lowest[idx].name);
+                }
+
+                gridManager.find_paths_realtime(this, to, fromTile);
+                var path2 = new List<string>();
+                for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
+                {
+                    path2.Add(selected_tile_s.db_path_lowest[idx].name);
+                }
+
+                if ((path2.Count + 1) > path1.Count)
+                {
+                    gridManager.find_paths_realtime(this, to);
+                }
+                else
+                {
+                    gridManager.find_paths_realtime(this, to, fromTile);
+                    var pathLowest = new List<GridTile>();
+                    pathLowest.Add(fromTile);
+                    pathLowest.AddRange(selected_tile_s.db_path_lowest);
+                    selected_tile_s.db_path_lowest = pathLowest;
+                }
             }
             else
             {
-                gridManager.find_paths_realtime(this, to, fromTile);
-                var pathLowest = new List<GridTile>();
-                pathLowest.Add(fromTile);
-                pathLowest.AddRange(selected_tile_s.db_path_lowest);
-                selected_tile_s.db_path_lowest = pathLowest;
+                gridManager.find_paths_realtime(this, to);
             }
         }
         else
         {
+            selected_tile_s = to;
             gridManager.find_paths_realtime(this, to);
         }
+        
 
         UpdateMoves(selected_tile_s);
 
@@ -644,6 +654,37 @@ public class Character : MonoBehaviour
         }
     }
 
+    public Coord frontTwo
+    {
+        get
+        {
+            var x = coord.x;
+            var z = coord.z;
+            var coordName = "";
+            if (direction == Direction.Up)
+            {
+                z += 2;
+            }
+            else if (direction == Direction.Down)
+            {
+                z -= 2;
+            }
+            else if (direction == Direction.Left)
+            {
+                x -= 2;
+            }
+            else if (direction == Direction.Right)
+            {
+                x += 2;
+            }
+            coordName = string.Format("{0}_{1}", x, z);
+            if (!boardManager) return Coord.Illegal;
+            var node = boardManager.FindNode(coordName);
+            if (node == null) return Coord.Illegal;
+            return new Coord(x, z, node.transform.position.y);
+        }
+    }
+
 
     #region 动画事件回调
     public virtual void FootL()
@@ -683,6 +724,12 @@ public class Character : MonoBehaviour
     }
 
     public virtual void Lure()
+    {
+
+    }
+
+
+    public virtual void StopLookAround()
     {
 
     }

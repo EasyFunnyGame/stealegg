@@ -93,4 +93,9 @@ public class AnimationEvent : MonoBehaviour
         owner?.Lure();
 
     }
+
+    public void StopLookAround()
+    {
+        owner?.StopLookAround();
+    }
 }

@@ -36,9 +36,9 @@ public class EnemyPatrol : Enemy
                 routeLine.transform.localScale = new Vector3(RED_SCALE, 1, distance);
                 routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
                 routeLine.transform.position = transform.position;
-                routeLine.transform.Translate(new Vector3(0, 0.0115f, 0));
+                routeLine.transform.Translate(new Vector3(0, 0.012f, 0));
 
-                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * distance / 40;
+                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * distance / 40 + new Vector3(0,0.0256f,0);
                 routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                 routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 
@@ -50,7 +50,7 @@ public class EnemyPatrol : Enemy
                 {
                     var lastNode = redNodes[redNodes.Count - 1];
                     routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
-                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.006f+ lastNode.transform.position.y, lastNode.transform.position.z);
+                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.006f+ lastNode.transform.position.y, lastNode.transform.position.z) + new Vector3(0, 0.0256f, 0);
                     routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                     routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 }
@@ -64,7 +64,16 @@ public class EnemyPatrol : Enemy
                 }
             }
         }
-        routeArrow.gameObject.SetActive(!body_looking);
+
+        if (((coordTracing.isLegal || originalTile != null) && redNodes.Count > 1 || patroling)  && !body_looking )
+        {
+            routeArrow.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            routeArrow.gameObject.SetActive(false);
+        }
     }
 
     public void ResetOriginal()

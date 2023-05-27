@@ -123,7 +123,7 @@ public class EnemySentinel : Enemy
                 if (originalTile == null)
                 {
                     originalTile = gridManager.GetTileByName(originalCoord.name);
-                    FindPathRealTime(originalTile);
+                    FindPathRealTime(originalTile, null,false);
                     currentAction = new ActionTurnDirection(this, nextTile.name, true);
                     ShowBackToOriginal();
                     return true;

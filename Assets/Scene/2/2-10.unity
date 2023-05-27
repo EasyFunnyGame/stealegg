@@ -4578,6 +4578,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &272754475
 GameObject:
   m_ObjectHideFlags: 0
@@ -12277,6 +12278,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &645078107
 GameObject:
   m_ObjectHideFlags: 0
@@ -13444,6 +13446,7 @@ MonoBehaviour:
   node2: 4_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &712886513
 GameObject:
   m_ObjectHideFlags: 0
@@ -23747,6 +23750,7 @@ MonoBehaviour:
   node2: 4_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &1339620721
 GameObject:
   m_ObjectHideFlags: 0
@@ -38840,6 +38844,7 @@ MonoBehaviour:
   node2: 2_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &1184904413010704357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38924,6 +38929,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 3_3
+  words: {fileID: 0}
   characters: []
 --- !u!4 &1571917877162331101
 Transform:
@@ -39002,6 +39008,7 @@ MonoBehaviour:
   node2: 1_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &1756723669834731471
 Transform:
   m_ObjectHideFlags: 0
@@ -39041,6 +39048,7 @@ MonoBehaviour:
     z: 4
     height: 0
     name: 1_4
+  words: {fileID: 0}
   characters: []
 --- !u!23 &1780186738742569881
 MeshRenderer:
@@ -39194,6 +39202,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 1_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &2277710085966557664
 GameObject:
@@ -39296,6 +39305,7 @@ MonoBehaviour:
   node2: 4_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &2848553404830652177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39339,6 +39349,7 @@ MonoBehaviour:
   node2: 3_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &2897480526749647389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39355,6 +39366,7 @@ MonoBehaviour:
   node2: 4_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &2960712428185088350
 GameObject:
   m_ObjectHideFlags: 0
@@ -39436,6 +39448,7 @@ MonoBehaviour:
   node2: 2_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!114 &3106030957465766415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39457,6 +39470,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 1_2
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3180587895751520741
 GameObject:
@@ -39513,6 +39527,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 2_3
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3232021757438571906
 GameObject:
@@ -39581,6 +39596,7 @@ MonoBehaviour:
   node2: 1_2
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &3485330458002786088
 GameObject:
   m_ObjectHideFlags: 0
@@ -39672,6 +39688,7 @@ MonoBehaviour:
   node2: 3_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &3945044370421310877
 GameObject:
   m_ObjectHideFlags: 0
@@ -39770,6 +39787,7 @@ MonoBehaviour:
   node2: 3_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &4406364281796955735
 Transform:
   m_ObjectHideFlags: 0
@@ -39978,6 +39996,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 1_3
+  words: {fileID: 0}
   characters: []
 --- !u!1 &5317952385549184533
 GameObject:
@@ -40191,6 +40210,7 @@ MonoBehaviour:
     z: 4
     height: 0
     name: 2_4
+  words: {fileID: 0}
   characters: []
 --- !u!4 &6382372127261910279
 Transform:
@@ -40261,6 +40281,7 @@ MonoBehaviour:
     z: 4
     height: 0
     name: 3_4
+  words: {fileID: 0}
   characters: []
 --- !u!114 &6572470917287910011
 MonoBehaviour:
@@ -40283,6 +40304,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 0_2
+  words: {fileID: 0}
   characters: []
 --- !u!114 &6573518429220847833
 MonoBehaviour:
@@ -40305,6 +40327,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 2_2
+  words: {fileID: 0}
   characters: []
 --- !u!4 &6596991433620740989
 Transform:
@@ -40427,6 +40450,20 @@ MonoBehaviour:
     tileName: 4_3
   - actionType: 0
     tileName: 4_4
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  growthLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  bottleCount: 0
 --- !u!33 &7232651633088418522
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -40520,6 +40557,7 @@ MonoBehaviour:
   node2: 2_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!4 &7278194951106555171
 Transform:
   m_ObjectHideFlags: 0
@@ -40551,6 +40589,7 @@ MonoBehaviour:
   node2: 1_3
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!33 &7422294058943165550
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -40580,6 +40619,7 @@ MonoBehaviour:
     z: 4
     height: 0
     name: 4_4
+  words: {fileID: 0}
   characters: []
 --- !u!4 &7485779295770112630
 Transform:
@@ -40771,6 +40811,7 @@ MonoBehaviour:
   node2: 1_4
   through: 1
   playerMoveType: -1
+  traversability: 0
 --- !u!1 &8038491025548696917
 GameObject:
   m_ObjectHideFlags: 0
@@ -40999,6 +41040,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 4_3
+  words: {fileID: 0}
   characters: []
 --- !u!1 &8879491937741810627
 GameObject:

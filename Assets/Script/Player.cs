@@ -34,6 +34,8 @@ public class Player : Character
     // 刚刚偷过菜
     public bool justSteal = false;
 
+    public float stealStopTime = 2.0f;
+
     public void Awake()
     {
         failCamera.gameObject.SetActive(false);
@@ -113,7 +115,7 @@ public class Player : Character
             m_animator.SetBool("moving", false);
         }
         m_animator.SetInteger("bottle",-1);
-        ShowReached();
+       
         idleTime = Random.Range(3,5);
 
         isHidding = false;
@@ -126,10 +128,23 @@ public class Player : Character
                 for (var index = 0; index < boardManager.enemies.Count;  index++)
                 {
                     var enemy = boardManager.enemies[index];
-                    if(CanReachInSteps(enemy.currentTile.name, 1))
+                    if(CanReachInSteps(enemy.currentTile.name, 2))
                     {
-                        var direction = Utils.DirectionTo(enemy.currentTile.name, kvp.Key, enemy.direction);
-                        if (direction == enemy.direction)
+                        var targetName = "";
+                        var frontTwo = enemy.frontTwo;
+                        var frontOne = enemy.front;
+                        if (frontTwo.isLegal && boardManager.allItems.ContainsKey(frontTwo.name))
+                        {
+                            targetName = frontTwo.name;
+                        }
+                        else if (frontOne.isLegal && boardManager.allItems.ContainsKey(frontOne.name))
+                        {
+                            targetName = front.name;
+                        }
+
+                        var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && targetName == lastTileName;
+
+                        if (lookingAtGrowthTile)
                         {
                             anyEnemyLookingAt = true;
                             break;
@@ -142,6 +157,10 @@ public class Player : Character
                 }
                 break;
             }
+        }
+        if (!isHidding)
+        {
+            ShowReached();
         }
         //Debug.Log(string.Format("{0}到达{1}", gameObject.name, tile_s.gameObject.name));
     }
@@ -230,7 +249,7 @@ public class Player : Character
         playerMovePlay.gameObject.SetActive(true);
         playerMovePlay.Play("Movement_Animation_01");
         playerMovePlay.transform.parent = null;
-        playerMovePlay.transform.position = transform.position;
+        playerMovePlay.transform.position = transform.position + new Vector3(0,0.05f,0);
     }
 
     public override void PlayerReached()

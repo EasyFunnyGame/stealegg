@@ -33,7 +33,7 @@ public class ActionPlayerMove : ActionBase
         startPosition = player.transform.position;
 
         velocity = new Vector3();
-        player.FindPathRealTime(tile);
+        player.FindPathRealTime(tile,null,true);
         
         var currentNodeName = player.currentTile.name;
         var targetNodeName = tile.name;

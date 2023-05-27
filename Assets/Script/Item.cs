@@ -143,13 +143,14 @@ public class Item : MonoBehaviour
         }
     }
 
-    private Character character;
+    
 
     protected virtual void OnTriggerEnter(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())
 
-        character = other.transform.parent.GetComponent<Character>();
+        var player = other.transform.parent.GetComponent<Player>();
+        if (player == null) return;
         //Debug.Log("触碰到Item的人物:" + character.name);
 
         upper = true;

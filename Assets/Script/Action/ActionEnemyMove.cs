@@ -13,8 +13,12 @@ public class ActionEnemyMove : ActionBase
 
     private bool actionForceBreak = false;
 
+    private GridTile targetTile;
+
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
+        targetTile = tile;
+
         actionForceBreak = false;
 
         if (enemy.coordPlayer.isLegal)
@@ -27,7 +31,7 @@ public class ActionEnemyMove : ActionBase
         patrolTurnDirection = enemy._direction;
 
         velocity = new Vector3();
-        enemy.FindPathRealTime(tile);
+        enemy.FindPathRealTime(tile,null, enemy.coordTracing.isLegal);
 
         // Debug.Log("位置偏移量:" + enemy.bodyPositionOffset);
 
@@ -157,7 +161,11 @@ public class ActionEnemyMove : ActionBase
         }
         else
         {
-            if(enemy.nextTile)
+            if (targetTile && targetTile.name != enemy.coord.name && enemy.nextTile == null)
+            {
+                enemy.FindPathRealTime(targetTile, null, true) ;
+            }
+            if (enemy.nextTile)
             {
                 enemy.LookAt(enemy.nextTile.name);
                 var sameDirection = enemy._direction == enemy.targetDirection;
@@ -290,10 +298,14 @@ public class ActionEnemyMove : ActionBase
         }
         else
         {
+            if (targetTile && targetTile.name != enemy.coord.name && enemy.nextTile == null)
+            {
+                enemy.FindPathRealTime(targetTile, null,true);
+            }
             // 继续转向下一个路径点
             if (enemy.nextTile)
             {
-                enemy.LookAt(character.nextTile.name);
+                enemy.LookAt(enemy.nextTile.name);
                 var sameDirection = enemy._direction == enemy.targetDirection;
                 if (sameDirection)
                 {

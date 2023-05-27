@@ -262,11 +262,21 @@ public class Game : MonoBehaviour
     public bool enemyTurn = false;
     public bool playerTurn = false;
 
+    
     void GamePlayingUpdate()
     {
         enemyActionRunning = false;
         if (player == null) return;
-        if (player.justSteal) return;
+        if (player.justSteal)
+        {
+            player.stealStopTime += Time.deltaTime;
+            if(player.stealStopTime >= 6.0f)
+            {
+                player.justSteal = false;
+            }
+            return;
+        }
+        player.stealStopTime = 0;
         if (player.currentAction != null)
         {
             playerTurn = true;
@@ -680,7 +690,7 @@ public class Game : MonoBehaviour
             }
 
             node.contour.gameObject.SetActive(selectable);
-            node.contour.transform.localPosition = new Vector3(0,0.025f,0);
+            node.contour.transform.localPosition = new Vector3(0, 0.028f, 0);
             if(selectable)
             {
                 bottleSelectable.Add(nodeName);
@@ -954,7 +964,7 @@ public class Game : MonoBehaviour
             var node = boardManager.FindNode(coordName);
             if (node == null) continue;
             move.gameObject.SetActive(true);
-            move.transform.position = node.transform.position;
+            move.transform.position = node.transform.position + new Vector3(0, 0.05f, 0);
             move.transform.parent = null;
             showingMoves.Add(coordName, move);
         }
