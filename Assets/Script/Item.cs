@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public enum ItemType
 {
@@ -62,6 +63,8 @@ public class Item : MonoBehaviour
     public bool picked = false;
 
     public ItemIconOnUI icon;
+
+    private List<Character> m_characters = new List<Character>();
 
     protected virtual void Awake()
     {
@@ -135,7 +138,7 @@ public class Item : MonoBehaviour
         
         if (upper)
         {
-            iconPosition.position = Vector3.SmoothDamp(iconPosition.position, transform.position + upperPosition, ref velocity, MoveSmoothTime);
+            iconPosition.position = Vector3.SmoothDamp(iconPosition.position, transform.position + upperPosition + new Vector3(0, enemyHightOffset, 0), ref velocity, MoveSmoothTime);
         }
         else
         {
@@ -143,34 +146,123 @@ public class Item : MonoBehaviour
         }
     }
 
-    
+    private float enemyHightOffset = 0.0f;
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        //if (other.gameObject.GetComponent<Character>())
 
-        var player = other.transform.parent.GetComponent<Player>();
-        if (player == null) return;
-        //Debug.Log("触碰到Item的人物:" + character.name);
 
         upper = true;
+
         velocity = Vector3.zero;
+
+
+        var character = other.transform.parent.GetComponent<Character>();
+        if(character is EnemyStatic)
+        {
+            enemyHightOffset = 0.5f;
+        }
+        else if(character is Player)
+        {
+            enemyHightOffset = 0.0f;
+        }
+        else
+        {
+            enemyHightOffset = 0.3f;
+        }
+        //else if(character is EnemyDistracted)
+        //{
+        //    enemyHightOffset = 0.12f;
+        //}
+        //else if(character is EnemyPatrol)
+        //{
+        //    enemyHightOffset = 0.12f;
+        //}
+        //else if(character is EnemySentinel)
+        //{
+        //    enemyHightOffset = 0.12f;
+        //}
+        //else if(character is Player)
+        //{
+        //    enemyHightOffset = 0.12f;
+        //}
+        
+        if(character)
+        {
+            var exist = false;
+            for(var index = 0; index < m_characters.Count; index++)
+            {
+                var cha = m_characters[index];
+                if(cha.Uid == character.Uid)
+                {
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist)
+            {
+                m_characters.Add(character);
+            }
+        }
 
         if (itemType == ItemType.LureBottle)
         {
-            if (Game.Instance.boardManager.bottleCount <= 0)
+            if (character is Player)
             {
-                Game.Instance.player.m_animator.SetTrigger("pick");
-                picked = true;
+                if (Game.Instance.boardManager.bottleCount <= 0)
+                {
+                    Game.Instance.player.m_animator.SetTrigger("pick");
+                    picked = true;
+                }
             }
         }
     }
 
     protected virtual void OnTriggerExit(Collider other)
     {
+        var character = other.transform.parent.GetComponent<Character>();
+        if (character)
+        {
+            var exist = false;
+            for (var index = 0; index < m_characters.Count; index++)
+            {
+                var cha = m_characters[index];
+                if (cha.Uid == character.Uid)
+                {
+                    exist = true;
+                    break;
+                }
+            }
+            if (exist)
+            {
+                m_characters.Remove(character);
+            }
+        }
+
+        if (m_characters.Count > 0)
+        {
+            for(var index = 0; index < m_characters.Count; index++)
+            {
+                var cha = m_characters[index];
+                if(cha is EnemyStatic)
+                {
+                    enemyHightOffset = 0.5f;
+                }
+                else
+                {
+                    enemyHightOffset = 0.3f;
+                }
+            }
+        }
+        else
+        {
+            upper = false;
+            velocity = Vector3.zero;
+            enemyHightOffset = 0.0f;
+        }
+
         //if (other.gameObject.GetComponent<Character>())
-        upper = false;
-        velocity = Vector3.zero;
+       
     }
     
     public Vector3 GetIconPosition()
