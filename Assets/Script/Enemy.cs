@@ -473,7 +473,7 @@ public class Enemy : Character
 
     GridTile getAssignGoBackTileName()
     {
-        var assignedTurnBackTile = originalCoord.name;
+        var assignedTurnBackTile = "";
         var currentLevelName = Game.Instance.currentLevelName;
         if (currentLevelName == "2-10")
         {
@@ -497,6 +497,19 @@ public class Enemy : Character
                         if(enemyPatrol.patrolNodes[index].name == "3_0")
                         {
                             assignedTurnBackTile = "2_1";
+                            originalCoord = new Coord(3, 0, 0.0f);
+                            originalDirection = Direction.Up;
+                        }
+                    }
+                }
+                if (coord.name == "5_1")
+                {
+                    var enemyPatrol = this as EnemyPatrol;
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "3_0")
+                        {
+                            assignedTurnBackTile = "4_2";
                             originalCoord = new Coord(3, 0, 0.0f);
                             originalDirection = Direction.Up;
                         }
