@@ -144,13 +144,21 @@ public class Enemy : Character
         var player = Game.Instance.player;
         if (player.justJump)
         {
-            coordPlayer.SetNoTurn();
+            var distance = Coord.Distance(coord, Game.Instance.player.lastCoord);
+            if(distance>1)
+            {
+                coordPlayer.SetTurnBack();
+            }
+            else
+            {
+                coordPlayer.SetNoTurn();
+            }
         }
         else
         {
             coordPlayer = player.coord.Clone();
         }
-        
+
         updateCoordPlayer = false;
     }
 
@@ -414,15 +422,34 @@ public class Enemy : Character
             {
                 if (originalTile == null)
                 {
+                    var assignGoBackTile = getAssignGoBackTileName();
                     originalTile = gridManager.GetTileByName(originalCoord.name);
-                    FindPathRealTime(originalTile, null,false);
+                    if (assignGoBackTile)
+                    {
+                        FindPathRealTime(assignGoBackTile, null, true);
+                    }
+                    else
+                    {
+                        FindPathRealTime(originalTile, null, false);
+                    }
+                    
                     currentAction = new ActionTurnDirection(this, nextTile.name, true);
                     ShowBackToOriginal();
                     return true;
                 }
                 else
                 {
-                    currentAction = new ActionEnemyMove(this, originalTile);
+                    var goBackTile = getAssignGoBackTileName();
+                    if (goBackTile)
+                    {
+                        currentAction = new ActionEnemyMove(this, goBackTile);
+                        //FindPathRealTime(originalTile, null, false);
+                    }
+                    else
+                    {
+                        currentAction = new ActionEnemyMove(this, originalTile);
+                        //FindPathRealTime(originalTile, null, false);
+                    }
                     return true;
                 }
             }
@@ -439,6 +466,59 @@ public class Enemy : Character
             ReachedOriginal();
             return false;
         }
+    }
+
+
+    public GridTile assignTile;
+
+    GridTile getAssignGoBackTileName()
+    {
+        var assignedTurnBackTile = originalCoord.name;
+        var currentLevelName = Game.Instance.currentLevelName;
+        if (currentLevelName == "2-10")
+        {
+            if (gameObject.name.Contains("Enemy_Distracted"))
+            {
+                if (coord.name == "2_4")
+                {
+                    assignedTurnBackTile = "3_3";
+                }
+            }
+        }
+        if(currentLevelName == "2-12")
+        {
+            if (this is EnemyPatrol)
+            {
+                if (coord.name == "2_2")
+                {
+                    var enemyPatrol = this as EnemyPatrol;
+                    for(var index=  0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if(enemyPatrol.patrolNodes[index].name == "3_0")
+                        {
+                            assignedTurnBackTile = "2_1";
+                            originalCoord = new Coord(3, 0, 0.0f);
+                            originalDirection = Direction.Up;
+                        }
+                    }
+                }
+            }
+            if(gameObject.name.Contains("Enemy_Static"))
+            {
+                if (coord.name == "2_2")
+                {
+                    assignedTurnBackTile = "2_1";
+                }
+            }
+        }
+
+        var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
+        if(assignTile)
+        {
+            this.assignTile = assignTile;
+            return assignTile;
+        }
+        return gridManager.GetTileByName(originalCoord.name);
     }
 
     public void RedLine(LinkLine line)
@@ -556,7 +636,7 @@ public class Enemy : Character
             {
                 var middleNode = redNodes[x];
                 var middleNodeY = middleNode.transform.position.y;
-                if (middleNodeY > transform.position.y && middleNodeY > node.transform.position.y)
+                if (Mathf.Abs(middleNodeY - transform.position.y) > 0.2f && Mathf.Abs(middleNodeY - node.transform.position.y) > 0.2f)
                 {
                     // return false;
                     blockByHeight = true;
@@ -794,7 +874,7 @@ public class Enemy : Character
                     {
                         var middleNode = redNodes[x];
                         var middleNodeY = middleNode.transform.position.y;
-                        if (middleNodeY > transform.position.y && middleNodeY > player.transform.position.y)
+                        if (Mathf.Abs(middleNodeY - transform.position.y) > 0.2f && Mathf.Abs(middleNodeY - player.transform.position.y) > 0.2f )
                         {
                             return false;
                         }

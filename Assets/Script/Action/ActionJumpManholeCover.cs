@@ -15,6 +15,8 @@ public class ActionJumpManholeCover : ActionBase
     {
         player.justJump = true;
 
+        player.jumstJumpTileName = player.coord.name;
+
         jumpInDelay = 1.5f;
 
         jumpInCoverDelay = 0.1f;

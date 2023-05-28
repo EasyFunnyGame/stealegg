@@ -305,7 +305,7 @@ public class Character : MonoBehaviour
         {
             xOffSet = 1;
         }
-        gridManager.find_paths_realtime(this, to);
+        gridManager.find_paths_realtime(this, to, currentTile);
         if (to.db_path_lowest.Count <= 0)
         {
             Debug.LogWarning(this.gameObject.name + " ---查找路径点失败，该点不可达----" + to.gameObject.name );
@@ -338,7 +338,7 @@ public class Character : MonoBehaviour
 
         if (fromTile)
         {
-            gridManager.find_paths_realtime(this, to);
+            gridManager.find_paths_realtime(this, to, currentTile);
             var path1 = new List<string>();
             for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
             {
@@ -354,7 +354,7 @@ public class Character : MonoBehaviour
 
             if ((path2.Count + 1) > path1.Count)
             {
-                gridManager.find_paths_realtime(this, to);
+                gridManager.find_paths_realtime(this, to, currentTile);
             }
             else
             {
@@ -367,7 +367,7 @@ public class Character : MonoBehaviour
         }
         else
         {
-            gridManager.find_paths_realtime(this, to);
+            gridManager.find_paths_realtime(this, to, currentTile);
         }
 
         var p = new List<string>();
@@ -381,7 +381,7 @@ public class Character : MonoBehaviour
     }
 
 
-    public bool FindPathRealTime(GridTile to, GridTile from, bool useFastestWay )
+    public bool FindPathRealTime(GridTile to, GridTile from, bool useFastestWay, bool reverseDirection = false )
     {
 
         if(useFastestWay)
@@ -404,7 +404,7 @@ public class Character : MonoBehaviour
             {
                 xOffSet = 1;
             }
-            gridManager.find_paths_realtime(this, to);
+            gridManager.find_paths_realtime(this, to, currentTile);
             if (to.db_path_lowest.Count <= 0)
             {
                 Debug.LogWarning(this.gameObject.name + "查找路径点失败，该点不可达" + to.gameObject.name);
@@ -437,7 +437,7 @@ public class Character : MonoBehaviour
 
             if (fromTile)
             {
-                gridManager.find_paths_realtime(this, to);
+                gridManager.find_paths_realtime(this, to, currentTile);
                 var path1 = new List<string>();
                 for (var idx = 0; idx < selected_tile_s.db_path_lowest.Count; idx++)
                 {
@@ -453,7 +453,7 @@ public class Character : MonoBehaviour
 
                 if ((path2.Count + 1) > path1.Count)
                 {
-                    gridManager.find_paths_realtime(this, to);
+                    gridManager.find_paths_realtime(this, to, currentTile);
                 }
                 else
                 {
@@ -466,13 +466,13 @@ public class Character : MonoBehaviour
             }
             else
             {
-                gridManager.find_paths_realtime(this, to);
+                gridManager.find_paths_realtime(this, to, currentTile);
             }
         }
         else
         {
             selected_tile_s = to;
-            gridManager.find_paths_realtime(this, to);
+            gridManager.find_paths_realtime(this, to, currentTile);
         }
         
 
@@ -579,7 +579,7 @@ public class Character : MonoBehaviour
         {
             var pathLength = 0;
             selected_tile_s = tile;
-            gridManager.find_paths_realtime(this, tile);
+            gridManager.find_paths_realtime(this, tile, currentTile);
             pathLength = tile.db_path_lowest.Count;
             Clear();
             return pathLength;
@@ -600,7 +600,7 @@ public class Character : MonoBehaviour
 
         var pathLength = 0;
         selected_tile_s = toTile;
-        gridManager.find_paths_realtime(this, toTile);
+        gridManager.find_paths_realtime(this, toTile, currentTile);
         pathLength = toTile.db_path_lowest.Count;
         Clear();
         _currentTile = tempCurrentTile;
@@ -615,7 +615,7 @@ public class Character : MonoBehaviour
         {
             var pathLength = 0;
             selected_tile_s = tile;
-            gridManager.find_paths_realtime(this, tile);
+            gridManager.find_paths_realtime(this, tile, currentTile);
             pathLength = tile.db_path_lowest.Count;
             Clear();
             return pathLength <= step;

@@ -165,6 +165,12 @@ public class ActionEnemyMove : ActionBase
             {
                 enemy.FindPathRealTime(targetTile, null, true) ;
             }
+            if(enemy.assignTile)
+            {
+                //Debug.Log("临时的点");
+                enemy.FindPathRealTime(enemy.originalTile, null, true);
+                enemy.assignTile = null;
+            }
             if (enemy.nextTile)
             {
                 enemy.LookAt(enemy.nextTile.name);
@@ -211,6 +217,71 @@ public class ActionEnemyMove : ActionBase
     {
         if (enemy.coord.Equals(enemy.coordTracing))
         {
+            //if (Game.Instance.player.justJump && enemy.coordTracing.name == Game.Instance.player.jumstJumpTileName)
+            //{
+            //    // Debug.Log("从井盖上消失");
+            //    var available = 0;
+            //    var upAvailable = false;
+            //    var up = enemy.gridManager.GetTileByName(string.Format("{0}_{1}",enemy.coord.x,enemy.coord.z + 1));
+            //    if (up != null && enemy.boardManager.FindLine(enemy.coord.name, up.name))
+            //    {
+            //        // Debug.Log("上");
+            //        available++;
+            //        upAvailable = true;
+            //    }
+            //    var downAvailable = false;
+            //    var down = enemy.gridManager.GetTileByName(string.Format("{0}_{1}", enemy.coord.x, enemy.coord.z - 1));
+            //    if (down != null && enemy.boardManager.FindLine(enemy.coord.name, down.name))
+            //    {
+            //        // Debug.Log("下");
+            //        available++;
+            //        downAvailable = true;
+            //    }
+            //    var leftAvailable = false;
+            //    var left = enemy.gridManager.GetTileByName(string.Format("{0}_{1}", enemy.coord.x - 1, enemy.coord.z));
+            //    if (left != null && enemy.boardManager.FindLine(enemy.coord.name, left.name))
+            //    {
+            //        // Debug.Log("左");
+            //        available++;
+            //        leftAvailable = true;
+            //    }
+            //    var rightAvailable = false;
+            //    var right = enemy.gridManager.GetTileByName(string.Format("{0}_{1}", enemy.coord.x + 1, enemy.coord.z));
+            //    if (right != null && enemy.boardManager.FindLine(enemy.coord.name, right.name))
+            //    {
+            //        // Debug.Log("右");
+            //        available++;
+            //        rightAvailable = true;
+            //    }
+
+            //    if(available == 1)
+            //    {
+            //        enemy.coordPlayer.SetNoTurn();
+            //    }
+            //    else
+            //    {
+            //        if(enemy.direction == Direction.Right && leftAvailable)
+            //        {
+            //            enemy.coordPlayer.SetTurnBack();
+            //        }
+            //        else if(enemy.direction == Direction.Left && rightAvailable) 
+            //        {
+            //            enemy.coordPlayer.SetTurnBack();
+            //        }
+            //        else if(enemy.direction == Direction.Up && downAvailable)
+            //        {
+            //            enemy.coordPlayer.SetTurnBack();
+            //        }
+            //        else if(enemy.direction == Direction.Down && upAvailable)
+            //        {
+            //            enemy.coordPlayer.SetTurnBack();
+            //        }
+            //        else
+            //        {
+
+            //        }
+            //    }
+            //}
             // 到达追踪点
             // 如果 coordPlayer 不合法，转向上一个路径点 如果合法，转向主角逃跑寻路点下一个路径点，这里要从主角开始寻路到敌人
             if (enemy.coordPlayer.isMin)

@@ -31,6 +31,8 @@ public class Player : Character
     // 刚刚跳过井
     public bool justJump = false;
 
+    public string jumstJumpTileName = "";
+
     // 刚刚偷过菜
     public bool justSteal = false;
 
