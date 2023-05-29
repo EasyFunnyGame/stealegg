@@ -172,6 +172,16 @@ public class Game : MonoBehaviour
 
         playerRound = 0;
         enemyRound = 0;
+
+        camera.testing = true;
+
+        // Test  测试镜头
+        var nodes = new List<GameObject>();
+        foreach(var kvp in boardManager.nodes)
+        {
+            nodes.Add(kvp.Value.gameObject);
+        }
+        camera.SetTargets(nodes.ToArray());
     }
 
 

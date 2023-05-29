@@ -193,9 +193,21 @@ public class GameCamera : MonoBehaviour
 	public float UpperPaddingLeft = 0.5f;
 	public float UpperPaddingRight = 0.5f;
 
+	public bool testing = false;
+
 	private void LateUpdate()
 	{
 		if (Game.Instance.result != GameResult.NONE && !forceUpdate) return;
+
+		if (testing && _targets.Length > 0)
+		{
+			var targetPositionAndRotation = TargetPositionAndRotation(_targets);
+			Vector3 velocity = Vector3.zero;
+			transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, 0.05f);
+			transform.rotation = targetPositionAndRotation.Rotation;
+			return;
+		}
+
 		if (upper && _targets.Length > 0)
 		{
 			var targetPositionAndRotation = TargetPositionAndRotation(_targets);

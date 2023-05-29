@@ -269,6 +269,7 @@ public class AudioPlay : MonoBehaviour
         if (index != -1)
         {
             Instance.PlaySFX(index);
+            // Debug.Log("播放敌人脚步声 左:" + enemy.Uid);
         }
     }
 
@@ -293,6 +294,7 @@ public class AudioPlay : MonoBehaviour
         if (index != -1)
         {
             Instance.PlaySFX(index);
+            // Debug.Log("播放敌人脚步声 右:" + enemy.Uid);
         }
     }
 
