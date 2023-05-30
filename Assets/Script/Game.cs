@@ -182,7 +182,10 @@ public class Game : MonoBehaviour
         {
             nodes.Add(kvp.Value.gameObject);
         }
-        camera.height = 6;
+        if (sceneName == "2-5")
+        {
+            camera.height = 6;
+        }
         camera.SetTargets(nodes.ToArray());
     }
 
