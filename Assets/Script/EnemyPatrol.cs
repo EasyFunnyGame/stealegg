@@ -38,7 +38,7 @@ public class EnemyPatrol : Enemy
                 routeLine.transform.position = transform.position;
                 routeLine.transform.Translate(new Vector3(0, 0.012f, 0));
 
-                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * distance / 40 + new Vector3(0,0.0256f,0);
+                routeArrow.transform.position = transform.localPosition + transform.GetChild(0).forward * distance / 40 + new Vector3(0, Enemy.ARROW_HIEGHT, 0);
                 routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                 routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 
@@ -50,7 +50,7 @@ public class EnemyPatrol : Enemy
                 {
                     var lastNode = redNodes[redNodes.Count - 1];
                     routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
-                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.006f+ lastNode.transform.position.y, lastNode.transform.position.z) + new Vector3(0, 0.0256f, 0);
+                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.006f+ lastNode.transform.position.y, lastNode.transform.position.z) + new Vector3(0, Enemy.ARROW_HIEGHT, 0);
                     routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                     routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 }

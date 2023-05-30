@@ -38,6 +38,8 @@ public class Enemy : Character
     // 敌人数量
     public static int count;
 
+    public static float ARROW_HIEGHT = 0.025f;
+
     // 追踪的目标点
     public Coord _coordTracing = new Coord();
     private float m_traceRound = int.MinValue;
@@ -541,7 +543,7 @@ public class Enemy : Character
         copy.transform.position = line.transform.position;
         var scale = line.transform.localScale;
         copy.transform.localScale = new Vector3(RED_SCALE, scale.y, scale.z);
-        copy.transform.position = new Vector3(line.transform.position.x, 0.006f + line.transform.position.y, line.transform.position.z);
+        copy.transform.position = new Vector3(line.transform.position.x, 0.001f + line.transform.position.y, line.transform.position.z);
         copy.transform.rotation = line.transform.rotation;
 
         var childCount = copy.transform.childCount;
@@ -738,7 +740,7 @@ public class Enemy : Character
         {
             routeArrow.gameObject.SetActive(true);
             var lastRedNode = redNodes[redNodes.Count - 1];
-            routeArrow.transform.position = lastRedNode.transform.position+ new Vector3(0,0.0256f,0);
+            routeArrow.transform.position = lastRedNode.transform.position+ new Vector3(0,Enemy.ARROW_HIEGHT, 0);
 
             routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
             routeArrow.transform.Rotate(new Vector3(0, 0, 180));

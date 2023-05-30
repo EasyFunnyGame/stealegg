@@ -81,14 +81,14 @@ public class GameCamera : MonoBehaviour
 			(viewProjectionTopAndBottomEdgeHits.Max + viewProjectionTopAndBottomEdgeHits.Min) / 2f,
 			projectionPlaneZ - requiredCameraPerpedicularDistanceFromProjectionPlane);
 
-		DebugDrawProjectionRays(cameraPositionIdentity,
-			viewProjectionLeftAndRightEdgeHits,
-			viewProjectionTopAndBottomEdgeHits,
-			requiredCameraPerpedicularDistanceFromProjectionPlane,
-			targetsRotatedToCameraIdentity,
-			projectionPlaneZ,
-			halfHorizontalFovRad,
-			halfVerticalFovRad);
+		//DebugDrawProjectionRays(cameraPositionIdentity,
+		//	viewProjectionLeftAndRightEdgeHits,
+		//	viewProjectionTopAndBottomEdgeHits,
+		//	requiredCameraPerpedicularDistanceFromProjectionPlane,
+		//	targetsRotatedToCameraIdentity,
+		//	projectionPlaneZ,
+		//	halfHorizontalFovRad,
+		//	halfVerticalFovRad);
 
 		return new PositionAndRotation(rotation * cameraPositionIdentity, rotation, height);
 	}

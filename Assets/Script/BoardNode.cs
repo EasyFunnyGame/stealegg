@@ -304,7 +304,7 @@ public class BoardNode : MonoBehaviour
         var targetIconRenderer = targetIcon.GetComponent<MeshRenderer>();
         targetIconRenderer.transform.localScale = new Vector3(Enemy.RED_SCALE, 1, Enemy.RED_SCALE);
         //targetIconRenderer.transform.position = node.transform.position;
-        targetIconRenderer.transform.Translate(new Vector3(0,0.012f,0));
+        targetIconRenderer.transform.Translate(new Vector3(0,0.002f,0));
         targetIconRenderer.material = Resources.Load<Material>("Material/RouteRed");
         contour.gameObject.SetActive(false);
         sphereCollider.gameObject.SetActive(false);

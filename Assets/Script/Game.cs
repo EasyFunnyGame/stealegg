@@ -175,12 +175,14 @@ public class Game : MonoBehaviour
 
         camera.testing = true;
 
+        delayShowEndTimer = 0;
         // Test  测试镜头
         var nodes = new List<GameObject>();
         foreach(var kvp in boardManager.nodes)
         {
             nodes.Add(kvp.Value.gameObject);
         }
+        camera.height = 6;
         camera.SetTargets(nodes.ToArray());
     }
 
@@ -632,9 +634,9 @@ public class Game : MonoBehaviour
     }
 
 
-    bool enemyActionRunning = false;
+    public bool enemyActionRunning = false;
 
-    bool enemyTurnStart = false;
+    public bool enemyTurnStart = false;
 
     public void Steal()
     {

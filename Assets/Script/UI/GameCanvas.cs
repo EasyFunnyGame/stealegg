@@ -161,6 +161,14 @@ public class GameCanvas : BaseCanvas
         {
             return; 
         }
+        if (Game.Instance.enemyTurnStart && Game.Instance.enemyActionRunning)
+        {
+            return;
+        }
+        if (Game.Instance.player.currentAction!= null)
+        {
+            return;
+        }
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
