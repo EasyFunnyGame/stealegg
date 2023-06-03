@@ -216,6 +216,13 @@ public class GraffCanvas : BaseCanvas
         }
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera.gameObject.SetActive(true);
+
+
+        var targetSceneObject = GameObject.Find("Target");
+        if (targetSceneObject && targetSceneObject.activeSelf)
+        {
+            Game.Instance.player.Pick();
+        }
     }
 
     FreeDraw.Drawable drawable;

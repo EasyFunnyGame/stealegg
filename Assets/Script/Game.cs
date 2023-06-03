@@ -289,7 +289,7 @@ public class Game : MonoBehaviour
         delayShowEndTimer = 2;
         player.m_animator.SetInteger("result",1);
 
-        if(gainEergy >0 )
+        if(gainEergy > 0 )
         {
             var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
             energy += gainEergy;
@@ -309,7 +309,7 @@ public class Game : MonoBehaviour
         if (player.justSteal)
         {
             player.stealStopTime += Time.deltaTime;
-            if(player.stealStopTime >= 6.0f)
+            if(player.stealStopTime >= 3.0f)
             {
                 player.justSteal = false;
             }

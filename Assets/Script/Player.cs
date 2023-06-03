@@ -337,7 +337,6 @@ public class Player : Character
                 item.icon.gameObject.SetActive(false);
                 (item as GraffItem)?.sceneGameObject?.SetActive(false);
             }
-
         }
     }
 
