@@ -38,7 +38,7 @@ public class Enemy : Character
     // 敌人数量
     public static int count;
 
-    public static float ARROW_HIEGHT = 0.025f;
+    public static float ARROW_HIEGHT = 0.03f;
 
     // 追踪的目标点
     public Coord _coordTracing = new Coord();
@@ -58,7 +58,6 @@ public class Enemy : Character
             if(!_coordTracing.isLegal &&  value.isLegal)
             {
                 m_traceRound = Game.Instance.enemyRound;
-                // m_traceTime = //Random.Range(0,99999);
             }
             _coordTracing = value;
         }
@@ -66,6 +65,8 @@ public class Enemy : Character
 
     // 玩家当前所在坐标
     public Coord coordPlayer = null;
+
+    public bool sawPlayer = false;
 
     // 是否实时更新主角追踪点
     public bool updateCoordPlayer = false;
@@ -167,16 +168,28 @@ public class Enemy : Character
     public virtual void CheckAction()
     {
         if (currentAction != null) return;
-
-        if(!coordTracing.isLegal)
+        var player = Game.Instance.player;
+        // var nextTileName = "";
+        if (!coordTracing.isLegal)
         {
             if (CheckPlayer() == CheckPlayerResult.Found)
             {
                 checkRange = 3;
                 UpdateRouteMark();
-                Debug.Log("发现敌人,更新监测点");
+                // Debug.Log("发现敌人,更新监测点");
                 return;
             }
+        }
+        else
+        {
+            //nextTileName = nextTile?.name;
+            // 主角躲进树林，清空追踪点
+            //if(player.isHidding && sawPlayer)
+            //{
+                //sawPlayer = false;
+                //coordTracing.SetNoTurn();
+                //coordPlayer.SetNoTurn();
+            //}
         }
 
         var result = CheckPlayer();
@@ -184,11 +197,11 @@ public class Enemy : Character
         {
             return;
         }
-        //if(result == CheckPlayerResult.None)
+        if(!sawPlayer)// 优先追击看见敌人的点,同样是声音引起的追击点才进行点更新
         {
             var coordLure = boardManager.coordLure;
             var rangeLure = boardManager.rangeLure;
-            var player = Game.Instance.player;
+            
             if (boardManager.coordLure.isLegal && Coord.Distance(coordLure, coord) <= rangeLure)// coordPlayer.isMin &&
             {
                 sleeping = false;
@@ -244,7 +257,13 @@ public class Enemy : Character
                         }
                     }
                     // 这个转向要在后面，否则转向不对
-                    currentAction = new ActionTurnDirection(this, coordLure.name, false);
+                    var lureTile = gridManager.GetTileByName(coordLure.name);
+                    FindPathRealTime(lureTile, null, true);
+                    LookAt(coordLure.name);
+                    if (_direction != targetDirection)
+                    {
+                        currentAction = new ActionTurnDirection(this, nextTile.name, true);
+                    }
                 }
                 else
                 {
@@ -267,6 +286,23 @@ public class Enemy : Character
                         LostTarget();
                     }
                 }
+
+                // 
+                //if(nextTileName == nextTile.name)
+                //{
+
+                //    // 如果寻找主角的下一个点和声音引诱的下一个点相同，则继续前进
+                //    // 不同向则转向
+                //    if (_direction != targetDirection)
+                //    {
+                //        currentAction = new ActionTurnDirection(this, nextTile.name, true);
+                //    }
+                //    else
+                //    // 同向则直接行进
+                //    {
+                //        currentAction = new ActionEnemyMove(this, gridManager.GetTileByName(coordTracing.name));
+                //    }
+                //}
                 // 更新声波点 回合停止
                 if (!coordLureMe.isLegal || !coordLureMe.Equals(coordLure))
                 {
@@ -274,57 +310,62 @@ public class Enemy : Character
                     return;
                 }
             }
-            else if( boardManager.growthLure.isLegal )
+            // else 
+        }
+
+        // 2-3-17 
+        if (boardManager.growthLure.isLegal)
+        {
+            var growthLure = boardManager.growthLure;
+            var targetName = "";
+            var fTwo = frontTwo;
+            var fOne = front;
+            if (frontTwo.isLegal && boardManager.allItems.ContainsKey(fTwo.name))
             {
-                var growthLure = boardManager.growthLure;
-                var targetName = "";
+                targetName = fTwo.name;
+            }
+            else if (front.isLegal && boardManager.allItems.ContainsKey(fOne.name))
+            {
+                targetName = fOne.name;
+            }
 
-                if (frontTwo.isLegal &&  boardManager.allItems.ContainsKey(frontTwo.name))
+            var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == player.lastTileName || targetName == player.coord.name);
+            if (lookingAtGrowthTile)
+            {
+                var lureTile = gridManager.GetTileByName(growthLure.name);
+                if (lureTile == null)
                 {
-                    targetName = frontTwo.name;
+                    LostTarget();
+                    return;
                 }
-                else if(front.isLegal && boardManager.allItems.ContainsKey(front.name))
+                var success = FindPathRealTime(lureTile, null, true);
+                if (success)
                 {
-                    targetName = front.name;
-                }
-
-                var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth &&  (targetName == player.lastTileName || targetName == player.coord.name);
-                if(lookingAtGrowthTile )
-                {
-                    var lureTile = gridManager.GetTileByName(growthLure.name);
-                    if (lureTile == null)
+                    var continueTrace = false;
+                    if (coordTracing.isLegal)
                     {
-                        LostTarget();
-                        return;
+                        continueTrace = true;
                     }
-                    var success = FindPathRealTime(lureTile, null,true);
-                    if (success)
+                    coordTracing = boardManager.growthLure.Clone();
+                    coordPlayer.SetNoTurn();
+                    Game.Instance.UpdateMoves();
+                    //ShowTraceTarget(player.coord.name);
+                    ShowFound();
+                    if (continueTrace)
                     {
-                        var continueTrace = false;
-                        if (coordTracing.isLegal)
-                        {
-                            continueTrace = true;
-                        }
-                        coordTracing = boardManager.growthLure.Clone();
-                        coordPlayer.SetNoTurn();
-                        Game.Instance.UpdateMoves();
-                        //ShowTraceTarget(player.coord.name);
-                        ShowFound();
-                        if (continueTrace)
-                        {
-                            var tile = gridManager.GetTileByName(coordTracing.name);
-                            currentAction = new ActionEnemyMove(this, tile);
-                        }
+                        var tile = gridManager.GetTileByName(coordTracing.name);
+                        currentAction = new ActionEnemyMove(this, tile);
                     }
                     patroling = false;
                     UpdateRouteMark();
-                    //else
-                    //{
-                    //    Debug.LogWarning("在敌人不可达的出逃树林！！！");
-                    //    LostTarget();
-                    //}
-                    return;
                 }
+                else
+                {
+                    Debug.LogWarning("在敌人不可达的出逃树林！！！");
+                    LostTarget();
+                    GoBack();
+                }
+                return;
             }
         }
 
@@ -339,6 +380,7 @@ public class Enemy : Character
             {
                 UpdateTracingPlayerTile();
             }
+           
 
             var tile = gridManager.GetTileByName(coordTracing.name);
             if (tile == null)
@@ -361,7 +403,6 @@ public class Enemy : Character
             var success = FindPathRealTime(tile, null, true);
             if (!success)
             {
-                var player = Game.Instance.player;
                 // 如果主角在正前方而且 前方一格可达 则继续前进
                 if (TryMoveFrontToWardPlayer())
                 {
@@ -897,7 +938,7 @@ public class Enemy : Character
 
                     coordTracing = player.coord.Clone();
                     coordPlayer = player.coord.Clone();
-
+                    sawPlayer = true;
                     updateCoordPlayer = true;
 
                     var enemySteps = StepsReach(player.coord.name);
@@ -1029,6 +1070,7 @@ public class Enemy : Character
         coordPlayer.SetNoTurn();
         coordLureMe.SetNoTurn();
         stepsAfterFoundPlayer = -1;
+        sawPlayer = false;
     }
 
     protected float idleType;

@@ -60,7 +60,11 @@ public class Game : MonoBehaviour
 
     public static bool teaching = false;
 
+    public static bool restart = false;
+
     public static int clearTeaching = 0;
+
+    //public static int clearRestatr = 0;
 
     public Transform guideArrow;
 
@@ -109,7 +113,7 @@ public class Game : MonoBehaviour
     }
 
 
-    bool resLoaded = false;
+    public bool resLoaded = false;
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
         stealed = false;
@@ -164,6 +168,15 @@ public class Game : MonoBehaviour
             }
             gameCanvas.onClickStartPlayingGameHandler();
         }
+
+        if (restart)
+        {
+            gameCanvas.onClickStartPlayingGameHandler();
+            restart = false;
+        }
+
+
+
         camera.upper = false;
 
         boardManager.Ready();
@@ -173,9 +186,9 @@ public class Game : MonoBehaviour
         playerRound = 0;
         enemyRound = 0;
 
-        camera.testing = true;
-
         delayShowEndTimer = 0;
+
+        camera.testing = true;
         // Test  测试镜头
         var nodes = new List<GameObject>();
         foreach(var kvp in boardManager.nodes)
@@ -201,6 +214,10 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!resLoaded)
+        {
+            return;
+        }
         if(bottleSelectingTarget)
         {
             ListenBottleTargetSelect();
@@ -322,102 +339,6 @@ public class Game : MonoBehaviour
 
                 enemyTurnStart = true;
 
-                //var enemyUid2Poses = new Dictionary<string, List<Enemy>>();
-                //for (var i = 0; i < boardManager.enemies.Count; i++)
-                //{
-                //    var enemy = boardManager.enemies[i];
-                //    enemy.bodyPositionOffset = Vector3.zero;
-                //    var targetNodeName = "";
-                //    if (enemy.currentAction is ActionEnemyMove)
-                //    {
-                //        var moveOne = enemy.db_moves[0];
-                //        Debug.Log("敌人:" + enemy.Uid + " 下一个目的点:" + moveOne.transform.position);
-                //        targetNodeName = string.Format("{0}_{1}", moveOne.transform.position.x, moveOne.transform.position.z);
-                //    }
-                //    else
-                //    {
-                //        targetNodeName = enemy.coord.name;
-                //    }
-
-                //    if (string.IsNullOrEmpty(targetNodeName)) continue;
-
-                //    if (enemyUid2Poses.ContainsKey(targetNodeName))
-                //    {
-                //        enemyUid2Poses[targetNodeName].Add(enemy);
-                //    }
-                //    else
-                //    {
-                //        var list = new List<Enemy>();
-                //        list.Add(enemy);
-                //        enemyUid2Poses[targetNodeName] = list;
-                //    }
-                //}
-
-                //var nodes = boardManager.nodes;
-                //foreach(var kvp in nodes)
-                //{
-                //    var node = kvp.Value;
-                //    node.ClearCharacters();
-                //}
-
-                //foreach ( var kvp in enemyUid2Poses)
-                //{
-                //    var nodeName = kvp.Key;
-
-                //    var enemyList = kvp.Value;
-
-                //    var boardNode = boardManager.FindNode(nodeName);
-                //    if (boardNode == null) continue;
-
-                //    if (enemyList.Count < 1 || enemyList.Count > 4) continue;
-
-                //    var positions = boardNode.getPositions(enemyList.Count);
-
-                //    var occupied = new List<Vector3>();
-
-                //    for( var index = 0; index < enemyList.Count; index++ ) 
-                //    {
-                //        var dis = float.MaxValue;
-                //        var selectedPosition = Vector3.zero;
-                //        var enemy = enemyList[index];
-                //        for(var posIndex = 0; posIndex < positions.Count; posIndex++)
-                //        {
-                //            var pos = positions[posIndex];
-                //            if (occupied.IndexOf(pos) != -1)
-                //            {
-                //                continue;
-                //            }
-                //            var testDis = Vector3.Distance(enemy.tr_body.GetChild(0).position, pos);
-                //            if(testDis < dis)
-                //            {
-                //                dis = testDis;
-                //                selectedPosition = pos;
-                //            }
-                //        }
-                //        if (!selectedPosition.Equals(Vector3.zero))
-                //        {
-                //            enemy.bodyPositionOffset = selectedPosition;
-                //            occupied.Add(selectedPosition);
-                //            // enemy.db_moves[0].transform.position = selectedPosition;
-                //        }
-                //    }
-                //}
-
-                //foreach(var kvp  in enemyUid2Poses)
-                //{
-                //    var nodeName = kvp.Key;
-
-                //    var enemyList = kvp.Value;
-
-                //    var boardNode = boardManager.FindNode(nodeName);
-                //    if (boardNode == null) continue;
-                //    boardNode.SetCharacterCount(enemyList.Count);
-                //    for (var index = 0;index < enemyList.Count; index++)
-                //    {
-                //        boardNode.AddCharacter(enemyList[index]);
-                //    }
-                //}
-
 
                 boardManager.coordLure.SetNoTurn();
                 boardManager.growthLure.SetNoTurn();
@@ -521,7 +442,7 @@ public class Game : MonoBehaviour
     public WalkThroughStep showingStep = null;
     public void ShowGuide()
     {
-        if (resLoaded == false) return;
+        if (!resLoaded) return;
         if (guideArrow == null) return;
         if (teaching == false)
         {

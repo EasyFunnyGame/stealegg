@@ -157,18 +157,19 @@ public class GameCanvas : BaseCanvas
         {
             return;
         }
-        if (Game.Instance.walkingToExit)
-        {
-            return; 
-        }
-        if (Game.Instance.enemyTurnStart && Game.Instance.enemyActionRunning)
-        {
-            return;
-        }
-        if (Game.Instance.player.currentAction!= null)
-        {
-            return;
-        }
+        //if (Game.Instance.walkingToExit)
+        //{
+        //    return; 
+        //}
+
+        //if (Game.Instance.enemyTurnStart && Game.Instance.enemyActionRunning)
+        //{
+        //    return;
+        //}
+        //if (Game.Instance.player.currentAction!= null)
+        //{
+        //    return;
+        //}
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
@@ -188,6 +189,7 @@ public class GameCanvas : BaseCanvas
         PlayerPrefs.Save();
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
+        Game.Instance.resLoaded = false;
         Game.Instance.playing = false;
         AudioPlay.Instance.PlayClick();
     }
@@ -196,6 +198,7 @@ public class GameCanvas : BaseCanvas
     {
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene("Main");
+        Game.Instance.resLoaded = false;
         Game.Instance.playing = false;
         AudioPlay.Instance.PlayClick();
     }
@@ -335,8 +338,10 @@ public class GameCanvas : BaseCanvas
         // 水井盖图标显示，能用的才显示出来
         // 敌人移动中不显示
         // 主角进行中不显示
+        // 酒瓶正在选点不显示
         var playerActing = Game.Instance.player.currentAction != null;
         var enemyActing = false;
+        
         for(var index = 0; index < Game.Instance.boardManager.enemies.Count; index++)
         {
             if (Game.Instance.boardManager.enemies[index].currentAction != null)
@@ -356,7 +361,7 @@ public class GameCanvas : BaseCanvas
                 var item = items[playerTileName];
                 if(item?.itemType == ItemType.ManHoleCover)
                 {
-                    showManHoleCoverIcon = !enemyActing && !playerActing;
+                    showManHoleCoverIcon = !enemyActing && !playerActing && !Game.Instance.bottleSelectingTarget;
                 }
             }
         }

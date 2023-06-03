@@ -29,7 +29,9 @@ public class EnemyPatrol : Enemy
             routeLine.gameObject.SetActive(patroling);
             if ( redNodes.Count > 0)
             {
-                var distance = Vector3.Distance(transform.position, patrolEnd.transform.position) * 40;
+                //var distance = Vector3.Distance(transform.position, patrolEnd.transform.position) * 40;
+                var lastRedNode = redNodes[redNodes.Count - 1];
+                var distance = Vector3.Distance(transform.position, lastRedNode.transform.position) * 40;
                 distance = Mathf.Min(distance,80);
 
 
@@ -50,7 +52,7 @@ public class EnemyPatrol : Enemy
                 {
                     var lastNode = redNodes[redNodes.Count - 1];
                     routeLine.transform.rotation = transform.GetChild(0).transform.rotation;
-                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, 0.006f+ lastNode.transform.position.y, lastNode.transform.position.z) + new Vector3(0, Enemy.ARROW_HIEGHT, 0);
+                    routeArrow.transform.position = new Vector3(lastNode.transform.position.x, lastNode.transform.position.y, lastNode.transform.position.z) + new Vector3(0, Enemy.ARROW_HIEGHT, 0);
                     routeArrow.transform.rotation = transform.GetChild(0).transform.rotation;
                     routeArrow.transform.Rotate(new Vector3(0, 0, 180));
                 }

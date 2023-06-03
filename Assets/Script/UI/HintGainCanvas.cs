@@ -35,6 +35,7 @@ public class HintGainCanvas : BaseCanvas
         Game.clearTeaching = 0;
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
+        Game.Instance.resLoaded = false;
         Game.Instance.playing = false;
         AudioPlay.Instance.PlayClick();
     }

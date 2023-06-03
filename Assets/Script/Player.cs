@@ -141,7 +141,7 @@ public class Player : Character
                         }
                         else if (frontOne.isLegal && boardManager.allItems.ContainsKey(frontOne.name))
                         {
-                            targetName = front.name;
+                            targetName = frontOne.name;
                         }
 
                         var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == lastTileName || targetName == coord.name);

@@ -31,6 +31,7 @@ public class GameEndCanvas : BaseCanvas
     private void onClickReturnToHomeHandler()
     {
         SceneManager.LoadScene("Main");
+        Game.Instance.resLoaded = false;
         Game.Instance.endCanvas.Hide();
         AudioPlay.Instance.PlayClick();
         Game.Instance.playing = false;
@@ -85,8 +86,11 @@ public class GameEndCanvas : BaseCanvas
 
         Game.Instance.playing = false;
         Game.Instance.endCanvas.Hide();
+        Game.restart = true;
         SceneManager.LoadScene(Game.Instance.currentLevelName);
+        Game.Instance.resLoaded = false;
         AudioPlay.Instance.PlayClick();
+
     }
 
     private void onClickShareHandler()

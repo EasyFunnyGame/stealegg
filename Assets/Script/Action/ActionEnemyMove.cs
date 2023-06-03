@@ -15,6 +15,12 @@ public class ActionEnemyMove : ActionBase
 
     private GridTile targetTile;
 
+    private float turnEndWait = 0.5f;
+
+    private float reachEndWait = 0.5f;
+
+    private static float WAIT_TIME = 0.25f;
+
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
     {
         targetTile = tile;
@@ -59,9 +65,7 @@ public class ActionEnemyMove : ActionBase
                 enemy.up = height > 0 ? 1 : height < 0 ? -1 : 0;
             }
         }
-
         enemy.m_animator.SetBool("moving", true);
-        
     }
 
     public Enemy enemy
@@ -79,10 +83,23 @@ public class ActionEnemyMove : ActionBase
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist >= 0.001f)
         {
+            reachEndWait = ActionEnemyMove.WAIT_TIME;
             return false;
         }
-        if(!reached)
+        if(reachEndWait == WAIT_TIME)
         {
+            enemy.Reached();
+            
+        }
+        if (reachEndWait > 0.0f)
+        {
+            reachEndWait -= Time.deltaTime;
+        }
+        if (reachEndWait > 0) return false;
+
+        if (!reached)
+        {
+            CheckNextStep();
             reached = true;
             enemy.Reached();
             var result = enemy.CheckPlayer();
@@ -92,7 +109,7 @@ public class ActionEnemyMove : ActionBase
             }
             // 巡逻敌人到达点之后检查是否需要转向
             var enemyPatrol = enemy as EnemyPatrol;
-            if(enemyPatrol)
+            if (enemyPatrol)
             {
                 patrolTurnDirection = enemyPatrol.TurnDirection();
             }
@@ -120,7 +137,9 @@ public class ActionEnemyMove : ActionBase
         {
             if (patrolTurnDirection != patrolEnemy._direction)
             {
-                enemy.LookAt(patrolEnemy.lastCoord.name);
+                Utils.SetDirection(enemy, patrolTurnDirection);
+                enemy.targetDirection = patrolTurnDirection;
+                // enemy.LookAt(patrolEnemy.lastCoord.name);
                 return false;
             }
             else
@@ -217,71 +236,6 @@ public class ActionEnemyMove : ActionBase
     {
         if (enemy.coord.Equals(enemy.coordTracing))
         {
-            //if (Game.Instance.player.justJump && enemy.coordTracing.name == Game.Instance.player.jumstJumpTileName)
-            //{
-            //    // Debug.Log("从井盖上消失");
-            //    var available = 0;
-            //    var upAvailable = false;
-            //    var up = enemy.gridManager.GetTileByName(string.Format("{0}_{1}",enemy.coord.x,enemy.coord.z + 1));
-            //    if (up != null && enemy.boardManager.FindLine(enemy.coord.name, up.name))
-            //    {
-            //        // Debug.Log("上");
-            //        available++;
-            //        upAvailable = true;
-            //    }
-            //    var downAvailable = false;
-            //    var down = enemy.gridManager.GetTileByName(string.Format("{0}_{1}", enemy.coord.x, enemy.coord.z - 1));
-            //    if (down != null && enemy.boardManager.FindLine(enemy.coord.name, down.name))
-            //    {
-            //        // Debug.Log("下");
-            //        available++;
-            //        downAvailable = true;
-            //    }
-            //    var leftAvailable = false;
-            //    var left = enemy.gridManager.GetTileByName(string.Format("{0}_{1}", enemy.coord.x - 1, enemy.coord.z));
-            //    if (left != null && enemy.boardManager.FindLine(enemy.coord.name, left.name))
-            //    {
-            //        // Debug.Log("左");
-            //        available++;
-            //        leftAvailable = true;
-            //    }
-            //    var rightAvailable = false;
-            //    var right = enemy.gridManager.GetTileByName(string.Format("{0}_{1}", enemy.coord.x + 1, enemy.coord.z));
-            //    if (right != null && enemy.boardManager.FindLine(enemy.coord.name, right.name))
-            //    {
-            //        // Debug.Log("右");
-            //        available++;
-            //        rightAvailable = true;
-            //    }
-
-            //    if(available == 1)
-            //    {
-            //        enemy.coordPlayer.SetNoTurn();
-            //    }
-            //    else
-            //    {
-            //        if(enemy.direction == Direction.Right && leftAvailable)
-            //        {
-            //            enemy.coordPlayer.SetTurnBack();
-            //        }
-            //        else if(enemy.direction == Direction.Left && rightAvailable) 
-            //        {
-            //            enemy.coordPlayer.SetTurnBack();
-            //        }
-            //        else if(enemy.direction == Direction.Up && downAvailable)
-            //        {
-            //            enemy.coordPlayer.SetTurnBack();
-            //        }
-            //        else if(enemy.direction == Direction.Down && upAvailable)
-            //        {
-            //            enemy.coordPlayer.SetTurnBack();
-            //        }
-            //        else
-            //        {
-
-            //        }
-            //    }
-            //}
             // 到达追踪点
             // 如果 coordPlayer 不合法，转向上一个路径点 如果合法，转向主角逃跑寻路点下一个路径点，这里要从主角开始寻路到敌人
             if (enemy.coordPlayer.isMin)
@@ -435,17 +389,30 @@ public class ActionEnemyMove : ActionBase
             character.tr_body.GetChild(0).transform.rotation = Quaternion.LookRotation(new_dir);
 
             var angle = Vector3.Angle(tar_dir, character.tr_body.GetChild(0).forward);
+
             
             if (angle <= 1 )
             {
                 enemy.tr_body.GetChild(0).forward = tar_dir;
-                enemy.Turned();
-                var result = enemy.CheckPlayer();
-                if( result != CheckPlayerResult.None )
+                if (turnEndWait == WAIT_TIME)
                 {
-                    actionForceBreak = true;
-                    enemy.currentAction = null;
+                    
                 }
+                turnEndWait -= Time.deltaTime;
+                if (turnEndWait <= 0)
+                {
+                    enemy.Turned();
+                    var result = enemy.CheckPlayer();
+                    if (result != CheckPlayerResult.None)
+                    {
+                        actionForceBreak = true;
+                        enemy.currentAction = null;
+                    }
+                }
+            }
+            else
+            {
+                turnEndWait = WAIT_TIME;
             }
         }
         else if (character.moving)
@@ -466,25 +433,30 @@ public class ActionEnemyMove : ActionBase
             var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
             if (tdist < 0.001f)
             {
-                character.currentTile = character.tar_tile_s.db_path_lowest[character.num_tile];
-                if (character.moving_tiles && character.num_tile < character.tar_tile_s.db_path_lowest.Count - 1)
-                {
-                    character.num_tile++;
-                    var tpos = character.tar_tile_s.db_path_lowest[character.num_tile].transform.position;
-                    tpos.y = character.transform.position.y;
-                    character.db_moves[0].position = tpos;
-
-                    character.nextTile = character.tar_tile_s.db_path_lowest[character.num_tile];
-
-                    character.db_moves[1].position = tpos;
-                }
-                else
-                {
-                    character.db_moves[4].gameObject.SetActive(false);
-                    character.moving = false;
-                    character.moving_tiles = false;
-                }
+                //this.CheckNextStep();
             }
+        }
+    }
+
+    private void CheckNextStep()
+    {
+        character.currentTile = character.tar_tile_s.db_path_lowest[character.num_tile];
+        if (character.moving_tiles && character.num_tile < character.tar_tile_s.db_path_lowest.Count - 1)
+        {
+            character.num_tile++;
+            var tpos = character.tar_tile_s.db_path_lowest[character.num_tile].transform.position;
+            tpos.y = character.transform.position.y;
+            character.db_moves[0].position = tpos;
+
+            character.nextTile = character.tar_tile_s.db_path_lowest[character.num_tile];
+
+            character.db_moves[1].position = tpos;
+        }
+        else
+        {
+            character.db_moves[4].gameObject.SetActive(false);
+            character.moving = false;
+            character.moving_tiles = false;
         }
     }
 }
