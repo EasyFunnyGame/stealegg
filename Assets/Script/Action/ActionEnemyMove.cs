@@ -15,10 +15,13 @@ public class ActionEnemyMove : ActionBase
 
     private GridTile targetTile;
 
-    private float turnEndWait = 0.5f;
+    // 转向等待时间
+    private float turnEndWait = 0.25f;
 
-    private float reachEndWait = 0.5f;
+    // 到达转向时间
+    private float reachEndWait = 0.25f;
 
+    // 等待时间
     private static float WAIT_TIME = 0.25f;
 
     public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
@@ -83,13 +86,12 @@ public class ActionEnemyMove : ActionBase
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist >= 0.001f)
         {
-            reachEndWait = ActionEnemyMove.WAIT_TIME;
+            reachEndWait = WAIT_TIME;
             return false;
         }
         if(reachEndWait == WAIT_TIME)
         {
             enemy.Reached();
-            
         }
         if (reachEndWait > 0.0f)
         {
@@ -396,12 +398,11 @@ public class ActionEnemyMove : ActionBase
                 enemy.tr_body.GetChild(0).forward = tar_dir;
                 if (turnEndWait == WAIT_TIME)
                 {
-                    
+                    enemy.Turned();
                 }
                 turnEndWait -= Time.deltaTime;
                 if (turnEndWait <= 0)
                 {
-                    enemy.Turned();
                     var result = enemy.CheckPlayer();
                     if (result != CheckPlayerResult.None)
                     {

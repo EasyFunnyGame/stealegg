@@ -46,6 +46,7 @@ public class ActionTurnDirection : ActionBase
         var angle = Vector3.Angle(tar_dir, character.tr_body.GetChild(0).forward);
         if(angle < 1)
         {
+            character.tr_body.GetChild(0).forward = tar_dir;
             character.body_looking = false;
             character.Turned();
         }

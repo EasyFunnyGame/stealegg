@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GrowthItem : Item
 {
-
     override protected void OnTriggerEnter(Collider other)
     {
         //if (other.gameObject.GetComponent<Character>())

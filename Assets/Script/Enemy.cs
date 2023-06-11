@@ -38,7 +38,7 @@ public class Enemy : Character
     // 敌人数量
     public static int count;
 
-    public static float ARROW_HIEGHT = 0.028f;
+    public static float ARROW_HIEGHT = 0.025f;
 
     // 追踪的目标点
     public Coord _coordTracing = new Coord();
@@ -172,6 +172,7 @@ public class Enemy : Character
         // var nextTileName = "";
         if (!coordTracing.isLegal)
         {
+            // 2-3-15
             if (CheckPlayer() == CheckPlayerResult.Found)
             {
                 checkRange = 3;
@@ -197,9 +198,24 @@ public class Enemy : Character
         {
             return;
         }
-        if(!sawPlayer)// 优先追击看见敌人的点,同样是声音引起的追击点才进行点更新
+
+        // 玩家是否在视线范围内
+        var isPlayerInSight = false;
+        for(var index = 0; index < redNodes.Count; index++)
         {
+            if (redNodes[index].name == player.coord.name)
+            {
+                isPlayerInSight = true;
+                break;
+            }
+        }
+
+        if (!sawPlayer )// 优先追击看见敌人的点,同样是声音引起的追击点才进行点更新
+        {
+            var tracing = coordTracing.isLegal;
+
             var coordLure = boardManager.coordLure;
+
             var rangeLure = boardManager.rangeLure;
             
             if (boardManager.coordLure.isLegal && Coord.Distance(coordLure, coord) <= rangeLure)// coordPlayer.isMin &&
@@ -250,7 +266,6 @@ public class Enemy : Character
                                 else
                                 {
                                     // 敌人不能直达 吹口哨时回头望
-                                    //coordPlayer.SetTurnBack();
                                 }
                             }
                             
@@ -262,7 +277,7 @@ public class Enemy : Character
                     LookAt(coordLure.name);
                     if (_direction != targetDirection)
                     {
-                        currentAction = new ActionTurnDirection(this, nextTile.name, true);
+                        currentAction = new ActionTurnDirection(this, coordLure.name, true);
                     }
                 }
                 else
@@ -284,26 +299,26 @@ public class Enemy : Character
                         // 如果主角在正前方而且 前方一格可达 则继续前进
                         Debug.LogWarning("在敌人不可达的点吹口哨！！！");
                         LostTarget();
+                        // 2-5-13, 第二章第三关
+                        GoBack();
                     }
                 }
 
-                // 
-                //if(nextTileName == nextTile.name)
-                //{
+                // 如果看见了敌人而且正在追击,听到声音则继续追击
+                if (sawPlayer)
+                {
+                    if (_direction != targetDirection)
+                    {
+                        currentAction = new ActionTurnDirection(this, nextTile.name, true);
+                    }
+                    else
+                    // 同向则直接行进
+                    {
+                        currentAction = new ActionEnemyMove(this, gridManager.GetTileByName(coordTracing.name));
+                    }
+                }
 
-                //    // 如果寻找主角的下一个点和声音引诱的下一个点相同，则继续前进
-                //    // 不同向则转向
-                //    if (_direction != targetDirection)
-                //    {
-                //        currentAction = new ActionTurnDirection(this, nextTile.name, true);
-                //    }
-                //    else
-                //    // 同向则直接行进
-                //    {
-                //        currentAction = new ActionEnemyMove(this, gridManager.GetTileByName(coordTracing.name));
-                //    }
-                //}
-                // 更新声波点 回合停止
+                // 更新声波点 
                 if (!coordLureMe.isLegal || !coordLureMe.Equals(coordLure))
                 {
                     coordLureMe = coordLure.Clone();
@@ -313,7 +328,7 @@ public class Enemy : Character
             // else 
         }
 
-        // 2-3-17 
+        // 2-3-17  2-3-15
         if (boardManager.growthLure.isLegal)
         {
             var growthLure = boardManager.growthLure;
@@ -338,32 +353,45 @@ public class Enemy : Character
                     LostTarget();
                     return;
                 }
+             
                 var success = FindPathRealTime(lureTile, null, true);
-                if (success)
+
+                var continueTrace = false;
+                if (coordTracing.isLegal)
                 {
-                    var continueTrace = false;
-                    if (coordTracing.isLegal)
+                    continueTrace = true;
+                }
+
+                coordTracing = boardManager.growthLure.Clone();
+                coordPlayer.SetNoTurn();
+
+                ShowFound();
+                Game.Instance.UpdateMoves();
+                UpdateRouteMark();
+
+                if (!success)
+                {
+                    // 2-3-15
+                    var distance = player.StepsReach( coord.name );
+                    if(distance > 2)
                     {
-                        continueTrace = true;
+                        LostTarget();
+                        GoBack();
                     }
-                    coordTracing = boardManager.growthLure.Clone();
-                    coordPlayer.SetNoTurn();
-                    Game.Instance.UpdateMoves();
-                    //ShowTraceTarget(player.coord.name);
-                    ShowFound();
+                }
+                else
+                {
                     if (continueTrace)
                     {
                         var tile = gridManager.GetTileByName(coordTracing.name);
                         currentAction = new ActionEnemyMove(this, tile);
                     }
                     patroling = false;
-                    UpdateRouteMark();
-                }
-                else
-                {
-                    Debug.LogWarning("在敌人不可达的出逃树林！！！");
-                    LostTarget();
-                    GoBack();
+
+                    // Debug.LogWarning("在敌人不可达的出逃树林！！！");
+                    // 2-3-15 下一个回合才转身回去, 而且要保持警戒状态
+                    // LostTarget();
+                    // GoBack();
                 }
                 return;
             }
@@ -555,7 +583,7 @@ public class Enemy : Character
                 }
             }
         }
-        if (currentLevelName == "2-12")
+        else if (currentLevelName == "2-12")
         {
             if (this is EnemyPatrol)
             {
@@ -592,6 +620,21 @@ public class Enemy : Character
                 {
                     assignedTurnBackTile = "2_1";
                 }
+            }
+        }
+        else if(currentLevelName == "2-4")
+        {
+            if( coord.name == "0_3" )
+            {
+                assignedTurnBackTile = "1_0";
+                originalCoord = new Coord(1, 0, 0.0f);
+                originalDirection = Direction.Up;
+            }
+            if (coord.name == "2_2")
+            {
+                assignedTurnBackTile = "1_4";
+                originalCoord = new Coord(1, 4, 0.0f);
+                originalDirection = Direction.Down;
             }
         }
 
@@ -929,6 +972,11 @@ public class Enemy : Character
             AudioPlay.Instance.PlayCatch(this);
             m_animator.SetBool("catch", true);
             m_animator.SetBool("moving", false);
+
+            // 抓到了仍然需要更新定位框
+            coordTracing = player.coord.Clone();
+            Game.Instance.UpdateMoves();
+
             Game.Instance.FailGame(this);
             ClearAllIconsAboveHead();
             return true;

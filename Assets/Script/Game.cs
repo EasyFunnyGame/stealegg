@@ -383,7 +383,7 @@ public class Game : MonoBehaviour
         }
 
         
-        if (result == GameResult.NONE && player.currentAction == null && !enemyActionRunning)
+        if (player.currentAction == null && !enemyActionRunning)
         {
             ShowGuide();
             UpdateMoves();
