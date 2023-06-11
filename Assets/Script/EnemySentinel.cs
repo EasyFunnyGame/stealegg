@@ -130,7 +130,8 @@ public class EnemySentinel : Enemy
                 }
                 else
                 {
-                    currentAction = new ActionEnemyMove(this, originalTile);
+                    var useFastest = ifGoBackUseFastestWay();
+                    currentAction = new ActionEnemyMove(this, originalTile,useFastest );
                     return true;
                 }
             }

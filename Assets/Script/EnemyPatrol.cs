@@ -117,7 +117,8 @@ public class EnemyPatrol : Enemy
             Debug.LogError(this.gameObject.name + "巡逻点不存在" + nextTile.name + " ,请重新检查地图路径点设置");
             return;
         }
-        currentAction = new ActionEnemyMove(this, tile);
+        
+        currentAction = new ActionEnemyMove(this, tile, coordTracing.isLegal);
     }
 
 

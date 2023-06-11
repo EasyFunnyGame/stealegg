@@ -314,7 +314,7 @@ public class Enemy : Character
                     else
                     // 同向则直接行进
                     {
-                        currentAction = new ActionEnemyMove(this, gridManager.GetTileByName(coordTracing.name));
+                        currentAction = new ActionEnemyMove(this, gridManager.GetTileByName(coordTracing.name), true);
                     }
                 }
 
@@ -384,7 +384,7 @@ public class Enemy : Character
                     if (continueTrace)
                     {
                         var tile = gridManager.GetTileByName(coordTracing.name);
-                        currentAction = new ActionEnemyMove(this, tile);
+                        currentAction = new ActionEnemyMove(this, tile, true);
                     }
                     patroling = false;
 
@@ -442,7 +442,7 @@ public class Enemy : Character
                 GoBack();
                 return;
             }
-            currentAction = new ActionEnemyMove(this, tile);
+            currentAction = new ActionEnemyMove(this, tile,true);
             return;
         }
 
@@ -475,7 +475,7 @@ public class Enemy : Character
                     if (stepFront == 1)
                     {
                         var frontTile = gridManager.GetTileByName(front.name);
-                        currentAction = new ActionEnemyMove(this, frontTile);
+                        currentAction = new ActionEnemyMove(this, frontTile,true);
                         return true;
                     }
                 }
@@ -495,6 +495,8 @@ public class Enemy : Character
                 {
                     var assignGoBackTile = getAssignGoBackTileName();
                     originalTile = gridManager.GetTileByName(originalCoord.name);
+                    
+                    
                     FindPathRealTime(assignGoBackTile, null, false);
 
                     currentAction = new ActionTurnDirection(this, nextTile.name, true);
@@ -504,15 +506,14 @@ public class Enemy : Character
                 else
                 {
                     var goBackTile = getAssignGoBackTileName();
+                    var useFastest = ifGoBackUseFastestWay();
                     if (goBackTile)
                     {
-                        currentAction = new ActionEnemyMove(this, goBackTile);
-                        //FindPathRealTime(originalTile, null, false);
+                        currentAction = new ActionEnemyMove(this, goBackTile, useFastest);
                     }
                     else
                     {
-                        currentAction = new ActionEnemyMove(this, originalTile);
-                        //FindPathRealTime(originalTile, null, false);
+                        currentAction = new ActionEnemyMove(this, originalTile, useFastest);
                     }
                     return true;
                 }
@@ -533,117 +534,181 @@ public class Enemy : Character
     }
 
 
-    public GridTile assignTile;
+    public GridTile assignNextTile;
 
-    GridTile getAssignGoBackTileName()
+    public string assignOriginalTileName;
+
+    protected bool ifGoBackUseFastestWay()
     {
-        var assignedTurnBackTile = "";
+        // 2-7-16
         var currentLevelName = Game.Instance.currentLevelName;
         if (currentLevelName == "2-7")
         {
             var enemyPatrol = this as EnemyPatrol;
-            if (coord.name == "3_2")
+            if (coord.name == "2_1")
             {
                 for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
                 {
-                    if (enemyPatrol.patrolNodes[index].name == "1_1")
+                    if (enemyPatrol.patrolNodes[index].name == "4_3")
                     {
-                        assignedTurnBackTile = "3_1";
-                        originalCoord = new Coord(1, 1, 0.0f);
-                        originalDirection = Direction.Right;
-                    }
-                    if (enemyPatrol.patrolNodes[index].name == "1_3")
-                    {
-                        assignedTurnBackTile = "3_3";
-                        originalCoord = new Coord(1, 3, 0.0f);
-                        originalDirection = Direction.Right;
+                        return true;
                     }
                 }
-            }
-            if (coord.name == "3_1")
-            {
-                for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
-                {
-                    if (enemyPatrol.patrolNodes[index].name == "1_1")
-                    {
-                        assignedTurnBackTile = "2_1";
-                        originalCoord = new Coord(1, 1, 0.0f);
-                        originalDirection = Direction.Right;
-                    }
-                }
-            }
-        }
-        else if (currentLevelName == "2-10")
-        {
-            if (gameObject.name.Contains("Enemy_Distracted"))
-            {
-                if (coord.name == "2_4")
-                {
-                    assignedTurnBackTile = "3_3";
-                }
-            }
-        }
-        else if (currentLevelName == "2-12")
-        {
-            if (this is EnemyPatrol)
-            {
-                if (coord.name == "2_2")
-                {
-                    var enemyPatrol = this as EnemyPatrol;
-                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
-                    {
-                        if (enemyPatrol.patrolNodes[index].name == "3_0")
-                        {
-                            assignedTurnBackTile = "2_1";
-                            originalCoord = new Coord(3, 0, 0.0f);
-                            originalDirection = Direction.Up;
-                        }
-                    }
-                }
-                if (coord.name == "5_1")
-                {
-                    var enemyPatrol = this as EnemyPatrol;
-                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
-                    {
-                        if (enemyPatrol.patrolNodes[index].name == "3_0")
-                        {
-                            assignedTurnBackTile = "4_2";
-                            originalCoord = new Coord(3, 0, 0.0f);
-                            originalDirection = Direction.Up;
-                        }
-                    }
-                }
-            }
-            if (gameObject.name.Contains("Enemy_Static"))
-            {
-                if (coord.name == "2_2")
-                {
-                    assignedTurnBackTile = "2_1";
-                }
-            }
-        }
-        else if(currentLevelName == "2-4")
-        {
-            if( coord.name == "0_3" )
-            {
-                assignedTurnBackTile = "1_0";
-                originalCoord = new Coord(1, 0, 0.0f);
-                originalDirection = Direction.Up;
-            }
-            if (coord.name == "2_2")
-            {
-                assignedTurnBackTile = "1_4";
-                originalCoord = new Coord(1, 4, 0.0f);
-                originalDirection = Direction.Down;
             }
         }
 
-        var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
-        if(assignTile)
+        return false;
+    }
+
+    GridTile getAssignGoBackTileName()
+    {
+        if(string.IsNullOrEmpty(assignOriginalTileName))
         {
-            this.assignTile = assignTile;
-            return assignTile;
+            var assignedTurnBackTile = "";
+            var currentLevelName = Game.Instance.currentLevelName;
+            if (currentLevelName == "2-7")
+            {
+                var enemyPatrol = this as EnemyPatrol;
+                if (coord.name == "2_2")
+                {
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "4_1")
+                        {
+                            assignedTurnBackTile = "2_1";
+                            originalCoord = new Coord(4, 1, 0.0f);
+                            originalDirection = Direction.Left;
+                            assignOriginalTileName = "4_1";
+                        }
+                        if (enemyPatrol.patrolNodes[index].name == "4_3")
+                        {
+                            assignedTurnBackTile = "2_3";
+                            originalCoord = new Coord(4, 3, 0.0f);
+                            originalDirection = Direction.Left;
+                            assignOriginalTileName = "4_3";
+                        }
+                    }
+                }
+                else
+                if (coord.name == "3_2" )
+                {
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "1_1")
+                        {
+                            assignedTurnBackTile = "3_1";
+                            originalCoord = new Coord(1, 1, 0.0f);
+                            originalDirection = Direction.Right;
+                            assignOriginalTileName = "1_1";
+                        }
+                        if (enemyPatrol.patrolNodes[index].name == "1_3")
+                        {
+                            assignedTurnBackTile = "3_3";
+                            originalCoord = new Coord(1, 3, 0.0f);
+                            originalDirection = Direction.Right;
+                            assignOriginalTileName = "1_3";
+                        }
+                    }
+                }
+                else if (coord.name == "3_1")
+                {
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "1_1")
+                        {
+                            assignedTurnBackTile = "2_1";
+                            originalCoord = new Coord(1, 1, 0.0f);
+                            originalDirection = Direction.Right;
+                            assignOriginalTileName = "1_1";
+                        }
+                        // 2-7-16
+                        if (enemyPatrol.patrolNodes[index].name == "1_3")
+                        {
+                            assignedTurnBackTile = "1_1";
+                            originalCoord = new Coord(1, 3, 0.0f);
+                            originalDirection = Direction.Right;
+                            assignOriginalTileName = "1_3";
+                        }
+                    }
+                }
+            }
+            else if (currentLevelName == "2-10")
+            {
+                if (gameObject.name.Contains("Enemy_Distracted"))
+                {
+                    if (coord.name == "2_4")
+                    {
+                        assignedTurnBackTile = "3_3";
+                    }
+                }
+            }
+            else if (currentLevelName == "2-12")
+            {
+                if (this is EnemyPatrol)
+                {
+                    if (coord.name == "2_2")
+                    {
+                        var enemyPatrol = this as EnemyPatrol;
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "3_0")
+                            {
+                                assignedTurnBackTile = "2_1";
+                                originalCoord = new Coord(3, 0, 0.0f);
+                                originalDirection = Direction.Up;
+                                assignOriginalTileName = "3_0";
+                            }
+                        }
+                    }
+                    if (coord.name == "5_1")
+                    {
+                        var enemyPatrol = this as EnemyPatrol;
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "3_0")
+                            {
+                                assignedTurnBackTile = "4_2";
+                                originalCoord = new Coord(3, 0, 0.0f);
+                                originalDirection = Direction.Up;
+                                assignOriginalTileName = "3_0";
+                            }
+                        }
+                    }
+                }
+                if (gameObject.name.Contains("Enemy_Static"))
+                {
+                    if (coord.name == "2_2")
+                    {
+                        assignedTurnBackTile = "2_1";
+                    }
+                }
+            }
+            else if (currentLevelName == "2-4")
+            {
+                if (coord.name == "0_3")
+                {
+                    assignedTurnBackTile = "1_0";
+                    originalCoord = new Coord(1, 0, 0.0f);
+                    originalDirection = Direction.Up;
+                    assignOriginalTileName = "1_0";
+                }
+                if (coord.name == "2_2")
+                {
+                    assignedTurnBackTile = "1_4";
+                    originalCoord = new Coord(1, 4, 0.0f);
+                    originalDirection = Direction.Down;
+                    assignOriginalTileName = "1_4";
+                }
+            }
+
+            var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
+            if (assignTile)
+            {
+                assignNextTile = assignTile;
+                return assignTile;
+            }
         }
+        
         return gridManager.GetTileByName(originalCoord.name);
     }
 
@@ -705,8 +770,10 @@ public class Enemy : Character
     public override void Reached()
     {
         base.Reached();
+      
         lookAroundTime = 9;
         m_animator.SetBool("moving", false);
+        m_animator.SetBool("look_around", false);
         UpdateRouteMark();
         //Debug.Log("到达更新监测点");
         //Debug.Log(gameObject.name + " 到达点" + coord.name);
@@ -972,7 +1039,7 @@ public class Enemy : Character
             AudioPlay.Instance.PlayCatch(this);
             m_animator.SetBool("catch", true);
             m_animator.SetBool("moving", false);
-
+            m_animator.Play("Cath");
             // 抓到了仍然需要更新定位框
             coordTracing = player.coord.Clone();
             Game.Instance.UpdateMoves();
@@ -1146,11 +1213,12 @@ public class Enemy : Character
         coordLureMe.SetNoTurn();
         stepsAfterFoundPlayer = -1;
         sawPlayer = false;
+        assignOriginalTileName = "";
     }
 
     protected float idleType;
     protected float targetIdleType;
-    protected float lookAroundTime = 0;
+    public float lookAroundTime = 0;
 
     public int stepsAfterFoundPlayer = -1;
 

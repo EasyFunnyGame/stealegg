@@ -381,9 +381,8 @@ public class Character : MonoBehaviour
     }
 
 
-    public bool FindPathRealTime(GridTile to, GridTile from, bool useFastestWay, bool reverseDirection = false )
+    public bool FindPathRealTime(GridTile to, GridTile from, bool useFastestWay )
     {
-
         if(useFastestWay)
         {
             var xOffSet = 0;

@@ -24,7 +24,7 @@ public class ActionEnemyMove : ActionBase
     // 等待时间
     private static float WAIT_TIME = 0.25f;
 
-    public ActionEnemyMove(Enemy enemy, GridTile tile) : base(enemy, ActionType.EnemyMove)
+    public ActionEnemyMove(Enemy enemy, GridTile tile, bool useFastest) : base(enemy, ActionType.EnemyMove)
     {
         targetTile = tile;
 
@@ -34,13 +34,12 @@ public class ActionEnemyMove : ActionBase
         {
             enemy.stepsAfterFoundPlayer++;
         }
-
         reached = false;
 
         patrolTurnDirection = enemy._direction;
 
         velocity = new Vector3();
-        enemy.FindPathRealTime(tile,null, enemy.coordTracing.isLegal);
+        enemy.FindPathRealTime(tile, null, useFastest);// enemy.coordTracing.isLegal
 
         // Debug.Log("位置偏移量:" + enemy.bodyPositionOffset);
 
@@ -166,6 +165,10 @@ public class ActionEnemyMove : ActionBase
     {
         if (enemy.coord.name == enemy.originalCoord.name)
         {
+            if(enemy.assignOriginalTileName == enemy.originalCoord.name)
+            {
+                enemy.assignOriginalTileName = "";
+            }
             // 回到原点要转向
             if (enemy._direction != enemy.originalDirection)
             {
@@ -186,11 +189,12 @@ public class ActionEnemyMove : ActionBase
             {
                 enemy.FindPathRealTime(targetTile, null, true) ;
             }
-            if(enemy.assignTile)
+
+            if(enemy.assignNextTile)
             {
                 //Debug.Log("临时的点");
                 enemy.FindPathRealTime(enemy.originalTile, null, true);
-                enemy.assignTile = null;
+                enemy.assignNextTile = null;
             }
             if (enemy.nextTile)
             {
@@ -248,6 +252,14 @@ public class ActionEnemyMove : ActionBase
                 if (checkResult == CheckPlayerResult.None)
                 {
                     enemy.LostTarget();
+
+                    if(enemy is EnemyPatrol)
+                    {
+                        enemy.lookAroundTime = 9;
+                        enemy.m_animator.SetFloat("look_around_type", 0);
+                        enemy.m_animator.SetBool("look_around", true);
+                    }
+                    
                 }
                 return true;
             }
@@ -263,6 +275,13 @@ public class ActionEnemyMove : ActionBase
                     if (checkResult == CheckPlayerResult.None)
                     {
                         enemy.LostTarget();
+
+                        if (enemy is EnemyPatrol)
+                        {
+                            enemy.lookAroundTime = 9;
+                            enemy.m_animator.SetFloat("look_around_type", 0);
+                            enemy.m_animator.SetBool("look_around", true);
+                        }
                     }
                 }
                 return sameDirection;
@@ -312,6 +331,13 @@ public class ActionEnemyMove : ActionBase
                         if (checkResult == CheckPlayerResult.None)
                         {
                             enemy.LostTarget();
+
+                            if (enemy is EnemyPatrol)
+                            {
+                                enemy.lookAroundTime = 9;
+                                enemy.m_animator.SetFloat("look_around_type", 0);
+                                enemy.m_animator.SetBool("look_around", true);
+                            }
                         }
                     }
                     return sameDirection;
