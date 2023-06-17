@@ -555,6 +555,17 @@ public class Enemy : Character
                     }
                 }
             }
+
+            if (coord.name == "2_3")
+            {
+                for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                {
+                    if (enemyPatrol.patrolNodes[index].name == "4_1")
+                    {
+                        return true;
+                    }
+                }
+            }
         }
 
         return false;
@@ -628,6 +639,27 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 3, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_3";
+                        }
+                    }
+                }
+                else if(coord.name == "3_3")
+                {
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "1_3")
+                        {
+                            assignedTurnBackTile = "2_3";
+                            originalCoord = new Coord(1, 3, 0.0f);
+                            originalDirection = Direction.Right;
+                            assignOriginalTileName = "1_3";
+                        }
+                        // 2-7-16
+                        if (enemyPatrol.patrolNodes[index].name == "1_1")
+                        {
+                            assignedTurnBackTile = "2_3";
+                            originalCoord = new Coord(1, 1, 0.0f);
+                            originalDirection = Direction.Right;
+                            assignOriginalTileName = "1_1";
                         }
                     }
                 }

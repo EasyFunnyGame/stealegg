@@ -253,12 +253,12 @@ public class ActionEnemyMove : ActionBase
                 {
                     enemy.LostTarget();
 
-                    if(enemy is EnemyPatrol)
-                    {
-                        enemy.lookAroundTime = 9;
-                        enemy.m_animator.SetFloat("look_around_type", 0);
-                        enemy.m_animator.SetBool("look_around", true);
-                    }
+                    //if(enemy is EnemyPatrol)
+                    //{
+                    //    enemy.lookAroundTime = 9;
+                    //    enemy.m_animator.SetFloat("look_around_type", 0);
+                    //    enemy.m_animator.SetBool("look_around", true);
+                    //}
                     
                 }
                 return true;
@@ -276,12 +276,12 @@ public class ActionEnemyMove : ActionBase
                     {
                         enemy.LostTarget();
 
-                        if (enemy is EnemyPatrol)
-                        {
-                            enemy.lookAroundTime = 9;
-                            enemy.m_animator.SetFloat("look_around_type", 0);
-                            enemy.m_animator.SetBool("look_around", true);
-                        }
+                        //if (enemy is EnemyPatrol)
+                        //{
+                        //    enemy.lookAroundTime = 9;
+                        //    enemy.m_animator.SetFloat("look_around_type", 0);
+                        //    enemy.m_animator.SetBool("look_around", true);
+                        //}
                     }
                 }
                 return sameDirection;
@@ -332,12 +332,12 @@ public class ActionEnemyMove : ActionBase
                         {
                             enemy.LostTarget();
 
-                            if (enemy is EnemyPatrol)
-                            {
-                                enemy.lookAroundTime = 9;
-                                enemy.m_animator.SetFloat("look_around_type", 0);
-                                enemy.m_animator.SetBool("look_around", true);
-                            }
+                            //if (enemy is EnemyPatrol)
+                            //{
+                            //    enemy.lookAroundTime = 9;
+                            //    enemy.m_animator.SetFloat("look_around_type", 0);
+                            //    enemy.m_animator.SetBool("look_around", true);
+                            //}
                         }
                     }
                     return sameDirection;
