@@ -175,7 +175,7 @@ public class Enemy : Character
             // 2-3-15
             if (CheckPlayer() == CheckPlayerResult.Found)
             {
-                checkRange = 3;
+                
                 UpdateRouteMark();
                 // Debug.Log("发现敌人,更新监测点");
                 return;
@@ -966,7 +966,7 @@ public class Enemy : Character
     {
         if (targetIdleType < idleType)
         {
-            idleType -= (0.1f * Time.deltaTime * 60);
+            idleType -= (0.2f * Time.deltaTime * 60);
             if (targetIdleType >= idleType)
             {
                 idleType = targetIdleType;
@@ -975,7 +975,7 @@ public class Enemy : Character
 
         if (targetIdleType > idleType)
         {
-            idleType += (0.1f * Time.deltaTime * 60);
+            idleType += (0.2f * Time.deltaTime * 60);
             if (targetIdleType <= idleType)
             {
                 idleType = targetIdleType;
@@ -1047,6 +1047,7 @@ public class Enemy : Character
         var found = TryFound();
         if(found)
         {
+            checkRange = 3;
             return CheckPlayerResult.Found;
         }
         return CheckPlayerResult.None;
