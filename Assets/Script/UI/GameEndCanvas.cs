@@ -136,6 +136,7 @@ public class GameEndCanvas : BaseCanvas
             winTxture.gameObject.SetActive(false);
             failTexture.gameObject.SetActive(true);
         }
+        AudioPlay.Instance.PlaySnapShot();
     }
 
     protected override void OnHide()

@@ -185,6 +185,10 @@ public class AudioPlay : MonoBehaviour
             audioPlayRightNow.src = src;
             audioPlayRightNow.Play();
         }
+
+        Debug.Log("Play SFX" + src);
+        Debug.Log("Volume:" + audioPlayRightNow.volume);
+
         return audioPlayRightNow;
     }
 
@@ -476,13 +480,13 @@ public class AudioPlay : MonoBehaviour
     public void EnemySleepIn()
     {
         var index = new System.Random().Next(77, 80);
-        sleepSound =  Instance.PlaySFX(index,0.4f);
+        sleepSound =  Instance.PlaySFX(index,0.35f);
     }
 
     public void EnemySleepOut()
     {
         var index = new System.Random().Next(80, 83);
-        sleepSound = Instance.PlaySFX(index, 0.4f);
+        sleepSound = Instance.PlaySFX(index, 0.35f);
     }
 
     public void StopSleepSound()
@@ -523,4 +527,9 @@ public class AudioPlay : MonoBehaviour
         Instance.PlaySFX(s[1]);
     }
 
+
+    public void PlaySnapShot()
+    {
+        Instance.PlaySFX(95);
+    }
 }
