@@ -1117,8 +1117,8 @@ public class Enemy : Character
                     updateCoordPlayer = true;
 
                     var enemySteps = StepsReach(player.coord.name);
-                    
-                    if( patroling && enemySteps >= 3)
+
+                    if (watching && enemySteps > 2)
                     {
                         coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
                     }
