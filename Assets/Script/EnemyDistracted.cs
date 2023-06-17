@@ -12,7 +12,7 @@ public class EnemyDistracted : Enemy
         base.Start();
     }
 
-    private float sleepSoundTime = 2.5f;
+    private float sleepSoundTime = 3f;
     private int sleepSoundType = 1;
 
     protected override void Update()

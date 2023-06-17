@@ -30,11 +30,13 @@ public class AudioPlay : MonoBehaviour
     public static void MusicVolume()
     {
         AudioManager.audioBGM.volume = bgmVolume;
+        Debug.Log("背景音乐:" + AudioManager.audioBGM.volume);
     }
 
     public static void SoundVolume()
     {
         AudioManager.audioPlayArray.ForEach((context) => { if(context != AudioManager.audioBGM) context.volume = sfxVolume; });
+        Debug.Log("背景音效:" + AudioManager.audioBGM.volume);
     }
 
     public void PlayMusic()
@@ -101,6 +103,8 @@ public class AudioPlay : MonoBehaviour
         AudioManager.audioBGM = manager.CreateAudio();
         // audioBGM.loop = true;
         AudioManager.audioBGM.src = inGameAudioSrc;
+
+        AudioManager.audioBGM.volume = bgmVolume;
 
         AudioManager.audioBGM.OnCanplay(() =>
         {
@@ -420,7 +424,7 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayStarGain()
     {
-        Instance.PlaySFX(87);
+        Instance.PlaySFX(90);
     }
 
     public void PlayWatchTurn()
@@ -472,13 +476,13 @@ public class AudioPlay : MonoBehaviour
     public void EnemySleepIn()
     {
         var index = new System.Random().Next(77, 80);
-        sleepSound =  Instance.PlaySFX(index,0.6f);
+        sleepSound =  Instance.PlaySFX(index,0.4f);
     }
 
     public void EnemySleepOut()
     {
         var index = new System.Random().Next(80, 83);
-        sleepSound = Instance.PlaySFX(index, 0.6f);
+        sleepSound = Instance.PlaySFX(index, 0.4f);
     }
 
     public void StopSleepSound()

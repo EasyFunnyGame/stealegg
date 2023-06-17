@@ -997,7 +997,7 @@ public class Enemy : Character
                 }
             }
         }
-        Debug.Log("站立状态:" + idleType);
+        // Debug.Log("站立状态:" + idleType);
     }
 
     public virtual void ReachedOriginal()

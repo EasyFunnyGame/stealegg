@@ -237,7 +237,6 @@ public class AudioManager : MonoBehaviour
         }
 
         var audio = addAudio(true);
-        audio.volume = AudioPlay.sfxVolume;
         if (!audioPlayArray.Contains(audio))
         {
             audioPlayArray.Add(audio);
