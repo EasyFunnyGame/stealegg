@@ -200,15 +200,15 @@ public class Enemy : Character
         }
 
         // 玩家是否在视线范围内
-        var isPlayerInSight = false;
-        for(var index = 0; index < redNodes.Count; index++)
-        {
-            if (redNodes[index].name == player.coord.name)
-            {
-                isPlayerInSight = true;
-                break;
-            }
-        }
+        //var isPlayerInSight = false;
+        //for(var index = 0; index < redNodes.Count; index++)
+        //{
+        //    if (redNodes[index].name == player.coord.name)
+        //    {
+        //        isPlayerInSight = true;
+        //        break;
+        //    }
+        //}
 
         if (!sawPlayer )// 优先追击看见敌人的点,同样是声音引起的追击点才进行点更新
         {
@@ -966,7 +966,7 @@ public class Enemy : Character
     {
         if (targetIdleType < idleType)
         {
-            idleType -= (0.2f * Time.deltaTime * 60);
+            idleType -= (0.1f * Time.deltaTime * 60);
             if (targetIdleType >= idleType)
             {
                 idleType = targetIdleType;
@@ -975,7 +975,7 @@ public class Enemy : Character
 
         if (targetIdleType > idleType)
         {
-            idleType += (0.2f * Time.deltaTime * 60);
+            idleType += (0.1f * Time.deltaTime * 60);
             if (targetIdleType <= idleType)
             {
                 idleType = targetIdleType;
@@ -990,7 +990,6 @@ public class Enemy : Character
                 lookAroundTime -= Time.deltaTime;
                 if (lookAroundTime <= 0)
                 {
-
                     lookAroundTime = 9;
                     var lookAroundType = coordTracing.isLegal ? 1 : 0;
                     m_animator.SetFloat("look_around_type", lookAroundType);
@@ -998,6 +997,7 @@ public class Enemy : Character
                 }
             }
         }
+        Debug.Log("站立状态:" + idleType);
     }
 
     public virtual void ReachedOriginal()
@@ -1126,8 +1126,10 @@ public class Enemy : Character
                     Game.Instance.UpdateMoves();
 
                     m_animator.SetBool("look_around", false);
+                   
 
                     ShowFound();
+
                     originalTile = null;
                     patroling = false;
                     watching = false;
@@ -1141,6 +1143,7 @@ public class Enemy : Character
         return false;
     }
 
+
     public virtual void ShowFound()
     {
         icons.shuijiao.gameObject.SetActive(false);
@@ -1150,9 +1153,17 @@ public class Enemy : Character
         icons.ccw.gameObject.SetActive(false);
         icons.cw.gameObject.SetActive(false);
         targetIdleType = 0.5f;
-        m_animator.SetBool("moving",false);
+
+        var isLookingAround = m_animator.GetBool("look_around");
+        if(isLookingAround)
+        {
+            idleType = 0.5f;
+            m_animator.SetFloat("idle_type", targetIdleType);
+        }
+        m_animator.SetBool("look_around", false);
         AudioPlay.Instance.PlayEnemyAlert(this);
     }
+
 
     public virtual void ShowBackToOriginal()
     {
