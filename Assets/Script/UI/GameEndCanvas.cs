@@ -30,7 +30,8 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickReturnToHomeHandler()
     {
-        SceneManager.LoadScene("Main");
+        //SceneManager.LoadScene("Main");
+        Game.Instance.mainCanvas.Show();
         Game.Instance.resLoaded = false;
         Game.Instance.endCanvas.Hide();
         AudioPlay.Instance.PlayClick();

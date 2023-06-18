@@ -197,7 +197,8 @@ public class GameCanvas : BaseCanvas
     void onClickBackToHomeHandler()
     {
         Game.Instance.gameCanvas.Hide();
-        SceneManager.LoadScene("Main");
+        //SceneManager.LoadScene("Main");
+        Game.Instance.mainCanvas.Show();
         Game.Instance.resLoaded = false;
         Game.Instance.playing = false;
         AudioPlay.Instance.PlayClick();

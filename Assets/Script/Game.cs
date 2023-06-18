@@ -100,7 +100,7 @@ public class Game : MonoBehaviour
     public void StartGame(string sceneName)
     {
         PlayLevel(sceneName);
-        chapterCanvas.Hide();
+        
         result = GameResult.NONE;
         gainEergy = 0;
     }
@@ -116,6 +116,7 @@ public class Game : MonoBehaviour
     public bool resLoaded = false;
     public void SceneLoaded(BoardManager boardMgr , string sceneName)
     {
+        chapterCanvas.Hide();
         stealed = false;
         walkingToExit = false;
         boardManager = boardMgr;
@@ -195,7 +196,16 @@ public class Game : MonoBehaviour
         {
             nodes.Add(kvp.Value.gameObject);
         }
-        if (sceneName == "2-5")
+        if (sceneName == "2-5" ||
+            sceneName == "2-3" ||
+            sceneName == "3-5" ||
+            sceneName == "3-6" ||
+            sceneName == "3-7" ||
+            sceneName == "3-9" ||
+            sceneName == "3-10"||
+            sceneName == "3-12"
+            )
+
         {
             camera.height = 6;
         }

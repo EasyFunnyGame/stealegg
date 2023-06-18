@@ -23,7 +23,7 @@ public class EnemyDistracted : Enemy
         
         if(sleepSoundTime <=0)
         {
-            sleepSoundTime = 2.5f;
+            sleepSoundTime = 3f;
 
             if(sleepSoundType == 1)
             {

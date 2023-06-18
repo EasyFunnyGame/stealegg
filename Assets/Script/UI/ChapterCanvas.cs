@@ -78,7 +78,7 @@ public class ChapterCanvas : BaseCanvas
 
     protected override void OnHide()
     {
-
+        Debug.Log("关闭界面");
     }
 
     void ShowChapter(int chapter)

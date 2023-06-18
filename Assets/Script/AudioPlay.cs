@@ -41,7 +41,7 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayMusic()
     {
-        if(SceneManager.GetActiveScene().name== "Main")
+        if(SceneManager.GetActiveScene().name == "Main")
         {
             PlayMain();
         }
@@ -83,9 +83,11 @@ public class AudioPlay : MonoBehaviour
             AudioManager.audioBGM = null;
         });
     }
+
     string backgroundSrc = "";
 
     string inGameAudioSrc = "";
+
     public void PlayBackGroundMusic()
     {
         if (!init)
@@ -126,6 +128,8 @@ public class AudioPlay : MonoBehaviour
             AudioManager.audioBGM = null;
         });
     }
+
+
     public void PlaySilencMusic()
     {
         if (!init) return;
@@ -305,7 +309,6 @@ public class AudioPlay : MonoBehaviour
             // Debug.Log("播放敌人脚步声 右:" + enemy.Uid);
         }
     }
-
     
 
     public void ClickUnWalkable()
@@ -489,31 +492,37 @@ public class AudioPlay : MonoBehaviour
         sleepSound = Instance.PlaySFX(index, 0.35f);
     }
 
+    // 停止呼噜声
     public void StopSleepSound()
     {
         sleepSound?.Stop();
     }
 
+    // 躲进树
     public void HideInTree()
     {
         Instance.PlaySFX(38);
     }
 
+    // 走出树
     public void WalkOutTree()
     {
-        Instance.PlaySFX(39);
+        Instance.PlaySFX(39,2);
     }
 
+    // 通过破洞铁网
     public void ThroughWireNet()
     {
         Instance.PlaySFX(32);
     }
 
+    // 通过剪短的贴网
     public void ThroughCuttedWireNet()
     {
         Instance.PlaySFX(33);
     }
 
+    // 剪铁网
     public void PlayPrincersCut()
     {
         int[] sounds1 = { 34, 36 };
@@ -527,7 +536,7 @@ public class AudioPlay : MonoBehaviour
         Instance.PlaySFX(s[1]);
     }
 
-
+    // 结束界面拍照
     public void PlaySnapShot()
     {
         Instance.PlaySFX(95);
