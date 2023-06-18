@@ -35,7 +35,8 @@ public class AudioPlay : MonoBehaviour
 
     public static void SoundVolume()
     {
-        AudioManager.audioPlayArray.ForEach((context) => { if(context != AudioManager.audioBGM) context.volume = sfxVolume; });
+        //AudioManager.audioPlayArray.ForEach((context) => { if(context != AudioManager.audioBGM) context.volume = sfxVolume; });
+        AudioPlay.sfxVolume = sfxVolume;
         Debug.Log("背景音效:" + AudioManager.audioBGM.volume);
     }
 
@@ -177,7 +178,7 @@ public class AudioPlay : MonoBehaviour
         {
             return null;
         }
-        audioPlayRightNow.volume *= volumeScale;
+        audioPlayRightNow.volume = AudioPlay.sfxVolume * volumeScale;
         // 如果要设置的src和原音频对象一致，可以直接播放
         if (audioPlayRightNow.src == src)
         {
@@ -507,7 +508,7 @@ public class AudioPlay : MonoBehaviour
     // 走出树
     public void WalkOutTree()
     {
-        Instance.PlaySFX(39,2);
+        Instance.PlaySFX(39,3);
     }
 
     // 通过破洞铁网

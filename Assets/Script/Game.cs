@@ -197,7 +197,6 @@ public class Game : MonoBehaviour
             nodes.Add(kvp.Value.gameObject);
         }
         if (sceneName == "2-5" ||
-            sceneName == "2-3" ||
             sceneName == "3-5" ||
             sceneName == "3-6" ||
             sceneName == "3-7" ||
@@ -208,6 +207,10 @@ public class Game : MonoBehaviour
 
         {
             camera.height = 6;
+        }
+        else if(sceneName == "2-3")
+        {
+            camera.height = 4;
         }
         camera.SetTargets(nodes.ToArray());
     }
