@@ -838,31 +838,36 @@ MonoBehaviour:
     z: -2147483648
     height: -2.1474836e+9
     name: 
+  sawPlayer: 0
+  updateCoordPlayer: 0
   originalTile: {fileID: 0}
   icons: {fileID: 0}
   headPoint: {fileID: 7865484325890252411}
   enemyMove: {fileID: 3352430559203129792}
   route: {fileID: 3420992984054824707}
   routeArrow: {fileID: 3420992982953370257}
-  routeNodeNames: []
   redNodes: []
   redLines: []
   sleeping: 0
   patroling: 0
+  watching: 1
   walkingLineType: 
   up: 0
   turnOnReachDirection: 0
-  tracingTileName: 
   checkRange: 0
   coordLureMe:
     x: -2147483648
     z: -2147483648
     height: -2.1474836e+9
     name: 
-  growthTile: {fileID: 0}
+  bodyPositionOffset: {x: 0, y: 0, z: 0}
+  moveDistance: 0
+  assignNextTile: {fileID: 0}
+  assignOriginalTileName: 
+  lookAroundTime: 0
   stepsAfterFoundPlayer: -1
-  patrolDistance: 2
   edgeCoords: []
+  patrolNodes: []
   patrolTile: {fileID: 0}
 --- !u!1 &9103667222968600252
 GameObject:
@@ -1107,15 +1112,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 802fbcd5018662c4786b0ae0c348151b, type: 3}
---- !u!4 &3617569255942812930 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2255204474031071120, guid: 802fbcd5018662c4786b0ae0c348151b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3276413358196533906}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4697362588524032566 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7802568774414571684, guid: 802fbcd5018662c4786b0ae0c348151b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3276413358196533906}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3617569255942812930 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2255204474031071120, guid: 802fbcd5018662c4786b0ae0c348151b,
     type: 3}
   m_PrefabInstance: {fileID: 3276413358196533906}
   m_PrefabAsset: {fileID: 0}
