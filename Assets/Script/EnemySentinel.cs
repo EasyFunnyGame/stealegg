@@ -36,7 +36,7 @@ public class EnemySentinel : Enemy
     public override void DoDefaultAction()
     {
         base.DoDefaultAction();
-        if (sentinelDirections == null || sentinelDirections.Count < 1) return;
+        if (sentinelDirections == null ) return;// || sentinelDirections.Count < 1 
         if (!willTurn)
         {
             var currentDirectionIndex = sentinelDirections.IndexOf(direction);
