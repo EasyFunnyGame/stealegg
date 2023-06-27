@@ -736,10 +736,17 @@ public class Enemy : Character
             {
                 if(coord.name == "1_2")
                 {
-                    if(this.originalCoord.name == "5_3")
+                    if(originalCoord.name == "5_3")
                     {
                         assignedTurnBackTile = "1_3";
                     }
+                }
+            }
+            else if(currentLevelName == "3-8")
+            {
+                if(this is EnemyStatic && coord.name == "1_3")
+                {
+                    assignedTurnBackTile = "1_2";
                 }
             }
 
