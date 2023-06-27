@@ -878,7 +878,7 @@ public class Enemy : Character
             {
                 var middleNode = redNodes[x];
                 var middleNodeY = middleNode.transform.position.y;
-                if (Mathf.Abs(middleNodeY - transform.position.y) > 0.2f && Mathf.Abs(middleNodeY - node.transform.position.y) > 0.2f)
+                if (middleNodeY - transform.position.y > 0.2f && middleNodeY - node.transform.position.y > 0.2f)
                 {
                     // return false;
                     blockByHeight = true;
@@ -1144,7 +1144,7 @@ public class Enemy : Character
                     {
                         var middleNode = redNodes[x];
                         var middleNodeY = middleNode.transform.position.y;
-                        if (Mathf.Abs(middleNodeY - transform.position.y) > 0.2f && Mathf.Abs(middleNodeY - player.transform.position.y) > 0.2f )
+                        if (middleNodeY - transform.position.y > 0.2f && middleNodeY - player.transform.position.y > 0.2f )
                         {
                             return false;
                         }
