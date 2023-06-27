@@ -401,10 +401,9 @@ public class Game : MonoBehaviour
             ShowGuide();
             UpdateMoves();
             // ListenClick();
+            player.CheckWhitsle();
+            player.CheckBottle();
         }
-
-        player.CheckWhitsle();
-        player.CheckBottle();
     }
 
 
@@ -835,7 +834,7 @@ public class Game : MonoBehaviour
             }
 
             var linkLine = player.boardManager.FindLine(player.currentTile.name, tile.name);
-            if (linkLine == null || linkLine.through == false)
+            if (linkLine == null || !linkLine.through)
             {
                 if (linkLine == null)
                 {

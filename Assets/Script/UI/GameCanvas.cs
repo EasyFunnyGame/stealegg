@@ -157,19 +157,6 @@ public class GameCanvas : BaseCanvas
         {
             return;
         }
-        //if (Game.Instance.walkingToExit)
-        //{
-        //    return; 
-        //}
-
-        //if (Game.Instance.enemyTurnStart && Game.Instance.enemyActionRunning)
-        //{
-        //    return;
-        //}
-        //if (Game.Instance.player.currentAction!= null)
-        //{
-        //    return;
-        //}
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
@@ -223,6 +210,11 @@ public class GameCanvas : BaseCanvas
                 return;
             }
         }
+        if (Game.Instance.enemyActionRunning || Game.Instance.player.currentAction!=null)
+        {
+            return;
+        }
+
         Game.Instance.BottleSelectTarget();
         btn_bottle_cancel.gameObject.SetActive(true);
         btn_bottle.gameObject.SetActive(false);
@@ -271,6 +263,11 @@ public class GameCanvas : BaseCanvas
                 Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
                 return;
             }
+        }
+
+        if (Game.Instance.enemyActionRunning || Game.Instance.player.currentAction != null)
+        {
+            return;
         }
         Game.Instance.BlowWhistle();
     }
@@ -524,6 +521,12 @@ public class GameCanvas : BaseCanvas
         {
             return;
         }
+
+        if(Game.Instance.enemyActionRunning || Game.Instance.player.currentAction != null)
+        {
+            return;
+        }    
+
         Game.Instance.CutBarbedWire(pincersItem as PincersItem);
     }
 
@@ -570,6 +573,11 @@ public class GameCanvas : BaseCanvas
             {
                 return;
             }
+        }
+
+        if (Game.Instance.enemyActionRunning || Game.Instance.player.currentAction != null)
+        {
+            return;
         }
         Game.Instance.JumpIntoManholeCover(itemIcon.item as ManholeCoverItem);
     }

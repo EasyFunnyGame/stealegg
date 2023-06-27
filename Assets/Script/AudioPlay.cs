@@ -225,7 +225,7 @@ public class AudioPlay : MonoBehaviour
         }
         if (index != -1)
         {
-            Instance.PlaySFX(index);
+            Instance.PlaySFX(index, 0.5f);
         }
     }
 
@@ -257,7 +257,7 @@ public class AudioPlay : MonoBehaviour
         }
         if (index != -1)
         {
-            Instance.PlaySFX(index);
+            Instance.PlaySFX(index,0.5f);
         }
     }
 
@@ -281,7 +281,7 @@ public class AudioPlay : MonoBehaviour
         }
         if (index != -1)
         {
-            Instance.PlaySFX(index);
+            Instance.PlaySFX(index, 0.5f);
             // Debug.Log("播放敌人脚步声 左:" + enemy.Uid);
         }
     }
@@ -306,7 +306,7 @@ public class AudioPlay : MonoBehaviour
         }
         if (index != -1)
         {
-            Instance.PlaySFX(index);
+            Instance.PlaySFX(index, 0.5f);
             // Debug.Log("播放敌人脚步声 右:" + enemy.Uid);
         }
     }
@@ -484,13 +484,13 @@ public class AudioPlay : MonoBehaviour
     public void EnemySleepIn()
     {
         var index = new System.Random().Next(77, 80);
-        sleepSound =  Instance.PlaySFX(index,0.35f);
+        sleepSound =  Instance.PlaySFX(index,0.2f);
     }
 
     public void EnemySleepOut()
     {
         var index = new System.Random().Next(80, 83);
-        sleepSound = Instance.PlaySFX(index, 0.35f);
+        sleepSound = Instance.PlaySFX(index, 0.2f);
     }
 
     // 停止呼噜声

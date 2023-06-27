@@ -849,7 +849,7 @@ public class Enemy : Character
             if(index > 0 )
             {
                 var linkLine = boardManager.FindLine(lastCoordName, routeCoordName);
-                if (linkLine==null || !linkLine.through)
+                if ( linkLine == null)// || !linkLine.through || linkLine.name == "Hor_Fenced_Visual"// 未间断的铁网路线也要显示
                 {
                     break;
                 }
