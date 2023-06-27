@@ -22,9 +22,7 @@
     "useApiHook": false,
     "disableUseStrict": false,
     "babelSetting": {
-      "ignore": [
-        "webgl.wasm.framework.unityweb.js"
-      ],
+      "ignore": ["webgl.wasm.framework.unityweb.js"],
       "disablePlugins": [],
       "outputPath": ""
     },
@@ -43,19 +41,31 @@
   "packOptions": {
     "ignore": [
       {
-        "value": ".plugincache",
-        "type": "folder"
+        "type": "folder",
+        "value": ".plugincache"
       },
       {
-        "value": ".symbols.unityweb",
-        "type": "suffix"
+        "type": "suffix",
+        "value": ".symbols.unityweb"
       }
-    ],
-    "include": []
+    ]
   },
-  "condition": {},
-  "editorSetting": {
-    "tabIndent": "insertSpaces",
-    "tabSize": 2
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "currentL": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": []
+    }
   }
 }
