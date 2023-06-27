@@ -10,6 +10,8 @@ public class EnemySentinel : Enemy
 
     public bool willTurn = false;
 
+    public Direction willWatchDirection = Direction.Down;
+
     const string Up = "Up";
 
     const string Down = "Down";
@@ -24,6 +26,10 @@ public class EnemySentinel : Enemy
     // 逆时针
     const string CCW = "CCW";
 
+    bool showCCW = false;
+
+    bool showCW = false;
+
     public override void Start()
     {
         this.checkRange = 10;
@@ -31,6 +37,7 @@ public class EnemySentinel : Enemy
         this.sleeping = false;
         this.patroling = false;
         base.Start();
+        willWatchDirection = targetDirection;
     }
 
     public override void DoDefaultAction()
@@ -48,15 +55,7 @@ public class EnemySentinel : Enemy
             {
                 indexTurn = -1;
             }
-
-            if (indexTurn == 1)
-            {
-                ShowCCW();
-            }
-            else
-            {
-                ShowCW();
-            }
+          
 
             var tryTurnDirectionIndex = currentDirectionIndex + indexTurn;
             if (tryTurnDirectionIndex < 0)
@@ -67,17 +66,49 @@ public class EnemySentinel : Enemy
             {
                 tryTurnDirectionIndex = 0;
             }
+
+
+
+            
+
             var tryTurnDirection = sentinelDirections[tryTurnDirectionIndex];
             targetDirection = tryTurnDirection;
+            willWatchDirection = tryTurnDirection;
             willTurn = true;
+
+            var angleIndex = targetDirection - _direction;
+            if (angleIndex < -1)
+            {
+                angleIndex += 4;
+            }
+            if(angleIndex > 1)
+            {
+                angleIndex -= 4;
+            }
+            //Debug.Log("angle index :" + angleIndex + " targetDirection: " + targetDirection + " currentDirection: " + _direction);
+            if (angleIndex == -1)
+            {
+                ShowCCW();
+                showCCW = true;
+                showCW = false;
+            }
+            else
+            {
+                ShowCW();
+                showCCW = false;
+                showCW = true;
+            }
+
         }
         else
         {
             // 执行转向动作
-            currentAction = new ActionTurnDirection(this, targetDirection, true);
+            currentAction = new ActionTurnDirection(this, willWatchDirection, true);
             AudioPlay.Instance.PlayWatchTurn();
             willTurn = false;
             HideSentinelTurn();
+            showCCW = false;
+            showCW = false;
         }
     }
 
@@ -86,14 +117,22 @@ public class EnemySentinel : Enemy
         base.ReachedOriginal();
         HideSentinelTurn();
         watching = true;
-        this.checkRange = 10;
+        checkRange = 10;
+
+        if (targetDirection != willWatchDirection)
+        {
+            targetDirection = willWatchDirection;
+        }
+        if (showCW)
+        {
+            ShowCW();
+        }
+        else if(showCCW)
+        {
+            ShowCCW();
+        }
     }
 
-    public override void LostTarget()
-    {
-        base.LostTarget();
-        willTurn = false;
-    }
 
     public override void Turned()
     {
@@ -114,39 +153,39 @@ public class EnemySentinel : Enemy
 
 
     // 回去原点  是否完结此回合
-    public override bool GoBack()
-    {
-        if (coord.name != originalCoord.name || _direction != originalDirection)
-        {
-            if (coord.name != originalCoord.name)
-            {
-                if (originalTile == null)
-                {
-                    originalTile = gridManager.GetTileByName(originalCoord.name);
-                    FindPathRealTime(originalTile, null,false);
-                    currentAction = new ActionTurnDirection(this, nextTile.name, true);
-                    ShowBackToOriginal();
-                    return true;
-                }
-                else
-                {
-                    var useFastest = ifGoBackUseFastestWay();
-                    currentAction = new ActionEnemyMove(this, originalTile,useFastest );
-                    return true;
-                }
-            }
-            else
-            {
-                ShowBackToOriginal();
-                targetDirection = originalDirection;
-                currentAction = new ActionTurnDirection(this, originalDirection, true);
-                return true;
-            }
-        }
-        else
-        {
-            ReachedOriginal();
-            return false;
-        }
-    }
+    //public override bool GoBack()
+    //{
+    //    if (coord.name != originalCoord.name || _direction != originalDirection)
+    //    {
+    //        if (coord.name != originalCoord.name)
+    //        {
+    //            if (originalTile == null)
+    //            {
+    //                originalTile = gridManager.GetTileByName(originalCoord.name);
+    //                FindPathRealTime(originalTile, null,false);
+    //                currentAction = new ActionTurnDirection(this, nextTile.name, true);
+    //                ShowBackToOriginal();
+    //                return true;
+    //            }
+    //            else
+    //            {
+    //                var useFastest = ifGoBackUseFastestWay();
+    //                currentAction = new ActionEnemyMove(this, originalTile,useFastest );
+    //                return true;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            ShowBackToOriginal();
+    //            targetDirection = originalDirection;
+    //            currentAction = new ActionTurnDirection(this, originalDirection, true);
+    //            return true;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        ReachedOriginal();
+    //        return false;
+    //    }
+    //}
 }

@@ -732,6 +732,16 @@ public class Enemy : Character
                     assignOriginalTileName = "1_4";
                 }
             }
+            else if(currentLevelName == "3-4")
+            {
+                if(coord.name == "1_2")
+                {
+                    if(this.originalCoord.name == "5_3")
+                    {
+                        assignedTurnBackTile = "1_3";
+                    }
+                }
+            }
 
             var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
             if (assignTile)
@@ -983,7 +993,8 @@ public class Enemy : Character
         }
         m_animator.SetFloat("idle_type", idleType);
 
-        if((targetIdleType != 0f || this is EnemyPatrol ) && !(this is EnemySentinel))
+
+        if( this is EnemySentinel )
         {
             if (lookAroundTime > 0)
             {
@@ -991,9 +1002,30 @@ public class Enemy : Character
                 if (lookAroundTime <= 0)
                 {
                     lookAroundTime = 9;
-                    var lookAroundType = coordTracing.isLegal ? 1 : 0;
-                    m_animator.SetFloat("look_around_type", lookAroundType);
-                    m_animator.SetBool("look_around",true);
+
+                    if (coordTracing.isLegal)
+                    {
+                        m_animator.SetFloat("look_around_type", 0.5f);
+                    }
+                    else
+                    {
+                        m_animator.SetFloat("look_around_type", 0);
+                    }
+                    
+                    m_animator.SetBool("look_around", true);
+                }
+            }
+        }
+        else if ((targetIdleType != 0f || this is EnemyPatrol))
+        {
+            if (lookAroundTime > 0)
+            {
+                lookAroundTime -= Time.deltaTime;
+                if (lookAroundTime <= 0)
+                {
+                    lookAroundTime = 9;
+                    m_animator.SetFloat("look_around_type", coordTracing.isLegal ? 1 : 0);
+                    m_animator.SetBool("look_around", true);
                 }
             }
         }
@@ -1121,6 +1153,7 @@ public class Enemy : Character
                     if (watching && enemySteps > 2)
                     {
                         coordPlayer.SetNoTurn();// 望远镜敌人看见远处敌人到达追踪点后不转向
+                        updateCoordPlayer = false;
                     }
 
                     Game.Instance.UpdateMoves();
@@ -1261,7 +1294,7 @@ public class Enemy : Character
     }
 
     protected float idleType;
-    protected float targetIdleType;
+    public float targetIdleType;
     public float lookAroundTime = 0;
 
     public int stepsAfterFoundPlayer = -1;
