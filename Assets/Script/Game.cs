@@ -418,12 +418,18 @@ public class Game : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
             {
-                var node = hitInfo.transform.parent.parent;
-                if (bottleSelectable.IndexOf(node.name)==-1)
+                var node = hitInfo.transform?.parent?.parent;
+                if (node == null || bottleSelectable.IndexOf(node.name) == -1)
                 {
+                    Debug.LogWarning("1 选中了一个不存在的点:" + hitInfo.transform.gameObject.name);
                     return;
                 }
                 GridTile tile = player.gridManager.GetTileByName(node.name);
+                if(tile == null)
+                {
+                    Debug.LogWarning("2 选中了一个不存在的点:"+ node.name);
+                    return;
+                }
                 for (var i = 0; i < boardManager.enemies.Count; i++)
                 {
                     var enemy = boardManager.enemies[i];
