@@ -333,67 +333,96 @@ public class Enemy : Character
         {
             var growthLure = boardManager.growthLure;
             var targetName = "";
-            var fTwo = frontTwo;
-            var fOne = front;
-            if (frontTwo.isLegal && boardManager.allItems.ContainsKey(fTwo.name))
+            var body = transform.GetChild(0);
+            if (body != null)
             {
-                targetName = fTwo.name;
-            }
-            else if (front.isLegal && boardManager.allItems.ContainsKey(fOne.name))
-            {
-                targetName = fOne.name;
-            }
-
-            var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == player.lastTileName || targetName == player.coord.name);
-            if (lookingAtGrowthTile)
-            {
-                var lureTile = gridManager.GetTileByName(growthLure.name);
-                if (lureTile == null)
+                var eulerY = body.rotation.eulerAngles.y;
+                while (eulerY < 0)
                 {
-                    LostTarget();
-                    return;
+                    eulerY += 360;
                 }
-             
-                var success = FindPathRealTime(lureTile, null, true);
-
-                var continueTrace = false;
-                if (coordTracing.isLegal)
+                while (eulerY >= 360)
                 {
-                    continueTrace = true;
+                    eulerY -= 360;
                 }
-
-                coordTracing = boardManager.growthLure.Clone();
-                coordPlayer.SetNoTurn();
-
-                ShowFound();
-                Game.Instance.UpdateMoves();
-                UpdateRouteMark();
-
-                if (!success)
+                var zOffset = 0;
+                var xOffset = 0;
+                if (Mathf.Abs(eulerY - 0) < 10)// up
                 {
-                    // 2-3-15
-                    var distance = player.StepsReach( coord.name );
-                    if(distance > 2)
+                    zOffset = 1;
+                }
+                else if (Mathf.Abs(eulerY - 180) < 10)// down
+                {
+                    zOffset = -1;
+                }
+                else if (Mathf.Abs(eulerY - 270) < 10)// left 270
+                {
+                    xOffset = -1;
+                }
+                else if (Mathf.Abs(eulerY - 90) < 10)// right
+                {
+                    xOffset = 1;
+                }
+                var checkCoord = coord.Clone();
+                for (var index = 0; index < checkRange; index++)
+                {
+                    checkCoord.x += xOffset;
+                    checkCoord.z += zOffset;
+
+                    targetName = new Coord(checkCoord.x + xOffset, checkCoord.z + zOffset, transform.position.y).name;
+                    var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == player.lastTileName || targetName == player.coord.name);
+                    if (lookingAtGrowthTile)
                     {
-                        LostTarget();
-                        GoBack();
+                        var lureTile = gridManager.GetTileByName(growthLure.name);
+                        if (lureTile == null)
+                        {
+                            LostTarget();
+                            return;
+                        }
+
+                        var success = FindPathRealTime(lureTile, null, true);
+
+                        var continueTrace = false;
+                        if (coordTracing.isLegal)
+                        {
+                            continueTrace = true;
+                        }
+
+                        coordTracing = boardManager.growthLure.Clone();
+                        coordPlayer.SetNoTurn();
+
+                        ShowFound();
+                        checkRange = 3;
+                        UpdateRouteMark();
+
+                        Game.Instance.UpdateMoves();
+
+                        if (!success)
+                        {
+                            // 2-3-15
+                            var distance = player.StepsReach(coord.name);
+                            if (distance > 2)
+                            {
+                                LostTarget();
+                                GoBack();
+                            }
+                        }
+                        else
+                        {
+                            if (continueTrace)
+                            {
+                                var tile = gridManager.GetTileByName(coordTracing.name);
+                                currentAction = new ActionEnemyMove(this, tile, true);
+                            }
+                            patroling = false;
+                            // Debug.LogWarning("在敌人不可达的出逃树林！！！");
+                            // 2-3-15 下一个回合才转身回去, 而且要保持警戒状态
+                            // LostTarget();
+                            // GoBack();
+                        }
+                        return;
                     }
                 }
-                else
-                {
-                    if (continueTrace)
-                    {
-                        var tile = gridManager.GetTileByName(coordTracing.name);
-                        currentAction = new ActionEnemyMove(this, tile, true);
-                    }
-                    patroling = false;
-
-                    // Debug.LogWarning("在敌人不可达的出逃树林！！！");
-                    // 2-3-15 下一个回合才转身回去, 而且要保持警戒状态
-                    // LostTarget();
-                    // GoBack();
-                }
-                return;
             }
         }
 
@@ -1154,7 +1183,7 @@ public class Enemy : Character
 
         if (player != null && !player.isHidding && player.coord.Equals(front) && playerSteps == 1)
         {
-            AudioPlay.Instance.PlayCatch(this);
+            AudioPlay.Instance?.PlayCatch(this);
             m_animator.SetBool("catch", true);
             m_animator.SetBool("moving", false);
             m_animator.Play("Cath");
@@ -1247,7 +1276,7 @@ public class Enemy : Character
             m_animator.SetFloat("idle_type", targetIdleType);
         }
         m_animator.SetBool("look_around", false);
-        AudioPlay.Instance.PlayEnemyAlert(this);
+        AudioPlay.Instance?.PlayEnemyAlert(this);
     }
 
 
@@ -1324,7 +1353,7 @@ public class Enemy : Character
         //enemyMove.gameObject.SetActive(false);
         if(play)
         {
-            AudioPlay.Instance.PlayNotFound(this);
+            AudioPlay.Instance?.PlayNotFound(this);
         }
     }
 

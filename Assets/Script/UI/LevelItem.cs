@@ -85,24 +85,24 @@ public class LevelItem : MonoBehaviour
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         if( energy < 1 )
         {
-            Game.Instance.energyGainCanvas.Show();
+            Game.Instance?.energyGainCanvas.Show();
             return;
         }
         var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
         if (level == level + 1)
         {
-            Game.Instance.msgCanvas.PopMessage("观看视频可直接试玩此关!");
+            Game.Instance?.msgCanvas.PopMessage("观看视频可直接试玩此关!");
             return;
         }
         if(level > level + 1)
         {
-            Game.Instance.msgCanvas.PopMessage("请先通过前一关!");
+            Game.Instance?.msgCanvas.PopMessage("请先通过前一关!");
             return;
         }
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
         PlayerPrefs.Save();
-        Game.Instance.StartGame(sceneName);
+        Game.Instance?.StartGame(sceneName);
     }
 
 }

@@ -11,13 +11,13 @@ public class AnimationEvent : MonoBehaviour
     {
         if (owner != null)
         {
-            AudioPlay.Instance.Speep(owner as EnemyDistracted);
+            AudioPlay.Instance?.Speep(owner as EnemyDistracted);
         }
     }
 
     public void EnemySleepOut()
     {
-        AudioPlay.Instance.EnemySleepOut();
+        AudioPlay.Instance?.EnemySleepOut();
     }
 
     public void ManHoleCoverOpen()
@@ -50,11 +50,11 @@ public class AnimationEvent : MonoBehaviour
         if (!owner) return;
         if(owner is Player)
         {
-            AudioPlay.Instance.PlayerFootRight();
+            AudioPlay.Instance?.PlayerFootRight();
         }
         else
         {
-            AudioPlay.Instance.EnemyFootRight(owner as Enemy);
+            AudioPlay.Instance?.EnemyFootRight(owner as Enemy);
         }
         
     }
@@ -64,18 +64,18 @@ public class AnimationEvent : MonoBehaviour
         if (!owner) return;
         if (owner is Player)
         {
-            AudioPlay.Instance.PlayerFootLeft();
+            AudioPlay.Instance?.PlayerFootLeft();
         }
         else
         {
-            AudioPlay.Instance.EnemyFootLeft(owner as Enemy);
+            AudioPlay.Instance?.EnemyFootLeft(owner as Enemy);
         }
 
     }
 
     public void PlayerWalkingExit()
     {
-        AudioPlay.Instance.PlaySFX(12);
+        AudioPlay.Instance?.PlaySFX(12);
     }
 
     public void Pick()
@@ -85,7 +85,7 @@ public class AnimationEvent : MonoBehaviour
 
     public void BlowWhitsle()
     {
-        AudioPlay.Instance.PlayerBlowWhitsle();
+        AudioPlay.Instance?.PlayerBlowWhitsle();
     }
 
     public void Lure()

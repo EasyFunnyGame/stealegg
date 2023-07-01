@@ -156,16 +156,16 @@ public static class Utils
     public static ActionBase CreatePlayerAction(ActionType actionType, GridTile tile)
     {
         if (!Game.Instance) return null;
-        var player = Game.Instance.player;
+        var player = Game.Instance?.player;
         if (player == null) return null;
 
         if ( Game.teaching)
         {
             var rightStep = false;
-            var steps = Game.Instance.boardManager.steps;
+            var steps = Game.Instance?.boardManager.steps;
             if (steps.Count>0)
             {
-                var currentStep = Game.Instance.boardManager.steps[0];
+                var currentStep = Game.Instance?.boardManager.steps[0];
                 if(currentStep.actionType == actionType)
                 {
                     if(currentStep.tileName == tile.name)

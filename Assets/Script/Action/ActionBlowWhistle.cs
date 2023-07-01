@@ -8,7 +8,7 @@ public class ActionBlowWhistle : ActionBase
     public ActionBlowWhistle(Player player) : base(player, ActionType.BlowWhistle)
     {
         player.PlayWhitsle();
-        //var boardManager = Game.Instance.boardManager;
+        //var boardManager = Game.Instance?.boardManager;
         //var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
         //var targetTile = player.currentTile;
         //foreach (var kvp in nodes)
@@ -22,7 +22,7 @@ public class ActionBlowWhistle : ActionBase
         //        }
         //    }
         //}
-        Game.Instance.UpdateMoves();
+        Game.Instance?.UpdateMoves();
     }
 
     private Player player
@@ -37,8 +37,12 @@ public class ActionBlowWhistle : ActionBase
     {
         if (actionDuration < 0)
         {
-            Game.Instance.boardManager.coordLure = player.coord.Clone();
-            Game.Instance.boardManager.rangeLure = 1;
+            if(Game.Instance)
+            {
+                Game.Instance.boardManager.coordLure = player.coord.Clone();
+                Game.Instance.boardManager.rangeLure = 1;
+            }
+            
             return true;
         }
         return false;

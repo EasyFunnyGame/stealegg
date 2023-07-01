@@ -199,8 +199,8 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayerFootLeft()
     {
-        var lineName = Game.Instance.player.walkingLineType;
-        var height = Game.Instance.player.up;
+        var lineName = Game.Instance?.player.walkingLineType;
+        var height = Game.Instance?.player.up;
         //Debug.Log("玩家行进路线左"+ lineName + " 高度:" + height);
         var index = -1;
         if (lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")
@@ -231,8 +231,8 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayerFootRight()
     {
-        var lineName = Game.Instance.player.walkingLineType;
-        var height = Game.Instance.player.up;
+        var lineName = Game.Instance?.player.walkingLineType;
+        var height = Game.Instance?.player.up;
         //Debug.Log("玩家行进路线右" + lineName + " 高度:" + height);
         var index = -1;
         if (lineName == "Hor_Normal_Visual" || lineName == "Hor_Doted_Visual")

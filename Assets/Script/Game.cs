@@ -107,7 +107,7 @@ public class Game : MonoBehaviour
 
     public void PlayLevel(string sceneName)
     {
-        AudioPlay.Instance.PlayBackGroundMusic();
+        AudioPlay.Instance?.PlayBackGroundMusic();
         SceneManager.LoadScene(sceneName);
         resLoaded = false;
     }
@@ -265,7 +265,7 @@ public class Game : MonoBehaviour
         result = GameResult.FAIL;
         delayShowEndTimer = 2;
         player.m_animator.SetInteger("result",-1);
-        AudioPlay.Instance.PlayBeCaught();
+        AudioPlay.Instance?.PlayBeCaught();
         player.failCamera.gameObject.SetActive(true);
 
         var playerHead = player.transform.position + new Vector3(0, 1f, 0);
@@ -834,7 +834,7 @@ public class Game : MonoBehaviour
                 var enemy = boardManager.enemies[i];
                 if (enemy.coord.name == nodeName)
                 {
-                    AudioPlay.Instance.ClickUnWalkable();
+                    AudioPlay.Instance?.ClickUnWalkable();
                     return;
                 }
             }
@@ -846,7 +846,7 @@ public class Game : MonoBehaviour
                 {
                     //Debug.Log("路径点连接GameObject名字出错");
                 }
-                AudioPlay.Instance.ClickUnWalkable();
+                AudioPlay.Instance?.ClickUnWalkable();
                 return;
             }
 

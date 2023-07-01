@@ -289,7 +289,7 @@ public class ActionEnemyMove : ActionBase
             else
             {
                 // 转向从主角寻路到敌人本身到倒数第二个点
-                //var player = Game.Instance.player;
+                //var player = Game.Instance?.player;
                 //var lastTile = player.gridManager.GetTileByName(player.lastCoord.name);
                 //var dstTile = player.gridManager.GetTileByName(enemy.currentTile.name);
                 //var path = new List<string>();

@@ -153,8 +153,8 @@ public class ChapterCanvas : BaseCanvas
 
     void onClickCloseChapterHandler()
     {
-        Game.Instance.chapterCanvas.Hide();
-        Game.Instance.mainCanvas.Show();
+        Game.Instance?.chapterCanvas.Hide();
+        Game.Instance?.mainCanvas.Show();
     }
 
     

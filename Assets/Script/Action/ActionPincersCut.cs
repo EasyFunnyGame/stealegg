@@ -64,7 +64,7 @@ public class ActionPincersCut : ActionBase
     void Cut()
     {
         player.m_animator.SetTrigger("cut");
-        AudioPlay.Instance.PlayPrincersCut();
+        AudioPlay.Instance?.PlayPrincersCut();
         var boardManager = Game.Instance.boardManager;
         var nodes = boardManager.FindNodesAround(player.currentTile.name, 2);
         //foreach (var kvp in nodes)

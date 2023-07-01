@@ -29,9 +29,11 @@ public class ActionThrowBottle : ActionBase
         var targetPosition = boardNode.transform.position;
         targetPosition.y = player.transform.position.y;
         targetRotation = Quaternion.LookRotation(targetPosition - player.transform.position);
-
-        Game.Instance.boardManager.bottleCount = 0;
-        AudioPlay.Instance.PlayerThrowBottle();
+        if (Game.Instance)
+        {
+            Game.Instance.boardManager.bottleCount = 0;
+        }
+        AudioPlay.Instance?.PlayerThrowBottle();
     }
 
     private Player player
@@ -94,17 +96,17 @@ public class ActionThrowBottle : ActionBase
                     var distanceFromZ = Mathf.Abs(z - coord.z);
                     if (distanceFromX <= 2 && distanceFromZ <= 2)
                     {
-                        Game.Instance.UpdateMoves(targetTileName);
+                        Game.Instance?.UpdateMoves(targetTileName);
                         break;
                         //enemy.ShowTraceTarget(targetTileName);
                     }
                 }
-                AudioPlay.Instance.PlayerBottleGrounded();
+                AudioPlay.Instance?.PlayerBottleGrounded();
             }
             delayTime += Time.deltaTime;
             if (once && delayTime >= 0.75f)
             {
-                Game.Instance.BottleThorwed(targetTileName);
+                Game.Instance?.BottleThorwed(targetTileName);
                 return true;
             }
            

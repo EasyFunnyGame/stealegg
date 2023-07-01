@@ -78,7 +78,7 @@ public class ActionPlayerMove : ActionBase
             }
         }
 
-        if (Game.Instance.stealed)
+        if (Game.Instance && Game.Instance.stealed)
         {
             if(player.boardManager.allItems.ContainsKey(tile.name))
             {
@@ -114,9 +114,9 @@ public class ActionPlayerMove : ActionBase
             {
                 character.body_looking = false;
                 character.Reached();
-                if(Game.Instance.walkingToExit)
+                if(Game.Instance && Game.Instance.walkingToExit)
                 {
-                    AudioPlay.Instance.PlayReachExit();
+                    AudioPlay.Instance?.PlayReachExit();
                 }
                 return true;
             }
@@ -158,7 +158,7 @@ public class ActionPlayerMove : ActionBase
         if (character.moving)
         {
            
-            if(crounching || Game.Instance.walkingToExit)
+            if(crounching || (Game.Instance && Game.Instance.walkingToExit))
             {
                 float step = character.move_speed * Time.deltaTime;
                 character.transform.position = Vector3.MoveTowards(character.transform.position, character.db_moves[0].position + new Vector3(0, height, 0), step);

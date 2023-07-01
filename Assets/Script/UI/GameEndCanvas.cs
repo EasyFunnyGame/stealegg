@@ -31,11 +31,16 @@ public class GameEndCanvas : BaseCanvas
     private void onClickReturnToHomeHandler()
     {
         //SceneManager.LoadScene("Main");
-        Game.Instance.mainCanvas.Show();
-        Game.Instance.resLoaded = false;
-        Game.Instance.endCanvas.Hide();
-        AudioPlay.Instance.PlayClick();
-        Game.Instance.playing = false;
+        if(Game.Instance)
+        {
+            Game.Instance.mainCanvas.Show();
+            Game.Instance.resLoaded = false;
+            Game.Instance.endCanvas.Hide();
+            Game.Instance.playing = false;
+        }
+       
+        AudioPlay.Instance?.PlayClick();
+       
         //throw new NotImplementedException();
     }
 
@@ -44,32 +49,34 @@ public class GameEndCanvas : BaseCanvas
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         if(energy <= 0)
         {
-            Game.Instance.energyGainCanvas.Show();
+            Game.Instance?.energyGainCanvas.Show();
             return;
         }
 
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
         PlayerPrefs.Save();
 
+        if(Game.Instance)
+        {
+            Game.Instance.playing = false;
+            Game.Instance.endCanvas.Hide();
+            var playingLevel = Game.Instance.playingLevel + 1;
 
-        Game.Instance.playing = false;
-        Game.Instance.endCanvas.Hide();
-        var playingLevel = Game.Instance.playingLevel+1;
-        
-        if(playingLevel>Game.MAX_LEVEL)
-        {
-            playingLevel = 0;
+            if (playingLevel > Game.MAX_LEVEL)
+            {
+                playingLevel = 0;
+            }
+            var playingChapter = Mathf.FloorToInt(playingLevel / 12) + 1;
+            var playingIndex = playingLevel % 12 + 1;
+            if (playingLevel % 12 == 0)
+            {
+                playingIndex = 1;
+            }
+
+            var nextLevelName = string.Format("{0}-{1}", playingChapter, playingIndex);
+            Game.Instance?.PlayLevel(nextLevelName);
         }
-        var playingChapter = Mathf.FloorToInt(playingLevel/12) + 1;
-        var playingIndex = playingLevel % 12 + 1;
-        if (playingLevel % 12 == 0)
-        {
-            playingIndex = 1;
-        }
-        
-        var nextLevelName = string.Format("{0}-{1}", playingChapter, playingIndex);
-        Game.Instance.PlayLevel(nextLevelName);
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
 
     }
 
@@ -78,25 +85,27 @@ public class GameEndCanvas : BaseCanvas
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         if (energy <= 0)
         {
-            Game.Instance.energyGainCanvas.Show();
+            Game.Instance?.energyGainCanvas.Show();
             return;
         }
 
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
         PlayerPrefs.Save();
-
-        Game.Instance.playing = false;
-        Game.Instance.endCanvas.Hide();
-        Game.restart = true;
-        SceneManager.LoadScene(Game.Instance.currentLevelName);
-        Game.Instance.resLoaded = false;
-        AudioPlay.Instance.PlayClick();
-
+        if(Game.Instance)
+        {
+            Game.Instance.playing = false;
+            Game.Instance.endCanvas.Hide();
+            Game.restart = true;
+            Game.Instance.resLoaded = false;
+            
+        }
+        AudioPlay.Instance?.PlayClick();
+        SceneManager.LoadScene(Game.Instance?.currentLevelName);
     }
 
     private void onClickShareHandler()
     {
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     
@@ -109,35 +118,35 @@ public class GameEndCanvas : BaseCanvas
         {
             //Debug.Log("找到 Draw");
             var renderCamera = drawGameObject.transform.Find("render_camera");
-            renderCamera.gameObject.SetActive(Game.Instance.result == GameResult.WIN);
+            renderCamera.gameObject.SetActive(Game.Instance?.result == GameResult.WIN);
         }
 
-        if (Game.Instance.result == GameResult.WIN)
+        if (Game.Instance?.result == GameResult.WIN)
         {
-            Game.Instance.player.m_animator.SetBool("moving", false);
-            Game.Instance.player.gameObject.SetActive(false);
+            Game.Instance?.player.m_animator.SetBool("moving", false);
+            Game.Instance?.player.gameObject.SetActive(false);
 
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0049");
             btn_nxtLevel.gameObject.SetActive(true);
             btn_replay.gameObject.SetActive(false);
-            AudioPlay.Instance.PlayWin();
+            AudioPlay.Instance?.PlayWin();
 
             winTxture.gameObject.SetActive(true);
             failTexture.gameObject.SetActive(false);
         }
-        else if(Game.Instance.result == GameResult.FAIL)
+        else if(Game.Instance?.result == GameResult.FAIL)
         {
             var draw_able = GameObject.FindObjectOfType<FreeDraw.Drawable>();
             draw_able?.gameObject.SetActive(false);
             img_title.sprite = Resources.Load<Sprite>("UI/Sprite/ui-_0048");
             btn_nxtLevel.gameObject.SetActive(false);
             btn_replay.gameObject.SetActive(true);
-            AudioPlay.Instance.PlayFail();
+            AudioPlay.Instance?.PlayFail();
 
             winTxture.gameObject.SetActive(false);
             failTexture.gameObject.SetActive(true);
         }
-        AudioPlay.Instance.PlaySnapShot();
+        AudioPlay.Instance?.PlaySnapShot();
     }
 
     protected override void OnHide()

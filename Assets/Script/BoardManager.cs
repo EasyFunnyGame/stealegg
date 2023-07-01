@@ -84,7 +84,7 @@ public class BoardManager : MonoBehaviour
         ResetEnemies();
         ResetSquareNodes();
 
-        Game.Instance.SceneLoaded(this, name);
+        Game.Instance?.SceneLoaded(this, name);
     }
 
     public void Ready()

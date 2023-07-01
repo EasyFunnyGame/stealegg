@@ -46,16 +46,13 @@ public class ActionSteal : ActionBase
             graffItem.gameObject.SetActive(false);
             graffItem.icon.gameObject.SetActive(false);
 
-            if(Game.Instance.draw_able)
+            if(Game.Instance && Game.Instance.draw_able)
             {
                 Game.Instance.translateCanvas.Show();
                 Game.Instance.translateCanvas.SetAfterTranslate("steal");
                 Game.Instance.playing = false;
             }
-            else
-            {
-                
-            }
+           
             graffItem.gameObject.SetActive(false);
         }
         

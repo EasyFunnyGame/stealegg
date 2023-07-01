@@ -11,7 +11,7 @@ public class GrowthItem : Item
         velocity = Vector3.zero;
         if (other?.transform.parent?.name == "Player")
         {
-            AudioPlay.Instance.HideInTree();
+            AudioPlay.Instance?.HideInTree();
         }
     }
 
@@ -22,7 +22,7 @@ public class GrowthItem : Item
         velocity = Vector3.zero;
         if (other?.transform.parent?.name == "Player")
         {
-            AudioPlay.Instance.WalkOutTree();
+            AudioPlay.Instance?.WalkOutTree();
         }
     }
 }

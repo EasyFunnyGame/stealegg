@@ -46,15 +46,15 @@ public class EnergyGainCanvas : BaseCanvas
         PlayerPrefs.SetInt(UserDataKey.Energy,energy);
         PlayerPrefs.Save();
         btn_watch.enabled = false;
-        Game.Instance.energyGainCanvas.Hide();
-        Game.Instance.msgCanvas.PopMessage("获得" + 10 + "点体力");
-        Game.Instance.gameCanvas.RefreshEnergy();
-        AudioPlay.Instance.PlayClick();
+        Game.Instance?.energyGainCanvas.Hide();
+        Game.Instance?.msgCanvas.PopMessage("获得" + 10 + "点体力");
+        Game.Instance?.gameCanvas.RefreshEnergy();
+        AudioPlay.Instance?.PlayClick();
     }
 
     void onClickCloseCanvasHandler()
     {
-        Game.Instance.energyGainCanvas.Hide();
-        AudioPlay.Instance.PlayClick();
+        Game.Instance?.energyGainCanvas.Hide();
+        AudioPlay.Instance?.PlayClick();
     }
 }

@@ -125,7 +125,7 @@ public class GameCanvas : BaseCanvas
     void onClickHintHandler()
     {
         Game.Instance.hintGainCanvas.Show();
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     void onClickGraffHandler()
@@ -148,7 +148,7 @@ public class GameCanvas : BaseCanvas
         home.gameObject.SetActive(false);
         playing.gameObject.SetActive(true);
         Game.Instance.playing = true;
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     private void onClickPasueGameHandler()
@@ -160,7 +160,7 @@ public class GameCanvas : BaseCanvas
 
         playing.gameObject.SetActive(false);
         home.gameObject.SetActive(true);
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     void onClickReStartLevelHandler()
@@ -178,7 +178,7 @@ public class GameCanvas : BaseCanvas
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         Game.Instance.resLoaded = false;
         Game.Instance.playing = false;
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     void onClickBackToHomeHandler()
@@ -188,13 +188,13 @@ public class GameCanvas : BaseCanvas
         Game.Instance.mainCanvas.Show();
         Game.Instance.resLoaded = false;
         Game.Instance.playing = false;
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     private void onClickShowEnergyGainCanvasHandler()
     {
         Game.Instance.energyGainCanvas.Show();
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     private void onClickUseBottleHandler()
@@ -237,7 +237,7 @@ public class GameCanvas : BaseCanvas
         Game.Instance.CancelBottleSelectTarget();
         btn_bottle_cancel.gameObject.SetActive(false);
         btn_bottle.gameObject.SetActive(true);
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     private void onClickUseWhistleHandler()
@@ -911,7 +911,7 @@ public class GameCanvas : BaseCanvas
         var targetTile = player.gridManager.GetTileByName(targetTileName);
         if (targetTileName == null)
         {
-            AudioPlay.Instance.ClickUnWalkable();
+            AudioPlay.Instance?.ClickUnWalkable();
             return;
         }
 
@@ -924,14 +924,14 @@ public class GameCanvas : BaseCanvas
             }
             if (enemy.coord.name == targetTileName)
             {
-                AudioPlay.Instance.ClickUnWalkable();
+                AudioPlay.Instance?.ClickUnWalkable();
                 return;
             }
         }
         var linkLine = player.boardManager.FindLine(player.currentTile.name, targetTileName);
         if (linkLine == null || linkLine.through == false)
         {
-            //AudioPlay.Instance.ClickUnWalkable();
+            //AudioPlay.Instance?.ClickUnWalkable();
             return;
         }
         if (player.moving || player.currentTile != targetTile)

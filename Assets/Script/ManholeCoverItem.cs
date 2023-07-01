@@ -20,7 +20,7 @@ public class ManholeCoverItem : Item
     {
         m_animator.speed = 1;
         m_animator.Play("JingGai_Animation", 0, 0);
-        AudioPlay.Instance.PlayJumpOut();
+        AudioPlay.Instance?.PlayJumpOut();
         InOrOut = 0;
     }
 
@@ -28,7 +28,7 @@ public class ManholeCoverItem : Item
     {
         m_animator.speed = 1;
         m_animator.Play("JingGai_Animation", 0, 0);
-        AudioPlay.Instance.PlayJumpIn();
+        AudioPlay.Instance?.PlayJumpIn();
         InOrOut = 1;
     }
 
@@ -36,11 +36,11 @@ public class ManholeCoverItem : Item
     {
         if(InOrOut==1)
         {
-            AudioPlay.Instance.PlaySFX(40);
+            AudioPlay.Instance?.PlaySFX(40);
         }
         else
         {
-            AudioPlay.Instance.PlaySFX(42);
+            AudioPlay.Instance?.PlaySFX(42);
         }
     }
 
@@ -48,11 +48,11 @@ public class ManholeCoverItem : Item
     {
         if (InOrOut == 1)
         {
-            AudioPlay.Instance.PlaySFX(41);
+            AudioPlay.Instance?.PlaySFX(41);
         }
         else
         {
-            AudioPlay.Instance.PlaySFX(43);
+            AudioPlay.Instance?.PlaySFX(43);
         }
     }
 }

@@ -19,11 +19,11 @@ public class SoundTrigger : MonoBehaviour
         switch (type)
         {
             case TriggerType.ThroughWireNet:
-                AudioPlay.Instance.ThroughWireNet();
+                AudioPlay.Instance?.ThroughWireNet();
                 break;
 
             case TriggerType.ThroughCuttedWireNet:
-                AudioPlay.Instance.ThroughCuttedWireNet();
+                AudioPlay.Instance?.ThroughCuttedWireNet();
                 break;
         }
     }

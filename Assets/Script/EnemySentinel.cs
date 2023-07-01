@@ -104,7 +104,7 @@ public class EnemySentinel : Enemy
         {
             // 执行转向动作
             currentAction = new ActionTurnDirection(this, willWatchDirection, true);
-            AudioPlay.Instance.PlayWatchTurn();
+            AudioPlay.Instance?.PlayWatchTurn();
             willTurn = false;
             HideSentinelTurn();
             showCCW = false;

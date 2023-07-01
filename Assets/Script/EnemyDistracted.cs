@@ -27,11 +27,11 @@ public class EnemyDistracted : Enemy
 
             if(sleepSoundType == 1)
             {
-                AudioPlay.Instance.EnemySleepIn();
+                AudioPlay.Instance?.EnemySleepIn();
             }
             else
             {
-                AudioPlay.Instance.EnemySleepIn();
+                AudioPlay.Instance?.EnemySleepIn();
             }
         }
         else

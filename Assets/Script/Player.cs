@@ -130,26 +130,54 @@ public class Player : Character
                 for (var index = 0; index < boardManager.enemies.Count;  index++)
                 {
                     var enemy = boardManager.enemies[index];
-                    if(CanReachInSteps(enemy.currentTile.name, 2))
+                    var body = enemy.transform.GetChild(0);
+                    if (body == null) continue;
+                    var eulerY = body.rotation.eulerAngles.y;
+                    while (eulerY < 0)
+                    {
+                        eulerY += 360;
+                    }
+                    while (eulerY >= 360)
+                    {
+                        eulerY -= 360;
+                    }
+
+                    if (CanReachInSteps(enemy.currentTile.name, enemy.checkRange))
                     {
                         var targetName = "";
-                        var frontTwo = enemy.frontTwo;
-                        var frontOne = enemy.front;
-                        if (frontTwo.isLegal && boardManager.allItems.ContainsKey(frontTwo.name))
-                        {
-                            targetName = frontTwo.name;
-                        }
-                        else if (frontOne.isLegal && boardManager.allItems.ContainsKey(frontOne.name))
-                        {
-                            targetName = frontOne.name;
-                        }
+                        var zOffset = 0;
+                        var xOffset = 0;
 
-                        var lookingAtGrowthTile = !string.IsNullOrEmpty(targetName) && boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == lastTileName || targetName == coord.name);
-
-                        if (lookingAtGrowthTile)
+                        if (Mathf.Abs(eulerY - 0) < 10)// up
                         {
-                            anyEnemyLookingAt = true;
-                            break;
+                            zOffset = 1;
+                        }
+                        else if (Mathf.Abs(eulerY - 180) < 10)// down
+                        {
+                            zOffset = -1;
+                        }
+                        else if (Mathf.Abs(eulerY - 270) < 10)// left 270
+                        {
+                            xOffset = -1;
+                        }
+                        else if (Mathf.Abs(eulerY - 90) < 10)// right
+                        {
+                            xOffset = 1;
+                        }
+                        var checkCoord = enemy.coord.Clone();
+                        for (var idx = 0; idx < enemy.checkRange; idx++)
+                        {
+                            checkCoord.x += xOffset;
+                            checkCoord.z += zOffset;
+
+                            targetName = new Coord(checkCoord.x + xOffset, checkCoord.z + zOffset, transform.position.y).name;
+                            var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == lastTileName || targetName == coord.name);
+
+                            if (lookingAtGrowthTile)
+                            {
+                                anyEnemyLookingAt = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -233,6 +261,7 @@ public class Player : Character
 
     public void CheckBottle()
     {
+        if (!Game.Instance) return;
         Game.Instance.gameCanvas.DisableBottle();
         if (Game.Instance.playingLevel == 0)
         {

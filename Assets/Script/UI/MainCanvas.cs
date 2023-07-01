@@ -31,21 +31,18 @@ public class MainCanvas : BaseCanvas
     {
         Game.Instance?.mainCanvas.Hide();
         Game.Instance?.chapterCanvas.Show();
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     void ShowSettingCanvas()
     {
         Game.Instance?.settingCanvas.Show();
-        AudioPlay.Instance.PlayClick();
+        AudioPlay.Instance?.PlayClick();
     }
 
     protected override void OnShow()
     {
-        if(AudioPlay.Instance != null)
-        {
-            AudioPlay.Instance.PlayMain();
-        }
+        AudioPlay.Instance?.PlayMain();
     }
 
     protected override void OnHide()
