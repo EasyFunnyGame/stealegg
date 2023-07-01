@@ -30,6 +30,7 @@ public class HintGainCanvas : BaseCanvas
 
     void onWatchVideoHandler()
     {
+        if (!Game.Instance) return;
         Game.Instance.hintGainCanvas.Hide();
         Game.teaching = true;
         Game.clearTeaching = 0;

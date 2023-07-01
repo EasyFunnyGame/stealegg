@@ -73,19 +73,19 @@ public class TranslateCanvas : BaseCanvas
     {
         if (afterTranslate == "steal")
         {
-            Game.Instance.graffCanvas.Show();
-            Game.Instance.gameCanvas.Hide();
+            Game.Instance?.graffCanvas.Show();
+            Game.Instance?.gameCanvas.Hide();
         }
         else if (afterTranslate == "main")
         {
-            Game.Instance.graffCanvas.Hide();
-            Game.Instance.gameCanvas.Show();
-            Game.Instance.gameCanvas.home.gameObject.SetActive(false);
-            Game.Instance.gameCanvas.playing.gameObject.SetActive(true);
+            Game.Instance?.graffCanvas.Hide();
+            Game.Instance?.gameCanvas.Show();
+            Game.Instance?.gameCanvas.home.gameObject.SetActive(false);
+            Game.Instance?.gameCanvas.playing.gameObject.SetActive(true);
 
-            Player player = Game.Instance.player;
-            var stealAction = player.currentAction;
-            if(stealAction.actionType == ActionType.Steal)
+            Player player = Game.Instance?.player;
+            var stealAction = player?.currentAction;
+            if(stealAction?.actionType == ActionType.Steal)
             {
                 (stealAction as ActionSteal).ActionComplete();
             }

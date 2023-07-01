@@ -185,6 +185,7 @@ public class Player : Character
 
     public void CheckWhitsle()
     {
+        if (!Game.Instance) return;
         Game.Instance.gameCanvas.DisableWhistle();
         if (Game.Instance.playingLevel == 1)
         {

@@ -197,6 +197,8 @@ public class GameCamera : MonoBehaviour
 
 	private void LateUpdate()
 	{
+		if (!Game.Instance) return;
+
 		if (Game.Instance.result != GameResult.NONE && !forceUpdate) return;
 
 		if (testing && _targets.Length > 0)

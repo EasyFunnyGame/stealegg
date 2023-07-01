@@ -44,16 +44,18 @@ public class ActionJumpManholeCover : ActionBase
     {
         if (jumpInDelay <= 0 && jumpOutDelay<= 0)
         {
-            var boardManager = Game.Instance.boardManager;
-            if (Game.teaching && Game.Instance.showingStep != null)
+            if(Game.Instance)
             {
-                if (Game.Instance.showingStep.actionType == ActionType.ManHoleCover && Game.Instance.showingStep.tileName == jumpOutCover.coord.name)
+                var boardManager = Game.Instance.boardManager;
+                if (Game.teaching && Game.Instance.showingStep != null)
                 {
-                    boardManager.steps.RemoveAt(0);
-                    Game.Instance.ShowGuide();
+                    if (Game.Instance.showingStep.actionType == ActionType.ManHoleCover && Game.Instance.showingStep.tileName == jumpOutCover.coord.name)
+                    {
+                        boardManager.steps.RemoveAt(0);
+                        Game.Instance.ShowGuide();
+                    }
                 }
             }
-
             player.Reached();
             return true;
         }
@@ -87,7 +89,6 @@ public class ActionJumpManholeCover : ActionBase
             {
                 jumpOutDelay = 1.5f;
                 player.m_animator.SetTrigger("jump_out");
-                var boardManager = Game.Instance.boardManager;
                 var tile = player.gridManager.GetTileByName(jumpOutCover.coord.name);
                 if (tile)
                 {

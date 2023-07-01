@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WeChatWASM;
@@ -417,7 +418,6 @@ public class AudioManager : MonoBehaviour
             // 如果该文件已经下载过，并且配置了缓存本地，就不会重复下载
             // 如果该文件没有下载过，等同于先调用WX.PreDownloadAudios下载后再播放
             audioIndex.src = audioList[index];
-
             // 短音频可以直接调用Play
             if (isShort)
             {
@@ -442,7 +442,6 @@ public class AudioManager : MonoBehaviour
         var audioPlayRightNow = CreateAudio();
 
         audioPlayRightNow.needDownload = false;
-
         if (audioPlayRightNow == null)
         {
             return;
@@ -490,11 +489,18 @@ public class AudioManager : MonoBehaviour
     {
         if(audioPlayArray!=null && audioPlayArray.Count > 0)
         {
-            audioPlayArray.ForEach(audio =>
+            try
             {
-                audio.OffCanplay();
-                audio.Stop();
-            });
+                audioPlayArray.ForEach(audio =>
+                {
+                    audio.OffCanplay();
+                    audio.Stop();
+                });
+            }
+            catch(Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
     }
 
@@ -530,6 +536,7 @@ public class AudioManager : MonoBehaviour
         audioBGM = CreateAudio();
         // audioBGM.loop = true;
         audioBGM.src = audioList[index];
+        audioBGM.volume = AudioPlay.bgmVolume;
         audioBGM.OnCanplay(() =>
         {
             audioBGM.Play();

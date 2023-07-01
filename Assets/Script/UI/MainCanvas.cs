@@ -29,14 +29,14 @@ public class MainCanvas : BaseCanvas
 
     void StartGame()
     {
-        Game.Instance.mainCanvas.Hide();
-        Game.Instance.chapterCanvas.Show();
+        Game.Instance?.mainCanvas.Hide();
+        Game.Instance?.chapterCanvas.Show();
         AudioPlay.Instance.PlayClick();
     }
 
     void ShowSettingCanvas()
     {
-        Game.Instance.settingCanvas.Show();
+        Game.Instance?.settingCanvas.Show();
         AudioPlay.Instance.PlayClick();
     }
 

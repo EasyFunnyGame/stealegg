@@ -538,6 +538,10 @@ public class Enemy : Character
 
     public string assignOriginalTileName;
 
+    /// <summary>
+    /// 返回原点时是否用最快捷路径
+    /// </summary>
+    /// <returns></returns>
     protected bool ifGoBackUseFastestWay()
     {
         // 2-7-16
@@ -577,6 +581,7 @@ public class Enemy : Character
         {
             var assignedTurnBackTile = "";
             var currentLevelName = Game.Instance.currentLevelName;
+            #region 2-7
             if (currentLevelName == "2-7")
             {
                 var enemyPatrol = this as EnemyPatrol;
@@ -664,6 +669,9 @@ public class Enemy : Character
                     }
                 }
             }
+            #endregion
+
+            #region 2-10
             else if (currentLevelName == "2-10")
             {
                 if (gameObject.name.Contains("Enemy_Distracted"))
@@ -674,6 +682,9 @@ public class Enemy : Character
                     }
                 }
             }
+            #endregion
+
+            #region 2-12
             else if (currentLevelName == "2-12")
             {
                 if (this is EnemyPatrol)
@@ -715,6 +726,9 @@ public class Enemy : Character
                     }
                 }
             }
+            #endregion
+
+            #region 2-4
             else if (currentLevelName == "2-4")
             {
                 if (coord.name == "0_3")
@@ -732,7 +746,10 @@ public class Enemy : Character
                     assignOriginalTileName = "1_4";
                 }
             }
-            else if(currentLevelName == "3-4")
+            #endregion
+
+            #region 3-4
+            else if (currentLevelName == "3-4")
             {
                 if(coord.name == "1_2")
                 {
@@ -742,13 +759,42 @@ public class Enemy : Character
                     }
                 }
             }
-            else if(currentLevelName == "3-8")
+            #endregion
+
+            #region 3-6
+            else if(currentLevelName == "3-6")
             {
-                if(this is EnemyStatic && coord.name == "1_3")
+                if (this is EnemySentinel && (coord.name == "3_1" || coord.name == "3_3"))
+                {
+                    assignedTurnBackTile = lastTileName;
+                }
+                if(this is EnemyStatic && coord.name == "4_1")
+                {
+                    assignedTurnBackTile = lastTileName;
+                }
+            }
+            #endregion
+
+            #region 3-8
+            else if (currentLevelName == "3-8")
+            {
+                if (this is EnemyStatic && coord.name == "1_3")
+                {
+                    assignedTurnBackTile = lastTileName;
+                }
+            }
+            #endregion
+
+            #region 3-9
+            else if (currentLevelName == "3-9")
+            {
+                if (this is EnemyDistracted && coord.name == "2_0")
                 {
                     assignedTurnBackTile = "1_2";
                 }
             }
+            #endregion
+
 
             var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
             if (assignTile)
@@ -1163,7 +1209,7 @@ public class Enemy : Character
                         updateCoordPlayer = false;
                     }
 
-                    Game.Instance.UpdateMoves();
+                    Game.Instance?.UpdateMoves();
 
                     m_animator.SetBool("look_around", false);
                    

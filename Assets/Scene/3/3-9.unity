@@ -1550,6 +1550,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5472030283631833775, guid: 0abb254ce359171409bd971e00fa3838,
+        type: 3}
+      propertyPath: lowerPosition.x
+      value: -0.24
+      objectReference: {fileID: 0}
     - target: {fileID: 7344982118165975154, guid: 0abb254ce359171409bd971e00fa3838,
         type: 3}
       propertyPath: m_Name
@@ -49538,6 +49543,7 @@ MonoBehaviour:
   UpperPaddingDown: 0.5
   UpperPaddingLeft: 0.5
   UpperPaddingRight: 0.5
+  testing: 0
 --- !u!1 &1829290459896094404
 GameObject:
   m_ObjectHideFlags: 0
@@ -49736,6 +49742,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 1_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &2206010267628311400
 GameObject:
@@ -49949,6 +49956,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 6_0
+  words: {fileID: 0}
   characters: []
 --- !u!4 &2641516321052888378
 Transform:
@@ -49986,6 +49994,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 6_3
+  words: {fileID: 0}
   characters: []
 --- !u!114 &2697243947735342789
 MonoBehaviour:
@@ -50008,6 +50017,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 5_3
+  words: {fileID: 0}
   characters: []
 --- !u!4 &2763888166231501338
 Transform:
@@ -50160,6 +50170,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 6_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3010347396156954047
 GameObject:
@@ -50265,6 +50276,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 1_2
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3114726804836254138
 GameObject:
@@ -50304,6 +50316,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 1_0
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3269326598453845344
 GameObject:
@@ -50343,6 +50356,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 2_3
+  words: {fileID: 0}
   characters: []
 --- !u!114 &3304475605599453998
 MonoBehaviour:
@@ -50365,6 +50379,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 2_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3364791935206210082
 GameObject:
@@ -50404,6 +50419,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 3_0
+  words: {fileID: 0}
   characters: []
 --- !u!1 &3748235211754890511
 GameObject:
@@ -50871,6 +50887,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 2_0
+  words: {fileID: 0}
   characters: []
 --- !u!4 &4985203662930950238
 Transform:
@@ -50991,6 +51008,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 3_2
+  words: {fileID: 0}
   characters: []
 --- !u!114 &5143776495995115736
 MonoBehaviour:
@@ -51043,6 +51061,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 1_3
+  words: {fileID: 0}
   characters: []
 --- !u!4 &5376610761193533875
 Transform:
@@ -51084,6 +51103,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 0_0
+  words: {fileID: 0}
   characters: []
 --- !u!1 &5410837505357186834
 GameObject:
@@ -51300,6 +51320,7 @@ MonoBehaviour:
     z: 4
     height: 0
     name: 2_4
+  words: {fileID: 0}
   characters: []
 --- !u!1 &6149278828840475111
 GameObject:
@@ -51405,6 +51426,7 @@ MonoBehaviour:
     z: 0
     height: 0
     name: 5_0
+  words: {fileID: 0}
   characters: []
 --- !u!114 &6388590127254784200
 MonoBehaviour:
@@ -51561,6 +51583,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 2_2
+  words: {fileID: 0}
   characters: []
 --- !u!1 &6545799058090121514
 GameObject:
@@ -51615,6 +51638,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 3_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &6665740313048217177
 GameObject:
@@ -51654,6 +51678,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 5_2
+  words: {fileID: 0}
   characters: []
 --- !u!4 &6719551681102119233
 Transform:
@@ -51742,6 +51767,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 4_1
+  words: {fileID: 0}
   characters: []
 --- !u!1 &6878975243230372255
 GameObject:
@@ -51889,6 +51915,20 @@ MonoBehaviour:
     tileName: 2_3
   - actionType: 0
     tileName: 2_4
+  playerTurn: 0
+  enemyTurn: 0
+  coordLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  rangeLure: 0
+  growthLure:
+    x: -2147483648
+    z: -2147483648
+    height: -2.1474836e+9
+    name: 
+  bottleCount: 0
 --- !u!4 &7096722967412010204
 Transform:
   m_ObjectHideFlags: 0
@@ -52321,6 +52361,7 @@ MonoBehaviour:
     z: 2
     height: 0
     name: 6_2
+  words: {fileID: 0}
   characters: []
 --- !u!114 &8921027648097537402
 MonoBehaviour:
@@ -52343,6 +52384,7 @@ MonoBehaviour:
     z: 3
     height: 0
     name: 4_3
+  words: {fileID: 0}
   characters: []
 --- !u!114 &9123828200089107145
 MonoBehaviour:
@@ -52365,6 +52407,7 @@ MonoBehaviour:
     z: 1
     height: 0
     name: 5_1
+  words: {fileID: 0}
   characters: []
 --- !u!4 &9193025745046988175
 Transform:

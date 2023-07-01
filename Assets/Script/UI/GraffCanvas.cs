@@ -195,7 +195,11 @@ public class GraffCanvas : BaseCanvas
     protected override void OnShow()
     {
         img_default.gameObject.SetActive(true); 
-
+            
+        if(!Game.Instance)
+        {
+            return;
+        }
         if (Game.Instance.camera != null)
             Game.Instance.camera.gameObject.SetActive(false);
         if (Game.Instance.draw_able != null)

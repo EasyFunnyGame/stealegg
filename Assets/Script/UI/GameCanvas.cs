@@ -286,7 +286,10 @@ public class GameCanvas : BaseCanvas
         {
             buttonClickCd -= Time.deltaTime;
         }
-
+        if(!Game.Instance)
+        {
+            return;
+        }
         if (Game.Instance.player != null)
         {
             UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
@@ -418,6 +421,7 @@ public class GameCanvas : BaseCanvas
 
     void LateUpdate()
     {
+        if (!Game.Instance) return;
         if (!Game.Instance.camera) return;
         distance_up.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingUp));
         txt_up.text = Math.Abs(Game.Instance.camera.playerPaddingUp).ToString();

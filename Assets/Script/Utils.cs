@@ -155,10 +155,11 @@ public static class Utils
 
     public static ActionBase CreatePlayerAction(ActionType actionType, GridTile tile)
     {
+        if (!Game.Instance) return null;
         var player = Game.Instance.player;
         if (player == null) return null;
 
-        if (Game.teaching)
+        if ( Game.teaching)
         {
             var rightStep = false;
             var steps = Game.Instance.boardManager.steps;
@@ -170,17 +171,17 @@ public static class Utils
                     if(currentStep.tileName == tile.name)
                     {
                         rightStep = true;
-                        Game.Instance.boardManager.steps.RemoveAt(0);
+                        Game.Instance?.boardManager.steps.RemoveAt(0);
                     }
                 }
             }
             if(rightStep==false)
             {
-                Game.Instance.msgCanvas.PopMessage("请按照步骤进行");
+                Game.Instance?.msgCanvas.PopMessage("请按照步骤进行");
                 return null;
             }
         }
-        Game.Instance.HideGuide();
+        Game.Instance?.HideGuide();
         switch(actionType)
         {
             case ActionType.PlayerMove:
