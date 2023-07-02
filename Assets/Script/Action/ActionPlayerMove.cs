@@ -23,6 +23,21 @@ public class ActionPlayerMove : ActionBase
         {
             var node = player.boardManager.FindNode(tile.gameObject.name);
             player.boardManager.growthLure = node.coord.Clone();
+            #region 3-10
+            if( Game.Instance )
+            {
+                if (Game.Instance.currentLevelName == "3-10")
+                {
+                    if(player.coord.name == "2_1")
+                    {
+                        if( tile.name == "3_1" )
+                        {
+                            player.boardManager.growthLure = new Coord(2, 2, 0);
+                        }
+                    }
+                }
+            }
+            #endregion
         }
         else
         {
