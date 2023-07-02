@@ -394,7 +394,7 @@ public class Enemy : Character
                         ShowFound();
                         checkRange = 3;
                         UpdateRouteMark();
-
+                        body_looking = false;// 修复 3-10-2 第三段，箭头消失bug
                         Game.Instance.UpdateMoves();
 
                         if (!success)

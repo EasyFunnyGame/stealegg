@@ -67,10 +67,6 @@ public class EnemySentinel : Enemy
                 tryTurnDirectionIndex = 0;
             }
 
-
-
-            
-
             var tryTurnDirection = sentinelDirections[tryTurnDirectionIndex];
             targetDirection = tryTurnDirection;
             willWatchDirection = tryTurnDirection;

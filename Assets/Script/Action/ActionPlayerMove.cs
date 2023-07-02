@@ -30,7 +30,7 @@ public class ActionPlayerMove : ActionBase
                 {
                     if(player.coord.name == "2_1")
                     {
-                        if( tile.name == "3_1" )
+                        if( tile.name == "3_1" || tile.name == "1_1")
                         {
                             player.boardManager.growthLure = new Coord(2, 2, 0);
                         }
