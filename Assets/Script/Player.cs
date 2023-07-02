@@ -25,6 +25,8 @@ public class Player : Character
 
     public Camera failCamera;
 
+    public bool justSkipTurn;
+
     // 刚刚穿过网
     public bool justThroughNet = false;
 

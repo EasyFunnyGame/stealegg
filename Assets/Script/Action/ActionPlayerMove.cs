@@ -26,7 +26,7 @@ public class ActionPlayerMove : ActionBase
             #region 3-10
             if( Game.Instance )
             {
-                if (Game.Instance.currentLevelName == "3-10")
+                if (Game.Instance.currentLevelName == "3-10" && player.justSkipTurn)
                 {
                     if(player.coord.name == "2_1")
                     {

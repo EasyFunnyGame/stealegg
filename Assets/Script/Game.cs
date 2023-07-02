@@ -392,6 +392,7 @@ public class Game : MonoBehaviour
                     enemy.UpdateRouteMark();
                 }
                 UpdateMoves();
+                player.justSkipTurn = false;
             }
         }
 
@@ -731,6 +732,7 @@ public class Game : MonoBehaviour
     public void SkipPlayerTurn()
     {
         player.currentAction = new ActionTurnDirection(player, player.direction, false);
+        player.justSkipTurn = true;
         if (teaching && showingStep != null)
         {
             if (showingStep.actionType == ActionType.TurnDirection)
