@@ -167,7 +167,7 @@ public class Player : Character
                             xOffset = 1;
                         }
                         var checkCoord = enemy.coord.Clone();
-                        for (var idx = 0; idx < enemy.checkRange; idx++)
+                        for (var idx = 0; idx < enemy.checkRange - 1; idx++)
                         {
                             checkCoord.x += xOffset;
                             checkCoord.z += zOffset;

@@ -26,16 +26,16 @@ public class ActionPlayerMove : ActionBase
             #region 3-10
             if( Game.Instance )
             {
-                if (Game.Instance.currentLevelName == "3-10" && player.justSkipTurn)
-                {
-                    if(player.coord.name == "2_1")
-                    {
-                        if( tile.name == "3_1" || tile.name == "1_1")
-                        {
-                            player.boardManager.growthLure = new Coord(2, 2, 0);
-                        }
-                    }
-                }
+                //if (Game.Instance.currentLevelName == "3-10" && player.justSkipTurn)
+                //{
+                //    if(player.coord.name == "2_1")
+                //    {
+                //        if( tile.name == "3_1" || tile.name == "1_1")
+                //        {
+                //            player.boardManager.growthLure = new Coord(2, 2, 0);
+                //        }
+                //    }
+                //}
             }
             #endregion
         }

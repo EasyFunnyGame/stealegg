@@ -364,7 +364,7 @@ public class Enemy : Character
                     xOffset = 1;
                 }
                 var checkCoord = coord.Clone();
-                for (var index = 0; index < checkRange; index++)
+                for (var index = 0; index < checkRange - 1 ; index++)
                 {
                     checkCoord.x += xOffset;
                     checkCoord.z += zOffset;
@@ -820,6 +820,19 @@ public class Enemy : Character
                 if (this is EnemyDistracted && coord.name == "2_0")
                 {
                     assignedTurnBackTile = "1_2";
+                }
+            }
+            #endregion
+
+            #region 3-10
+            else if (currentLevelName == "3-10")
+            {
+                if (this is EnemyPatrol && coord.name == "3_3")
+                {
+                    //assignedTurnBackTile = "4_1";
+                    originalCoord = new Coord(2, 0, 0.0f);
+                    originalDirection = Direction.Right;
+                    assignOriginalTileName = "2_0";
                 }
             }
             #endregion
