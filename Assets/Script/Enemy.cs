@@ -364,7 +364,7 @@ public class Enemy : Character
                     xOffset = 1;
                 }
                 var checkCoord = coord.Clone();
-                for (var index = 0; index < checkRange - 1 ; index++)
+                for (var index = 0; index < checkRange - 2 ; index++)
                 {
                     checkCoord.x += xOffset;
                     checkCoord.z += zOffset;
