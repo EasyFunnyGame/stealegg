@@ -329,7 +329,7 @@ public class Enemy : Character
         }
 
         // 2-3-17  2-3-15
-        if (boardManager.growthLure.isLegal)
+        if (Game.Instance != null && boardManager.growthLure.isLegal)
         {
             var growthLure = boardManager.growthLure;
             var targetName = "";
@@ -369,8 +369,25 @@ public class Enemy : Character
                     checkCoord.x += xOffset;
                     checkCoord.z += zOffset;
 
+                    var isObstructByOther = false;
+                    for(var jndex = 0; jndex < Game.Instance.boardManager.enemies.Count; jndex++)
+                    {
+                        var otherEnemy = Game.Instance.boardManager.enemies[jndex];
+                        if (otherEnemy == this) continue;
+                        if(otherEnemy.coord.x == checkCoord.x && otherEnemy.coord.z == checkCoord.z)
+                        {
+                            isObstructByOther = true;
+                        }
+                    }
+
+                    if(isObstructByOther)
+                    {
+                        break;
+                    }
+
                     targetName = new Coord(checkCoord.x + xOffset, checkCoord.z + zOffset, transform.position.y).name;
                     var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == player.lastTileName || targetName == player.coord.name);
+
                     if (lookingAtGrowthTile)
                     {
                         var lureTile = gridManager.GetTileByName(growthLure.name);
@@ -830,6 +847,13 @@ public class Enemy : Character
                 if (this is EnemyPatrol && coord.name == "3_3")
                 {
                     //assignedTurnBackTile = "4_1";
+                    originalCoord = new Coord(2, 0, 0.0f);
+                    originalDirection = Direction.Right;
+                    assignOriginalTileName = "2_0";
+                }
+                if(this is EnemyPatrol && coord.name == "1_2")
+                {
+                    assignedTurnBackTile = "1_3";
                     originalCoord = new Coord(2, 0, 0.0f);
                     originalDirection = Direction.Right;
                     assignOriginalTileName = "2_0";

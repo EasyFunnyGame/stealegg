@@ -172,6 +172,24 @@ public class Player : Character
                             checkCoord.x += xOffset;
                             checkCoord.z += zOffset;
 
+                           
+
+                            var isObstructByOther = false;
+                            for (var jndex = 0; jndex < Game.Instance.boardManager.enemies.Count; jndex++)
+                            {
+                                var otherEnemy = Game.Instance.boardManager.enemies[jndex];
+                                if (otherEnemy == this) continue;
+                                if (otherEnemy.coord.x == checkCoord.x && otherEnemy.coord.z == checkCoord.z)
+                                {
+                                    isObstructByOther = true;
+                                }
+                            }
+
+                            if (isObstructByOther)
+                            {
+                                break;
+                            }
+
                             targetName = new Coord(checkCoord.x + xOffset, checkCoord.z + zOffset, transform.position.y).name;
                             var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == lastTileName || targetName == coord.name);
 
