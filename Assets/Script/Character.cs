@@ -449,18 +449,24 @@ public class Character : MonoBehaviour
                 {
                     path2.Add(selected_tile_s.db_path_lowest[idx].name);
                 }
-
-                if ((path2.Count + 1) > path1.Count)
+                if(path2.Count != 0 && path1.Count != 0)
                 {
-                    gridManager.find_paths_realtime(this, to, currentTile);
+                    if ((path2.Count + 1) > path1.Count)
+                    {
+                        gridManager.find_paths_realtime(this, to, currentTile);
+                    }
+                    else
+                    {
+                        gridManager.find_paths_realtime(this, to, fromTile);
+                        var pathLowest = new List<GridTile>();
+                        pathLowest.Add(fromTile);
+                        pathLowest.AddRange(selected_tile_s.db_path_lowest);
+                        selected_tile_s.db_path_lowest = pathLowest;
+                    }
                 }
                 else
                 {
-                    gridManager.find_paths_realtime(this, to, fromTile);
-                    var pathLowest = new List<GridTile>();
-                    pathLowest.Add(fromTile);
-                    pathLowest.AddRange(selected_tile_s.db_path_lowest);
-                    selected_tile_s.db_path_lowest = pathLowest;
+                    gridManager.find_paths_realtime(this, to, currentTile);
                 }
             }
             else
