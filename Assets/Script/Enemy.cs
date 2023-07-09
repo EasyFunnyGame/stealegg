@@ -284,13 +284,15 @@ public class Enemy : Character
                 {
                     // 不共线转向寻路下一点
                     var lureTile = gridManager.GetTileByName(coordLure.name);
+                    // var useFastestWay = IfEnemyUseFastestWay();
                     var success = FindPathRealTime(lureTile, null, true);
                     if (success)
                     {
-                        LookAt(nextTile.name);
+                        var lookAtNextTile = HearSoudLookAt();
+                        LookAt(lookAtNextTile);
                         if (_direction != targetDirection)
                         {
-                            currentAction = new ActionTurnDirection(this, nextTile.name, true);
+                            currentAction = new ActionTurnDirection(this, lookAtNextTile, true);
                         }
                     }
                     else
@@ -528,6 +530,39 @@ public class Enemy : Character
             }
         }
         return false;
+    }
+
+    string HearSoudLookAt()
+    {
+        if (Game.Instance == null) return nextTile.name;
+        var currentLevelName = Game.Instance.currentLevelName;
+        if (currentLevelName == "3-12")
+        {
+            if (this is EnemyDistracted)
+            {
+                if(coord.name == "4_2")
+                return "3_2";
+            }
+        }
+
+        return nextTile.name;
+    }
+
+    bool IfEnemyUseFastestWay()
+    {
+        if (Game.Instance == null) return true;
+        var currentLevelName = Game.Instance.currentLevelName;
+        #region
+        if(currentLevelName == "3-12")
+        {
+            if(this is EnemyDistracted)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        return true;
     }
 
     // 回去原点  是否完结此回合
@@ -932,8 +967,22 @@ public class Enemy : Character
             }
             #endregion
 
+
             #region
             else if(currentLevelName == "3-12")
+            {
+                if(this is EnemySentinel)
+                {
+                    if(coord.name == "")
+                    {
+
+                    }
+                }
+            }
+            #endregion
+
+            #region
+            else if (currentLevelName == "3-12")
             {
                 if(this is EnemySentinel)
                 {
