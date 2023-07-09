@@ -690,8 +690,27 @@ public class Enemy : Character
         {
             var assignedTurnBackTile = "";
             var currentLevelName = Game.Instance.currentLevelName;
+            if(currentLevelName == "1-1")
+            {
+
+            }
+            #region
+
+            else if(currentLevelName == "1-10")
+            {
+                if(this is EnemyStatic)
+                {
+                    if(coord.name == "1_4"|| coord.name == "1_0")
+                    {
+                        assignedTurnBackTile = lastTileName;
+                    }
+                }
+            }
+
+            #endregion
+
             #region 2-7
-            if (currentLevelName == "2-7")
+            else if (currentLevelName == "2-7")
             {
                 var enemyPatrol = this as EnemyPatrol;
                 if (coord.name == "2_2")
