@@ -638,10 +638,11 @@ public class Enemy : Character
             }
             if(this is EnemyDistracted)
             {
-                //if(coord.name == "3_3")
-                {
-                    return true;
-                }
+                return true;
+            }
+            if (this is EnemyStatic)
+            {
+                return true;
             }
         }
         #endregion
@@ -900,7 +901,13 @@ public class Enemy : Character
                         originalDirection = Direction.Up;
                         assignOriginalTileName = "3_0";
                     }
-                    else if(coord.name == "4_2" || coord.name == "3_3" || coord.name == "1_2" || coord.name == "4_3")
+                    else if(coord.name == "4_2" ||
+                            coord.name == "3_3" ||
+                            coord.name == "1_2" ||
+                            coord.name == "4_3" ||
+                            coord.name == "3_2" ||
+                            coord.name == "2_2" ||
+                            coord.name == "2_3")
                     {
                         originalCoord = new Coord(3, 0, 0.0f);
                         originalDirection = Direction.Up;
