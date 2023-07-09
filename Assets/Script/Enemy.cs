@@ -618,6 +618,33 @@ public class Enemy : Character
             }
         }
 
+        #region
+
+        else if(currentLevelName == "3-11")
+        {
+            if(this is EnemyPatrol )
+            {
+                if(coord.name == "1_3")
+                {
+                    return true;
+                }
+            }
+            if (this is EnemyStatic)
+            {
+                if (coord.name == "3_0")
+                {
+                    return true;
+                }
+            }
+            if(this is EnemyDistracted)
+            {
+                //if(coord.name == "3_3")
+                {
+                    return true;
+                }
+            }
+        }
+        #endregion
         return false;
     }
 
@@ -861,6 +888,44 @@ public class Enemy : Character
             }
             #endregion
 
+            #region 3-11
+            else if (currentLevelName == "3-11")
+            {
+                if (this is EnemyPatrol )
+                {
+                    if (coord.name == "1_3")
+                    {
+                        assignedTurnBackTile = "2_3";
+                        originalCoord = new Coord(3, 0, 0.0f);
+                        originalDirection = Direction.Up;
+                        assignOriginalTileName = "3_0";
+                    }
+                    else if(coord.name == "4_2" || coord.name == "3_3" || coord.name == "1_2" || coord.name == "4_3")
+                    {
+                        originalCoord = new Coord(3, 0, 0.0f);
+                        originalDirection = Direction.Up;
+                        assignOriginalTileName = "3_0";
+                    }
+                   
+                }
+                if(this is EnemyStatic)
+                {
+                    if(coord.name == "3_0")
+                    {
+                        assignedTurnBackTile = "2_0";
+                    }
+                }
+                if (this is EnemyDistracted)
+                {
+                    if (coord.name == "3_3")
+                    {
+                        assignedTurnBackTile = "4_3";
+                    }
+                }
+            }
+
+
+            #endregion
 
             var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
             if (assignTile)

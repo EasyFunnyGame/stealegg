@@ -198,6 +198,19 @@ public class ActionEnemyMove : ActionBase
             }
             if (enemy.nextTile)
             {
+                #region 3-11-8
+                if (Game.Instance && Game.Instance.currentLevelName == "3-11")
+                {
+                    if(enemy is EnemyDistracted)
+                    {
+                        if(enemy.coord.name == "3_3")
+                        {
+                            return true;
+                        }
+                    }
+                }
+                #endregion
+
                 enemy.LookAt(enemy.nextTile.name);
                 var sameDirection = enemy._direction == enemy.targetDirection;
                 if (sameDirection)
