@@ -930,10 +930,18 @@ public class Enemy : Character
                     }
                 }
             }
-
-
             #endregion
 
+            #region
+            else if(currentLevelName == "3-12")
+            {
+                if(this is EnemySentinel)
+                {
+                    assignedTurnBackTile = lastTileName;
+                }
+
+            }
+            #endregion
             var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
             if (assignTile)
             {
