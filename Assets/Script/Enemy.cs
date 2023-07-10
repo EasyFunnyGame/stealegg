@@ -799,6 +799,18 @@ public class Enemy : Character
             }
             #endregion
 
+            #region
+            else if(currentLevelName == "2-8")
+            {
+                if(originalCoord.name == "2_1")
+                {
+                    assignedTurnBackTile = "4_2";
+                }
+            }
+
+            #endregion
+
+
             #region 2-10
             else if (currentLevelName == "2-10")
             {
