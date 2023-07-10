@@ -653,9 +653,28 @@ public class Enemy : Character
             }
         }
 
+
+
+        #region
+        else if (currentLevelName == "2-12")
+        {
+            var enemyPatrol = this as EnemyPatrol;
+            if(enemyPatrol && coord.name == "2_1")
+            {
+                for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                {
+                    if (enemyPatrol.patrolNodes[index].name == "3_0")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        #endregion
+
         #region
 
-        else if(currentLevelName == "3-11")
+        else if (currentLevelName == "3-11")
         {
             if(this is EnemyPatrol )
             {
@@ -723,6 +742,7 @@ public class Enemy : Character
                             originalCoord = new Coord(4, 1, 0.0f);
                             originalDirection = Direction.Left;
                             assignOriginalTileName = "4_1";
+                            break;
                         }
                         if (enemyPatrol.patrolNodes[index].name == "4_3")
                         {
@@ -730,6 +750,7 @@ public class Enemy : Character
                             originalCoord = new Coord(4, 3, 0.0f);
                             originalDirection = Direction.Left;
                             assignOriginalTileName = "4_3";
+                            break;
                         }
                     }
                 }
@@ -744,6 +765,7 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 1, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_1";
+                            break;
                         }
                         if (enemyPatrol.patrolNodes[index].name == "1_3")
                         {
@@ -751,6 +773,7 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 3, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_3";
+                            break;
                         }
                     }
                 }
@@ -764,6 +787,7 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 1, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_1";
+                            break;
                         }
                         // 2-7-16
                         if (enemyPatrol.patrolNodes[index].name == "1_3")
@@ -772,6 +796,7 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 3, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_3";
+                            break;
                         }
                     }
                 }
@@ -785,6 +810,7 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 3, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_3";
+                            break;
                         }
                         // 2-7-16
                         if (enemyPatrol.patrolNodes[index].name == "1_1")
@@ -793,6 +819,28 @@ public class Enemy : Character
                             originalCoord = new Coord(1, 1, 0.0f);
                             originalDirection = Direction.Right;
                             assignOriginalTileName = "1_1";
+                            break;
+                        }
+                    }
+                }
+                else if(coord.name == "2_3")
+                {
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "4_3")
+                        {
+                            originalCoord = new Coord(4, 3, 0.0f);
+                            originalDirection = Direction.Left;
+                            assignOriginalTileName = "4_3";
+                            break;
+                        }
+                        if (enemyPatrol.patrolNodes[index].name == "4_1")
+                        {
+                            assignedTurnBackTile = "2_2";
+                            originalCoord = new Coord(4, 1, 0.0f);
+                            originalDirection = Direction.Left;
+                            assignOriginalTileName = "4_1";
+                            break;
                         }
                     }
                 }
@@ -810,6 +858,51 @@ public class Enemy : Character
 
             #endregion
 
+            #region 2-9
+            else if (currentLevelName == "2-9")
+            {
+                if (this is EnemyPatrol)
+                {
+                    var enemyPatrol = this as EnemyPatrol;
+                    if (coord.name == "2_2")
+                    {
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "4_1")
+                            {
+                                originalCoord = new Coord(4, 1, 0.0f);
+                                originalDirection = Direction.Left;
+                                assignOriginalTileName = "4_1";
+                                break;
+                            }
+                        }   
+                    }
+                    if (coord.name == "3_2")
+                    {
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "1_1")
+                            {
+                                originalCoord = new Coord(1, 1, 0.0f);
+                                originalDirection = Direction.Right;
+                                assignOriginalTileName = "1_1";
+                                break;
+                            }
+                        }
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "2_3")
+                            {
+                                originalCoord = new Coord(2, 3, 0.0f);
+                                originalDirection = Direction.Right;
+                                assignOriginalTileName = "2_3";
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
 
             #region 2-10
             else if (currentLevelName == "2-10")
@@ -827,8 +920,30 @@ public class Enemy : Character
             #region 2-12
             else if (currentLevelName == "2-12")
             {
+                if(this is EnemyDistracted)
+                {
+                    if(coord.name == "3_1")
+                    {
+                        assignedTurnBackTile = lastTileName;
+                    }
+                }
                 if (this is EnemyPatrol)
                 {
+                    if (coord.name == "2_1")
+                    {
+                        var enemyPatrol = this as EnemyPatrol;
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "3_4")
+                            {
+                                assignedTurnBackTile = "3_1";
+                                originalCoord = new Coord(3, 4, 0.0f);
+                                originalDirection = Direction.Down;
+                                assignOriginalTileName = "3_4";
+                                break;
+                            }
+                        }
+                    }
                     if (coord.name == "2_2")
                     {
                         var enemyPatrol = this as EnemyPatrol;
@@ -840,6 +955,7 @@ public class Enemy : Character
                                 originalCoord = new Coord(3, 0, 0.0f);
                                 originalDirection = Direction.Up;
                                 assignOriginalTileName = "3_0";
+                                break;
                             }
                         }
                     }

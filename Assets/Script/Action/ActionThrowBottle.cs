@@ -20,8 +20,11 @@ public class ActionThrowBottle : ActionBase
 
     public Quaternion targetRotation;
 
+    private bool throwed = false;
+
     public ActionThrowBottle(Player player, string targetTile) : base(player, ActionType.ThrowBottle)
     {
+        throwed = false;
         var boardNode = player.boardManager.FindNode(targetTile);
         _targetPositon = boardNode.transform.position;
         targetTileName = targetTile;
@@ -46,6 +49,8 @@ public class ActionThrowBottle : ActionBase
 
     void Throw()
     {
+        if (throwed) return;
+        throwed = true;
         player.m_animator.SetInteger("bottle", 1);
         
         bottle = player.bottle.transform;
@@ -126,6 +131,9 @@ public class ActionThrowBottle : ActionBase
                 Throw();
             }
             return;
+        }
+        else {
+            Throw();
         }
 
         if (segmentIndex >= 0 && segmentIndex < linePointList.Length - 1) 
