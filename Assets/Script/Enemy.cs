@@ -1067,7 +1067,7 @@ public class Enemy : Character
                 {
                     assignedTurnBackTile = "1_2";
                 }
-                if(coord.name == "1_0")
+                if(coord.name == "1_0" || coord.name == "2_0")
                 {
                     assignedTurnBackTile = lastTileName;
                 }
