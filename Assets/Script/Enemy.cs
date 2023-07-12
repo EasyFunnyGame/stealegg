@@ -672,6 +672,20 @@ public class Enemy : Character
         }
         #endregion
 
+
+        #region 3-9
+        else if(currentLevelName == "3-9")
+        {
+            if(this is EnemyDistracted)
+            {
+                if (coord.name == "1_0" || coord.name == "2_0")
+                {
+                    return true;
+                }
+            }
+        }
+        #endregion
+
         #region
 
         else if (currentLevelName == "3-11")
@@ -1063,13 +1077,13 @@ public class Enemy : Character
             #region 3-9
             else if (currentLevelName == "3-9")
             {
-                if (this is EnemyDistracted && coord.name == "2_0")
+                if(coord.name == "1_0"  )
                 {
-                    assignedTurnBackTile = "1_2";
+                    assignedTurnBackTile = "1_1";
                 }
-                if(coord.name == "1_0" || coord.name == "2_0")
+                else if(coord.name == "2_0")
                 {
-                    assignedTurnBackTile = lastTileName;
+                    assignedTurnBackTile = "1_0";
                 }
             }
             #endregion
@@ -1138,27 +1152,24 @@ public class Enemy : Character
             #endregion
 
 
-            #region
-            else if(currentLevelName == "3-12")
-            {
-                if(this is EnemySentinel)
-                {
-                    if(coord.name == "")
-                    {
-
-                    }
-                }
-            }
-            #endregion
 
             #region
             else if (currentLevelName == "3-12")
             {
                 if(this is EnemySentinel)
                 {
-                    assignedTurnBackTile = lastTileName;
+                    if(coord.name == "4_1")
+                    {
+                        assignedTurnBackTile = lastTileName;
+                    }
                 }
-
+                if(this is EnemyDistracted)
+                {
+                    if (coord.name == "5_3" || coord.name == "5_1")
+                    {
+                        assignedTurnBackTile = lastTileName;
+                    }
+                }
             }
             #endregion
             var assignTile = gridManager.GetTileByName(assignedTurnBackTile);
