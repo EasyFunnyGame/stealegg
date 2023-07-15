@@ -330,11 +330,28 @@ public class Enemy : Character
             // else 
         }
 
-        // 2-3-17  2-3-15
+        // 2-3-17  2-3-15 丛林里走出来的引诱点会更新正在追踪的点
         if (Game.Instance != null && boardManager.growthLure.isLegal)
         {
-            var growthLure = boardManager.growthLure;
-            var targetName = "";
+            if( coordTracing.isLegal )
+            {
+                if( boardManager.allItems.ContainsKey(coordTracing.name) &&
+                    boardManager.allItems[coordTracing.name]?.itemType == ItemType.Growth)
+                {
+
+                    var assignGrowthTractingTile = getAssignGrowthLureTile();
+                    if(assignGrowthTractingTile.isLegal)
+                    {
+                        coordTracing = assignGrowthTractingTile;
+                        var tile = gridManager.GetTileByName(coordTracing.name);
+                        currentAction = new ActionEnemyMove(this, tile, true);
+                        return;
+                    }
+                }
+            }
+
+
+
             var body = transform.GetChild(0);
             if (body != null)
             {
@@ -366,7 +383,7 @@ public class Enemy : Character
                     xOffset = 1;
                 }
                 var checkCoord = coord.Clone();
-                for (var index = 0; index < checkRange - 2 ; index++)
+                for (var index = 0; index < checkRange - 1 ; index++)
                 {
                     checkCoord.x += xOffset;
                     checkCoord.z += zOffset;
@@ -387,12 +404,14 @@ public class Enemy : Character
                         break;
                     }
 
-                    targetName = new Coord(checkCoord.x + xOffset, checkCoord.z + zOffset, transform.position.y).name;
-                    var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == player.lastTileName || targetName == player.coord.name);
+                    var targetName = new Coord(checkCoord.x, checkCoord.z , transform.position.y).name;
+                    var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) &&
+                                              boardManager.allItems[targetName]?.itemType == ItemType.Growth &&
+                                              (targetName == player.lastTileName || targetName == player.coord.name);
 
                     if (lookingAtGrowthTile)
                     {
-                        var lureTile = gridManager.GetTileByName(growthLure.name);
+                        var lureTile = gridManager.GetTileByName(boardManager.growthLure.name);
                         if (lureTile == null)
                         {
                             LostTarget();
@@ -407,6 +426,8 @@ public class Enemy : Character
                             continueTrace = true;
                         }
 
+                        // ssss
+                        
                         coordTracing = boardManager.growthLure.Clone();
                         coordPlayer.SetNoTurn();
 
@@ -504,6 +525,24 @@ public class Enemy : Character
     public virtual void DoDefaultAction()
     {
 
+    }
+
+    public Coord getAssignGrowthLureTile()
+    {
+        if (Game.Instance == null) return new Coord();
+        var currentLevelName = Game.Instance.currentLevelName;
+        if (!coordTracing.isLegal) return new Coord();
+        var coordTracingName = coordTracing.name;
+        #region 3-10
+        if (currentLevelName == "3-10")
+        {
+            if(this is EnemySentinel && coordTracingName == "2_1")
+            {
+                return new Coord(2,2,0);
+            }
+        }
+        #endregion
+        return new Coord();
     }
 
 

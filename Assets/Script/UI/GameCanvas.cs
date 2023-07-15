@@ -534,6 +534,7 @@ public class GameCanvas : BaseCanvas
         Game.Instance.CutBarbedWire(pincersItem as PincersItem);
     }
 
+    // 跳进下水道
     void OnClickManholeCoverIconHandler(ItemIconOnUI itemIcon)
     {
         if (buttonClickCd > 0) return;
@@ -586,6 +587,7 @@ public class GameCanvas : BaseCanvas
         Game.Instance.JumpIntoManholeCover(itemIcon.item as ManholeCoverItem);
     }
 
+    // 跳过回合
     void OnClickGrowthHandler(GrowthItem item)
     {
         if (buttonClickCd > 0) return;
@@ -612,6 +614,10 @@ public class GameCanvas : BaseCanvas
         }
         var pincersItem = allItems[tileName];
         if (pincersItem == null || pincersItem.itemType != ItemType.Growth)
+        {
+            return;
+        }
+        if (Game.Instance.enemyActionRunning || Game.Instance.player.currentAction != null)
         {
             return;
         }

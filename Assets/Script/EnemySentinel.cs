@@ -94,7 +94,7 @@ public class EnemySentinel : Enemy
                 showCCW = false;
                 showCW = true;
             }
-
+            currentAction = new ActionWaitForSeconds(this, 1f);
         }
         else
         {

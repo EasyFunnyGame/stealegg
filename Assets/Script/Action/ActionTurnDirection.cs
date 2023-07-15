@@ -51,7 +51,4 @@ public class ActionTurnDirection : ActionBase
             character.Turned();
         }
     }
-
-
-
 }

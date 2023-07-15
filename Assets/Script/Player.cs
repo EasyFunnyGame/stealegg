@@ -167,12 +167,10 @@ public class Player : Character
                             xOffset = 1;
                         }
                         var checkCoord = enemy.coord.Clone();
-                        for (var idx = 0; idx < enemy.checkRange - 2; idx++)
+                        for (var idx = 0; idx < enemy.checkRange - 1; idx++)
                         {
                             checkCoord.x += xOffset;
                             checkCoord.z += zOffset;
-
-                           
 
                             var isObstructByOther = false;
                             for (var jndex = 0; jndex < Game.Instance.boardManager.enemies.Count; jndex++)
@@ -190,7 +188,7 @@ public class Player : Character
                                 break;
                             }
 
-                            targetName = new Coord(checkCoord.x + xOffset, checkCoord.z + zOffset, transform.position.y).name;
+                            targetName = new Coord(checkCoord.x, checkCoord.z, transform.position.y).name;
                             var lookingAtGrowthTile = boardManager.allItems.ContainsKey(targetName) && boardManager.allItems[targetName]?.itemType == ItemType.Growth && (targetName == lastTileName || targetName == coord.name);
 
                             if (lookingAtGrowthTile)

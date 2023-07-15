@@ -20,4 +20,6 @@ public enum ActionType
    PincersCut,
 
    ManHoleCover,
+
+   WaitForSeconds,
 }
