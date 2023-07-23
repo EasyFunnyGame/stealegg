@@ -985,7 +985,7 @@ public class Enemy : Character
                 if (this is EnemyPatrol)
                 {
                     var enemyPatrol = this as EnemyPatrol;
-                    if (coord.name == "2_2")
+                    if (coord.name == "2_2" && justLostTarget)
                     {
                         for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
                         {
@@ -996,9 +996,15 @@ public class Enemy : Character
                                 assignOriginalTileName = "4_1";
                                 break;
                             }
+                            if (enemyPatrol.patrolNodes[index].name == "5_3")
+                            {
+                                originalCoord = new Coord(5, 3, 0.0f);
+                                originalDirection = Direction.Left;
+                                break;
+                            }
                         }   
                     }
-                    if (coord.name == "3_2")
+                    if (coord.name == "3_2" && justLostTarget)
                     {
                         for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
                         {
@@ -1050,6 +1056,21 @@ public class Enemy : Character
                 }
                 if (this is EnemyPatrol)
                 {
+                    if (coord.name == "3_1")
+                    {
+                        var enemyPatrol = this as EnemyPatrol;
+                        for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                        {
+                            if (enemyPatrol.patrolNodes[index].name == "3_4")
+                            {
+                                originalCoord = new Coord(3, 4, 0.0f);
+                                originalDirection = Direction.Down;
+                                assignOriginalTileName = "3_4";
+                                break;
+                            }
+                        }
+                    }
+
                     if (coord.name == "2_1")
                     {
                         var enemyPatrol = this as EnemyPatrol;
