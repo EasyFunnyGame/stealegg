@@ -335,7 +335,10 @@ public class ActionEnemyMove : ActionBase
                 //    }
                 //}
                 var lookAtTileName = enemy.coordPlayer.name;
-
+                if (Game.Instance?.player.coord.name == "1_3" && enemy.coord.name == "1_2")
+                {
+                    lookAtTileName = "1_3";
+                }
 
                 if (!string.IsNullOrEmpty(lookAtTileName))
                 {

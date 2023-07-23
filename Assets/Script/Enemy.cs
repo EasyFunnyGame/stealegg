@@ -500,16 +500,34 @@ public class Enemy : Character
             var success = FindPathRealTime(tile, null, true);
             if (!success)
             {
-                // 如果主角在正前方而且 前方一格可达 则继续前进
-                if (TryMoveFrontToWardPlayer())
+                GridTile assignTraceTile = null;
+                var levelName = Game.Instance.currentLevelName;
+                if (levelName == "3-2")
                 {
+                    if (this is EnemyDistracted)
+                    {
+                        if (Game.Instance?.player.coord.name == "1_3" && coord.name == "2_2")
+                        {
+                            assignTraceTile = gridManager.GetTileByName("1_2");
+                            coordTracing = new Coord(1, 2, 0);
+                            currentAction = new ActionEnemyMove(this, assignTraceTile, true);
+                        }
+                    }
+                }
+                
+                if(assignTraceTile == null)
+                {
+                    // 如果主角在正前方而且 前方一格可达 则继续前进
+                    if (TryMoveFrontToWardPlayer())
+                    {
+                        return;
+                    }
+                    // 寻路失败就返回起点。
+                    //Debug.LogWarning("寻路失败,寻路回到起点并转向");
+                    LostTarget();
+                    GoBack();
                     return;
                 }
-                // 寻路失败就返回起点。
-                //Debug.LogWarning("寻路失败,寻路回到起点并转向");
-                LostTarget();
-                GoBack();
-                return;
             }
             currentAction = new ActionEnemyMove(this, tile,true);
             return;
