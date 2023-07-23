@@ -756,6 +756,20 @@ public class Enemy : Character
         return false;
     }
 
+    GridTile GetAssignTraceTile()
+    {
+        var assignedTurnBackTile = "";
+        var currentLevelName = Game.Instance.currentLevelName;
+        if(currentLevelName == "1-10")
+        {
+            if(originalCoord.name == "3_3" && coordTracing.name == "1_4")
+            {
+                Debug.Log("下一个格子");
+            }
+        }
+        return null;
+    }
+
     GridTile getAssignGoBackTileName()
     {
         if(string.IsNullOrEmpty(assignOriginalTileName))

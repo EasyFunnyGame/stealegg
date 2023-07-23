@@ -364,6 +364,18 @@ public class ActionEnemyMove : ActionBase
         }
         else
         {
+            var assiglTileName = GetAssignTracingTile();
+            // 第一章 第十关 指定追踪路径
+            if (!string.IsNullOrEmpty(assiglTileName))
+            {
+                enemy.LookAt(assiglTileName);
+                var sameDirection = enemy._direction == enemy.targetDirection;
+                if (sameDirection)
+                {
+                    enemy.CheckPlayer();
+                }
+                return sameDirection;
+            }
             if (targetTile && targetTile.name != enemy.coord.name && enemy.nextTile == null)
             {
                 enemy.FindPathRealTime(targetTile, null,true);
@@ -498,5 +510,23 @@ public class ActionEnemyMove : ActionBase
             character.moving = false;
             character.moving_tiles = false;
         }
+    }
+
+    string GetAssignTracingTile()
+    {
+        var currentLevelName = Game.Instance.currentLevelName;
+        if (currentLevelName == "1-10")
+        {
+            if (enemy.originalCoord.name == "3_3" && enemy.coordTracing.name == "1_4" && enemy.coord.name =="2_2")
+            {
+                return "1_2";
+            }
+            if (enemy.originalCoord.name == "3_0" && enemy.coordTracing.name == "1_0" && enemy.coord.name == "2_2")
+            {
+                return "1_2";
+            }
+        }
+
+        return null;
     }
 }
