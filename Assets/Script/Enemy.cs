@@ -831,7 +831,30 @@ public class Enemy : Character
             else if (currentLevelName == "2-7")
             {
                 var enemyPatrol = this as EnemyPatrol;
-                if (coord.name == "2_2")
+                if (coord.name == "2_1")
+                {
+                    for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
+                    {
+                        if (enemyPatrol.patrolNodes[index].name == "4_1")
+                        {
+                            assignedTurnBackTile = "3_1";
+                            originalCoord = new Coord(4, 1, 0.0f);
+                            originalDirection = Direction.Left;
+                            assignOriginalTileName = "4_1";
+                            break;
+                        }
+                        if (enemyPatrol.patrolNodes[index].name == "4_3")
+                        {
+                            assignedTurnBackTile = "2_2";
+                            originalCoord = new Coord(4, 3, 0.0f);
+                            originalDirection = Direction.Left;
+                            assignOriginalTileName = "4_3";
+                            break;
+                        }
+                    }
+                }
+
+                else if (coord.name == "2_2")
                 {
                     for (var index = 0; index < enemyPatrol.patrolNodes.Count; index++)
                     {
@@ -949,7 +972,7 @@ public class Enemy : Character
             #region 2-8
             else if(currentLevelName == "2-8")
             {
-                if(originalCoord.name == "2_1")
+                if(originalCoord.name == "2_1" && coord.name == "4_3")
                 {
                     assignedTurnBackTile = "4_2";
                 }
