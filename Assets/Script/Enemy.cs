@@ -780,7 +780,7 @@ public class Enemy : Character
             {
 
             }
-            #region
+            #region 1-10
 
             else if(currentLevelName == "1-10")
             {
@@ -793,6 +793,38 @@ public class Enemy : Character
                 }
             }
 
+            #endregion
+
+            #region 2-3  在 Lost Target 那边处理
+            // justLostTarget
+            else if (currentLevelName == "2-3")
+            {
+                if (justLostTarget && coord.name == "2_2")
+                {
+                    originalCoord = new Coord(2, 0, 0.0f);
+                    originalDirection = Direction.Up;
+                }
+            }
+            #endregion
+
+            #region 2-4
+            else if (currentLevelName == "2-4")
+            {
+                if (coord.name == "0_3")
+                {
+                    assignedTurnBackTile = "1_0";
+                    originalCoord = new Coord(1, 0, 0.0f);
+                    originalDirection = Direction.Up;
+                    assignOriginalTileName = "1_0";
+                }
+                if (coord.name == "2_2")
+                {
+                    assignedTurnBackTile = "1_4";
+                    originalCoord = new Coord(1, 4, 0.0f);
+                    originalDirection = Direction.Down;
+                    assignOriginalTileName = "1_4";
+                }
+            }
             #endregion
 
             #region 2-7
@@ -914,7 +946,7 @@ public class Enemy : Character
             }
             #endregion
 
-            #region
+            #region 2-8
             else if(currentLevelName == "2-8")
             {
                 if(originalCoord.name == "2_1")
@@ -922,7 +954,6 @@ public class Enemy : Character
                     assignedTurnBackTile = "4_2";
                 }
             }
-
             #endregion
 
             #region 2-9
@@ -1051,26 +1082,6 @@ public class Enemy : Character
             }
             #endregion
 
-            #region 2-4
-            else if (currentLevelName == "2-4")
-            {
-                if (coord.name == "0_3")
-                {
-                    assignedTurnBackTile = "1_0";
-                    originalCoord = new Coord(1, 0, 0.0f);
-                    originalDirection = Direction.Up;
-                    assignOriginalTileName = "1_0";
-                }
-                if (coord.name == "2_2")
-                {
-                    assignedTurnBackTile = "1_4";
-                    originalCoord = new Coord(1, 4, 0.0f);
-                    originalDirection = Direction.Down;
-                    assignOriginalTileName = "1_4";
-                }
-            }
-            #endregion
-
             #region 3-3
             else if(currentLevelName == "3-3")
             {
@@ -1084,7 +1095,6 @@ public class Enemy : Character
             }
 
             #endregion
-
 
             #region 3-4
             else if (currentLevelName == "3-4")
@@ -1203,8 +1213,6 @@ public class Enemy : Character
                 }
             }
             #endregion
-
-
 
             #region
             else if (currentLevelName == "3-12")
@@ -1763,6 +1771,7 @@ public class Enemy : Character
         m_animator.SetBool("look_around", false);
     }
 
+    public bool justLostTarget = false;
     public virtual void LostTarget()
     {
         ShowNotFound();
@@ -1773,6 +1782,20 @@ public class Enemy : Character
         stepsAfterFoundPlayer = -1;
         sawPlayer = false;
         assignOriginalTileName = "";
+
+        justLostTarget = true;
+        //var levelName = Game.Instance.currentLevelName;
+
+        #region 2-3
+        //if( levelName == "2-3" )
+        //{
+        //    if( coord.name == "2_2")
+        //    {
+        //        originalCoord = new Coord(2, 0, 0.0f);
+        //        originalDirection = Direction.Up;
+        //    }
+        //}
+        #endregion
     }
 
     protected float idleType;

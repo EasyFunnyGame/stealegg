@@ -26,6 +26,9 @@ public class ActionEnemyMove : ActionBase
 
     public ActionEnemyMove(Enemy enemy, GridTile tile, bool useFastest) : base(enemy, ActionType.EnemyMove)
     {
+
+        enemy.justLostTarget = false;
+
         targetTile = tile;
 
         actionForceBreak = false;
@@ -511,7 +514,7 @@ public class ActionEnemyMove : ActionBase
             character.moving_tiles = false;
         }
     }
-
+    // 追踪时选取指定路径
     string GetAssignTracingTile()
     {
         var currentLevelName = Game.Instance.currentLevelName;
