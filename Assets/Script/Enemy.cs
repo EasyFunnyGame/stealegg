@@ -59,6 +59,11 @@ public class Enemy : Character
             {
                 m_traceRound = Game.Instance.enemyRound;
             }
+            if(startTracingTile == "")
+            {
+                startTracingTile = coord.name;
+            }
+            startTracingDirection = _direction;
             _coordTracing = value;
         }
     }
@@ -124,6 +129,11 @@ public class Enemy : Character
     public Vector3 bodyPositionOffset = Vector3.zero;
 
     public float moveDistance = 0;
+
+    // 记录发现目标时候所在的坐标
+    public string startTracingTile;
+
+    public Direction startTracingDirection;
 
     public override void Start()
     {
@@ -1361,35 +1371,43 @@ public class Enemy : Character
             {
                 if (this is EnemyPatrol )
                 {
-                    if (coord.name == "1_3")
-                    {
-                        assignedTurnBackTile = "2_3";
-                        originalCoord = new Coord(3, 0, 0.0f);
-                        originalDirection = Direction.Up;
-                        assignOriginalTileName = "3_0";
-                    }
-                    else if(coord.name == "4_2" ||
-                            coord.name == "3_3" ||
-                            coord.name == "1_2" ||
-                            coord.name == "4_3" ||
-                            coord.name == "3_2" ||
-                            coord.name == "2_2" ||
-                            coord.name == "2_3")
+                    if(startTracingTile == "3_0" && justLostTarget)
                     {
                         originalCoord = new Coord(3, 0, 0.0f);
                         originalDirection = Direction.Up;
                         assignOriginalTileName = "3_0";
+                        //assignedTurnBackTile = lastTileName;
                     }
-                   
+                    else if(startTracingTile == "3_4" && justLostTarget)
+                    {
+                        originalCoord = new Coord(3, 4, 0.0f);
+                        originalDirection = Direction.Down;
+                        assignOriginalTileName = "3_4";
+                        //assignedTurnBackTile = lastTileName;
+                    }
+                    else if(startTracingDirection == Direction.Up && justLostTarget)
+                    {
+                        originalCoord = new Coord(3, 4, 0.0f);
+                        originalDirection = Direction.Down;
+                        assignOriginalTileName = "3_4";
+                        //assignedTurnBackTile = lastTileName;
+                    }
+                    else if (startTracingDirection == Direction.Down && justLostTarget)
+                    {
+                        originalCoord = new Coord(3, 0, 0.0f);
+                        originalDirection = Direction.Up;
+                        assignOriginalTileName = "3_0";
+                        //assignedTurnBackTile = lastTileName;
+                    }
                 }
                 if(this is EnemyStatic)
                 {
-                    if(coord.name == "3_0")
+                    if(coord.name == "3_0" && justLostTarget)
                     {
                         assignedTurnBackTile = "2_0";
                     }
                 }
-                if (this is EnemyDistracted)
+                if (this is EnemyDistracted && justLostTarget)
                 {
                     if (coord.name == "3_3")
                     {
@@ -1720,6 +1738,7 @@ public class Enemy : Character
     public virtual void ReachedOriginal()
     {
         //Debug.Log(gameObject.name + " 回到原点");
+        startTracingTile = "";
     }
 
     // =======================================================================================
