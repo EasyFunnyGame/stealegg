@@ -613,6 +613,7 @@ public class Enemy : Character
                 }
 
                 // 如果追击是直线。并且能由主角到敌人的地方。则向前进一步
+                // 3-10-10
                 var playerSteps = player.ReachInStepsFrom(coordTracing.name, coord.name);   //player.StepsReach(coord.name);
                 if (Coord.inLine(coordTracing, coord) )// 敌人、引诱点共线 并且路线能通行
                 {
