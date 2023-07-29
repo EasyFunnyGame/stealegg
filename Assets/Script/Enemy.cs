@@ -259,18 +259,12 @@ public class Enemy : Character
                                 coordPlayer = player.coord.Clone();
                                 stepsAfterFoundPlayer = 0;
                                 updateCoordPlayer = true;
-                                if (playerSteps == enemySteps)
-                                {
-                                    // 敌人能直达
-                                }
-                                else
-                                {
-                                    // 敌人不能直达 吹口哨时回头望
-                                }
                             }
                             
                         }
                     }
+
+
                     // 这个转向要在后面，否则转向不对
                     var lureTile = gridManager.GetTileByName(coordLure.name);
                     FindPathRealTime(lureTile, null, true);
@@ -279,6 +273,8 @@ public class Enemy : Character
                     {
                         currentAction = new ActionTurnDirection(this, coordLure.name, true);
                     }
+
+                    
                 }
                 else
                 {
@@ -297,12 +293,95 @@ public class Enemy : Character
                     }
                     else
                     {
-                        // 寻路失败就返回起点。
-                        // 如果主角在正前方而且 前方一格可达 则继续前进
-                        Debug.LogWarning("在敌人不可达的点吹口哨！！！");
-                        LostTarget();
                         // 2-5-13, 第二章第三关
-                        GoBack();
+                        if (Game.Instance?.currentLevelName == "3-2" )
+                        {
+                            if (player.justWhistle)
+                            {
+                                if ( this is EnemyStatic)
+                                {
+                                    if (player.coord.name == "2_3" && coord.name == "1_4")
+                                    {
+                                        coordTracing = new Coord(2, 4, 0);
+                                        coordPlayer = player.coord.Clone();
+                                        currentAction = new ActionTurnDirection(this, "2_4", true);
+                                        ShowFound();
+                                    }
+                                    if (player.coord.name == "1_3" && coord.name == "2_4")
+                                    {
+                                        coordTracing = new Coord(1, 4, 0);
+                                        coordPlayer = player.coord.Clone();
+                                        currentAction = new ActionTurnDirection(this, "1_4", true);
+                                        ShowFound();
+                                    }
+                                }
+                                
+                                if (this is EnemyDistracted)
+                                {
+                                    if (player.coord.name == "2_3" && coord.name == "3_2")
+                                    {
+                                        coordTracing = new Coord(3, 3, 0);
+                                        coordPlayer = player.coord.Clone();
+                                        currentAction = new ActionTurnDirection(this, "3_3", true);
+                                        ShowFound();
+                                    }
+                                }
+
+                                if(player.coord.name == "2_3" && coord.name == "2_2")
+                                {
+                                    coordTracing = new Coord(1, 2, 0);
+                                    coordPlayer = player.coord.Clone();
+                                    currentAction = new ActionTurnDirection(this, "1_2", true);
+                                    ShowFound();
+                                }
+
+                                if (player.coord.name == "1_3" && coord.name == "2_2")
+                                {
+                                    coordTracing = new Coord(1, 2, 0);
+                                    coordPlayer = player.coord.Clone();
+                                    currentAction = new ActionTurnDirection(this, "1_2", true);
+                                    ShowFound();
+                                }
+
+
+
+                                if (player.coord.name == "2_3" && coord.name == "1_2")
+                                {
+                                    coordTracing = new Coord(2, 2, 0);
+                                    coordPlayer = player.coord.Clone();
+                                    currentAction = new ActionTurnDirection(this, "2_2", true);
+                                    ShowFound();
+                                }
+
+
+
+                                if (player.coord.name == "1_3" && coord.name == "2_4")
+                                {
+                                    coordTracing = new Coord(1, 4, 0);
+                                    coordPlayer = player.coord.Clone();
+                                    currentAction = new ActionTurnDirection(this, "1_4", true);
+                                    ShowFound();
+                                }
+
+
+                                if (player.coord.name == "2_3" && coord.name == "1_4")
+                                {
+                                    coordTracing = new Coord(2, 4, 0);
+                                    coordPlayer = player.coord.Clone();
+                                    currentAction = new ActionTurnDirection(this, "2_4", true);
+                                    ShowFound();
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            // 寻路失败就返回起点。
+                            // 如果主角在正前方而且 前方一格可达 则继续前进
+                            Debug.LogWarning("在敌人不可达的点吹口哨！！！");
+                            LostTarget();
+                            GoBack();
+                        }
                     }
                 }
 
@@ -506,12 +585,30 @@ public class Enemy : Character
                 {
                     if (this is EnemyDistracted)
                     {
-                        if (Game.Instance?.player.coord.name == "1_3" && coord.name == "2_2")
+                        if (player.coord.name == "1_3" && coord.name == "2_2")
                         {
                             assignTraceTile = gridManager.GetTileByName("1_2");
                             coordTracing = new Coord(1, 2, 0);
                             currentAction = new ActionEnemyMove(this, assignTraceTile, true);
                         }
+                        if(player.coord.name == "1_4" && coord.name == "3_3")
+                        {
+                            assignTraceTile = gridManager.GetTileByName("1_4");
+                            coordTracing = new Coord(1, 4, 0);
+                            currentAction = new ActionEnemyMove(this, assignTraceTile, true);
+                        }
+                    }
+                    if (player.coord.name == "2_3" && coord.name == "1_4")
+                    {
+                        coordTracing = new Coord(2, 4, 0);
+                        assignTraceTile = gridManager.GetTileByName("2_4");
+                        currentAction = new ActionEnemyMove(this, assignTraceTile, true);
+                    }
+                    if (this is EnemyStatic && player.coord.name == "2_2" && coord.name == "3_3")
+                    {
+                        coordTracing = new Coord(2, 2, 0);
+                        assignTraceTile = gridManager.GetTileByName("2_2");
+                        currentAction = new ActionEnemyMove(this, assignTraceTile, true);
                     }
                 }
                 

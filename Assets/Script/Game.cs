@@ -393,6 +393,9 @@ public class Game : MonoBehaviour
                 }
                 UpdateMoves();
                 player.justSkipTurn = false;
+                player.justWhistle = false;
+                player.justThroughNet = false;
+                player.justJump = false;
             }
         }
 
