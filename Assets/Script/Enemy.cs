@@ -1312,11 +1312,11 @@ public class Enemy : Character
             #region 3-9
             else if (currentLevelName == "3-9")
             {
-                if(coord.name == "1_0"  )
+                if(coord.name == "1_0" && justLostTarget )
                 {
                     assignedTurnBackTile = "1_1";
                 }
-                else if(coord.name == "2_0")
+                else if(coord.name == "2_0" && justLostTarget && this is EnemyDistracted)
                 {
                     assignedTurnBackTile = "1_0";
                 }
