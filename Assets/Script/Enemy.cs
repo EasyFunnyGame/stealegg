@@ -826,9 +826,22 @@ public class Enemy : Character
         }
         #endregion
 
+        #region 3-6
+        else if(currentLevelName == "3-6")
+        {
+            if (this is EnemySentinel && (coord.name == "3_1" || coord.name == "3_3"))
+            {
+                return true;
+            }
+            if (this is EnemyStatic && coord.name == "4_1")
+            {
+                return true;
+            }
+        }
+        #endregion
 
         #region 3-9
-        else if(currentLevelName == "3-9")
+        else if (currentLevelName == "3-9")
         {
             if(this is EnemyDistracted)
             {
@@ -1258,14 +1271,14 @@ public class Enemy : Character
             #region 3-4
             else if (currentLevelName == "3-4")
             {
-                if(coord.name == "1_2")
+                if(coord.name == "1_2" && justLostTarget)
                 {
                     if(originalCoord.name == "5_3")
                     {
                         assignedTurnBackTile = "1_3";
                     }
                 }
-                if(coord.name == "2_1")
+                if(coord.name == "2_1" && justLostTarget)
                 {
                     assignedTurnBackTile = lastTileName;
                 }
@@ -1275,11 +1288,11 @@ public class Enemy : Character
             #region 3-6
             else if(currentLevelName == "3-6")
             {
-                if (this is EnemySentinel && (coord.name == "3_1" || coord.name == "3_3"))
+                if (this is EnemySentinel && (coord.name == "3_1" || coord.name == "3_3") && justLostTarget)
                 {
                     assignedTurnBackTile = lastTileName;
                 }
-                if(this is EnemyStatic && coord.name == "4_1")
+                if(this is EnemyStatic && coord.name == "4_1" && justLostTarget)
                 {
                     assignedTurnBackTile = lastTileName;
                 }

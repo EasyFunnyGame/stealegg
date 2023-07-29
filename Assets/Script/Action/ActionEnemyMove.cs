@@ -43,7 +43,6 @@ public class ActionEnemyMove : ActionBase
 
         velocity = new Vector3();
         enemy.FindPathRealTime(tile, null, useFastest);// enemy.coordTracing.isLegal
-
         // Debug.Log("位置偏移量:" + enemy.bodyPositionOffset);
 
         targetPosition = enemy.db_moves[0].position;
@@ -52,7 +51,7 @@ public class ActionEnemyMove : ActionBase
 
         var currentNodeName = enemy.currentTile.name;
         var targetNodeName = tile.name;
-        var linkLine = enemy.boardManager.FindLine(currentNodeName, targetNodeName);
+        var linkLine = enemy.boardManager.FindLine(currentNodeName, enemy.nextTile.name);
         if (linkLine != null)
         {
             Transform lineType = null;
@@ -85,13 +84,14 @@ public class ActionEnemyMove : ActionBase
     {
         if (actionForceBreak) return true;
         var myPosition = character.transform.position;
+        // 这个会造成视频 3-9-2 秃头男的不移动
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist >= 0.001f)
         {
             reachEndWait = WAIT_TIME;
             return false;
         }
-        if(reachEndWait == WAIT_TIME)
+        if (reachEndWait == WAIT_TIME)
         {
             enemy.Reached();
         }
@@ -447,7 +447,7 @@ public class ActionEnemyMove : ActionBase
             new_dir.y = 0;
             character.tr_body.GetChild(0).transform.rotation = Quaternion.LookRotation(new_dir);
 
-            var angle = Vector3.Angle(tar_dir, character.tr_body.GetChild(0).forward);
+            var angle = Vector3.Angle(new Vector3(tar_dir.x,0, tar_dir.z), character.tr_body.GetChild(0).forward);
 
             
             if (angle <= 1 )
