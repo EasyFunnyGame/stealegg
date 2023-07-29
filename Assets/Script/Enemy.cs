@@ -1399,6 +1399,16 @@ public class Enemy : Character
             }
             #endregion
 
+            #region 3-12
+            else if(currentLevelName == "3-12")
+            {
+                if(this is EnemySentinel && coord.name == "3_4" &&  justLostTarget )
+                {
+                    assignedTurnBackTile = lastTileName;
+                }
+            }
+            #endregion
+
             #region
             else if (currentLevelName == "3-12")
             {
