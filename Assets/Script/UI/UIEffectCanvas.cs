@@ -13,6 +13,8 @@ public class UIEffectCanvas : BaseCanvas
 
     public MousePassThrough ui_mouse_pass_through;
 
+    public TrailRenderer m_trail;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +32,10 @@ public class UIEffectCanvas : BaseCanvas
     {
         base.OnShow();
         m_click_effect.gameObject.SetActive(false);
-        ui_mouse_pass_through.OnPointerDownAction = PointerClick;
+        ui_mouse_pass_through.OnPointerClickAction = PointerClick;
+        ui_mouse_pass_through.OnBeginDragAction = OnBeginDrag;
+        ui_mouse_pass_through.OnEndDragAction = OnEndDrag;
+        ui_mouse_pass_through.OnDragAction = OnMouseDrag;
     }
 
     protected override void OnHide()
@@ -41,6 +46,7 @@ public class UIEffectCanvas : BaseCanvas
 
     public void PointerClick(PointerEventData eventData)
     {
+        if (draging) return;
         var position = Input.mousePosition;
         m_click_effect.transform.position = position;
         m_click_effect.Stop();
@@ -48,13 +54,26 @@ public class UIEffectCanvas : BaseCanvas
         m_click_effect.gameObject.SetActive(true);
     }
 
-    public void OnBeginDrag()
-    {
+    bool draging = false;
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        var position = Input.mousePosition;
+        m_trail.transform.position = position;
+        m_trail.Clear();
+        draging = true;
+        //m_trail.gameObject.SetActive(true);
     }
 
-    public void OnEndDrag()
+    public void OnEndDrag(PointerEventData eventData)
     {
+        draging = false;
+        // m_trail.gameObject.SetActive(false);
+    }
 
+    public void OnMouseDrag(PointerEventData eventData)
+    {
+        var position = Input.mousePosition;
+        m_trail.transform.position = position;
     }
 }

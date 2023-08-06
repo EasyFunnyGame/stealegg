@@ -22,16 +22,19 @@ public class MousePassThrough : MonoBehaviour, IPointerDownHandler , IPointerUpH
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        OnBeginDragAction?.Invoke(eventData);
         Psss(eventData, ExecuteEvents.beginDragHandler);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        OnDragAction?.Invoke(eventData);
         Psss(eventData, ExecuteEvents.dragHandler);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        OnEndDragAction?.Invoke(eventData);
         Psss(eventData, ExecuteEvents.endDragHandler);
     }
 
