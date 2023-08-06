@@ -22,7 +22,9 @@ public class ActionEnemyMove : ActionBase
     private float reachEndWait = 0.25f;
 
     // 等待时间
-    private static float WAIT_TIME = 0.25f;
+    private static float WAIT_TIME = 0.2f;
+
+    private bool needTurn = false;
 
     public ActionEnemyMove(Enemy enemy, GridTile tile, bool useFastest) : base(enemy, ActionType.EnemyMove)
     {
@@ -69,7 +71,15 @@ public class ActionEnemyMove : ActionBase
                 enemy.up = height > 0 ? 1 : height < 0 ? -1 : 0;
             }
         }
-        enemy.m_animator.SetBool("moving", true);
+
+        needTurn = enemy.body_looking;
+
+        if (!needTurn)
+        {
+            enemy.m_animator.SetBool("moving", true);
+        }
+
+        turnEndWait = WAIT_TIME;
     }
 
     public Enemy enemy
@@ -84,7 +94,7 @@ public class ActionEnemyMove : ActionBase
     {
         if (actionForceBreak) return true;
         var myPosition = character.transform.position;
-        // 这个会造成视频 3-9-2 秃头男的不移动
+        
         var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
         if (tdist >= 0.001f)
         {
@@ -440,6 +450,7 @@ public class ActionEnemyMove : ActionBase
         if (character.body_looking)
         {
             var dirPos = character.db_moves[1].position;
+
             Vector3 tar_dir = new Vector3(dirPos.x, character.tr_body.GetChild(0).position.y, dirPos.z)  - character.tr_body.position;
 
             Vector3 new_dir = Vector3.RotateTowards(character.tr_body.GetChild(0).forward, tar_dir, character.rotate_speed * Time.deltaTime / 2, 0f);
@@ -453,24 +464,31 @@ public class ActionEnemyMove : ActionBase
             if (angle <= 1 )
             {
                 enemy.tr_body.GetChild(0).forward = tar_dir;
-                if (turnEndWait == WAIT_TIME)
-                {
-                    enemy.Turned();
-                }
-                turnEndWait -= Time.deltaTime;
                 if (turnEndWait <= 0)
                 {
+                    //Debug.Log("转向完成");
+
+                    enemy.Turned();
+
                     var result = enemy.CheckPlayer();
                     if (result != CheckPlayerResult.None)
                     {
                         actionForceBreak = true;
                         enemy.currentAction = null;
                     }
+
+                    var myPosition = character.transform.position;
+                    var tdist = Vector3.Distance(new Vector3(myPosition.x, 0, myPosition.z), new Vector3(targetPosition.x, 0, targetPosition.z));
+                    if (tdist > 0.001f)
+                    {
+                        enemy.m_animator.SetBool("moving", true);
+                    }
                 }
-            }
-            else
-            {
-                turnEndWait = WAIT_TIME;
+                else
+                {
+                    turnEndWait -= Time.deltaTime;
+                    //Debug.Log("转向等待中");
+                }
             }
         }
         else if (character.moving)
