@@ -417,7 +417,48 @@ public class GameCanvas : BaseCanvas
             iconScale = 1 + 0.1f * Mathf.Sin(updateTime);
             btn_bottle.transform.localScale = new Vector3(iconScale, iconScale, iconScale);
         }
+
+
+        if(Input.touchCount == 2)
+        {
+            if(!twoFingers)
+            {
+                twoFingers = true;
+                lstOnePos = Input.GetTouch(0).position;
+                lstTwoPos = Input.GetTouch(1).position;
+            }
+            Vector2 onePos = Input.GetTouch(0).position;
+            Vector2 twoPos = Input.GetTouch(1).position;
+
+            float lastDis = Vector2.Distance(lstOnePos, lstTwoPos);
+            float curDis = Vector2.Distance(onePos, twoPos);
+            
+
+            if(Game.Instance?.camera)
+            {
+                var cam = Game.Instance?.camera;
+                if (curDis > lastDis)
+                {
+                    Debug.Log("放大");
+                    cam.transform.Translate(cam.transform.forward * 0.1f);
+                }
+                else
+                {
+                    Debug.Log("缩小");
+                    cam.transform.Translate(-cam.transform.forward * 0.1f);
+                }
+            }
+        }
+        else
+        {
+            twoFingers = false;
+        }
     }
+
+    Vector2 lstOnePos;
+    Vector2 lstTwoPos;
+    bool twoFingers = false;
+
 
     void LateUpdate()
     {

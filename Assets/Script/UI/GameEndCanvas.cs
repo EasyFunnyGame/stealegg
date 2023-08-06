@@ -111,8 +111,6 @@ public class GameEndCanvas : BaseCanvas
     
     protected override void OnShow()
     {
-        
-
         var drawGameObject = GameObject.Find("Draw");
         if(drawGameObject != null)
         {
@@ -147,6 +145,7 @@ public class GameEndCanvas : BaseCanvas
             failTexture.gameObject.SetActive(true);
         }
         AudioPlay.Instance?.PlaySnapShot();
+        AudioPlay.Instance?.StopBackGroundMisic();
     }
 
     protected override void OnHide()

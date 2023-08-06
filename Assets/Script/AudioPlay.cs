@@ -130,6 +130,12 @@ public class AudioPlay : MonoBehaviour
         });
     }
 
+    public void StopBackGroundMisic()
+    {
+        // 自动播放停止
+        AudioManager.audioBGM.Stop();
+    }
+
 
     public void PlaySilencMusic()
     {

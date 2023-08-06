@@ -40,8 +40,8 @@ if (false) {
 }
 
 let managerConfig = {
-  DATA_FILE_MD5: '0f12823d8781ce99',
-  CODE_FILE_MD5: '911e26a688aaf5cf',
+  DATA_FILE_MD5: 'de20ee6d5d4f070b',
+  CODE_FILE_MD5: '0b9465a305843043',
   GAME_NAME: 'webgl',
   APPID: 'wxba69270c020dda95',
   // DATA_FILE_SIZE: "$DATA_FILE_SIZE",
