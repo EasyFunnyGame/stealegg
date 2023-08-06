@@ -32,12 +32,14 @@ public class MainCanvas : BaseCanvas
         Game.Instance?.mainCanvas.Hide();
         Game.Instance?.chapterCanvas.Show();
         AudioPlay.Instance?.PlayClick();
+        //Game.Instance?.effectCanvas.PointerClick(null);
     }
 
     void ShowSettingCanvas()
     {
         Game.Instance?.settingCanvas.Show();
         AudioPlay.Instance?.PlayClick();
+        //Game.Instance?.effectCanvas.PointerClick(null);
     }
 
     protected override void OnShow()

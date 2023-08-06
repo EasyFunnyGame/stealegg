@@ -3,6 +3,10 @@ using UnityEngine.UI;
 
 public class LevelItem : MonoBehaviour  
 {
+    public static string SelectedLevel = "";
+
+    public static float SelectedDelayEnter = 0.0f;
+
     public RawImage img_vedio;
 
     public RawImage img_center_locked;
@@ -82,6 +86,11 @@ public class LevelItem : MonoBehaviour
 
     void onClickChapterLevelHandler()
     {
+        if(!string.IsNullOrEmpty(SelectedLevel))
+        {
+            return;
+        }
+
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
         if( energy < 1 )
         {
@@ -102,7 +111,11 @@ public class LevelItem : MonoBehaviour
         }
         PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
         PlayerPrefs.Save();
-        Game.Instance?.StartGame(sceneName);
+
+        SelectedLevel = sceneName;
+        SelectedDelayEnter = 0;
+
+        //Game.Instance?.effectCanvas.PointerClick(null);
     }
 
 }

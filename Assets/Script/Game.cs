@@ -25,6 +25,7 @@ public class Game : MonoBehaviour
     public GraffCanvas graffCanvas;
     public CameraSettingCanvas cameraSettingCanvas;
     public TranslateCanvas translateCanvas;
+    public UIEffectCanvas effectCanvas;
 
     public Dictionary<string, int> scores = new Dictionary<string, int>();
 
@@ -86,6 +87,8 @@ public class Game : MonoBehaviour
 
         mainCanvas.Show();
         msgCanvas.Show();
+        effectCanvas.Show();
+
         gameCanvas.Hide();
         endCanvas.Hide();
         energyGainCanvas.Hide();

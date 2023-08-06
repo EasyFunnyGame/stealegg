@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C63F4C90-99C5-CC01-8D8E-136BF0D63FDB}</ProjectGuid>
+    <ProjectGuid>{0A2FE3A3-5C39-C77C-E291-AA88F740CA3D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>ParticleImage</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -56,164 +56,13 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CameraMultiTarget\Example\ExampleGameController.cs" />
-    <Compile Include="Assets\CameraMultiTarget\Example\ExampleTargetBehaviour.cs" />
-    <Compile Include="Assets\MeshCombiner\Scripts\MeshCombiner.cs" />
-    <Compile Include="Assets\Samples\Addressables\1.18.19\Addressables Utility\AddressablesUtility.cs" />
-    <Compile Include="Assets\Samples\Addressables\1.18.19\Prefab Spawner\PrefabSpawnerSample.cs" />
-    <Compile Include="Assets\Script\Action\ActionAlert.cs" />
-    <Compile Include="Assets\Script\Action\ActionBase.cs" />
-    <Compile Include="Assets\Script\Action\ActionBlowWhistle.cs" />
-    <Compile Include="Assets\Script\Action\ActionEnemyMove.cs" />
-    <Compile Include="Assets\Script\Action\ActionGraff.cs" />
-    <Compile Include="Assets\Script\Action\ActionJumpManholeCover.cs" />
-    <Compile Include="Assets\Script\Action\ActionPincersCut.cs" />
-    <Compile Include="Assets\Script\Action\ActionPlayerMove.cs" />
-    <Compile Include="Assets\Script\Action\ActionSteal.cs" />
-    <Compile Include="Assets\Script\Action\ActionThrowBottle.cs" />
-    <Compile Include="Assets\Script\Action\ActionTurnDirection.cs" />
-    <Compile Include="Assets\Script\Action\ActionType.cs" />
-    <Compile Include="Assets\Script\Action\ActionWaitForSeconds.cs" />
-    <Compile Include="Assets\Script\AnimationEvent.cs" />
-    <Compile Include="Assets\Script\AudioManager.cs" />
-    <Compile Include="Assets\Script\AudioPlay.cs" />
-    <Compile Include="Assets\Script\BezierUtils.cs" />
-    <Compile Include="Assets\Script\BoardManager.cs" />
-    <Compile Include="Assets\Script\BoardNode.cs" />
-    <Compile Include="Assets\Script\BoardNodeTrigger.cs" />
-    <Compile Include="Assets\Script\CameraAnimationEvent.cs" />
-    <Compile Include="Assets\Script\CameraMultiTarget.cs" />
-    <Compile Include="Assets\Script\Character.cs" />
-    <Compile Include="Assets\Script\Coord.cs" />
-    <Compile Include="Assets\Script\Enemy.cs" />
-    <Compile Include="Assets\Script\EnemyDistracted.cs" />
-    <Compile Include="Assets\Script\EnemyMove.cs" />
-    <Compile Include="Assets\Script\EnemyPatrol.cs" />
-    <Compile Include="Assets\Script\EnemySentinel.cs" />
-    <Compile Include="Assets\Script\EnemyStatic.cs" />
-    <Compile Include="Assets\Script\FixedRotation.cs" />
-    <Compile Include="Assets\Script\Game.cs" />
-    <Compile Include="Assets\Script\GameCamera.cs" />
-    <Compile Include="Assets\Script\Graff\Scripts\Drawable.cs" />
-    <Compile Include="Assets\Script\Graff\Scripts\DrawingSettings.cs" />
-    <Compile Include="Assets\Script\GraffItem.cs" />
-    <Compile Include="Assets\Script\GridLayout.cs" />
-    <Compile Include="Assets\Script\GridManager.cs" />
-    <Compile Include="Assets\Script\GridTile.cs" />
-    <Compile Include="Assets\Script\GrowthItem.cs" />
-    <Compile Include="Assets\Script\Item.cs" />
-    <Compile Include="Assets\Script\Level.cs" />
-    <Compile Include="Assets\Script\LinkLine.cs" />
-    <Compile Include="Assets\Script\ManholeCoverItem.cs" />
-    <Compile Include="Assets\Script\PincersItem.cs" />
-    <Compile Include="Assets\Script\Player.cs" />
-    <Compile Include="Assets\Script\PositionAndRotation.cs" />
-    <Compile Include="Assets\Script\PrefabLightMapData.cs" />
-    <Compile Include="Assets\Script\ProjectionHits.cs" />
-    <Compile Include="Assets\Script\RTS_Camera.cs" />
-    <Compile Include="Assets\Script\ShowUpCharacters.cs" />
-    <Compile Include="Assets\Script\SoundTrigger.cs" />
-    <Compile Include="Assets\Script\SubTile.cs" />
-    <Compile Include="Assets\Script\UI\BaseCanvas.cs" />
-    <Compile Include="Assets\Script\UI\CameraSettingCanvas.cs" />
-    <Compile Include="Assets\Script\UI\ChapterCanvas.cs" />
-    <Compile Include="Assets\Script\UI\EnergyGainCanvas.cs" />
-    <Compile Include="Assets\Script\UI\GameCanvas.cs" />
-    <Compile Include="Assets\Script\UI\GameEndCanvas.cs" />
-    <Compile Include="Assets\Script\UI\GraffCanvas.cs" />
-    <Compile Include="Assets\Script\UI\HintGainCanvas.cs" />
-    <Compile Include="Assets\Script\UI\IconOnUI.cs" />
-    <Compile Include="Assets\Script\UI\IconsAboveEnemy.cs" />
-    <Compile Include="Assets\Script\UI\ItemIconOnUI.cs" />
-    <Compile Include="Assets\Script\UI\LevelItem.cs" />
-    <Compile Include="Assets\Script\UI\MainCanvas.cs" />
-    <Compile Include="Assets\Script\UI\MousePassThrough.cs" />
-    <Compile Include="Assets\Script\UI\MsgCanvas.cs" />
-    <Compile Include="Assets\Script\UI\SettingCanvas.cs" />
-    <Compile Include="Assets\Script\UI\TranslateCanvas.cs" />
-    <Compile Include="Assets\Script\UI\UIEffectCanvas.cs" />
-    <Compile Include="Assets\Script\UI\UiUtils.cs" />
-    <Compile Include="Assets\Script\UIEventTrigger.cs" />
-    <Compile Include="Assets\Script\UserDataKey.cs" />
-    <Compile Include="Assets\Script\Utils.cs" />
-    <Compile Include="Assets\Script\WalkThroughStep.cs" />
-    <Compile Include="Assets\Script\walls.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\Cloud.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\HideLoadingPage.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\Extensions.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\IJsonWrapper.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\JsonData.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\JsonException.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\JsonMapper.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\JsonMockWrapper.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\JsonReader.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\JsonWriter.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\Lexer.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\Netstandard15Polyfill.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\ParserToken.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\LitJson\UnityTypeBindings.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\PlayerPrefs.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\UnityDumper.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WX.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXAdBaseStyle.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXAdCustomStyle.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXBannerAd.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXBase.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXBaseAd.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXCallBackHandler.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXCamera.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXCanvas.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXCustomAd.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXEnv.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXFileCacheClean.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXFileSystemManager.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXGameClubButton.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXGameRecorder.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXGridAd.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXInnerAudioContext.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXInterstitialAd.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXLaunchProgress.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXLongCallBackHandler.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXModel.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXModels.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXOpenDataContext.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXProfileStatsScript.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXRecorder.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXRewardedVideoAd.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXSDKManagerHandler.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXShortAudio.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXTouchInputOverride.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXUDPSocketManager.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXUploadFile.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXUserInfoButton.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\WXVideo.cs" />
-    <Compile Include="Assets\WX-WASM-SDK\interface.cs" />
+    <Compile Include="Assets\AssetKits\ParticleImage\Runtime\Noise.cs" />
+    <Compile Include="Assets\AssetKits\ParticleImage\Runtime\Particle.cs" />
+    <Compile Include="Assets\AssetKits\ParticleImage\Runtime\ParticleImage.cs" />
+    <Compile Include="Assets\AssetKits\ParticleImage\Runtime\ParticleTrailRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
-    <None Include="Assets\CameraMultiTarget\Example\ProjectorMultiply.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
-    <None Include="Assets\Resources\UI\BitmapFont\white_num.fnt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
-    <None Include="Assets\Script\graff.shader" />
-    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\AssetKits\ParticleImage\Runtime\ParticleImage.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -390,6 +239,18 @@
     <Reference Include="UnityEditor">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.VR">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\UnityExtensions\Unity\UnityVR\Editor\UnityEditor.VR.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Graphs">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.WebGL.Extensions">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\PlaybackEngines\WebGLSupport\UnityEditor.WebGL.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>Library\PackageCache\com.unity.analytics@3.6.12\Unity.Analytics.Editor.dll</HintPath>
     </Reference>
@@ -399,8 +260,23 @@
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@3.6.12\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
+    <Reference Include="log4netPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.14.18\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Plastic.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.14.18\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Plastic.Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.14.18\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="unityplastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.14.18\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Purchasing">
+      <HintPath>Library\PackageCache\com.unity.purchasing@2.0.6\Editor\UnityEditor.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -747,90 +623,14 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.36f1c1\Editor\Data\NetStandard\compat\2.0.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.CacheServer">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.CacheServer.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Monetization">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Monetization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ResourceManager">
-      <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Addressables.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Postprocessing.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Analytics">
-      <HintPath>Library\ScriptAssemblies\Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Advertisements.Editor">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Advertisements.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Addressables">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ScriptableBuildPipeline">
-      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>Library\ScriptAssemblies\Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.PlasticSCM.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{35F7E00E-E5FB-CEEB-CA66-6CDE8CDCDF8E}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

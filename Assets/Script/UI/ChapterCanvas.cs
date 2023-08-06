@@ -74,12 +74,31 @@ public class ChapterCanvas : BaseCanvas
         chapter = Mathf.Max(chapter, 0);
         chapter = Mathf.Min(chapter, 2);
         ShowChapter(chapter);
+        LevelItem.SelectedLevel = "";
     }
 
     protected override void OnHide()
     {
-        Debug.Log("关闭界面");
+        //Debug.Log("关闭界面");
     }
+
+    private void FixedUpdate()
+    {
+        if(!string.IsNullOrEmpty(LevelItem.SelectedLevel))
+        {
+            if(LevelItem.SelectedDelayEnter < 0.5f)
+            {
+                LevelItem.SelectedDelayEnter += Time.deltaTime;
+                if(LevelItem.SelectedDelayEnter >= 0.5f)
+                {
+                    LevelItem.SelectedDelayEnter = 0;
+                    Game.Instance?.StartGame(LevelItem.SelectedLevel);
+                    LevelItem.SelectedLevel = "";
+                }
+            }
+        }
+    }
+
 
     void ShowChapter(int chapter)
     {
