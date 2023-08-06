@@ -58,6 +58,16 @@ public class UIEffectCanvas : BaseCanvas
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (Input.touchCount > 1)
+        {
+            return;
+        }
+        if (Game.Instance == null) return;
+        if(Game.Instance.graffCanvas.gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         var position = Input.mousePosition;
         m_trail.transform.position = position;
         m_trail.Clear();
@@ -73,6 +83,16 @@ public class UIEffectCanvas : BaseCanvas
 
     public void OnMouseDrag(PointerEventData eventData)
     {
+        if (Input.touchCount > 1)
+        {
+            return;
+        }
+
+        if (Game.Instance == null) return;
+        if (Game.Instance.graffCanvas.gameObject.activeInHierarchy)
+        {
+            return;
+        }
         var position = Input.mousePosition;
         m_trail.transform.position = position;
     }

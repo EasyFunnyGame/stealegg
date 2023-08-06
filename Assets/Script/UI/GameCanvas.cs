@@ -880,7 +880,6 @@ public class GameCanvas : BaseCanvas
     {
         if (Input.touchCount > 1)
         {
-            Debug.Log("BeginDrag 多点触控" + Input.touchCount);
             return;
         }
         beginPosition = Input.mousePosition;
