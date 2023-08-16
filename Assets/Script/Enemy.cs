@@ -177,6 +177,7 @@ public class Enemy : Character
 
     public virtual void CheckAction()
     {
+        return;
         if (currentAction != null) return;
         var player = Game.Instance.player;
         // var nextTileName = "";

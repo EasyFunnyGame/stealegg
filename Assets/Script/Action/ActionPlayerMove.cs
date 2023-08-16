@@ -49,6 +49,8 @@ public class ActionPlayerMove : ActionBase
         endPosition = tile.transform.position;
         startPosition = player.transform.position;
 
+        player.lastMoveDelta = new Vector2(endPosition.x - startPosition.x, endPosition.z - startPosition.z);
+
         velocity = new Vector3();
         player.FindPathRealTime(tile,null,true);
         

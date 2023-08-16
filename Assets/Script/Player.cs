@@ -43,6 +43,8 @@ public class Player : Character
 
     public float stealStopTime = 2.0f;
 
+    public Vector2 lastMoveDelta = Vector2.zero;
+
     public void Awake()
     {
         failCamera.gameObject.SetActive(false);

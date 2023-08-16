@@ -22,6 +22,8 @@ public class BoardNode : MonoBehaviour
     [SerializeField]
     public ShowUpCharacters words;
 
+    public int targetPositionIndex = -1;
+
     public List<Character>characters = new List<Character>();
 
     private Dictionary<int, List<Vector3>> m_positions = new Dictionary<int, List<Vector3>>();

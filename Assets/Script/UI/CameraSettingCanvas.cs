@@ -96,56 +96,56 @@ public class CameraSettingCanvas : BaseCanvas
     private void MinHeight()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.height -= 0.1f;
+        //m_gamecamera.height -= 0.1f;
     }
 
     private void AddHeight()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.height += 0.1f;
+        //m_gamecamera.height += 0.1f;
     }
 
 
     private void MinUp()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingUp -= 10;
+        //m_gamecamera.PaddingUp -= 10;
     }
     private void AddUp()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingUp += 10;
+        //m_gamecamera.PaddingUp += 10;
     }
     private void MinDown()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingDown -= 10;
+        //m_gamecamera.PaddingDown -= 10;
     }
     private void AddDown()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingDown += 10;
+        //m_gamecamera.PaddingDown += 10;
     }
     private void MinLeft()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingLeft -= 10;
+        //m_gamecamera.PaddingLeft -= 10;
     }
     private void AddLeft()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingLeft += 10;
+        //m_gamecamera.PaddingLeft += 10;
     }
     private void MinRight()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingRight -= 10;
+        //m_gamecamera.PaddingRight -= 10;
     }
 
     private void AddRight()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.PaddingRight += 10;
+        //m_gamecamera.PaddingRight += 10;
     }
 
     // Update is called once per frame
@@ -159,96 +159,95 @@ public class CameraSettingCanvas : BaseCanvas
         eulerY.text = m_gamecamera.transform.eulerAngles.y.ToString("#0");
         eulerZ.text = m_gamecamera.transform.eulerAngles.z.ToString("#0");
 
-        smoothTime.text = m_gamecamera.MoveSmoothTime.ToString("#0.000");
+        //smoothTime.text = m_gamecamera.MoveSmoothTime.ToString("#0.000");
 
-        up.text = m_gamecamera.PaddingUp.ToString("#0");
-        down.text = m_gamecamera.PaddingDown.ToString("#0");
-        left.text = m_gamecamera.PaddingLeft.ToString("#0");
-        right.text = m_gamecamera.PaddingRight.ToString("#0");
+        //up.text = m_gamecamera.PaddingUp.ToString("#0");
+        //down.text = m_gamecamera.PaddingDown.ToString("#0");
+        //left.text = m_gamecamera.PaddingLeft.ToString("#0");
+        //right.text = m_gamecamera.PaddingRight.ToString("#0");
 
-        height.text = m_gamecamera.height.ToString("#0.0");
+        //height.text = m_gamecamera.height.ToString("#0.0");
     }
 
     void MinEulerX()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Pitch -= 1;
-        if(m_gamecamera.Pitch < -180)
-        {
-            m_gamecamera.Pitch = -180;
-        }
+        //m_gamecamera.Pitch -= 1;
+        //if(m_gamecamera.Pitch < -180)
+        //{
+        //    m_gamecamera.Pitch = -180;
+        //}
     }
 
     void AddEulerX()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Pitch += 1;
-        if (m_gamecamera.Pitch > 180)
-        {
-            m_gamecamera.Pitch = 180;
-        }
+        //m_gamecamera.Pitch += 1;
+        //if (m_gamecamera.Pitch > 180)
+        //{
+        //    m_gamecamera.Pitch = 180;
+        //}
     }
 
     void MinEulerY()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Yaw -= 1;
-        if (m_gamecamera.Yaw < -180)
-        {
-            m_gamecamera.Yaw = -180;
-        }
+        //m_gamecamera.Yaw -= 1;
+        //if (m_gamecamera.Yaw < -180)
+        //{
+        //    m_gamecamera.Yaw = -180;
+        //}
     }
 
 
     void AddEuluerY()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Yaw += 1;
-        if (m_gamecamera.Yaw > 180)
-        {
-            m_gamecamera.Yaw = 180;
-        }
+        //m_gamecamera.Yaw += 1;
+        //if (m_gamecamera.Yaw > 180)
+        //{
+        //    m_gamecamera.Yaw = 180;
+        //}
     }
 
     void MinEulerZ()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Roll -= 1;
-        if (m_gamecamera.Roll < -180)
-        {
-            m_gamecamera.Roll = -180;
-        }
+        //m_gamecamera.Roll -= 1;
+        //if (m_gamecamera.Roll < -180)
+        //{
+        //    m_gamecamera.Roll = -180;
+        //}
     }
 
     void AddEulerZ()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.Roll += 1;
-        if (m_gamecamera.Roll > 180)
-        {
-            m_gamecamera.Roll = 180;
-        }
-        
+        //m_gamecamera.Roll += 1;
+        //if (m_gamecamera.Roll > 180)
+        //{
+        //    m_gamecamera.Roll = 180;
+        //}
     }
 
     void MinSmoothTime()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.MoveSmoothTime -= 0.001f;
-        if (m_gamecamera.MoveSmoothTime < 0)
-        {
-            m_gamecamera.MoveSmoothTime = 0;
-        }
+        //m_gamecamera.MoveSmoothTime -= 0.001f;
+        //if (m_gamecamera.MoveSmoothTime < 0)
+        //{
+        //    m_gamecamera.MoveSmoothTime = 0;
+        //}
     }
 
     void AddSmoothTime()
     {
         if (!m_gamecamera) return;
-        m_gamecamera.MoveSmoothTime += 0.001f;
-        if (m_gamecamera.MoveSmoothTime > 1)
-        {
-            m_gamecamera.MoveSmoothTime = 1;
-        }
+        //m_gamecamera.MoveSmoothTime += 0.001f;
+        //if (m_gamecamera.MoveSmoothTime > 1)
+        //{
+        //    m_gamecamera.MoveSmoothTime = 1;
+        //}
     }
 
 

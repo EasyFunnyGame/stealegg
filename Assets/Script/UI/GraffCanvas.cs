@@ -69,6 +69,8 @@ public class GraffCanvas : BaseCanvas
         
         btn_complete.onClick.AddListener(onCloseGraffCanvasHandler);
 
+        
+
     }
 
 
@@ -227,6 +229,8 @@ public class GraffCanvas : BaseCanvas
         {
             Game.Instance.player.Pick();
         }
+
+        Game.Instance.effectCanvas.Hide();
     }
 
     FreeDraw.Drawable drawable;
@@ -249,6 +253,8 @@ public class GraffCanvas : BaseCanvas
             Game.Instance.draw_setting?.gameObject.SetActive(false);
         if (Game.Instance.draw_camera != null)
             Game.Instance.draw_camera?.gameObject.SetActive(false);
+
+        Game.Instance.effectCanvas.Show();
     }
 
     public void Draw()

@@ -179,10 +179,6 @@ public class Game : MonoBehaviour
             restart = false;
         }
 
-
-
-        camera.upper = false;
-
         boardManager.Ready();
 
         CleearMoves();
@@ -192,30 +188,8 @@ public class Game : MonoBehaviour
 
         delayShowEndTimer = 0;
 
-        camera.testing = true;
-        // Test  测试镜头
-        var nodes = new List<GameObject>();
-        foreach(var kvp in boardManager.nodes)
-        {
-            nodes.Add(kvp.Value.gameObject);
-        }
-        if (sceneName == "2-5" ||
-            sceneName == "3-5" ||
-            sceneName == "3-6" ||
-            sceneName == "3-7" ||
-            sceneName == "3-9" ||
-            sceneName == "3-10"||
-            sceneName == "3-12"
-            )
+        camera.OnSceneLoaded();
 
-        {
-            camera.height = 6;
-        }
-        else if(sceneName == "2-3")
-        {
-            camera.height = 4;
-        }
-        camera.SetTargets(nodes.ToArray());
     }
 
 
@@ -358,6 +332,12 @@ public class Game : MonoBehaviour
 
                 boardManager.coordLure.SetNoTurn();
                 boardManager.growthLure.SetNoTurn();
+
+                if (playerRound > 1)
+                {
+                    camera.MultiTargetCameraUpdateTargets();
+                }
+                
             }
             else
             {
@@ -420,7 +400,7 @@ public class Game : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) )
         {
-            Ray ray = camera.m_camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
             if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
@@ -452,8 +432,8 @@ public class Game : MonoBehaviour
                     boardManager.HideAllSuqreContour();
                     bottleSelectingTarget = false;
                     gameCanvas.btn_bottle_cancel.gameObject.SetActive(false);
+                    camera.RecoverCamera();
                 }
-                camera.upper = false;
             }
         }
     }
@@ -603,14 +583,12 @@ public class Game : MonoBehaviour
     List<string> bottleSelectable = new List<string>();
     public void BottleSelectTarget()
     {
-        camera.upper = true;
+        camera.SeeAllNodes();
         List<GameObject> allNodes = new List<GameObject>();
         foreach(var kvp in boardManager.nodes)
         {
             allNodes.Add(kvp.Value.gameObject);
         }
-        camera.SetTargets(allNodes.ToArray());
-
 
         player.bottle.gameObject.SetActive(true);
         bottleSelectable.Clear();
@@ -683,9 +661,7 @@ public class Game : MonoBehaviour
         player.m_animator.SetInteger("bottle", -1);
         player.bottle.gameObject.SetActive(false);
         bottleSelectingTarget = false;
-        camera.upper = false;
-        //
-        camera.SetTargets(new List<GameObject>().ToArray());
+        camera.RecoverCamera();
     }
 
     public void BottleThorwed(string tileName)
@@ -699,6 +675,7 @@ public class Game : MonoBehaviour
         boardManager.rangeLure = 2;
 
         bottleSelectingTarget = false;
+        
     }
 
     public void ReachEnd()
@@ -764,7 +741,7 @@ public class Game : MonoBehaviour
         if (!playing) return;
         if (bottleSelectingTarget)
         {
-            Ray ray1 = camera.m_camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray1 = camera.cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo1;
 
             if (Physics.Raycast(ray1, out hitInfo1, 100, LayerMask.GetMask("Square")))
@@ -791,7 +768,6 @@ public class Game : MonoBehaviour
                     bottleSelectingTarget = false;
                     gameCanvas.btn_bottle_cancel.gameObject.SetActive(false);
                 }
-                camera.upper = false;
             }
             return;
         }
@@ -819,7 +795,7 @@ public class Game : MonoBehaviour
         var position = Input.mousePosition;
         //FindPathTest("3_2","3_4");
         //return;
-        Ray ray = camera.m_camera.ScreenPointToRay(position);
+        Ray ray = camera.cam.ScreenPointToRay(position);
         RaycastHit hitInfo;
 
         if (Physics.Raycast(ray, out hitInfo, 100, LayerMask.GetMask("Square")))
@@ -843,7 +819,7 @@ public class Game : MonoBehaviour
                 if (enemy.coord.name == nodeName)
                 {
                     AudioPlay.Instance?.ClickUnWalkable();
-                    return;
+                    //return;
                 }
             }
 

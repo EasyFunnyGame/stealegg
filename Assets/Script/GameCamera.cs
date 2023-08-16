@@ -7,284 +7,254 @@ public class GameCamera : MonoBehaviour
 {
     public static GameCamera Instance;
 
-    public Animator camAnimator;
+    public CameraMultiTarget multiTarget;
 
-	public bool upper;
+    public Camera cam;
 
-	public float Pitch;
-	public float Yaw;
-	public float Roll;
-	public float PaddingLeft;
-	public float PaddingRight;
-	public float PaddingUp;
-	public float PaddingDown;
-	public float MoveSmoothTime = 0.19f;
+    public float distanceUpAndDown = 0;
 
-	public float height;
+    public float distanceLeftAndRight = 0;
 
-	public float targetHeight;
+    public GameObject multiNodeParent;
 
-	public Camera m_camera;
+    public Vector3 followingPosition;
 
-	public bool forceUpdate = false;
-
-	public GameObject[] _targets = new GameObject[0];
-	private DebugProjection _debugProjection;
-
-	enum DebugProjection { DISABLE, IDENTITY, ROTATED }
-	enum ProjectionEdgeHits { TOP_BOTTOM, LEFT_RIGHT }
-
-	public float max_height;
-
-	public float min_heieght;
-
-	public void SetTargets(GameObject[] targets)
-	{
-		_targets = targets;
-	}
-
-	private void Awake()
-	{
-		Instance = this;
-
-		targetHeight = height;
-		_debugProjection = DebugProjection.ROTATED;
-	}
-
-
-	PositionAndRotation TargetPositionAndRotation(GameObject[] targets)
-	{
-		float halfVerticalFovRad = (m_camera.fieldOfView * Mathf.Deg2Rad) / 2f;
-		float halfHorizontalFovRad = Mathf.Atan(Mathf.Tan(halfVerticalFovRad) * m_camera.aspect);
-
-		var rotation = Quaternion.Euler(Pitch, Yaw, Roll);
-		var inverseRotation = Quaternion.Inverse(rotation);
-
-		var targetsRotatedToCameraIdentity = targets.Select(target => inverseRotation * target.transform.position).ToArray();
-
-		float furthestPointDistanceFromCamera = targetsRotatedToCameraIdentity.Max(target => target.z);
-		float projectionPlaneZ = furthestPointDistanceFromCamera + 3f;
-
-		ProjectionHits viewProjectionLeftAndRightEdgeHits =
-			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.LEFT_RIGHT, projectionPlaneZ, halfHorizontalFovRad).AddPadding(UpperPaddingRight, UpperPaddingLeft);
-		ProjectionHits viewProjectionTopAndBottomEdgeHits =
-			ViewProjectionEdgeHits(targetsRotatedToCameraIdentity, ProjectionEdgeHits.TOP_BOTTOM, projectionPlaneZ, halfVerticalFovRad).AddPadding(UpperPaddingUp, UpperPaddingDown);
-
-		var requiredCameraPerpedicularDistanceFromProjectionPlane =
-			Mathf.Max(
-				RequiredCameraPerpedicularDistanceFromProjectionPlane(viewProjectionTopAndBottomEdgeHits, halfVerticalFovRad),
-				RequiredCameraPerpedicularDistanceFromProjectionPlane(viewProjectionLeftAndRightEdgeHits, halfHorizontalFovRad)
-		);
-
-		Vector3 cameraPositionIdentity = new Vector3(
-			(viewProjectionLeftAndRightEdgeHits.Max + viewProjectionLeftAndRightEdgeHits.Min) / 2f,
-			(viewProjectionTopAndBottomEdgeHits.Max + viewProjectionTopAndBottomEdgeHits.Min) / 2f,
-			projectionPlaneZ - requiredCameraPerpedicularDistanceFromProjectionPlane);
-
-		//DebugDrawProjectionRays(cameraPositionIdentity,
-		//	viewProjectionLeftAndRightEdgeHits,
-		//	viewProjectionTopAndBottomEdgeHits,
-		//	requiredCameraPerpedicularDistanceFromProjectionPlane,
-		//	targetsRotatedToCameraIdentity,
-		//	projectionPlaneZ,
-		//	halfHorizontalFovRad,
-		//	halfVerticalFovRad);
-
-		return new PositionAndRotation(rotation * cameraPositionIdentity, rotation, height);
-	}
-
-	private static float RequiredCameraPerpedicularDistanceFromProjectionPlane(ProjectionHits viewProjectionEdgeHits, float halfFovRad)
-	{
-		float distanceBetweenEdgeProjectionHits = viewProjectionEdgeHits.Max - viewProjectionEdgeHits.Min;
-		return (distanceBetweenEdgeProjectionHits / 2f) / Mathf.Tan(halfFovRad);
-	}
-
-	private ProjectionHits ViewProjectionEdgeHits(IEnumerable<Vector3> targetsRotatedToCameraIdentity, ProjectionEdgeHits alongAxis, float projectionPlaneZ, float halfFovRad)
-	{
-		float[] projectionHits = targetsRotatedToCameraIdentity
-			.SelectMany(target => TargetProjectionHits(target, alongAxis, projectionPlaneZ, halfFovRad))
-			.ToArray();
-		return new ProjectionHits(projectionHits.Max(), projectionHits.Min());
-	}
-
-	private float[] TargetProjectionHits(Vector3 target, ProjectionEdgeHits alongAxis, float projectionPlaneDistance, float halfFovRad)
-	{
-		float distanceFromProjectionPlane = projectionPlaneDistance - target.z;
-		float projectionHalfSpan = Mathf.Tan(halfFovRad) * distanceFromProjectionPlane;
-
-		if (alongAxis == ProjectionEdgeHits.LEFT_RIGHT)
-		{
-			return new[] { target.x + projectionHalfSpan, target.x - projectionHalfSpan };
-		}
-		else
-		{
-			return new[] { target.y + projectionHalfSpan, target.y - projectionHalfSpan };
-		}
-
-	}
-
-	private void DebugDrawProjectionRays(Vector3 cameraPositionIdentity, ProjectionHits viewProjectionLeftAndRightEdgeHits,
-		ProjectionHits viewProjectionTopAndBottomEdgeHits, float requiredCameraPerpedicularDistanceFromProjectionPlane,
-		IEnumerable<Vector3> targetsRotatedToCameraIdentity, float projectionPlaneZ, float halfHorizontalFovRad,
-		float halfVerticalFovRad)
-	{
-
-		if (_debugProjection == DebugProjection.DISABLE)
-			return;
-
-		DebugDrawProjectionRay(
-			cameraPositionIdentity,
-			new Vector3((viewProjectionLeftAndRightEdgeHits.Max - viewProjectionLeftAndRightEdgeHits.Min) / 2f,
-				(viewProjectionTopAndBottomEdgeHits.Max - viewProjectionTopAndBottomEdgeHits.Min) / 2f,
-				requiredCameraPerpedicularDistanceFromProjectionPlane), new Color32(31, 119, 180, 255));
-		DebugDrawProjectionRay(
-			cameraPositionIdentity,
-			new Vector3((viewProjectionLeftAndRightEdgeHits.Max - viewProjectionLeftAndRightEdgeHits.Min) / 2f,
-				-(viewProjectionTopAndBottomEdgeHits.Max - viewProjectionTopAndBottomEdgeHits.Min) / 2f,
-				requiredCameraPerpedicularDistanceFromProjectionPlane), new Color32(31, 119, 180, 255));
-		DebugDrawProjectionRay(
-			cameraPositionIdentity,
-			new Vector3(-(viewProjectionLeftAndRightEdgeHits.Max - viewProjectionLeftAndRightEdgeHits.Min) / 2f,
-				(viewProjectionTopAndBottomEdgeHits.Max - viewProjectionTopAndBottomEdgeHits.Min) / 2f,
-				requiredCameraPerpedicularDistanceFromProjectionPlane), new Color32(31, 119, 180, 255));
-		DebugDrawProjectionRay(
-			cameraPositionIdentity,
-			new Vector3(-(viewProjectionLeftAndRightEdgeHits.Max - viewProjectionLeftAndRightEdgeHits.Min) / 2f,
-				-(viewProjectionTopAndBottomEdgeHits.Max - viewProjectionTopAndBottomEdgeHits.Min) / 2f,
-				requiredCameraPerpedicularDistanceFromProjectionPlane), new Color32(31, 119, 180, 255));
-
-		foreach (var target in targetsRotatedToCameraIdentity)
-		{
-			float distanceFromProjectionPlane = projectionPlaneZ - target.z;
-			float halfHorizontalProjectionVolumeCircumcircleDiameter = Mathf.Sin(Mathf.PI - ((Mathf.PI / 2f) + halfHorizontalFovRad)) / (distanceFromProjectionPlane);
-			float projectionHalfHorizontalSpan = Mathf.Sin(halfHorizontalFovRad) / halfHorizontalProjectionVolumeCircumcircleDiameter;
-			float halfVerticalProjectionVolumeCircumcircleDiameter = Mathf.Sin(Mathf.PI - ((Mathf.PI / 2f) + halfVerticalFovRad)) / (distanceFromProjectionPlane);
-			float projectionHalfVerticalSpan = Mathf.Sin(halfVerticalFovRad) / halfVerticalProjectionVolumeCircumcircleDiameter;
-
-			DebugDrawProjectionRay(target,
-				new Vector3(projectionHalfHorizontalSpan, 0f, distanceFromProjectionPlane),
-				new Color32(214, 39, 40, 255));
-			DebugDrawProjectionRay(target,
-				new Vector3(-projectionHalfHorizontalSpan, 0f, distanceFromProjectionPlane),
-				new Color32(214, 39, 40, 255));
-			DebugDrawProjectionRay(target,
-				new Vector3(0f, projectionHalfVerticalSpan, distanceFromProjectionPlane),
-				new Color32(214, 39, 40, 255));
-			DebugDrawProjectionRay(target,
-				new Vector3(0f, -projectionHalfVerticalSpan, distanceFromProjectionPlane),
-				new Color32(214, 39, 40, 255));
-		}
-	}
-
-	private void DebugDrawProjectionRay(Vector3 start, Vector3 direction, Color color)
-	{
-		Quaternion rotation = _debugProjection == DebugProjection.IDENTITY ? Quaternion.identity : transform.rotation;
-		Debug.DrawRay(rotation * start, rotation * direction, color);
-	}
-
-	public float playerPaddingUp;
-	public float playerPaddingDown;
-	public float playerPaddingLeft;
-	public float playerPaddingRight;
-	public Vector3 targetPosition = new Vector3();
-
-	public float UpperPaddingUp=0.5f;
-	public float UpperPaddingDown = 0.5f;
-	public float UpperPaddingLeft = 0.5f;
-	public float UpperPaddingRight = 0.5f;
-
-	public bool testing = false;
-
-	private void LateUpdate()
-	{
-		if (!Game.Instance) return;
-
-		if (Game.Instance?.result != GameResult.NONE && !forceUpdate) return;
-
-		if (testing && _targets.Length > 0)
-		{
-			var targetPositionAndRotation = TargetPositionAndRotation(_targets);
-			Vector3 velocity = Vector3.zero;
-			transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, 0.05f);
-			transform.rotation = targetPositionAndRotation.Rotation;
-			return;
-		}
-
-		if (upper && _targets.Length > 0)
-		{
-			var targetPositionAndRotation = TargetPositionAndRotation(_targets);
-			Vector3 velocity = Vector3.zero;
-			transform.position = Vector3.SmoothDamp(transform.position, targetPositionAndRotation.Position, ref velocity, 0.05f);
-			transform.rotation = targetPositionAndRotation.Rotation;
-			return;
-		}
-
-		if (playerPaddingDown < PaddingDown)
-        {
-			transform.Translate(new Vector3(0,0,-MoveSmoothTime), Space.World);
-		}
-		if (playerPaddingUp < PaddingUp)
-        {
-			transform.Translate(new Vector3(0, 0, MoveSmoothTime), Space.World);
-		}
-		if (playerPaddingLeft < PaddingLeft)
-		{
-			transform.Translate(new Vector3(-MoveSmoothTime, 0, 0), Space.World);
-		}
-		if (playerPaddingRight < PaddingRight)
-		{
-			transform.Translate(new Vector3(MoveSmoothTime, 0, 0), Space.World);
-		}
-
-		//if(upper)
-  //      {
-		//	targetHeight = height + 1;
-  //      }
-  //      else
-  //      {
-		//	targetHeight = height;
-  //      }
-
-		if (transform.position.y < targetHeight)
-        {
-			transform.Translate(new Vector3(0, MoveSmoothTime, 0), Space.World);
-		}
-
-		if (transform.position.y > targetHeight)
-		{
-			transform.Translate(new Vector3(0, -MoveSmoothTime, 0), Space.World);
-		}
-		var rotation = Quaternion.Euler(Pitch, Yaw, Roll);
-		transform.rotation = rotation;
-
-	}
-
-
-	public void UpdatePlayerPositionOnScreen(RectTransform canvasRect, Vector3 position, Image playerImage)
+    public void OnSceneLoaded()
     {
-		float resolutionRotioWidth = canvasRect.sizeDelta.x;
-		float resolutionRotioHeight = canvasRect.sizeDelta.y;
-		float widthRatio = resolutionRotioWidth / Screen.width;
-		float heightRatio = resolutionRotioHeight / Screen.height;
+        if (Game.Instance == null) return;
 
-		float posX = position.x *= widthRatio;
+        if (multiNodeParent != null)
+        {
+            Destroy(multiNodeParent);
+        }
 
-		float posY = position.y *= heightRatio;
+        multiNodeParent = new GameObject("Multy Target Camera Nodes");
+        multiNodeParent.transform.position = Vector3.zero;
 
-		float halfCanvasHeight = resolutionRotioHeight / 2;
-		float halfCanvasWidth = resolutionRotioWidth / 2;
+        List<GameObject> nodeGameObjects = new List<GameObject>();
+        var playerPosition = Game.Instance.player.transform.position;
+
+        foreach (var kvp in Game.Instance.boardManager.nodes)
+        {
+            var node = kvp.Value;
+            var nodePosition = node.transform.position;
+            var distance = Vector3.Distance(nodePosition, playerPosition);
+            if (distance <= 4)
+            {
+                // 用这个不准，可能是与MultiTargetCamera的Update有关
+                //var copyNode = new GameObject(kvp.Value.gameObject.name);
+                //copyNode.transform.parent = multiNodeParent.transform;
+                //copyNode.transform.position = kvp.Value.transform.position;
+                nodeGameObjects.Add(kvp.Value.gameObject);
+            }
+        }
+        multiTarget.SetTargets(nodeGameObjects.ToArray());
+        multiTarget.enabled = true;
+
+        //multiTarget.InitTargets();
+    }
 
 
-		playerPaddingUp = halfCanvasHeight - playerImage.GetComponent<RectTransform>().anchoredPosition.y;
-		playerPaddingDown = halfCanvasHeight + playerImage.GetComponent<RectTransform>().anchoredPosition.y;
-		playerPaddingLeft = halfCanvasWidth + playerImage.GetComponent<RectTransform>().anchoredPosition.x;
-		playerPaddingRight = halfCanvasWidth - playerImage.GetComponent<RectTransform>().anchoredPosition.x;
+    public void SeeAllNodes()
+    {
+        List<GameObject> nodeGameObjects = new List<GameObject>();
+        foreach (var kvp in Game.Instance.boardManager.nodes)
+        {
+            var node = kvp.Value;
+            nodeGameObjects.Add(kvp.Value.gameObject);
+        }
+        multiTarget.SetTargets(nodeGameObjects.ToArray());
+    }
 
-		playerImage.rectTransform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, playerPaddingUp);
-		playerImage.rectTransform.GetChild(1).GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -playerPaddingDown);
-		playerImage.rectTransform.GetChild(2).GetComponent<RectTransform>().anchoredPosition = new Vector2(-playerPaddingLeft, 0);
-		playerImage.rectTransform.GetChild(3).GetComponent<RectTransform>().anchoredPosition = new Vector2(playerPaddingRight, 0);
-	}
+    public void RecoverCamera()
+    {
+        multiTarget.RecoverCamera();
+    }
+
+    Ray ray;
+
+    public void MultiTargetCameraUpdateTargets()
+    {
+        #region no use
+        //if (Game.Instance == null) return;
+        //var player = Game.Instance.player;
+        //var playerPosition = player.transform.position;
+
+        //Vector3 screenPoint = new Vector3();
+        //UiUtils.WorldToScreenPoint(cam, Game.Instance.gameCanvas, playerPosition, out screenPoint);
 
 
+        //var limitScreenPoint = new Vector2(screenPoint.x, screenPoint.y);
+
+        //var moveDirection = 0;
+        //if (screenPoint.y > 0)
+        //{
+        //    var distanceFromTop = Screen.height / 2 - screenPoint.y;
+        //    if (distanceFromTop < 350)
+        //    {
+        //        moveDirection = 1;
+        //        limitScreenPoint.y = 350;
+        //        Debug.Log("镜头向上移动");
+        //        Debug.Log("镜头玩家位置 [ x: " + screenPoint.x + ", y:" + screenPoint.y + " ]" + distanceFromTop);
+        //    }
+        //}
+        //else if (screenPoint.y < 0)
+        //{
+        //    var distanceFromBottom = Screen.height / 2 + screenPoint.y;
+        //    if (distanceFromBottom < 200)
+        //    {
+        //        moveDirection = 2;
+        //        limitScreenPoint.y = -350;
+        //        Debug.Log("镜头向下移动");
+        //        Debug.Log("镜头玩家位置 [ x: " + screenPoint.x + ", y:" + screenPoint.y + " ]" + distanceFromBottom);
+        //    }
+        //}
+        //if (screenPoint.x > 0)
+        //{
+        //    var distanceFromRight = Screen.width / 2 - screenPoint.x;
+        //    if (distanceFromRight < 350 )
+        //    {
+        //        moveDirection = 3;
+        //        limitScreenPoint.x = 350;
+
+        //        Debug.Log("镜头右向移动");
+        //        Debug.Log("镜头玩家位置 [ x: " + screenPoint.x + ", y:" + screenPoint.y + " ]" + distanceFromRight);
+        //    }
+        //}
+        //else if (screenPoint.x < 0)
+        //{
+        //    var distanceFromLeft = Screen.width / 2 + screenPoint.x;
+        //    if (distanceFromLeft < 350 )
+        //    {
+        //        moveDirection = 4;
+        //        limitScreenPoint.x = -350;
+
+        //        Debug.Log("镜头向左移动");
+        //        Debug.Log("镜头玩家位置 [ x: " + screenPoint.x + ", y:" + screenPoint.y + " ]" + distanceFromLeft);
+        //    }
+        //}
+
+        //var inputPos = new Vector3(Screen.width / 2 + limitScreenPoint.x, Screen.height / 2 + limitScreenPoint.y);
+        //ray = RectTransformUtility.ScreenPointToRay(cam, inputPos);
+
+
+        ////if(Input.GetMouseButtonDown(0))
+        ////{
+        ////    var inputPosition = Input.mousePosition;
+        ////}
+
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit,100, LayerMask.GetMask("Ground")))
+        //{
+        //    Debug.Log("wolrdPoint" + hit.transform.position);
+        //    var moveVec3 = Vector3.zero;
+        //    if(moveDirection != 0)
+        //    {
+        //        if(moveDirection == 1)// 上
+        //        {
+        //            moveVec3 = hit.point - player.transform.position;
+        //        }
+        //        else if (moveDirection == 2)// 下
+        //        {
+        //            moveVec3 = player.transform.position - hit.point;
+        //        }
+        //        else if (moveDirection == 3)// 右
+        //        {
+        //            moveVec3 = hit.point - player.transform.position;
+        //        }
+        //        else if (moveDirection == 4)// 左
+        //        {
+        //            moveVec3 = hit.point - player.transform.position;
+        //        }
+        //        moveVec3.y = 0;
+        //        followingPosition = transform.position + moveVec3;
+        //        //multiNodeParent.transform.Translate(direction);
+        //        Game.Instance.gameCanvas.playerPos.rectTransform.anchoredPosition = new Vector3(inputPos.x, inputPos.y, 0);
+
+        //        Debug.Log("镜头移动" + moveDirection + ":" +
+        //            " followingPosition.x:" + followingPosition.x +
+        //            " followingPosition.y:" + followingPosition.y +
+        //            " followingPosition.z:" + followingPosition.z);
+
+        //        Debug.Log("镜头偏移" + moveDirection + ":" +
+        //            " moveVec3.x:" + moveVec3.x +
+        //            " moveVec3.y:" + moveVec3.y +
+        //            " moveVec3.z:" + moveVec3.z);
+        //        //Debug.Break();
+        //    }
+        //}
+
+        #endregion
+
+        if (Game.Instance == null) return;
+        var player = Game.Instance.player;
+        if (player == null) return;
+        var node = player.boardManager.FindNode(player.coord.name);
+        if (node == null) return;
+        var targetPositionIndex = node.targetPositionIndex;
+        if (targetPositionIndex == -1) return;
+        multiTarget.ChangeCameraTargetPosition(targetPositionIndex);
+    }
+
+    private void Update()
+    {
+        #region no use
+        //MultiTargetCameraUpdateTargets();
+        //    Debug.DrawLine(ray.origin, ray.origin + ray.direction * 20, Color.red);
+
+        //    if(multiTarget.stopContainTargets)
+        //    {
+        //        Vector3 velocity = Vector3.zero;
+        //        transform.position = Vector3.SmoothDamp(transform.position, followingPosition, ref velocity, multiTarget.moveSmoothTime);
+        //    }
+        //    else
+        //    {
+        //        followingPosition = transform.position;
+        //    }
+
+        //    if (Game.Instance== null) return;
+        //    var keepMoving = false;
+        //    var player = Game.Instance.player;
+        //    var playerPosition = player.transform.position;
+        //    Vector3 screenPoint = new Vector3();
+        //    UiUtils.WorldToScreenPoint(cam, Game.Instance.gameCanvas, playerPosition, out screenPoint);
+        //    if (screenPoint.y > 0)
+        //    {
+        //        var distanceFromTop = Screen.height / 2 - screenPoint.y;
+        //        if (distanceFromTop < 250)
+        //        {
+        //            keepMoving = true;
+        //        }
+        //    }
+        //    else if (screenPoint.y < 0)
+        //    {
+        //        var distanceFromBottom = Screen.height / 2 + screenPoint.y;
+        //        if (distanceFromBottom < 200)
+        //        {
+        //            keepMoving = true;
+        //        }
+        //    }
+        //    if (screenPoint.x > 0)
+        //    {
+        //        var distanceFromRight = Screen.width / 2 - screenPoint.x;
+        //        if (distanceFromRight < 350)
+        //        {
+        //            keepMoving = true;
+        //        }
+        //    }
+        //    else if (screenPoint.x < 0)
+        //    {
+        //        var distanceFromLeft = Screen.width / 2 + screenPoint.x;
+        //        if (distanceFromLeft < 350)
+        //        {
+        //            keepMoving = true;
+        //        }
+        //    }
+
+        //    if(!keepMoving)
+        //    {
+        //        followingPosition = transform.position;
+        //    }
+        #endregion
+    }
 }

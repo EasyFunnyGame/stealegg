@@ -45,8 +45,8 @@ namespace RTS_Cam
         public bool autoHeight = true;
         public LayerMask groundMask = -1; //layermask of ground or other objects that affect height
 
-        public float maxHeight = 10f; //maximal height
-        public float minHeight = 15f; //minimnal height
+        public float maxHeight = 5; //maximal height
+        public float minHeight = 1; //minimnal height
         public float heightDampening = 5f; 
         public float keyboardZoomingSensitivity = 2f;
         public float scrollWheelZoomingSensitivity = 25f;
@@ -107,6 +107,8 @@ namespace RTS_Cam
         public bool useMouseRotation = true;
         public KeyCode mouseRotationKey = KeyCode.Mouse1;
 
+        public bool useTwoFingers = true;
+        public float TwoFingerZoomingSensitivity;
         private Vector2 KeyboardInput
         {
             get { return useKeyboardInput ? new Vector2(Input.GetAxis(horizontalAxis), Input.GetAxis(verticalAxis)) : Vector2.zero; }
@@ -126,6 +128,8 @@ namespace RTS_Cam
         {
             get { return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); }
         }
+
+        public int TwoFingerZoomDirection = 0;
 
         private int ZoomDirection
         {
@@ -257,9 +261,12 @@ namespace RTS_Cam
         private void HeightCalculation()
         {
             float distanceToGround = DistanceToGround();
-            if(useScrollwheelZooming)
-                zoomPos += ScrollWheel * Time.deltaTime * scrollWheelZoomingSensitivity;
+            //if (useScrollwheelZooming)
+            //    zoomPos += ScrollWheel * Time.deltaTime * scrollWheelZoomingSensitivity;
             if (useKeyboardZooming)
+                zoomPos += ZoomDirection * Time.deltaTime * keyboardZoomingSensitivity;
+
+            if (useTwoFingers)
                 zoomPos += ZoomDirection * Time.deltaTime * keyboardZoomingSensitivity;
 
             zoomPos = Mathf.Clamp01(zoomPos);
@@ -292,8 +299,15 @@ namespace RTS_Cam
         private void FollowTarget()
         {
             Vector3 targetPos = new Vector3(targetFollow.position.x, m_Transform.position.y, targetFollow.position.z) + targetOffset;
-            m_Transform.position = Vector3.MoveTowards(m_Transform.position, targetPos, Time.deltaTime * followingSpeed);
+
+            Vector3 followSmoothDampSpeed = new Vector3(0,0,0);
+
+            m_Transform.position = Vector3.SmoothDamp(m_Transform.position, targetPos,ref followSmoothDampSpeed, 0.25f);
+            // Vector3.MoveTowards(m_Transform.position, targetPos, Time.deltaTime * followingSpeed);
+
         }
+
+        
 
         /// <summary>
         /// limit camera position

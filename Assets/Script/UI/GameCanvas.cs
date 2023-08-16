@@ -79,6 +79,8 @@ public class GameCanvas : BaseCanvas
 
     public Image playerPosition;
 
+    public Image playerPos;
+
     Vector3 screenPoint = new Vector3();
 
     float iconScale = 1f;
@@ -290,29 +292,29 @@ public class GameCanvas : BaseCanvas
         {
             return;
         }
-        if (Game.Instance.player != null)
-        {
-            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
-            playerPosition.rectTransform.anchoredPosition = screenPoint;
-            Game.Instance.camera.UpdatePlayerPositionOnScreen(GetComponent<RectTransform>(), screenPoint, playerPosition);
-        }
+        //if (Game.Instance.player != null)
+        //{
+        //    UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, Game.Instance.player.transform.position, out screenPoint);
+        //    playerPosition.rectTransform.anchoredPosition = screenPoint;
+        //    Game.Instance.camera.UpdatePlayerPositionOnScreen(GetComponent<RectTransform>(), screenPoint, playerPosition);
+        //}
 
         if (icon_star.gameObject.activeSelf)
         {
-            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon_star.item.GetIconPosition(),  out screenPoint);
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon_star.item.GetIconPosition(),  out screenPoint);
             icon_star.rectTransform.anchoredPosition = screenPoint;
         }
 
         if (icon_graff.gameObject.activeSelf)
         {
-            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon_graff.item.GetIconPosition(), out screenPoint);
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon_graff.item.GetIconPosition(), out screenPoint);
             icon_graff.rectTransform.anchoredPosition = screenPoint;
         }
 
         for (var index = 0; index < icon_enemies.Count; index++)
         {
             var icon = icon_enemies[index];
-            UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.enemy.getHeadPointPosition(), out screenPoint);
+            UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon.enemy.getHeadPointPosition(), out screenPoint);
             icon.rectTransform.anchoredPosition = screenPoint;
         }
 
@@ -321,7 +323,7 @@ public class GameCanvas : BaseCanvas
             var icon = icon_bottles[index];
             if (icon.gameObject.activeSelf)
             {
-                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
@@ -331,7 +333,7 @@ public class GameCanvas : BaseCanvas
             var icon = icon_pincers[index];
             if (icon.gameObject.activeSelf)
             {
-                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
@@ -388,7 +390,7 @@ public class GameCanvas : BaseCanvas
 
             if (icon.gameObject.activeSelf )
             {
-                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
@@ -399,7 +401,7 @@ public class GameCanvas : BaseCanvas
             icon.gameObject.SetActive(playerTileName == icon.item.coord.name);
             if (icon.gameObject.activeSelf)
             {
-                UiUtils.WorldToScreenPoint(Game.Instance.camera.m_camera, this, icon.item.GetIconPosition(), out screenPoint);
+                UiUtils.WorldToScreenPoint(Game.Instance.camera.cam, this, icon.item.GetIconPosition(), out screenPoint);
                 icon.rectTransform.anchoredPosition = screenPoint;
             }
         }
@@ -436,22 +438,26 @@ public class GameCanvas : BaseCanvas
 
             if(Game.Instance?.camera)
             {
-                var cam = Game.Instance?.camera;
+                var cam = Game.Instance.camera;
                 if (curDis > lastDis)
                 {
-                    Debug.Log("放大");
-                    cam.transform.Translate(cam.transform.forward * 0.1f);
+                    cam.multiTarget.customPadding -= 0.05f;
+                    // cam.rtsCam.TwoFingerZoomDirection = -1;
                 }
                 else
                 {
-                    Debug.Log("缩小");
-                    cam.transform.Translate(-cam.transform.forward * 0.1f);
+                    cam.multiTarget.customPadding += 0.05f;
+                    // cam.rtsCam.TwoFingerZoomDirection = +1;
                 }
             }
         }
         else
         {
             twoFingers = false;
+            if(Game.Instance?.camera)
+            {
+                // Game.Instance.camera.rtsCam.TwoFingerZoomDirection = 0;
+            }
         }
     }
 
@@ -464,17 +470,17 @@ public class GameCanvas : BaseCanvas
     {
         if (!Game.Instance) return;
         if (!Game.Instance.camera) return;
-        distance_up.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingUp));
-        txt_up.text = Math.Abs(Game.Instance.camera.playerPaddingUp).ToString();
+        //distance_up.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingUp));
+        //txt_up.text = Math.Abs(Game.Instance.camera.playerPaddingUp).ToString();
 
-        distance_down.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingDown));
-        txt_down.text = Math.Abs(Game.Instance.camera.playerPaddingDown).ToString();
+        //distance_down.rectTransform.sizeDelta = new Vector2(2, Math.Abs(Game.Instance.camera.playerPaddingDown));
+        //txt_down.text = Math.Abs(Game.Instance.camera.playerPaddingDown).ToString();
 
-        distance_left.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingLeft), 2);
-        txt_left.text = Math.Abs(Game.Instance.camera.playerPaddingLeft).ToString();
+        //distance_left.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingLeft), 2);
+        //txt_left.text = Math.Abs(Game.Instance.camera.playerPaddingLeft).ToString();
 
-        distance_right.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingRight), 2);
-        txt_right.text = Math.Abs(Game.Instance.camera.playerPaddingRight).ToString();
+        //distance_right.rectTransform.sizeDelta = new Vector2(Math.Abs(Game.Instance.camera.playerPaddingRight), 2);
+        //txt_right.text = Math.Abs(Game.Instance.camera.playerPaddingRight).ToString();
     }
 
     protected override void OnShow()
@@ -890,62 +896,86 @@ public class GameCanvas : BaseCanvas
     public void EndDrag()
     {
         var endDragTime = Time.time;
-        if(endDragTime - beginDragTime > 1f)
+        if(endDragTime - beginDragTime > 2.0f)
         {
             //Debug.Log("滑动时间太长");
             return;
         }
         if (Game.Instance.result != GameResult.NONE) return;
-        if(Input.touchCount>1)
+        if (Input.touchCount > 1)
         {
-            Debug.Log("EndDrag 多点触控" + Input.touchCount);
+            //Debug.Log("EndDrag 多点触控" + Input.touchCount);
             return;
         }
-        var  sceneDirection  = Input.mousePosition - beginPosition;
-
-        var direction = Game.Instance.camera.transform.InverseTransformPoint(sceneDirection).normalized;
-
+       
         if (Game.Instance.pausing) return;
         var player = Game.Instance.player;
         if (player.currentAction != null)
         {
             return;
         }
-       
 
-        var thresHold = Mathf.Abs(direction.x) - Mathf.Abs(direction.z);
 
-        if (Mathf.Abs(thresHold) < 0.1f)
-        {
-            return;
-        }
+        var sceneMoveDelta = Input.mousePosition - beginPosition;
 
-        direction.x = thresHold > 0 ? Mathf.Round(direction.x) : 0;
+        var direction = Game.Instance.camera.transform.InverseTransformPoint(sceneMoveDelta).normalized;
 
-        direction.z = thresHold < 0 ? Mathf.Round(direction.z) : 0;
 
-        
+        //var thresHold = Mathf.Abs(direction.x) - Mathf.Abs(direction.z);
+
+        //if (Mathf.Abs(thresHold) < 0.1f)
+        //{
+        //    return;
+        //}
+
+        //direction.x = thresHold > 0 ? Mathf.Round(direction.x) : 0;
+
+        //direction.z = thresHold < 0 ? Mathf.Round(direction.z) : 0;
+
+
         var targetOffsetX = 0;
         var targetOffsetZ = 0;
 
-        if (direction.x == 1 && direction.z == 0)
+        //if (direction.x == 1 && direction.z == 0)
+        //{
+        //    targetOffsetX = 1;
+        //    //Debug.Log("滑动方向右");
+        //}
+        //else if (direction.x == -1 && direction.z == 0)
+        //{
+        //    targetOffsetX = -1;
+        //    //Debug.Log("滑动方向左");
+        //}
+        //else if (direction.z == 1 && direction.x == 0)
+        //{
+        //    targetOffsetZ = -1;
+        //    //Debug.Log("滑动方向上");
+        //}
+        //else if (direction.z == -1 && direction.x == 0)
+        //{
+        //    targetOffsetZ = 1;
+        //    //Debug.Log("滑动方向下");
+        //}
+
+        var thresHoldScreen = 150.0f;
+        if (sceneMoveDelta.x > thresHoldScreen && sceneMoveDelta.y > thresHoldScreen)
         {
             targetOffsetX = 1;
             //Debug.Log("滑动方向右");
         }
-        else if (direction.x == -1 && direction.z == 0)
+        else if (sceneMoveDelta.x < -thresHoldScreen && sceneMoveDelta.y < -thresHoldScreen)
         {
             targetOffsetX = -1;
             //Debug.Log("滑动方向左");
         }
-        else if (direction.z == 1 && direction.x == 0)
-        {
-            targetOffsetZ = -1;
-            //Debug.Log("滑动方向上");
-        }
-        else if (direction.z == -1 && direction.x == 0)
+        else if (sceneMoveDelta.x < -thresHoldScreen && sceneMoveDelta.y > thresHoldScreen)
         {
             targetOffsetZ = 1;
+            //Debug.Log("滑动方向上");
+        }
+        else if (sceneMoveDelta.x > thresHoldScreen && sceneMoveDelta.y < -thresHoldScreen)
+        {
+            targetOffsetZ = -1;
             //Debug.Log("滑动方向下");
         }
 
