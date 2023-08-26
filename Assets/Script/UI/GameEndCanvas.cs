@@ -19,6 +19,11 @@ public class GameEndCanvas : BaseCanvas
 
     public RawImage failTexture;
 
+    public Image img_star1;
+
+    public Image img_star2;
+
+    public Image img_star3;
 
     private void Awake()
     {
@@ -131,6 +136,47 @@ public class GameEndCanvas : BaseCanvas
 
             winTxture.gameObject.SetActive(true);
             failTexture.gameObject.SetActive(false);
+
+            var star = 1;
+
+            img_star1.gameObject.SetActive(true);
+            img_star2.gameObject.SetActive(false);
+            img_star3.gameObject.SetActive(false);
+            if (Game.Instance.gainStar)
+            {
+                star++;
+            }
+            if(Game.Instance.neverFound)
+            {
+                star++;
+            }
+
+            if(star ==2)
+            {
+                img_star2.gameObject.SetActive(true);
+                img_star3.gameObject.SetActive(false);
+            }
+            else if(star==3)
+            {
+                img_star2.gameObject.SetActive(true);
+                img_star3.gameObject.SetActive(true);
+            }
+
+            var key = UserDataKey.Level_Stars + Game.Instance.playingLevel.ToString();
+            var haveStars = PlayerPrefs.GetInt(key);
+            if(star > haveStars)
+            {
+                PlayerPrefs.SetInt(key, star);
+                PlayerPrefs.Save();
+            }
+
+
+            var level = PlayerPrefs.GetInt(UserDataKey.Level);
+            if (Game.Instance.playingLevel >= level)
+            {
+                PlayerPrefs.SetInt(UserDataKey.Level, Game.Instance.playingLevel + 1);
+                PlayerPrefs.Save();
+            }
         }
         else if(Game.Instance?.result == GameResult.FAIL)
         {
@@ -143,6 +189,10 @@ public class GameEndCanvas : BaseCanvas
 
             winTxture.gameObject.SetActive(false);
             failTexture.gameObject.SetActive(true);
+
+            img_star1.gameObject.SetActive(false);
+            img_star2.gameObject.SetActive(false);
+            img_star3.gameObject.SetActive(false);
         }
         AudioPlay.Instance?.PlaySnapShot();
         AudioPlay.Instance?.StopBackGroundMisic();

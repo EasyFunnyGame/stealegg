@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,6 +27,11 @@ public class Game : MonoBehaviour
     public CameraSettingCanvas cameraSettingCanvas;
     public TranslateCanvas translateCanvas;
     public UIEffectCanvas effectCanvas;
+    public HowToPlayCanvas howToPlayCanvas;
+    public StarCanvas starCanvas;
+    public TiliNoLimitCanvas tiliNoLimitCanvas;
+    public LevelNoLimitCavas levelNoLimitCavas;
+    public WatchVedioCanvas watchVedioCanvas;
 
     public Dictionary<string, int> scores = new Dictionary<string, int>();
 
@@ -69,7 +75,9 @@ public class Game : MonoBehaviour
 
     public Transform guideArrow;
 
-    public int gainEergy = 0;
+    public bool gainStar = false;
+
+    public bool neverFound = true;
 
     public int playerRound = 0;
 
@@ -105,7 +113,8 @@ public class Game : MonoBehaviour
         PlayLevel(sceneName);
         
         result = GameResult.NONE;
-        gainEergy = 0;
+        gainStar = false;
+        neverFound = true;
     }
 
     public void PlayLevel(string sceneName)
@@ -278,14 +287,6 @@ public class Game : MonoBehaviour
         result = GameResult.WIN;
         delayShowEndTimer = 2;
         player.m_animator.SetInteger("result",1);
-
-        if(gainEergy > 0 )
-        {
-            var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-            energy += gainEergy;
-            PlayerPrefs.SetInt(UserDataKey.Energy,energy);
-            PlayerPrefs.Save();
-        }
     }
 
     public bool enemyTurn = false;
@@ -682,13 +683,7 @@ public class Game : MonoBehaviour
     {
         if(stealed)
         {
-            var level = 13;// PlayerPrefs.GetInt(UserDataKey.Level);
-            if (playingLevel >= level)
-            {
-                level = playingLevel;
-                PlayerPrefs.SetInt(UserDataKey.Level, playingLevel + 1);
-                PlayerPrefs.Save();
-            }
+            
             WinGame();
         }
     }
@@ -819,7 +814,7 @@ public class Game : MonoBehaviour
                 if (enemy.coord.name == nodeName)
                 {
                     AudioPlay.Instance?.ClickUnWalkable();
-                    //return;
+                    return;
                 }
             }
 
@@ -916,5 +911,43 @@ public class Game : MonoBehaviour
             showingMoves.Add(coordName, move);
         }
         
+    }
+
+    public bool startButtonNoCover()
+    {
+        if (settingCanvas.gameObject.activeInHierarchy ||
+            hintGainCanvas.gameObject.activeInHierarchy ||
+            tiliNoLimitCanvas.gameObject.activeInHierarchy ||
+            levelNoLimitCavas.gameObject.activeInHierarchy ||
+            howToPlayCanvas.gameObject.activeInHierarchy ||
+            starCanvas.gameObject.activeInHierarchy ||
+            energyGainCanvas.gameObject.activeInHierarchy ||
+            watchVedioCanvas.gameObject.activeInHierarchy
+            ) return false;
+        return true;
+    }
+
+    public bool isLevelLimit()
+    {
+        var date = DateTime.Now.ToShortDateString();
+        var saveDate = PlayerPrefs.GetString(UserDataKey.FreeLevelDay);
+        if (date != saveDate)
+        {
+            PlayerPrefs.SetInt(UserDataKey.TodayFreeLevelCnt, 0);
+        }
+        var cnt = PlayerPrefs.GetInt(UserDataKey.TodayFreeLevelCnt);
+        return cnt < 3;
+    }
+
+    public bool isEnergyLimit()
+    {
+        var date = DateTime.Now.ToShortDateString();
+        var saveDate = PlayerPrefs.GetString(UserDataKey.EnergyUnlimitDay);
+        if (date != saveDate)
+        {
+            PlayerPrefs.SetInt(UserDataKey.TodayEnergyUnlimitCnt, 0);
+        }
+        var cnt = PlayerPrefs.GetInt(UserDataKey.TodayEnergyUnlimitCnt);
+        return cnt < 3;
     }
 }

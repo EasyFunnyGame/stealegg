@@ -96,7 +96,7 @@ public class Item : MonoBehaviour
                 icon.gameObject.SetActive(false);
                 if(Game.Instance)
                 {
-                    Game.Instance.gainEergy = 5;
+                    Game.Instance.gainStar = true;
                 }
                 delete = true;
                 AudioPlay.Instance.PlayStarGain();

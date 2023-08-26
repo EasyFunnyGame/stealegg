@@ -10,7 +10,7 @@ public class SettingCanvas : BaseCanvas
 
     private void Awake()
     {
-        btn_clz.onClick.AddListener(() => { this.Hide(); AudioPlay.Instance?.PlayClick(); });
+        btn_clz.onClick.AddListener(() => { Hide(); AudioPlay.Instance?.PlayClick(); });
         sld_bgm_volume.onValueChanged.AddListener(onChangeBgmVolumeHandler);
         sld_sfx_volume.onValueChanged.AddListener(onChangeSfxVolumeHandler);
     }

@@ -46,6 +46,8 @@ public class UIEffectCanvas : BaseCanvas
 
     public void PointerClick(PointerEventData eventData)
     {
+        if (Game.Instance == null) return;
+        
         if (draging) return;
         var position = Input.mousePosition;
         m_click_effect.transform.position = position;

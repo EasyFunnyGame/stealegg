@@ -23,6 +23,18 @@ public class ChapterCanvas : BaseCanvas
 
     public int chapter;
 
+    public Image img_star1;
+
+    public Text txt_star1;
+
+    public Image img_star2;
+
+    public Text txt_star2;
+
+    public Image img_my_star;
+
+    public Text txt_my_star;
+
 
     private void Awake()
     {
@@ -55,18 +67,6 @@ public class ChapterCanvas : BaseCanvas
     }
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     protected override void OnShow()
     {
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
@@ -75,6 +75,14 @@ public class ChapterCanvas : BaseCanvas
         chapter = Mathf.Min(chapter, 2);
         ShowChapter(chapter);
         LevelItem.SelectedLevel = "";
+
+        var totalStars = 0;
+        for(var i = 0; i < 36; i++)
+        {
+            var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
+            totalStars += levelStars;
+        }
+        txt_my_star.text = totalStars.ToString();
     }
 
     protected override void OnHide()
@@ -156,6 +164,23 @@ public class ChapterCanvas : BaseCanvas
         }
 
         img_chapter.texture = Resources.Load<Texture>("UI/Sprite/Num/"+(chapter+1).ToString());
+
+
+        if(chapter == 0)
+        {
+            txt_star1.text = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[5].ToString();
+            txt_star2.text = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[10].ToString();
+        }
+        else if(chapter == 1)
+        {
+            txt_star1.text = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[17].ToString();
+            txt_star2.text = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[22].ToString();
+        }
+        else if(chapter == 2)
+        {
+            txt_star1.text = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[29].ToString();
+            txt_star2.text = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[34].ToString();
+        }
     }
 
     void onClickPreChapterHandler()

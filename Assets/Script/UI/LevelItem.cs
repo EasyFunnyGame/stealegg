@@ -28,7 +28,6 @@ public class LevelItem : MonoBehaviour
     private void Awake()
     {
         btn_enter.onClick.AddListener(onClickChapterLevelHandler);
-        
     }
 
     // Start is called before the first frame update
@@ -91,31 +90,71 @@ public class LevelItem : MonoBehaviour
             return;
         }
 
+        // 隐藏关卡限制
+        var myStars = 0;
+        for (var i = 0; i < 36; i++)
+        {
+            var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
+            myStars += levelStars;
+        }
+        var starNeed = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG.ContainsKey(this.level + 1) ? LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[this.level + 1] : 0;
+        if (myStars < starNeed)
+        {
+            Game.Instance?.msgCanvas.PopMessage("获得" + starNeed.ToString() + "星星可解锁此关卡");
+            return;
+        }
+
+
+        // 24小时免费关卡
+        var levelLimit = Game.Instance.isLevelLimit();
+        // 24小时无限体力
+        var tiliLimit = Game.Instance.isEnergyLimit();
+
+
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        if( energy < 1 )
+        if( energy < 1 && tiliLimit)
         {
             Game.Instance?.energyGainCanvas.Show();
             return;
         }
+        
+
         var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
-        if (level == level + 1)
+        if (this.level == level + 1 && levelLimit)
         {
-            Game.Instance?.msgCanvas.PopMessage("观看视频可直接试玩此关!");
+            //Game.Instance?.msgCanvas.PopMessage("观看视频可直接试玩此关!");
+
+            var canvas = Game.Instance?.watchVedioCanvas;
+            if(canvas)
+            {
+                canvas.Show();
+                canvas.SetMessage("试玩", "观看视频可试玩本关", PlayerLevel);
+            }
             return;
         }
-        if(level > level + 1)
+        if(this.level > level + 1 && levelLimit)
         {
-            Game.Instance?.msgCanvas.PopMessage("请先通过前一关!");
+            Game.Instance?.msgCanvas.PopMessage("请先通过" + this.level.ToString() + "关");
             return;
         }
-        PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
-        PlayerPrefs.Save();
-
-        SelectedLevel = sceneName;
-        SelectedDelayEnter = 0;
-
+        
+        PlayerLevel();
         //Game.Instance?.effectCanvas.PointerClick(null);
     }
 
+
+    private void PlayerLevel()
+    {
+        var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+        if(Game.Instance.isEnergyLimit())
+        {
+            PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+            PlayerPrefs.Save();
+        }
+
+        SelectedLevel = sceneName;
+        SelectedDelayEnter = 0;
+    }
 }

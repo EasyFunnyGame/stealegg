@@ -177,7 +177,7 @@ public class Enemy : Character
 
     public virtual void CheckAction()
     {
-        return;
+        //return;
         if (currentAction != null) return;
         var player = Game.Instance.player;
         // var nextTileName = "";
@@ -1873,6 +1873,8 @@ public class Enemy : Character
                     watching = false;
                     lookAroundTime = 9;
                     stepsAfterFoundPlayer = 0;
+
+                    Game.Instance.neverFound = false;
                     return true;
                 }
                 break;

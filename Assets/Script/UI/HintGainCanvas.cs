@@ -9,6 +9,11 @@ public class HintGainCanvas : BaseCanvas
 
     public Button btn_clz;
 
+    public Text txt_current;
+
+    public Text txt_total;
+
+
     // Start is called before the first frame update
     void Start()
     {
