@@ -20,18 +20,22 @@ public class EnemyDistracted : Enemy
         base.Update();
 
         if (!sleeping) return;
+
+        if (Game.Instance.chapterCanvas.gameObject.activeInHierarchy || Game.Instance.mainCanvas.gameObject.activeInHierarchy) return;
         
         if(sleepSoundTime <=0)
         {
-            sleepSoundTime = 3f;
+            sleepSoundTime = 4f;
 
             if(sleepSoundType == 1)
             {
                 AudioPlay.Instance?.EnemySleepIn();
+                sleepSoundType = 0;
             }
             else
             {
-                AudioPlay.Instance?.EnemySleepIn();
+                sleepSoundType = 1;
+                AudioPlay.Instance?.EnemySleepOut();
             }
         }
         else

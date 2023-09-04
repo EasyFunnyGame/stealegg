@@ -29,6 +29,8 @@ public class SettingCanvas : BaseCanvas
         PlayerPrefs.Save();
         AudioPlay.sfxVolume = PlayerPrefs.GetFloat(UserDataKey.SfxVolume, 1f);
         AudioPlay.SoundVolume();
+
+        
     }
 
     protected override void OnShow()

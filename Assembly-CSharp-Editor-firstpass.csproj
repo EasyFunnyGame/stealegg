@@ -296,6 +296,18 @@
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>Library/PackageCache/com.unity.purchasing@2.0.6/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
+    <Reference Include="wx-editor">
+      <HintPath>Assets/WX-WASM-SDK-V2/Editor/wx-editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.FontABTool">
+      <HintPath>Assets/WX-WASM-SDK-V2/Runtime/Plugins/Unity.FontABTool.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>Assets/WX-WASM-SDK-V2/Runtime/Plugins/LitJson.dll</HintPath>
+    </Reference>
+    <Reference Include="wx-runtime-editor">
+      <HintPath>Assets/WX-WASM-SDK-V2/Runtime/Plugins/wx-runtime-editor.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>
@@ -742,6 +754,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="WxEditor.csproj">
+      <Project>{67CA107C-3B0A-8461-CF9B-A50437663C49}</Project>
+      <Name>WxEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Wx.csproj">
+      <Project>{5009E262-EE45-BB75-F229-08D055C2BE9D}</Project>
+      <Name>Wx</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

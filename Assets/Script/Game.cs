@@ -94,6 +94,8 @@ public class Game : MonoBehaviour
             energy = 10;
         PlayerPrefs.SetInt(UserDataKey.Energy, energy);
 
+        AudioPlay.bgmVolume = PlayerPrefs.GetFloat(UserDataKey.MusicVolume, 1f);
+        AudioPlay.sfxVolume = PlayerPrefs.GetFloat(UserDataKey.SfxVolume, 1f);
 
         mainCanvas.Show();
         msgCanvas.Show();

@@ -66,6 +66,7 @@ public class AudioPlay : MonoBehaviour
         var audioSrc = AudioManager.audioList[0];
         // 长音频在使用后需要销毁
         AudioManager.audioBGM = manager.CreateAudio();
+        AudioManager.audioBGM.volume = bgmVolume;
         AudioManager.audioBGM.loop = true;
         AudioManager.audioBGM.src = audioSrc;
         AudioManager.audioBGM.OnCanplay(() =>
