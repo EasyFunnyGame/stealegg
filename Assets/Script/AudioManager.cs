@@ -145,6 +145,8 @@ public class AudioManager : MonoBehaviour
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_click.mp3",// 89
         // ui-得到奖励的声音-体力
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/Music_Jingle_Bonus_v2.mp3",// 90
+
+        
         // ui-成功逃脱音效
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_success_1.mp3",// 91
         // ui-关卡成功完成
@@ -157,6 +159,10 @@ public class AudioManager : MonoBehaviour
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/sfx_endlevel_photograph.mp3",// 95
         // ui-无效/错误点击
         "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/ui_click_wrong.mp3",// 96
+
+
+        // ui-得到奖励的声音-星星
+        "https://cx-game.oss-cn-shanghai.aliyuncs.com/Assets/Audio/Mystery Pluck 3.mp3",// 97
     };
 
     // 当前场景需要预下载的音频列表

@@ -40,14 +40,14 @@ if (false) {
 }
 
 let managerConfig = {
-  DATA_FILE_MD5: 'b9c622202a86d2de',
-  CODE_FILE_MD5: '8b55cf0d4c4ca54b',
+  DATA_FILE_MD5: 'd9e42bd9e3525126',
+  CODE_FILE_MD5: '30c598a9c7b3c2fb',
   GAME_NAME: 'webgl',
   APPID: 'wxba69270c020dda95',
   // DATA_FILE_SIZE: "$DATA_FILE_SIZE",
-  DATA_CDN: 'https://www.cxqiji.com',
+  DATA_CDN: '$DEPLOY_URL',
   // 资源包是否作为小游戏分包加载
-  loadDataPackageFromSubpackage: false,
+  loadDataPackageFromSubpackage: $LOAD_DATA_FROM_SUBPACKAGE,
 
   // 需要在网络空闲时预加载的资源，支持如下形式的路径
   preloadDataList: [

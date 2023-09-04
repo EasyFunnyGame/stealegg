@@ -438,7 +438,7 @@ public class AudioPlay : MonoBehaviour
 
     public void PlayStarGain()
     {
-        Instance.PlaySFX(90);
+        Instance.PlaySFX(97);
     }
 
     public void PlayWatchTurn()
