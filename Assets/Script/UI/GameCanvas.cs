@@ -167,15 +167,21 @@ public class GameCanvas : BaseCanvas
 
     void onClickReStartLevelHandler()
     {
+        // 24小时无限体力
+        var tiliLimit = Game.Instance.isEnergyLimit();
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        if(energy<1)
+        if(energy<1 && tiliLimit)
         {
             Game.Instance.msgCanvas.PopMessage("体力不足");
             Game.Instance.energyGainCanvas.Show();
             return;
         }
-        PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
-        PlayerPrefs.Save();
+        if(tiliLimit)
+        {
+            PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+            PlayerPrefs.Save();
+        }
+        
         Game.Instance.gameCanvas.Hide();
         SceneManager.LoadScene(Game.Instance.currentLevelName);
         Game.Instance.resLoaded = false;

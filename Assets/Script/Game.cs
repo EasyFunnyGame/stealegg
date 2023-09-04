@@ -88,10 +88,12 @@ public class Game : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this);
 
+        //PlayerPrefs.DeleteAll();
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy, -999);
         if (energy == -999)
             energy = 10;
-        PlayerPrefs.GetInt(UserDataKey.Energy, energy);
+        PlayerPrefs.SetInt(UserDataKey.Energy, energy);
+
 
         mainCanvas.Show();
         msgCanvas.Show();
@@ -106,6 +108,8 @@ public class Game : MonoBehaviour
         graffCanvas.Hide();
         cameraSettingCanvas.Hide();
         translateCanvas.Hide();
+
+
     }
 
     public void StartGame(string sceneName)
