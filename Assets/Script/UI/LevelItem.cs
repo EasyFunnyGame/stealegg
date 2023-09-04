@@ -129,7 +129,7 @@ public class LevelItem : MonoBehaviour
             if(canvas)
             {
                 canvas.Show();
-                canvas.SetMessage("试玩", "观看视频可试玩本关", PlayerLevel);
+                canvas.SetMessage("试玩", "观看视频可试玩本关", FreeTrialLevel);
             }
             return;
         }
@@ -143,6 +143,14 @@ public class LevelItem : MonoBehaviour
         //Game.Instance?.effectCanvas.PointerClick(null);
     }
 
+    private void FreeTrialLevel()
+    {
+        var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
+
+        SelectedLevel = sceneName;
+        SelectedDelayEnter = 0;
+    }
 
     private void PlayerLevel()
     {
