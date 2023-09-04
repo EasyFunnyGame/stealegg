@@ -51,17 +51,43 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickPlayNextLevelHandler()
     {
+        // 24小时免费关卡
+        var levelLimit = Game.Instance.isLevelLimit();
+        // 24小时无限体力
+        var tiliLimit = Game.Instance.isEnergyLimit();
+
         var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        if(energy <= 0)
+        if(energy <= 0 && tiliLimit)
         {
             Game.Instance?.energyGainCanvas.Show();
             return;
         }
 
-        PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
-        PlayerPrefs.Save();
+        
+        // 隐藏关卡限制
+        var myStars = 0;
+        for (var i = 0; i < 36; i++)
+        {
+            var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
+            myStars += levelStars;
+        }
 
-        if(Game.Instance)
+        var nextLevel = Game.Instance.playingLevel + 1;
+        var starNeed = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG.ContainsKey(nextLevel + 1) ? LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[nextLevel + 1] : 0;
+        if (myStars < starNeed )
+        {
+            Game.Instance?.msgCanvas.PopMessage("获得" + starNeed.ToString() + "星星可解锁此关卡");
+            return;
+        }
+
+        if (tiliLimit)
+        {
+            PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+            PlayerPrefs.Save();
+        }
+
+
+        if (Game.Instance)
         {
             Game.Instance.playing = false;
             Game.Instance.endCanvas.Hide();
@@ -87,22 +113,28 @@ public class GameEndCanvas : BaseCanvas
 
     private void onClickReplayThisLevelHandler()
     {
-        var energy = PlayerPrefs.GetInt(UserDataKey.Energy);
-        if (energy <= 0)
+        // 24小时无限体力
+        var tiliLimit = Game.Instance.isEnergyLimit();
+
+        var energy = PlayerPrefs.GetInt(UserDataKey.Energy); 
+        if (energy <= 0 && tiliLimit)
         {
             Game.Instance?.energyGainCanvas.Show();
             return;
         }
 
-        PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
-        PlayerPrefs.Save();
+        if(tiliLimit)
+        {
+            PlayerPrefs.SetInt(UserDataKey.Energy, energy - 1);
+            PlayerPrefs.Save();
+        }
+
         if(Game.Instance)
         {
             Game.Instance.playing = false;
             Game.Instance.endCanvas.Hide();
             Game.restart = true;
             Game.Instance.resLoaded = false;
-            
         }
         AudioPlay.Instance?.PlayClick();
         SceneManager.LoadScene(Game.Instance?.currentLevelName);
