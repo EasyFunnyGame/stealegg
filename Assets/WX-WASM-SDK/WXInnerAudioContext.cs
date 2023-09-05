@@ -130,33 +130,28 @@ namespace WeChatWASM
             _loop = param.loop;
             _playbackRate = param.playbackRate;
             _needDownload = param.needDownload;
-            if(!Dict.ContainsKey(id))
-            {
-                Dict.Add(id, this);
-                OnPlay(() => {
-                    _isPlaying = true;
-                });
+            Dict.Add(id, this);
 
-                OnEnded(() => {
-                    _isPlaying = false;
-                });
+            OnPlay(()=> {
+                _isPlaying = true;
+            });
 
-                OnPause(() => {
-                    _isPlaying = false;
-                });
+            OnEnded(()=> {
+                _isPlaying = false;
+            });
 
-                OnStop(() => {
-                    _isPlaying = false;
-                });
+            OnPause(()=> {
+                _isPlaying = false;
+            });
+
+            OnStop(()=> {
+                _isPlaying = false;
+            });
 
 #if UNITY_EDITOR
-                _isPlaying = autoplay;
+            _isPlaying = autoplay;
 #endif
-            }
-            else
-            {
-                Debug.LogWarning("Add WXInnerAudioContext Repeatly:" + id);
-            }
+
         }
 
         /// <summary>
@@ -484,7 +479,7 @@ namespace WeChatWASM
                 return;
             }
 
-            //Debug.Log(_src + " 音频播放了，这里就不真的播放了。");
+            Debug.Log(_src + " 音频播放了，这里就不真的播放了。");
             ht["paused"] = false;
             _HandleCallBack("onPlay");
 
