@@ -65,20 +65,20 @@ public class GameEndCanvas : BaseCanvas
 
         
         // 隐藏关卡限制
-        var myStars = 0;
-        for (var i = 0; i < 36; i++)
-        {
-            var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
-            myStars += levelStars;
-        }
+        //var myStars = 0;
+        //for (var i = 0; i < 36; i++)
+        //{
+        //    var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
+        //    myStars += levelStars;
+        //}
 
-        var nextLevel = Game.Instance.playingLevel + 1;
-        var starNeed = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG.ContainsKey(nextLevel + 1) ? LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[nextLevel + 1] : 0;
-        if (myStars < starNeed )
-        {
-            Game.Instance?.msgCanvas.PopMessage("获得" + starNeed.ToString() + "星星可解锁此关卡");
-            return;
-        }
+        //var nextLevel = Game.Instance.playingLevel + 1;
+        //var starNeed = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG.ContainsKey(nextLevel + 1) ? LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[nextLevel + 1] : 0;
+        //if (myStars < starNeed )
+        //{
+        //    Game.Instance?.msgCanvas.PopMessage("获得" + starNeed.ToString() + "星星可解锁此关卡");
+        //    return;
+        //}
 
         if (tiliLimit)
         {

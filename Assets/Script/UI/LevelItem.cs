@@ -91,18 +91,18 @@ public class LevelItem : MonoBehaviour
         }
 
         // 隐藏关卡限制
-        var myStars = 0;
-        for (var i = 0; i < 36; i++)
-        {
-            var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
-            myStars += levelStars;
-        }
-        var starNeed = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG.ContainsKey(this.level + 1) ? LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[this.level + 1] : 0;
-        if (myStars < starNeed)
-        {
-            Game.Instance?.msgCanvas.PopMessage("获得" + starNeed.ToString() + "星星可解锁此关卡");
-            return;
-        }
+        //var myStars = 0;
+        //for (var i = 0; i < 36; i++)
+        //{
+        //    var levelStars = PlayerPrefs.GetInt(UserDataKey.Level_Stars + i.ToString());
+        //    myStars += levelStars;
+        //}
+        //var starNeed = LevelUnLockConfig.LEVEL_UNLOCK_CONFIG.ContainsKey(this.level + 1) ? LevelUnLockConfig.LEVEL_UNLOCK_CONFIG[this.level + 1] : 0;
+        //if (myStars < starNeed)
+        //{
+        //    Game.Instance?.msgCanvas.PopMessage("获得" + starNeed.ToString() + "星星可解锁此关卡");
+        //    return;
+        //}
 
 
         // 24小时免费关卡
@@ -121,23 +121,21 @@ public class LevelItem : MonoBehaviour
 
         var sceneName = string.Format("{0}-{1}", chapter + 1, (index % 12) + 1);
         var level = PlayerPrefs.GetInt(UserDataKey.Level);
-        if (this.level == level + 1 && levelLimit)
-        {
-            //Game.Instance?.msgCanvas.PopMessage("观看视频可直接试玩此关!");
-
-            var canvas = Game.Instance?.watchVedioCanvas;
-            if(canvas)
-            {
-                canvas.Show();
-                canvas.SetMessage("试玩", "观看视频可试玩本关", FreeTrialLevel);
-            }
-            return;
-        }
-        if(this.level > level + 1 && levelLimit)
-        {
-            Game.Instance?.msgCanvas.PopMessage("请先通过" + this.level.ToString() + "关");
-            return;
-        }
+        //if (this.level == level + 1 && levelLimit)
+        //{
+        //    var canvas = Game.Instance?.watchVedioCanvas;
+        //    if(canvas)
+        //    {
+        //        canvas.Show();
+        //        canvas.SetMessage("试玩", "观看视频可试玩本关", FreeTrialLevel);
+        //    }
+        //    return;
+        //}
+        //if(this.level > level + 1 && levelLimit)
+        //{
+        //    Game.Instance?.msgCanvas.PopMessage("请先通过" + this.level.ToString() + "关");
+        //    return;
+        //}
         
         PlayerLevel();
         //Game.Instance?.effectCanvas.PointerClick(null);
